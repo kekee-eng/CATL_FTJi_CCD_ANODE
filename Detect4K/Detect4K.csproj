@@ -59,7 +59,7 @@
     <Compile Include="CfgApp.cs" />
     <Compile Include="CfgParam.cs" />
     <Compile Include="CfgWork.cs" />
-    <Compile Include="ConnectDB.cs" />
+    <Compile Include="ConnectRecord.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="FormDetect4K.cs">
       <SubType>Form</SubType>

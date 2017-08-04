@@ -1,7 +1,11 @@
 ﻿
+using HalconDotNet;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Common {
@@ -21,6 +25,18 @@ namespace Common {
             form.Text += tag;
         }
 
+        [DllImport("kernel32.dll")]
+        public static extern void CopyMemory(IntPtr dst, IntPtr src, int len);
+
+        public static void CopyImageOffset(HImage imgSrc, HImage imgDst, int hsrc, int hdst, int hcopy) {
+
+            string type;
+            int w, h;
+            IntPtr psrc = imgSrc.GetImagePointer1(out type, out w, out h);
+            IntPtr pdst = imgDst.GetImagePointer1(out type, out w, out h);
+            CopyMemory(pdst + hdst * w, psrc + hsrc * w, hcopy * w);
+        }
+
         public static long TimeCounting(Action act) {
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -28,6 +44,6 @@ namespace Common {
             watch.Stop();
             return watch.ElapsedMilliseconds;
         }
-
+        
     }
 }

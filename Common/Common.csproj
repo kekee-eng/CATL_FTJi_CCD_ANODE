@@ -46,6 +46,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Bin\hdevenginedotnetxl.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Bin\log4net.dll</HintPath>
@@ -66,11 +70,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectCamZip.cs" />
     <Compile Include="TemplateDB.cs" />
     <Compile Include="DataEA.cs" />
     <Compile Include="DataGrab.cs" />
     <Compile Include="DataTab.cs" />
-    <Compile Include="RecordGrab.cs" />
     <Compile Include="TemplateConfig.cs" />
     <Compile Include="ConnectDALSA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

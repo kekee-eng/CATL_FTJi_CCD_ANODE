@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Common.UtilTool;
 
 namespace Detect4K {
     public partial class FormDetect4K : Form {
@@ -26,9 +27,9 @@ namespace Detect4K {
             Config.Log.Debug("App Stop.");
         }
 
-        private void button1_Click(object sender, EventArgs e) {
+        private async void button1_Click(object sender, EventArgs e) {
 
-            ConnectDB db = new ConnectDB();
+            ConnectRecord db = new ConnectRecord();
             db.Open("../st.db");
             db.Init();
 
@@ -37,24 +38,26 @@ namespace Detect4K {
                 Frame = 1,
                 Encoder = 10,
                 Timestamp = DateTime.Now.ToString(""),
-                Image = new byte[4096000]
+                Image = new HalconDotNet.HImage("byte", 4096, 1000)
             };
 
-            var tt = UtilTool.TimeCounting(() => {
+            var tt = await Task.Run(() => {
+                return TimeCounting(() => {
 
-                db.Transaction(() => {
-                    for (int i = 0; i < 100; i++) {
-                        data.Frame = i + 1;
-                        data.Encoder = i * 10;
-                        db.GrabInner.Save(data);
-                    }
+                    db.Transaction(() => {
+                        for (int i = 0; i < 200; i++) {
+                            data.Frame = i + 1;
+                            data.Encoder = i * 10;
+                            db.GrabInner.Save(data);
+                        }
+                    });
                 });
             });
 
             db.Close();
-            
             Console.WriteLine(tt);
 
+            MessageBox.Show(tt.ToString());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DALSA.SaperaLT.SapClassBasic;
 using System;
+using System.Diagnostics;
 
 namespace Common {
 
@@ -47,21 +48,20 @@ namespace Common {
         public SapAcqDevice AcqDevice = null;
         public SapBuffer Buffers = null;
         public SapTransfer Xfer = null;
-
-        public event SapXferNotifyHandler CallBack = null;
+        
+        public event Action<DataGrab> OnImageReady = null;
+        public event Func<int> GetEncoder;
 
         public bool m_isCameraLink = false;
         public bool m_isOpen = false;
         public bool m_isGrab = false;
 
         public int m_count = 0;
-        public double m_fps {
-            get {
-                if (m_isGrab)
-                    return Xfer.FrameRateStatistics.LiveFrameRate;
-                return -2;
-            }
-        }
+        public double m_fps = 0;
+
+        Stopwatch watch = new Stopwatch();
+        double watch_time = 0;
+        double watch_time_prev = 0;
 
         public string m_camera_name = "";
 
@@ -148,14 +148,7 @@ namespace Common {
             //
             Xfer.Pairs[0].CounterStampTimeBase = SapXferPair.XferCounterStampTimeBase.ShaftEncoder;
             Xfer.Pairs[0].EventType = SapXferPair.XferEventType.EndOfFrame;
-            Xfer.XferNotify += (sender, args) => {
-
-                //TODO:
-                long encoder = args.HostTimeStamp;
-
-                m_count++;
-                CallBack?.Invoke(sender, args);
-            };
+            Xfer.XferNotify += Xfer_XferNotify;
             Xfer.XferNotifyContext = this;
 
             //创建对象
@@ -172,6 +165,49 @@ namespace Common {
             m_isOpen = true;
             return true;
         }
+        private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
+
+            //
+            if (m_count == 0) {
+                watch.Stop();
+                watch.Reset();
+                watch.Start();
+                watch_time_prev = watch.ElapsedMilliseconds;
+                m_fps = 1.0;
+            }
+            else {
+                watch_time = watch.ElapsedMilliseconds;
+                m_fps = 1000 / (watch_time - watch_time_prev);
+                watch_time_prev = watch_time;
+            }
+
+            //
+            m_count++;
+
+            //
+            if (OnImageReady != null) {
+
+                //
+                DataGrab dg = new DataGrab() {
+                    Camera = m_camera_name,
+                    Frame = m_count,
+                    Encoder = GetEncoder != null ? GetEncoder() : (int)e.HostTimeStamp,
+                    Timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff"),
+                };
+
+                //
+                int w = Buffers.Width;
+                int h = Buffers.Height;
+                IntPtr data;
+                Buffers.GetAddress(out data);
+                dg.Image = new HalconDotNet.HImage("byte", w, h, data);
+
+                //
+                OnImageReady(dg);
+            }
+
+        }
+
         public void Close() {
 
             try {
@@ -201,8 +237,7 @@ namespace Common {
             if (AcqDevice != null) { AcqDevice.Dispose(); AcqDevice = null; }
             if (Acq != null) { Acq.Dispose(); Acq = null; }
         }
-
-
+        
         public void Snap() {
             if (m_isOpen) {
                 Xfer.Snap();
@@ -219,15 +254,7 @@ namespace Common {
                 m_isGrab = false;
             }
         }
-
-        public HalconDotNet.HImage GetImage() {
-            int w = Buffers.Width;
-            int h = Buffers.Height;
-            IntPtr data;
-            Buffers.GetAddress(out data);
-            return new HalconDotNet.HImage("byte", w, h, data);
-        }
-
+        
         //Param
         public bool ParamTriggerMode {
             get {
