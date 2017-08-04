@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Detect4K {
-
-    class Device {
+namespace Common {
+    class TemplateCamera {
 
     }
 }

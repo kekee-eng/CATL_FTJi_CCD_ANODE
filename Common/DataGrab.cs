@@ -46,6 +46,10 @@ namespace Common {
                 Encoder = (int)getDef(objs[3], 0),
                 Timestamp = (string)getDef(objs[4], ""),
                 Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null)),
+
+                IsCreated = true,
+                IsCache = true,
+                IsStore = true,
             };
         }
 
@@ -124,39 +128,39 @@ Image           BLOB
 
         public class CacheGrab {
 
-            public ConcurrentDictionary<int, DataGrab> Cache = new ConcurrentDictionary<int, DataGrab>();
-            public int Min { get { return Cache.Count == 0 ? 0 : Cache.Keys.Min(); } }
-            public int Max { get { return Cache.Count == 0 ? 0 : Cache.Keys.Max(); } }
-            public int Count { get { return Cache.Count; } }
+            public ConcurrentDictionary<int, DataGrab> store = new ConcurrentDictionary<int, DataGrab>();
+            public int Min { get { return store.Count == 0 ? 0 : store.Keys.Min(); } }
+            public int Max { get { return store.Count == 0 ? 0 : store.Keys.Max(); } }
+            public int Count { get { return store.Count; } }
 
             public int LastKey = 0;
             public DataGrab this[int i] {
                 get {
-                    return Cache.Keys.Contains(i) ? Cache[i] : null;
+                    return store.Keys.Contains(i) ? store[i] : null;
                 }
                 set {
                     LastKey = i;
-                    Cache[i] = value;
+                    store[i] = value;
                     value.IsCache = true;
                 }
             }
 
             public void RemoveAll() {
 
-                foreach (var key in Cache.Keys.ToArray()) {
+                foreach (var key in store.Keys.ToArray()) {
                     DataGrab dg;
-                    if (Cache.TryRemove(key, out dg)) {
+                    if (store.TryRemove(key, out dg)) {
                         dg.Image.Dispose();
                     }
                 }
             }
-            public void RemoveOld(int store) {
+            public void RemoveOld(int max) {
 
-                int del = Cache.Count - store;
+                int del = this.store.Count - max;
                 if (del > 0) {
-                    foreach (var key in Cache.Keys.OrderByDescending(x => Math.Abs(x - LastKey)).Take(del).ToList()) {
+                    foreach (var key in store.Keys.OrderByDescending(x => Math.Abs(x - LastKey)).Take(del).ToList()) {
                         DataGrab dg;
-                        if (Cache.TryRemove(key, out dg)) {
+                        if (store.TryRemove(key, out dg)) {
                             dg.Image.Dispose();
                         }
                     }
@@ -166,11 +170,49 @@ Image           BLOB
             public void SaveToDB(DBTableGrab tg) {
 
                 //
-                foreach (var key in Cache.Keys.ToList()) {
+                foreach (var key in store.Keys.ToList()) {
                     tg.Save(this[key]);
                 }
             }
 
+        }
+
+        #endregion
+
+        #region 
+
+        public class EntryGrab {
+
+            public EntryGrab(TemplateDB parent, string tableName) {
+                DB = new DBTableGrab(parent, tableName);
+                Cache = new CacheGrab();
+            }
+
+            public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
+            public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
+            public DataGrab this[int i] {
+                get {
+                    var ret1 = Cache[i];
+                    if (ret1 != null) {
+                        return ret1;
+                    }
+
+                    var ret2 = DB[i];
+                    if(ret2!=null) {
+                        Cache[i] = ret2;
+                        return ret2;
+                    }
+
+                    return Cache[i] ?? DB[i];
+                }
+            }
+
+            public CacheGrab Cache;
+            public DBTableGrab DB;
+
+            public void SaveToDB() {
+                Cache.SaveToDB(DB);
+            }
         }
 
         #endregion

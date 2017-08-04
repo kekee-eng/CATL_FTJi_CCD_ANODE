@@ -17,42 +17,64 @@ namespace Detect4K {
             InitializeComponent();
 
             //
-            //System.IO.File.Delete(Config.FolderRecord + "01.db");
-            m_record = new ConnectRecord();
-            m_record.Open(Config.FolderRecord + "01.db");
-            m_record.Init();
+            System.IO.File.Delete(Config.FolderRecord + "01.db");
+
+            record = new ModRecord();
+            record.Open(Config.FolderRecord + "01.db");
+            record.Init();
 
             //
-            m_camera = new ConnectCamZip(@"D:\#DAT\[2A][20170728][125247-130642][1283][F1-F1283].zip");
-            m_camera.OnImageReady += obj => {
+            device = new ModDevice();
+
+            //
+            device.InnerCamera = new ConnectCamera_ZipFile(@"D:\#DAT\[2A][20170728][125247-130642][1283][F1-F1283].zip");
+            device.InnerCamera.OnImageReady += obj => {
+
+                //线程1：内侧相机取图、处理
+                //
+                record.InnerGrab.Cache[obj.Frame] = obj;
+                record.InnerGrab.Cache.RemoveOld(100);
+            };
+            device.InnerCamera.OnComplete += () => {
 
                 //
-                m_record.InnerGrabCache[obj.Frame] = obj;
-                m_record.InnerGrabCache.RemoveOld(100);
+                device.InnerCamera.Stop();
+                device.InnerCamera.Reset();
+                device.InnerCamera.Start();
             };
-            m_camera.OnComplete += () => {
+
+            //
+            device.OuterCamera = new ConnectCamera_ZipFile(@"D:\#DAT\[2A][20170728][125247-130642][1283][F1-F1283].zip");
+            device.OuterCamera.OnImageReady += obj => {
+
+                //线程2：外侧相机取图、处理
+                //
+                record.InnerGrab.Cache[obj.Frame] = obj;
+                record.InnerGrab.Cache.RemoveOld(100);
+            };
+            device.OuterCamera.OnComplete += () => {
 
                 //
-                m_camera.Stop();
-                m_camera.Reset();
-                m_camera.Start();
+                device.OuterCamera.Stop();
+                device.OuterCamera.Reset();
+                device.OuterCamera.Start();
             };
-
+            
             //
             Task.Run(() => {
 
-                //
+                //线程3：写数据库
                 while (!isQuit) {
                     Thread.Sleep(200);
 
-                    m_record.Transaction(() => {
-                        m_record.InnerGrabCache.SaveToDB(m_record.InnerGrabDB);
+                    record.Transaction(() => {
+                        record.InnerGrab.SaveToDB();
                     });
                 }
 
                 //
-                m_record.Close();
-                m_camera.Dispose();
+                record.Close();
+                device.Close();
             });
 
             //
@@ -63,27 +85,27 @@ namespace Detect4K {
         }
         
         bool isQuit = false;
-
-        ConnectCamZip m_camera;
-        ConnectRecord m_record;
+        
+        ModRecord record;
+        ModDevice device;
 
         //公用信息，自动显示到控件上
-        public string AutoInfo_Inner_Grab_Name() { return m_camera.m_camera_name; }
-        public bool AutoInfo_Inner_Grab_IsReady() { return m_camera.isReady; }
-        public bool AutoInfo_Inner_Grab_IsRun() { return m_camera.isRun; }
-        public int AutoInfo_Inner_Grab_Frame() { return m_camera.m_frame; }
-        public int AutoInfo_Inner_Grab_FrameStart() { return m_camera.m_frameStart; }
-        public int AutoInfo_Inner_Grab_FrameEndMax() { return m_camera.m_frameEndMax; }
-        public double AutoInfo_Inner_Grab_FpsControl() { return m_camera.m_fpsControl; }
-        public double AutoInfo_Inner_Grab_FpsRealtime() { return m_camera.m_fpsRealtime; }
+        public string AutoInfo_Inner_Grab_Name() { return device.InnerCamera.m_camera_name; }
+        public bool AutoInfo_Inner_Grab_IsReady() { return device.InnerCamera.isReady; }
+        public bool AutoInfo_Inner_Grab_IsRun() { return device.InnerCamera.isRun; }
+        public int AutoInfo_Inner_Grab_Frame() { return device.InnerCamera.m_frame; }
+        public int AutoInfo_Inner_Grab_FrameStart() { return device.InnerCamera.m_frameStart; }
+        public int AutoInfo_Inner_Grab_FrameEndMax() { return device.InnerCamera.m_frameMax; }
+        public double AutoInfo_Inner_Grab_FpsControl() { return device.InnerCamera.m_fpsControl; }
+        public double AutoInfo_Inner_Grab_FpsRealtime() { return device.InnerCamera.m_fpsRealtime; }
 
-        public int AutoInfo_Inner_Record_GrabCacheMin() { return m_record.InnerGrabCache.Min; }
-        public int AutoInfo_Inner_Record_GrabCacheMax() { return m_record.InnerGrabCache.Max; }
-        public int AutoInfo_Inner_Record_GrabCacheCount() { return m_record.InnerGrabCache.Count; }
-        public int AutoInfo_Inner_Record_GrabDBMin() { return m_record.InnerGrabDB.Min; }
-        public int AutoInfo_Inner_Record_GrabDBMax() { return m_record.InnerGrabDB.Max; }
-        public int AutoInfo_Inner_Record_GrabDBCount() { return m_record.InnerGrabDB.Count; }
-        public int AutoInfo_Inner_Record_GrabCacheRemain() { return Math.Max(0, m_record.InnerGrabCache.Max - m_record.InnerGrabDB.Max); }
+        public int AutoInfo_Inner_Record_GrabCacheMin() { return record.InnerGrab.Cache.Min; }
+        public int AutoInfo_Inner_Record_GrabCacheMax() { return record.InnerGrab.Cache.Max; }
+        public int AutoInfo_Inner_Record_GrabCacheCount() { return record.InnerGrab.Cache.Count; }
+        public int AutoInfo_Inner_Record_GrabDBMin() { return record.InnerGrab.DB.Min; }
+        public int AutoInfo_Inner_Record_GrabDBMax() { return record.InnerGrab.DB.Max; }
+        public int AutoInfo_Inner_Record_GrabDBCount() { return record.InnerGrab.DB.Count; }
+        public int AutoInfo_Inner_Record_GrabCacheRemain() { return Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max); }
         
         //
         private void timer1_Tick(object sender, EventArgs e) {
@@ -92,11 +114,11 @@ namespace Detect4K {
             
         }
         private void btnGrabStart_Click(object sender, EventArgs e) {
-            m_camera.m_fpsControl = 20;
-            m_camera.Start();
+            device.InnerCamera.m_fpsControl = 20;
+            device.InnerCamera.Start();
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
-            m_camera.Stop();
+            device.InnerCamera.Stop();
         }
 
 

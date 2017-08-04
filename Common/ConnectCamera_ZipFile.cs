@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace Common {
 
-    public class ConnectCamZip : IDisposable {
+    public class ConnectCamera_ZipFile : IDisposable {
 
-        public ConnectCamZip(string filename) {
+        public ConnectCamera_ZipFile(string filename) {
             prepareFile(filename);
             new Thread(new ThreadStart(threadProcess)).Start();
         }
-        ~ConnectCamZip() {
+        ~ConnectCamera_ZipFile() {
             if (m_zipfile != null) {
                 m_zipfile.Dispose();
             }
@@ -91,8 +91,8 @@ namespace Common {
                 }
 
                 if (m_datas.Count > 0) {
-                    m_frameStartMin = m_datas.Keys.Min();
-                    m_frameEndMax = m_datas.Keys.Max();
+                    m_frameMin = m_datas.Keys.Min();
+                    m_frameMax = m_datas.Keys.Max();
                     isReady = true;
                 }
             });
@@ -108,11 +108,11 @@ namespace Common {
 
             //
             m_frame++;
-            if (m_frame > m_frameEndMax)
-                m_frame = m_frameEndMax + 1;
+            if (m_frame > m_frameMax)
+                m_frame = m_frameMax + 1;
 
-            if (m_frame < m_frameStartMin)
-                m_frame = m_frameStartMin;
+            if (m_frame < m_frameMin)
+                m_frame = m_frameMin;
 
             //
             if (!m_entrys.Keys.Contains(m_frame))
@@ -209,7 +209,7 @@ namespace Common {
                     if (dg != null)
                         OnImageReady?.Invoke(dg);
                     
-                    if (m_frame == m_frameEndMax)
+                    if (m_frame == m_frameMax)
                         OnComplete?.Invoke();
                     
                 }
@@ -228,7 +228,7 @@ namespace Common {
         public void Stop() {
             if (isRun) {
                 isRun = false;
-                while (!isQuit && !isStopOk && m_frame != m_frameEndMax) {
+                while (!isQuit && !isStopOk && m_frame != m_frameMax) {
                     Thread.Sleep(10);
                 }
             }
@@ -239,7 +239,7 @@ namespace Common {
             }
         }
         public string GetTitle() {
-            return string.Format("{0} [离线][{1}-{2}] [{3}]", m_camera_name, m_frameStartMin, m_frameEndMax, m_frame);
+            return string.Format("{0} [离线][{1}-{2}] [{3}]", m_camera_name, m_frameMin, m_frameMax, m_frame);
         }
 
         public virtual void Dispose() {
@@ -258,8 +258,8 @@ namespace Common {
         public bool isRun = false;
         public bool isStopOk = false;
 
-        public int m_frameStartMin = 0;
-        public int m_frameEndMax = 0;
+        public int m_frameMin = 0;
+        public int m_frameMax = 0;
 
         public int m_frame = 0;
         public int m_frameStart = 0;

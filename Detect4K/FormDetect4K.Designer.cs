@@ -39,7 +39,7 @@
             this.groupBox1.Controls.Add(this.btnGrabStart);
             this.groupBox1.Location = new System.Drawing.Point(446, 29);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(143, 187);
+            this.groupBox1.Size = new System.Drawing.Size(143, 125);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "取相";
