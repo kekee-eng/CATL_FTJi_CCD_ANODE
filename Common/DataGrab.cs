@@ -10,7 +10,7 @@ namespace Common {
 #pragma warning disable 0649
 
     public class DataGrab {
-        
+
         //取相相机
         public string Camera;
 
@@ -100,7 +100,7 @@ Image           BLOB
                     return;
                 db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", name), data.ToDB());
             }
-            
+
         }
 
         #endregion
@@ -109,16 +109,18 @@ Image           BLOB
 
         public class CacheGrab {
 
-            public SortedDictionary<int, DataGrab> Cache = new SortedDictionary<int, DataGrab>();
+            public ConcurrentDictionary<int, DataGrab> Cache = new ConcurrentDictionary<int, DataGrab>();
             public int FrameStart { get { return Cache.Count == 0 ? 0 : Cache.Keys.Min(); } }
             public int FrameEnd { get { return Cache.Count == 0 ? 0 : Cache.Keys.Max(); } }
             public int Count { get { return Cache.Count; } }
 
-            public DataGrab this [int i] {
+            public int LastKey = 0;
+            public DataGrab this[int i] {
                 get {
                     return Cache.Keys.Contains(i) ? Cache[i] : null;
                 }
                 set {
+                    LastKey = i;
                     Cache[i] = value;
                 }
             }
@@ -126,26 +128,29 @@ Image           BLOB
             public void RemoveAll() {
 
                 foreach (var key in Cache.Keys.ToArray()) {
-                    Cache[key].Image.Dispose();
-                    Cache.Remove(key);
-                }
-            }
-            public void RemoveOld(int store) {
-                
-                int del = Cache.Count - store;
-                if (del > 0) {
-                    foreach (var key in Cache.Keys.Take(del).ToList()) {
-                        Cache[key].Image.Dispose();
-                        Cache.Remove(key);
-                        
+                    DataGrab dg;
+                    if (Cache.TryRemove(key, out dg)) {
+                        dg.Image.Dispose();
                     }
                 }
             }
-            
+            public void RemoveOld(int store) {
+
+                int del = Cache.Count - store;
+                if (del > 0) {
+                    foreach (var key in Cache.Keys.OrderByDescending(x => Math.Abs(x - LastKey)).Take(del).ToList()) {
+                        DataGrab dg;
+                        if (Cache.TryRemove(key, out dg)) {
+                            dg.Image.Dispose();
+                        }
+                    }
+                }
+            }
+
             public void SaveToDB(DBTableGrab tg) {
-                
+
                 //
-                foreach(var key in Cache.Keys.ToList()) {
+                foreach (var key in Cache.Keys.ToList()) {
                     if (!tg.CheckExist(key))
                         tg.Save(Cache[key]);
                 }

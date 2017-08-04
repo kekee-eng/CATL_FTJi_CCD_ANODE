@@ -16,18 +16,25 @@ namespace Detect4K {
             InitializeComponent();
 
             //
-            System.IO.File.Delete(Config.FolderRecord + "01.db");
+            //System.IO.File.Delete(Config.FolderRecord + "01.db");
             m_record = new ConnectRecord();
             m_record.Open(Config.FolderRecord + "01.db");
             m_record.Init();
 
             //
-            m_camera = new ConnectCamZip(@"D:\#DAT\[2A][20170728][154856-162629][2413][F1-F2413].zip");
+            m_camera = new ConnectCamZip(@"D:\#DAT\[2A][20170728][125247-130642][1283][F1-F1283].zip");
             m_camera.OnImageReady += obj => {
 
                 //
                 m_record.GrabCacheInner[obj.Frame] = obj;
                 m_record.GrabCacheInner.RemoveOld(30);
+            };
+            m_camera.OnComplete += () => {
+
+                //
+                m_camera.Stop();
+                m_camera.Reset();
+                m_camera.Start();
             };
 
             //
