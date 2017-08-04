@@ -12,13 +12,17 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Common {
-    class ConnectCamZip : IDisposable {
+
+    public class ConnectCamZip : IDisposable {
 
         public ConnectCamZip(string filename) {
-
+            prepareFile(filename);
+            new Thread(new ThreadStart(threadProcess)).Start();
         }
         ~ConnectCamZip() {
-
+            if (m_zipfile != null) {
+                m_zipfile.Dispose();
+            }
         }
 
         //
@@ -177,10 +181,10 @@ namespace Common {
                     timeStart = watch.ElapsedMilliseconds;
 
                     //准备图像
-                    DataGrab image = null;
-                    while (isRun && image == null) {
+                    DataGrab dg = null;
+                    while (isRun && dg == null) {
                         Thread.Sleep(10);
-                        image = prepareImage();
+                        dg = prepareImage();
                     }
 
                     //计算达到指定帧率，所需要的时间
@@ -191,7 +195,7 @@ namespace Common {
 
                     //等待时间到达
                     do {
-                        Thread.Sleep(5);
+                        Thread.Sleep(1);
                         timeEnd = watch.ElapsedMilliseconds;
                         timeElapsedReal = timeEnd - timeStart;
                     } while (isRun && timeElapsedReal < timeElapsedRequire);
@@ -200,12 +204,12 @@ namespace Common {
                     m_fpsRealtime = 1000 / timeElapsedReal;
 
                     //回调
-                    if (image != null)
-                        OnImageReady?.Invoke(image);
+                    if (dg != null)
+                        OnImageReady?.Invoke(dg);
                     
                     if (m_frame == m_frameEndMax)
                         OnComplete?.Invoke();
-
+                    
                 }
                 else {
                     isStopOk = true;

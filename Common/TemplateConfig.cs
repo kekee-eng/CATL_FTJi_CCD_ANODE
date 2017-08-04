@@ -24,16 +24,16 @@ namespace Common {
             object tmp = field.GetValue(this);
 
             if (field.FieldType == typeof(string)) {
-                value = (tmp == null ? "" : tmp.ToString());
+                value = (tmp ?? "").ToString();
             }
             else if (field.FieldType == typeof(int)) {
-                value = (tmp == null ? "" : tmp.ToString());
+                value = (tmp ?? "").ToString();
             }
             else if (field.FieldType == typeof(bool)) {
-                value = (tmp == null ? "" : tmp.ToString());
+                value = (tmp ?? "").ToString();
             }
             else if (field.FieldType == typeof(double)) {
-                value = (tmp == null ? "" : tmp.ToString());
+                value = (tmp ?? "").ToString();
             }
             else {
                 throw new Exception("BaseConfig: getValueFromField: UnDefine Type." + field.FieldType.ToString());

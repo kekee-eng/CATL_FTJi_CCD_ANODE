@@ -92,7 +92,7 @@ namespace Common {
             return data;
         }
         public int Count(string table) {
-            try { return Convert.ToInt32(Read("SELECT COUNT(0) FROM " + table)[0][0]); }
+            try { return (int)(long)Read("SELECT COUNT(0) FROM " + table)[0][0]; }
             catch { return 0; }
         }
 

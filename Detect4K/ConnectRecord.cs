@@ -12,8 +12,8 @@ namespace Detect4K {
         public void Init() {
 
             //
-            GrabInner = new DBTableGrab(this, "GrabInner");
-            GrabOuter = new DBTableGrab(this, "GrabOuter");
+            GrabDBInner = new DBTableGrab(this, "GrabInner");
+            GrabDBOuter = new DBTableGrab(this, "GrabOuter");
 
             //
             GrabCacheInner = new CacheGrab();
@@ -21,11 +21,11 @@ namespace Detect4K {
 
         }
 
-        public DBTableGrab GrabInner;
-        public DBTableGrab GrabOuter;
+        public volatile DBTableGrab GrabDBInner;
+        public volatile DBTableGrab GrabDBOuter;
 
-        public CacheGrab GrabCacheInner;
-        public CacheGrab GrabCacheOuter;
+        public volatile CacheGrab GrabCacheInner;
+        public volatile CacheGrab GrabCacheOuter;
 
     }
 }
