@@ -27,13 +27,13 @@ namespace Detect4K {
             device = new ModDevice();
 
             //
-            device.InnerCamera = new ConnectCamera_ZipFile(@"D:\#DAT\[2A][20170728][125247-130642][1283][F1-F1283].zip");
+            device.InnerCamera = new ConnectCamera_ZipFile(@"D:\#DAT\[2B][20170728][125247-130642][1283][F1-F1283].zip");
             device.InnerCamera.OnImageReady += obj => {
 
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerGrab.Cache.RemoveOld(100);
+                record.InnerGrab.Cache.RemoveOld(Config.App.RecordCacheSize);
             };
             device.InnerCamera.OnComplete += () => {
 
@@ -50,7 +50,7 @@ namespace Detect4K {
                 //线程2：外侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerGrab.Cache.RemoveOld(100);
+                record.InnerGrab.Cache.RemoveOld(Config.App.RecordCacheSize);
             };
             device.OuterCamera.OnComplete += () => {
 
