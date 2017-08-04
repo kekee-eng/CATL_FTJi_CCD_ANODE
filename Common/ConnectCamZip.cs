@@ -70,7 +70,7 @@ namespace Common {
                 data.GenTimeStamp(new DateTime(v[0], v[1], v[2], v[3], v[4], v[5], v[6] / 10));
 
                 //
-                m_sourceName = data.Camera;
+                m_camera_name = data.Camera;
 
                 return data;
             };
@@ -146,6 +146,8 @@ namespace Common {
                 UtilTool.CopyMemory(dst, src, w * h);
             }
 
+            //
+            outdata.IsCreated = true;
             return outdata;
         }
         void threadProcess() {
@@ -237,13 +239,13 @@ namespace Common {
             }
         }
         public string GetTitle() {
-            return string.Format("{0} [离线][{1}-{2}] [{3}]", m_sourceName, m_frameStartMin, m_frameEndMax, m_frame);
+            return string.Format("{0} [离线][{1}-{2}] [{3}]", m_camera_name, m_frameStartMin, m_frameEndMax, m_frame);
         }
 
         public virtual void Dispose() {
             isRun = false;
             isQuit = true;
-            m_sourceName = "";
+            m_camera_name = "";
         }
         
         //事件
@@ -265,7 +267,7 @@ namespace Common {
         public double m_fpsRealtime = 0.0;
 
         //
-        public string m_sourceName = "";
+        public string m_camera_name = "";
 
     }
 }

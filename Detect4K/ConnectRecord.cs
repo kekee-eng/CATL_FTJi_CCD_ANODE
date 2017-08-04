@@ -10,22 +10,23 @@ namespace Detect4K {
     class ConnectRecord : TemplateDB {
 
         public void Init() {
+            
+            //
+            InnerGrabCache = new CacheGrab();
+            OuterGrabCache = new CacheGrab();
 
             //
-            GrabDBInner = new DBTableGrab(this, "GrabInner");
-            GrabDBOuter = new DBTableGrab(this, "GrabOuter");
-
-            //
-            GrabCacheInner = new CacheGrab();
-            GrabCacheOuter = new CacheGrab();
+            InnerGrabDB = new DBTableGrab(this, "InnerGrab");
+            OuterGrabDB = new DBTableGrab(this, "OuterGrab");
 
         }
 
-        public volatile DBTableGrab GrabDBInner;
-        public volatile DBTableGrab GrabDBOuter;
+        public volatile CacheGrab InnerGrabCache;
+        public volatile CacheGrab OuterGrabCache;
 
-        public volatile CacheGrab GrabCacheInner;
-        public volatile CacheGrab GrabCacheOuter;
+        public volatile DBTableGrab InnerGrabDB;
+        public volatile DBTableGrab OuterGrabDB;
+
 
     }
 }
