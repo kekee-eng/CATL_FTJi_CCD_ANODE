@@ -13,44 +13,49 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <BaseIntermediateOutputPath>..\..\build\tmp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\build\Temp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\build\bin\</OutputPath>
+    <OutputPath>..\..\build\Bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <BaseIntermediateOutputPath>..\..\build\tmp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\build\Temp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\build\bin\</OutputPath>
+    <OutputPath>..\..\build\Bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DALSA.SaperaLT.SapClassBasic, Version=8.30.0.1809, Culture=neutral, PublicKeyToken=4d8604101dcb6b58, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\bin\DALSA.SaperaLT.SapClassBasic.dll</HintPath>
+      <HintPath>..\..\build\Bin\DALSA.SaperaLT.SapClassBasic.dll</HintPath>
     </Reference>
     <Reference Include="halcondotnetxl, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\bin\halcondotnetxl.dll</HintPath>
+      <HintPath>..\..\build\Bin\halcondotnetxl.dll</HintPath>
     </Reference>
     <Reference Include="hdevenginedotnetxl, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\bin\hdevenginedotnetxl.dll</HintPath>
+      <HintPath>..\..\build\Bin\hdevenginedotnetxl.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\bin\log4net.dll</HintPath>
+      <HintPath>..\..\build\Bin\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -61,14 +66,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TemplateDB.cs" />
     <Compile Include="DataEA.cs" />
     <Compile Include="DataGrab.cs" />
     <Compile Include="DataTab.cs" />
+    <Compile Include="RecordGrab.cs" />
     <Compile Include="TemplateConfig.cs" />
     <Compile Include="ConnectDALSA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilSerialization.cs" />
     <Compile Include="_ENC7480.cs" />
     <Compile Include="_ModbusTCP.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZedGraph\ZedGraph.csproj">
+      <Project>{2541686b-1673-43bf-af89-3163945db009}</Project>
+      <Name>ZedGraph</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -36,20 +36,20 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <BaseIntermediateOutputPath>..\..\build\tmp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\build\Temp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\build\bin\</OutputPath>
+    <OutputPath>..\..\build\Bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <BaseIntermediateOutputPath>..\..\build\tmp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\..\build\Temp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\build\bin\</OutputPath>
+    <OutputPath>..\..\build\Bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

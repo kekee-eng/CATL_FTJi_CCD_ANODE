@@ -14,10 +14,16 @@ namespace Detect4K {
     class Config {
 
         public static string Root { get { return AppDomain.CurrentDomain.BaseDirectory; } }
-        public static string PathApp { get { return Root + "../config/cfg_app.xml"; } }
-        public static string PathParam { get { return Root + "../config/cfg_param.xml"; } }
-        public static string PathInner { get { return Root + "../config/cfg_inner.xml"; } }
-        public static string PathOuter { get { return Root + "../config/cfg_outer.xml"; } }
+
+        public static string FolderCfg { get { return Root + "../Config/"; } }
+        public static string FolderRecord { get { return Root + "../Record/"; } }
+        public static string FolderTemp { get { return Root + "../Temp/"; } }
+
+        public static string PathCfgApp { get { return FolderCfg + "cfg_app.xml"; } }
+        public static string PathCfgParam { get { return FolderCfg + "cfg_param.xml"; } }
+        public static string PathCfgInner { get { return FolderCfg + "cfg_inner.xml"; } }
+        public static string PathCfgOuter { get { return FolderCfg + "cfg_outer.xml"; } }
+        public static string PathImageProcess { get { return FolderCfg + "image_process.hdev"; } }
 
         public static CfgApp App;
         public static CfgParam Param;
@@ -29,20 +35,22 @@ namespace Detect4K {
         public static void Init() {
 
             //
-            Action<string> DelFile = x => {
-                if (System.IO.File.Exists(x))
-                    System.IO.File.Delete(x);
-            };
-            DelFile(PathApp);
-            DelFile(PathParam);
-            DelFile(PathInner);
-            DelFile(PathOuter);
+            if (true) {
+                Action<string> DelFile = x => {
+                    if (System.IO.File.Exists(x))
+                        System.IO.File.Delete(x);
+                };
+                DelFile(PathCfgApp);
+                DelFile(PathCfgParam);
+                DelFile(PathCfgInner);
+                DelFile(PathCfgOuter);
+            }
 
             //
-            App = new CfgApp(PathApp);
-            Param = new CfgParam(PathParam);
-            Inner = new CfgWork(PathInner);
-            Outer = new CfgWork(PathOuter);
+            App = new CfgApp(PathCfgApp);
+            Param = new CfgParam(PathCfgParam);
+            Inner = new CfgWork(PathCfgInner);
+            Outer = new CfgWork(PathCfgOuter);
 
             //
             App.Save();
