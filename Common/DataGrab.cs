@@ -13,16 +13,14 @@ namespace Common {
         public string Timestamp;
 
         //图像
-        public HalconDotNet.HImage Image;
+        public byte[] Image;
 
-        //数据库接口
-        public object[] ToDB() {
-            return new object[] {
-                Camera, Frame, Encoder, Timestamp,
-                UtilSerialization.obj2bytes(Image)
-            };
+        #region 数据库接口
+
+        object[] ToDB() {
+            return new object[] { Camera, Frame, Encoder, Timestamp, Image };
         }
-        public static DataGrab FromDB(object[] objs) {
+        static DataGrab FromDB(object[] objs) {
             System.Func<object, object, object> getDef = (obj, def) => obj is System.DBNull ? def : obj;
 
             return new DataGrab() {
@@ -30,12 +28,11 @@ namespace Common {
                 Frame = (int)getDef(objs[2], 0),
                 Encoder = (int)getDef(objs[3], 0),
                 Timestamp = (string)getDef(objs[4], ""),
-                Image = (HalconDotNet.HImage)getDef(objs[5], null),
+                Image = (byte[])getDef(objs[5], null),
             };
         }
 
-        #region 数据库命令
-        public static readonly string DB_CreateTable = @"CREATE TABLE IF NOT EXISTS {0} 
+        static readonly string C_CREATE = @"CREATE TABLE IF NOT EXISTS {0} 
 (
 ID              INTEGER     PRIMARY KEY     AUTOINCREMENT,
 Camera          TEXT,
@@ -44,9 +41,44 @@ Encoder         INTEGER,
 Timestamp       TEXT,
 Image           BLOB
 )";
-        public static readonly string DB_Insert = @"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ";
-        public static readonly string DB_Select = @"SELECT * FROM {0} WHERE Frame=""{1}""";
+        static readonly string C_INSERT = @"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ";
+        static readonly string C_SELECT = @"SELECT * FROM {0} WHERE Frame=""{1}""";
 
+        public class DBTableGrab {
+            public DBTableGrab(TemplateDB parent, string tableName) {
+
+                //
+                db = parent;
+                name = tableName;
+
+                //
+                db.Write(string.Format(C_CREATE, name));
+            }
+
+            TemplateDB db;
+            string name;
+
+            public int Count {
+                get { return db.Count(name); }
+            }
+            public bool CheckFrameExist(int frame) {
+                return db.Count(name + " WHERE Frame=" + frame) != 0;
+            }
+            public bool Save(DataGrab data) {
+                if (CheckFrameExist(data.Frame))
+                    return false;
+
+                db.Write(string.Format(C_INSERT, name), data.ToDB());
+                return true;
+            }
+            public DataGrab Get(int frame) {
+                var ret = db.Read(string.Format(C_SELECT, name, frame));
+                if (ret.Count == 0)
+                    return null;
+                return FromDB(ret[0]);
+            }
+            
+        }
 
         #endregion
 

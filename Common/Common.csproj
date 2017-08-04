@@ -75,6 +75,7 @@
     <Compile Include="ConnectDALSA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UtilSerialization.cs" />
+    <Compile Include="UtilTool.cs" />
     <Compile Include="_ENC7480.cs" />
     <Compile Include="_ModbusTCP.cs" />
   </ItemGroup>

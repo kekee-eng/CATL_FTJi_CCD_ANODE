@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Common {
-    public class TemplateDB {
+    public class TemplateDB :IDisposable{
 
         //
         public bool Open(string path) {
@@ -16,6 +16,7 @@ namespace Common {
                 return false;
 
             try {
+                m_conn = new SQLiteConnection();
                 m_conn.ConnectionString = "Data Source=" + path;
                 m_conn.Open();
             }
@@ -26,8 +27,17 @@ namespace Common {
             return true;
         }
         public void Close() {
-            m_conn.Close();
+            if (m_conn != null) {
+                m_conn.Close();
+                SQLiteConnection.ClearPool(m_conn);
+
+                m_conn.Dispose();
+                m_conn = null;
+            }
             m_isOpen = false;
+        }
+        void IDisposable.Dispose() {
+            Close();
         }
 
         public void Transaction(Action act) {
@@ -46,23 +56,25 @@ namespace Common {
         }
 
         //
-        public SQLiteConnection m_conn = new SQLiteConnection();
+        public SQLiteConnection m_conn = null;
         public bool m_isOpen = false;
 
         //
-        protected void write(string cmdtext, params object[] args) {
+        public void Write(string cmdtext, params object[] args) {
             var cmd = m_conn.CreateCommand();
             cmd.CommandText = cmdtext;
             foreach (var g in args)
                 cmd.Parameters.AddWithValue("", g);
             cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
-        protected List<object[]> read(string cmdtext) {
+        public List<object[]> Read(string cmdtext) {
             DataSet ds = new DataSet();
             {
                 var adapter = new SQLiteDataAdapter(cmdtext, m_conn);
                 adapter.FillSchema(ds, SchemaType.Source, "root");
                 adapter.Fill(ds, "root");
+                adapter.Dispose();
             }
             var dt = ds.Tables["root"];
 
@@ -79,8 +91,8 @@ namespace Common {
             }
             return data;
         }
-        protected int count(string table) {
-            try { return Convert.ToInt32(read("SELECT COUNT(0) FROM " + table)[0][0]); }
+        public int Count(string table) {
+            try { return Convert.ToInt32(Read("SELECT COUNT(0) FROM " + table)[0][0]); }
             catch { return 0; }
         }
 
