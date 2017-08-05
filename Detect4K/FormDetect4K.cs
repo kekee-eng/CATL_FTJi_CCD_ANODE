@@ -24,10 +24,9 @@ namespace Detect4K {
             //
             init_monitor();
             init_form();
-
-
+            
             //
-            viewer.InnerImage.View(1, 5, 1);
+            viewer.InnerImage.ViewFrame(1);
         }
 
         void init_form() {
@@ -141,21 +140,21 @@ namespace Detect4K {
             monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
 
             monitor["Inner_Viewer"] = () => ">=====<";
-            monitor["Inner_Viewer_frameS"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameS");
-            monitor["Inner_Viewer_frameX0"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX0");
-            monitor["Inner_Viewer_frameX"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX");
-            monitor["Inner_Viewer_frameY0"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY0");
-            monitor["Inner_Viewer_frameY"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY");
+            monitor["Inner_Viewer_frameVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVs");
+            monitor["Inner_Viewer_frameVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVx");
+            monitor["Inner_Viewer_frameVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVy");
+            monitor["Inner_Viewer_frameDx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameDx");
+            monitor["Inner_Viewer_frameDy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameDy");
+            monitor["Inner_Viewer_frameX1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX1");
+            monitor["Inner_Viewer_frameX2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX2");
+            monitor["Inner_Viewer_frameY1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY1");
+            monitor["Inner_Viewer_frameY2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY2");
             monitor["Inner_Viewer_frameStart"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStart");
             monitor["Inner_Viewer_frameEnd"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEnd");
             monitor["Inner_Viewer_frameStartRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartRequire");
             monitor["Inner_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndRequire");
             monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartLimit");
             monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndLimit");
-            monitor["Inner_Viewer_pixelPartRow1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartRow1");
-            monitor["Inner_Viewer_pixelPartRow2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartRow2");
-            monitor["Inner_Viewer_pixelPartCol1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartCol1");
-            monitor["Inner_Viewer_pixelPartCol2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartCol2");
             monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabWidth");
             monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabHeight");
             monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "boxWidth");

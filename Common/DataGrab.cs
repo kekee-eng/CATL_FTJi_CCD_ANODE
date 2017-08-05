@@ -247,7 +247,7 @@ Image           BLOB
             public int Height { get { return Math.Max(Cache.Height, DB.Height); } }
 
             //
-            public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
+            public int Min { get { return Math.Max(Cache.Min, DB.Min); } }
             public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
             public DataGrab this[int i] {
                 get {
@@ -401,12 +401,15 @@ Image           BLOB
             public void View(double x, double y, double s) {
 
                 //
-                frameX = x;
-                frameY = y;
-                frameS = s;
+                frameVx = x;
+                frameVy = y;
+                frameVs = s;
 
                 //
                 updateView();
+            }
+            public void ViewFrame(double y) {
+                View(0.5, y, 1);
             }
 
             #region 鼠标事件
@@ -429,8 +432,8 @@ Image           BLOB
                     if (!mouseAllow) return;
 
                     if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                        mouseFrameX = frameX;
-                        mouseFrameY = frameY;
+                        mouseFrameX = frameVx;
+                        mouseFrameY = frameVy;
                         mouseBoxX = e.X;
                         mouseBoxY = e.Y;
                         mouseIsMove = true;
@@ -442,8 +445,8 @@ Image           BLOB
                         double dx = mouseBoxX - e.X;
 
                         if (Math.Abs(dx) > 3 || Math.Abs(dy) > 3) {
-                            frameX = mouseFrameX + dx / refBoxWidth * frameS;
-                            frameY = mouseFrameY + dy / refBoxHeight * frameS;
+                            frameVx = mouseFrameX + dx / refBoxWidth * frameVs;
+                            frameVy = mouseFrameY + dy / refBoxHeight * frameVs;
 
                             updateView();
                         }
@@ -452,14 +455,14 @@ Image           BLOB
                 hwindow.HMouseWheel += (o, e) => {
                     if (!mouseAllow) return;
 
-                    double s1 = frameS;
-                    frameS *= (e.Delta < 0 ? 1.1 : 1 / 1.1);
-                    frameS = Math.Min(frameS, 2);
-                    frameS = Math.Max(frameS, 0.005);
-                    double s2 = frameS;
+                    double s1 = frameVs;
+                    frameVs *= (e.Delta < 0 ? 1.1 : 1 / 1.1);
+                    frameVs = Math.Min(frameVs, 2);
+                    frameVs = Math.Max(frameVs, 0.005);
+                    double s2 = frameVs;
 
-                    frameX += (e.X / 640.0 - 1) * (s1 - s2);
-                    frameY += (e.Y / 480.0 - 1) * (s1 - s2) * refGrabHeight / grabHeight;
+                    frameVx += (e.X / 640.0 - 0.5) * (s1 - s2);
+                    frameVy += (e.Y / 480.0 - 0.5) * (s1 - s2) * refGrabHeight / grabHeight;
 
                     updateView();
                 };
@@ -481,32 +484,35 @@ Image           BLOB
             int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
 
             //
-            double frameX = 1;
-            double frameY = 1;
-            double frameS = 1;
+            double frameVx = 1;
+            double frameVy = 1;
+            double frameVs = 1;
 
-            double frameX0 { get { return frameX - frameS * refGrabWidth / grabWidth; } }
-            double frameY0 { get { return frameY - frameS * refGrabHeight / grabHeight; } }
+            //
+            double frameDx { get { return  frameVs * refGrabWidth / grabWidth; } }
+            double frameDy { get { return  frameVs * refGrabHeight / grabHeight; } }
 
+            double frameX1 { get { return frameVx - frameDx/2; } }
+            double frameY1 { get { return frameVy - frameDy/2; } }
+
+            double frameX2 { get { return frameVx + frameDx/2; } }
+            double frameY2 { get { return frameVy + frameDy/2; } }
+
+            //
             int frameStart = 0;
             int frameEnd = 0;
 
+            int frameStartRequire { get { return (int)Math.Floor(frameY1); } }
+            int frameEndRequire { get { return (int)Math.Ceiling(frameY2); } }
+
             int frameStartLimit { get { return Grab.Min; } }
             int frameEndLimit { get { return Grab.Max; } }
-
-            int frameStartRequire { get { return (int)Math.Floor(frameY0); } }
-            int frameEndRequire { get { return (int)Math.Ceiling(frameY); } }
-
-            //
-            int pixelPartRow1 { get { return (int)getPixelY(frameY0); } }
-            int pixelPartRow2 { get { return (int)getPixelY(frameY); } }
-            int pixelPartCol1 { get { return (int)getPixelX(frameX0); } }
-            int pixelPartCol2 { get { return (int)getPixelX(frameX); } }
-
+            
             //
             double getPixelX(double framex) { return framex * grabWidth; }
             double getPixelY(double framey) { return (framey - frameStart) * grabHeight; }
 
+            //
             void updateView() {
 
                 if (frameEndRequire < frameStartLimit || frameStartRequire > frameEndLimit) {
@@ -529,28 +535,37 @@ Image           BLOB
                         Image = Grab.GetImage(frameStart, frameEnd);
                     }
 
-                    //显示图像
                     if (Image == null)
                         return;
 
-                    g.SetPart(pixelPartRow1, pixelPartCol1, pixelPartRow2, pixelPartCol2);
+                    //显示图像
+                    int row1 = (int)getPixelY(frameY1);
+                    int row2 = (int)getPixelY(frameY2);
+                    int col1 = (int)getPixelX(frameX1);
+                    int col2 = (int)getPixelX(frameX2);
+
+                    //
+                    g.SetPart(row1, col1, row2, col2);
                     g.DispImage(Image);
 
                     //显示极耳
 
 
                     //清空不显示区域
-                    double x1 = 1.0 * boxWidth * (0 - pixelPartCol1) / (pixelPartCol2 - pixelPartCol1);
-                    double x2 = 1.0 * boxWidth * (grabWidth - pixelPartCol1) / (pixelPartCol2 - pixelPartCol1);
-                    double y1 = 1.0 * boxHeight * (0 - pixelPartRow1) / (pixelPartRow2 - pixelPartRow1);
-                    double y2 = 1.0 * boxHeight * (grabHeight * (frameEnd - frameStart + 1) - pixelPartRow1) / (pixelPartRow2 - pixelPartRow1);
-                    int w = boxWidth;
-                    int h = boxHeight;
+                    int bw = boxWidth;
+                    int bh = boxHeight;
+                    int gw = grabWidth;
+                    int gh = grabHeight;
 
-                    if (x1 > 0) g.ClearRectangle(0, 0, h, x1);
-                    if (x2 < w) g.ClearRectangle(0, x2, h, w);
-                    if (y1 > 0) g.ClearRectangle(0, 0, y1, w);
-                    if (y2 < h) g.ClearRectangle(y2, 0, h, w);
+                    double x1 = 1.0 * bw * (0 - col1) / (col2 - col1);
+                    double x2 = 1.0 * bw * (gw - col1) / (col2 - col1);
+                    double y1 = 1.0 * bh * (0 - row1) / (row2 - row1);
+                    double y2 = 1.0 * bh * (gh * (frameEnd - frameStart + 1) - row1) / (row2 - row1);
+
+                    if (x1 > 0) g.ClearRectangle(0, 0, bh, x1);
+                    if (x2 < bw) g.ClearRectangle(0, x2, bh, bw);
+                    if (y1 > 0) g.ClearRectangle(0, 0, y1, bw);
+                    if (y2 < bh) g.ClearRectangle(y2, 0, bh, bw);
 
                 }
 
