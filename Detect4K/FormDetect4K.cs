@@ -119,8 +119,8 @@ namespace Detect4K {
 
             //
             var monitor = new Dictionary<string, Func<object>>();
-
-            monitor["Inner_Grab"] = () => ">=====<";
+            
+            monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;
             monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isReady;
             monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isRun;
@@ -130,7 +130,7 @@ namespace Detect4K {
             monitor["Inner_Grab_FpsControl"] = () => device.InnerCamera.m_fpsControl;
             monitor["Inner_Grab_FpsRealtime"] = () => device.InnerCamera.m_fpsRealtime;
 
-            monitor["Inner_Record"] = () => ">=====<";
+            monitor["Inner_Record"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Record_GrabCacheMin"] = () => record.InnerGrab.Cache.Min;
             monitor["Inner_Record_GrabCacheMax"] = () => record.InnerGrab.Cache.Max;
             monitor["Inner_Record_GrabCacheCount"] = () => record.InnerGrab.Cache.Count;
@@ -139,7 +139,7 @@ namespace Detect4K {
             monitor["Inner_Record_GrabDBCount"] = () => record.InnerGrab.DB.Count;
             monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
 
-            monitor["Inner_Viewer"] = () => ">=====<";
+            monitor["Inner_Viewer"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Viewer_frameVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVs");
             monitor["Inner_Viewer_frameVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVx");
             monitor["Inner_Viewer_frameVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVy");

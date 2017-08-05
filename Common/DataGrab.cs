@@ -105,8 +105,8 @@ Image           BLOB
             }
             public int Count { get { return db.Count(name); } }
 
-            public int Width = 0;
-            public int Height = 0;
+            public int Width = -1;
+            public int Height = -1;
 
             public DataGrab this[int i] {
                 get {
@@ -162,8 +162,8 @@ Image           BLOB
             public int Max { get { return store.Count == 0 ? 0 : store.Keys.Max(); } }
             public int Count { get { return store.Count; } }
 
-            public int Width = 0;
-            public int Height = 0;
+            public int Width = -1;
+            public int Height = -1;
 
             public int LastKey = 0;
             public DataGrab this[int i] {
@@ -509,10 +509,6 @@ Image           BLOB
             int frameEndLimit { get { return Grab.Max; } }
             
             //
-            double getPixelX(double framex) { return framex * grabWidth; }
-            double getPixelY(double framey) { return (framey - frameStart) * grabHeight; }
-
-            //
             void updateView() {
 
                 if (frameEndRequire < frameStartLimit || frameStartRequire > frameEndLimit) {
@@ -539,34 +535,40 @@ Image           BLOB
                         return;
 
                     //显示图像
-                    int row1 = (int)getPixelY(frameY1);
-                    int row2 = (int)getPixelY(frameY2);
-                    int col1 = (int)getPixelX(frameX1);
-                    int col2 = (int)getPixelX(frameX2);
+                    {
+                        //
+                        Func<double, double> getPixelX = framex => framex * grabWidth;
+                        Func<double ,double > getPixelY = framey => (framey - frameStart) * grabHeight;
 
-                    //
-                    g.SetPart(row1, col1, row2, col2);
-                    g.DispImage(Image);
+                        //
+                        int row1 = (int)getPixelY(frameY1);
+                        int row2 = (int)getPixelY(frameY2);
+                        int col1 = (int)getPixelX(frameX1);
+                        int col2 = (int)getPixelX(frameX2);
 
-                    //显示极耳
+                        //
+                        g.SetPart(row1, col1, row2, col2);
+                        g.DispImage(Image);
+
+                        //显示极耳
 
 
-                    //清空不显示区域
-                    int bw = boxWidth;
-                    int bh = boxHeight;
-                    int gw = grabWidth;
-                    int gh = grabHeight;
+                        //清空不显示区域
+                        int bw = boxWidth;
+                        int bh = boxHeight;
+                        int gw = grabWidth;
+                        int gh = grabHeight;
 
-                    double x1 = 1.0 * bw * (0 - col1) / (col2 - col1);
-                    double x2 = 1.0 * bw * (gw - col1) / (col2 - col1);
-                    double y1 = 1.0 * bh * (0 - row1) / (row2 - row1);
-                    double y2 = 1.0 * bh * (gh * (frameEnd - frameStart + 1) - row1) / (row2 - row1);
+                        double x1 = 1.0 * bw * (0 - col1) / (col2 - col1);
+                        double x2 = 1.0 * bw * (gw - col1) / (col2 - col1);
+                        double y1 = 1.0 * bh * (0 - row1) / (row2 - row1);
+                        double y2 = 1.0 * bh * (gh * (frameEnd - frameStart + 1) - row1) / (row2 - row1);
 
-                    if (x1 > 0) g.ClearRectangle(0, 0, bh, x1);
-                    if (x2 < bw) g.ClearRectangle(0, x2, bh, bw);
-                    if (y1 > 0) g.ClearRectangle(0, 0, y1, bw);
-                    if (y2 < bh) g.ClearRectangle(y2, 0, bh, bw);
-
+                        if (x1 > 0) g.ClearRectangle(0, 0, bh, x1);
+                        if (x2 < bw) g.ClearRectangle(0, x2, bh, bw);
+                        if (y1 > 0) g.ClearRectangle(0, 0, y1, bw);
+                        if (y2 < bh) g.ClearRectangle(y2, 0, bh, bw);
+                    }
                 }
 
             }
