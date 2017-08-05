@@ -17,7 +17,7 @@ namespace Detect4K {
             InitializeComponent();
 
             //
-            System.IO.File.Delete(Config.FolderRecord + "01.db");
+            //System.IO.File.Delete(Config.FolderRecord + "01.db");
 
             record = new ModRecord();
             record.Open(Config.FolderRecord + "01.db");
@@ -118,7 +118,16 @@ namespace Detect4K {
             device.InnerCamera.Stop();
         }
 
+        private void button1_Click(object sender, EventArgs e) {
 
+            var d1 = double.Parse(textBox1.Text);
+            var d2 = double.Parse(textBox2.Text);
 
+            var img = record.InnerGrab.GetImage(d1, d1 + d2);
+
+            hwin.HalconWindow.ClearWindow();
+            UtilTool.ShowHImage(hwin, img);
+
+        }
     }
 }

@@ -40,17 +40,26 @@ namespace Common {
         static DataGrab FromDB(object[] objs) {
             System.Func<object, object, object> getDef = (obj, def) => obj is System.DBNull ? def : obj;
 
-            return new DataGrab() {
+            var data = new DataGrab() {
                 Camera = (string)getDef(objs[1], ""),
-                Frame = (int)getDef(objs[2], 0),
-                Encoder = (int)getDef(objs[3], 0),
+                Frame = (int)(long)getDef(objs[2], 0),
+                Encoder = (int)(long)getDef(objs[3], 0),
                 Timestamp = (string)getDef(objs[4], ""),
-                Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null)),
-
+                
                 IsCreated = true,
                 IsCache = true,
                 IsStore = true,
             };
+
+            var a = getDef(objs[5], null);
+            var b = (byte[])a;
+            var c = UtilSerialization.bytes2obj(b);
+            var d = (HImage)c;
+
+            data.Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null));
+
+            return data;
+
         }
 
         public class DBTableGrab {
@@ -71,6 +80,10 @@ Timestamp       TEXT,
 Image           BLOB
 )", name));
 
+                //
+                if (Count != 0) {
+                    this[Min].Image.GetImageSize(out Width, out Height);
+                }
             }
 
             TemplateDB db;
@@ -90,8 +103,11 @@ Image           BLOB
                     return (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", name))[0][0];
                 }
             }
-
             public int Count { get { return db.Count(name); } }
+
+            public int Width = 0;
+            public int Height = 0;
+
             public DataGrab this[int i] {
                 get {
                     var ret = db.Read(string.Format(@"SELECT * FROM {0} WHERE Frame=""{1}""", name, i));
@@ -114,6 +130,18 @@ Image           BLOB
                 if (CheckExist(data.Frame)) {
                     data.IsStore = true;
                     return;
+                }
+
+                //
+                int w, h;
+                data.Image.GetImageSize(out w, out h);
+                if (Count == 0) {
+                    Width = w;
+                    Height = h;
+                }
+                else {
+                    if (Width != w || Height != h)
+                        throw new Exception("DataGrab: DBTableGrab: Save: Image Size Error.");
                 }
 
                 db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", name), data.ToDB());
@@ -142,14 +170,23 @@ Image           BLOB
                     return store.Keys.Contains(i) ? store[i] : null;
                 }
                 set {
+
+                    //
+                    int w, h;
+                    value.Image.GetImageSize(out w, out h);
+                    if (store.Count == 0) {
+                        Width = w;
+                        Height = h;
+                    }else {
+                        if(Width!=w || Height!=h)
+                            throw new Exception("DataGrab: CacheGrab: Set: Image Size Error.");
+                    }
+
+                    //
                     LastKey = i;
                     store[i] = value;
                     value.IsCache = true;
 
-                    //
-                    if (store.Count == 1) {
-                        value.Image.GetImageSize(out Width, out Height);
-                    }
                 }
             }
 
@@ -230,8 +267,8 @@ Image           BLOB
             public HImage GetImage(int start, int end) {
 
                 //变量定义
-                int w = Cache.Width;
-                int h = Cache.Height;
+                int w = Math.Max( Cache.Width, DB.Width);
+                int h = Math.Max(Cache.Height,DB.Height);
                 if (w == 0 || h == 0)
                     return null;
 
@@ -250,8 +287,8 @@ Image           BLOB
             public HImage GetImage(double start, double end) {
 
                 //变量定义
-                int w = Cache.Width;
-                int h = Cache.Height;
+                int w = Math.Max(Cache.Width, DB.Width);
+                int h = Math.Max(Cache.Height, DB.Height);
                 if (w == 0 || h == 0)
                     return null;
 
