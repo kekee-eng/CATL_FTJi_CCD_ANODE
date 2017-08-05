@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-#if MONO
+#if false
 using TypeConn = Mono.Data.Sqlite.SqliteConnection;
 using TypeAdapter = Mono.Data.Sqlite.SqliteDataAdapter;
 #else
@@ -23,12 +23,13 @@ namespace Common {
                 m_conn = new TypeConn();
                 m_conn.ConnectionString = "Data Source=" + path;
                 m_conn.Open();
+
+                m_isOpen = true;
+                return true;
             }
             catch {
                 return false;
             }
-            m_isOpen = true;
-            return true;
         }
         public void Close() {
             if (m_conn != null) {

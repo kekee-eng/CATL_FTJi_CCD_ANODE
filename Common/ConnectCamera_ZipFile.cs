@@ -211,10 +211,10 @@ namespace Common {
                     //回调
                     if (dg != null)
                         OnImageReady?.Invoke(dg);
-                    
+
                     if (m_frame == Max)
                         OnComplete?.Invoke();
-                    
+
                 }
                 else {
                     isStopOk = true;
@@ -250,7 +250,7 @@ namespace Common {
             isQuit = true;
             m_camera_name = "";
         }
-        
+
         //事件
         public event Action<DataGrab> OnImageReady = null;
         public event Action OnComplete = null;
@@ -261,8 +261,8 @@ namespace Common {
         public bool isRun = false;
         public bool isStopOk = false;
 
-        public int Min { get { return m_datas.Count == 0 ? 0 : m_datas.Keys.Min(); } }
-        public int Max { get { return m_datas.Count == 0 ? 0 : m_datas.Keys.Max(); } }
+        public int Min { get { return m_datas?.Count > 0 ? m_datas.Keys.Min() : 0; } }
+        public int Max { get { return m_datas?.Count > 0 ? m_datas.Keys.Max() : 0; } }
 
         public int m_frame = 0;
         public int m_frameStart = 0;

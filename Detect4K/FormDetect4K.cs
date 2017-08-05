@@ -65,7 +65,7 @@ namespace Detect4K {
                     Thread.Sleep(500);
 
                     record.Transaction(() => {
-                        record.InnerGrab.SaveToDB();
+                        record.InnerGrab.Save();
                     });
                 }
 

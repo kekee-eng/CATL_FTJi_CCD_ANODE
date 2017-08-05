@@ -121,6 +121,7 @@ Image           BLOB
                 return db.Count(name + " WHERE Frame=" + frame) != 0;
             }
             public void Save(DataGrab data) {
+
                 if (data == null)
                     return;
 
@@ -215,9 +216,10 @@ Image           BLOB
             public void SaveToDB(DBTableGrab tg) {
 
                 //
-                foreach (var key in store.Keys.ToList()) {
-                    tg.Save(this[key]);
+                foreach(var val in store.Values) {
+                    tg.Save(val);
                 }
+
             }
 
         }
@@ -228,11 +230,18 @@ Image           BLOB
 
         public class EntryGrab {
 
+            //
             public EntryGrab(TemplateDB parent, string tableName) {
                 DB = new DBTableGrab(parent, tableName);
                 Cache = new CacheGrab();
             }
 
+            //
+            public void Save() {
+                Cache.SaveToDB(DB);
+            }
+
+            //
             public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
             public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
             public DataGrab this[int i] {
@@ -252,14 +261,12 @@ Image           BLOB
                 }
             }
 
+            //
             public CacheGrab Cache;
             public DBTableGrab DB;
             public ViewerImageGrab Viewer;
-
-            public void SaveToDB() {
-                Cache.SaveToDB(DB);
-            }
             
+            //
             public HImage GetImage(int i) {
                 var dt = this[i];
                 return dt == null ? null : dt.Image;
@@ -354,11 +361,11 @@ Image           BLOB
 
         public class ViewerImageGrab {
 
-            public ViewerImageGrab(HWindowControl hwin, EntryGrab grab) {
+            public ViewerImageGrab(HWindowControl hwindow, EntryGrab grab) {
 
                 //
-                ImageBox = hwin;
-
+                ImageBox = hwindow;
+                ImageSource = grab;
 
             }
 
