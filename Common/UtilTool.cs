@@ -25,6 +25,9 @@ namespace Common {
                 return watch.ElapsedMilliseconds;
             }
 
+            public static void RunThread(Action act) {
+                new Thread(new ThreadStart(act)).Start();
+            }
         }
 
         public class Image {
@@ -227,7 +230,12 @@ namespace Common {
                 };
 
                 //
-                bool isChanged = false;
+                Action<int, Color> setColorToGrid = (i, color) => {
+                    if (_grid.Rows[i].Cells[2].Style.BackColor != color)
+                        _grid.Rows[i].Cells[2].Style.BackColor = color;
+                };
+
+                //
                 foreach (KeyValuePair<string, Func<object>> kv in _func) {
 
                     //
@@ -243,20 +251,16 @@ namespace Common {
 
                             if (value0 != value) {
                                 _grid.Rows[i].Cells[2].Value = value;
-                                _grid.Rows[i].Cells[2].Style.BackColor = getColor(1, value);
-                                isChanged = true;
+                                setColorToGrid(i, getColor(1, value));
                             }
                             else {
-                                _grid.Rows[i].Cells[2].Style.BackColor = getColor(0, value);
+                                setColorToGrid(i, getColor(0, value));
                             }
 
                         }
                     }
                 }
-
-                //
-                if (isChanged)
-                    _grid.Invalidate();
+                
             }
 
         }

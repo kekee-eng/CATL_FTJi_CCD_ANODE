@@ -12,8 +12,8 @@ namespace Detect4K {
         public void Init() {
             
             //
-            InnerGrab = new GrabEntry(this, "InnerGrab");
-            OuterGrab = new GrabEntry(this, "OuterGrab");
+            InnerGrab = new GrabEntry(this, "InnerGrab", Config.App.RecordCacheSize);
+            OuterGrab = new GrabEntry(this, "OuterGrab", Config.App.RecordCacheSize);
 
         }
 

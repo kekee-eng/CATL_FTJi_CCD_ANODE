@@ -19,12 +19,12 @@ namespace Detect4K {
         public bool CameraByFolder = false;
         public bool CameraByDB = false;
 
-        //缓存数据量
-        public int RecordCacheSize = 100;
-
-        //是否保存图像
+        //记录参数
+        public int RecordCacheSize = 200;
         public bool RecordIsSaveImageOK = true;
         public bool RecordIsSaveImageNG = true;
+        
+        //显示参数
 
     }
 

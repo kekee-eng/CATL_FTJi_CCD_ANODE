@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -24,37 +25,86 @@ namespace Detect4K {
             //
             init_monitor();
             init_form();
-            
-            //
-            viewer.InnerImage.ViewFrame(1);
+
+            viewer.InnerImage.MoveDirect(1);
         }
 
+        double fpsControl = 25;
+        double fpsRealtime;
         void init_form() {
 
             //
             UtilTool.Form.AddBuildTag(this);
 
-            //
+            //管理线程
             Task.Run(() => {
 
                 //线程：更新显示
-                while (!isQuit) {
-                    Thread.Sleep(10);
-                    //viewer.InnerImage.View(1, device.InnerCamera.m_frame, 1);
-                }
-            });
+                var tView1 = Task.Run(() => {
 
-            //
-            Task.Run(() => {
+                    Stopwatch watch = new Stopwatch();
+                    while (!isQuit) {
+                        Thread.Sleep(10);
 
-                //线程3：写数据库
-                while (!isQuit) {
-                    Thread.Sleep(500);
+                        if (!watch.IsRunning) {
+                            watch.Start();
+                        }
 
-                    record.Transaction(() => {
-                        record.InnerGrab.Save();
-                    });
-                }
+                        if (fpsControl < 1) fpsControl = 1;
+
+                        //控制帧率
+                        if (watch.ElapsedMilliseconds > 1000 / fpsControl) {
+
+                            //实时显示帧率
+                            fpsRealtime = 1000.0 / watch.ElapsedMilliseconds;
+
+                            //重置定时器
+                            watch.Stop();
+                            watch.Reset();
+                            watch.Start();
+
+                            //设定目标
+                            double dist = viewer.InnerImage.GetTargetDistance();
+
+                            dist = Math.Max(dist, 1) * device.InnerCamera.m_fpsRealtime / fpsRealtime;
+                            viewer.InnerImage.MoveToTarget(dist);
+                        }
+                    };
+
+                });
+
+                //线程：写数据库
+                var tWriteDB = Task.Run(() => {
+
+                    do {
+
+                        record.Transaction(() => {
+                            record.InnerGrab.Save();
+                        });
+
+                        Thread.Sleep(500);
+                    } while (!isQuit);
+
+                });
+
+                //线程：更新界面
+                var tUpdate = Task.Run(() => {
+
+                    do {
+
+                        if (IsHandleCreated) BeginInvoke(new Action(() => {
+
+                            UtilTool.AutoInfo.Update();
+
+                        }));
+
+                        Thread.Sleep(1000);
+                    } while (!isQuit);
+
+                });
+
+                //
+                Task.WaitAll(tWriteDB, tView1);
 
                 //
                 record.Close();
@@ -80,7 +130,7 @@ namespace Detect4K {
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-
+                viewer.InnerImage.SetTargetBottom(obj.Frame);
             };
             device.InnerCamera.OnComplete += () => {
 
@@ -121,7 +171,10 @@ namespace Detect4K {
 
             //
             var monitor = new Dictionary<string, Func<object>>();
-            
+
+            monitor["App"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["App_RunTime"] = () => UtilPerformance.GetAppRuntime();
+
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;
             monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isReady;
@@ -140,8 +193,17 @@ namespace Detect4K {
             monitor["Inner_Record_GrabDBMax"] = () => record.InnerGrab.DB.Max;
             monitor["Inner_Record_GrabDBCount"] = () => record.InnerGrab.DB.Count;
             monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
+            monitor["Inner_Record_LastLoadCache"] = () => record.InnerGrab.LastLoadCache;
+            monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
 
             monitor["Inner_Viewer"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Inner_Viewer_FpsControl"] = () => fpsControl;
+            monitor["Inner_Viewer_FpsRealtime"] = () => fpsRealtime;
+            monitor["Inner_Viewer_targetVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVs");
+            monitor["Inner_Viewer_targetVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVx");
+            monitor["Inner_Viewer_targetVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVy");
+            monitor["Inner_Viewer_targetAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetAllow");
+            monitor["Inner_Viewer_mouseAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "mouseAllow");
             monitor["Inner_Viewer_frameVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVs");
             monitor["Inner_Viewer_frameVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVx");
             monitor["Inner_Viewer_frameVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVy");
@@ -176,15 +238,11 @@ namespace Detect4K {
         ModRecord record;
         ModDevice device;
         ModViewer viewer;
-
-        //
-        private void timer1_Tick(object sender, EventArgs e) {
-
-            UtilTool.AutoInfo.Update();
-
-        }
+        
         private void btnGrabStart_Click(object sender, EventArgs e) {
-            device.InnerCamera.m_fpsControl = 20;
+            device.InnerCamera.m_fpsControl = 0.3;
+            device.InnerCamera.m_frameReset = 10;
+            device.InnerCamera.m_frame = 10;
             device.InnerCamera.Start();
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
@@ -193,6 +251,10 @@ namespace Detect4K {
 
         private void button1_Click(object sender, EventArgs e) {
             
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e) {
+            viewer.InnerImage.SetTargetUsed(checkBox1.Checked);
         }
     }
 }

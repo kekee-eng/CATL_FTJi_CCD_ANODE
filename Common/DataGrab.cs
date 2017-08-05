@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Common {
 #pragma warning disable 0649
@@ -81,7 +82,13 @@ Image           BLOB
 )", name));
 
                 //
+                Count = QueryCount;
+
+                //
                 if (Count != 0) {
+                    Min = QueryMin;
+                    Max = QueryMax;
+
                     this[Min].Image.GetImageSize(out Width, out Height);
                 }
             }
@@ -89,9 +96,13 @@ Image           BLOB
             TemplateDB db;
             string name;
 
-            public int Min { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MIN(Frame) FROM {0}", name))[0][0]; } }
-            public int Max { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", name))[0][0]; } }
-            public int Count { get { return db.Count(name); } }
+            public int QueryMin { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MIN(Frame) FROM {0}", name))[0][0]; } }
+            public int QueryMax { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", name))[0][0]; } }
+            public int QueryCount { get { return db.Count(name); } }
+
+            public int Min;
+            public int Max;
+            public int Count;
 
             public int Width = -1;
             public int Height = -1;
@@ -105,9 +116,6 @@ Image           BLOB
                 }
             }
 
-            public bool CheckExist(int frame) {
-                return db.Count(name + " WHERE Frame=" + frame) != 0;
-            }
             public void Save(DataGrab data) {
 
                 if (data == null)
@@ -116,10 +124,14 @@ Image           BLOB
                 if (data.IsStore)
                     return;
 
-                if (CheckExist(data.Frame)) {
+                if (db.Count(name + " WHERE Frame=" + data.Frame) != 0) {
                     data.IsStore = true;
                     return;
                 }
+
+                //
+                db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", name), data.ToDB());
+                data.IsStore = true;
 
                 //
                 int w, h;
@@ -127,14 +139,19 @@ Image           BLOB
                 if (Count == 0) {
                     Width = w;
                     Height = h;
+
+                    Min = data.Frame;
+                    Max = data.Frame;
                 }
                 else {
                     if (Width != w || Height != h)
                         throw new Exception("DataGrab: DBTableGrab: Save: Image Size Error.");
                 }
 
-                db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", name), data.ToDB());
-                data.IsStore = true;
+                //
+                Min = Math.Min(Min, data.Frame);
+                Max = Math.Max(Max, data.Frame);
+                Count++;
             }
 
         }
@@ -219,11 +236,9 @@ Image           BLOB
         public class GrabEntry {
 
             //
-            public GrabEntry(TemplateDB parent, string tableName) {
+            public GrabEntry(TemplateDB parent, string tableName, int cache) {
                 DB = new GrabDB(parent, tableName);
-                Cache = new GrabCache();
-
-                //
+                Cache = new GrabCache() { CountLimit = cache };
             }
 
             //
@@ -234,24 +249,32 @@ Image           BLOB
             //
             public int Width { get { return Math.Max(Cache.Width, DB.Width); } }
             public int Height { get { return Math.Max(Cache.Height, DB.Height); } }
-
-            //
+            
             public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
             public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
+
+            public bool LastLoadCache = false;
+            public bool LastLoadDB = false;
+
+            //
             public DataGrab this[int i] {
                 get {
                     var ret1 = Cache[i];
                     if (ret1 != null) {
+                        LastLoadCache = true;
+                        LastLoadDB = false;
                         return ret1;
                     }
 
                     var ret2 = DB[i];
                     if (ret2 != null) {
+                        LastLoadCache = false;
+                        LastLoadDB = true;
                         Cache[i] = ret2;
                         return ret2;
                     }
-
-                    return Cache[i] ?? DB[i];
+                    
+                    return null;
                 }
             }
 
@@ -379,7 +402,7 @@ Image           BLOB
                 g.ClearWindow();
 
                 //
-                initMouse(hwindow);
+                initEvent(hwindow);
             }
 
             public HImage Image;
@@ -387,7 +410,69 @@ Image           BLOB
             public HWindowControl Box;
             public HWindow g;
 
-            public void View(double x, double y, double s) {
+            public void SetTargetUsed(bool use) {
+
+                if(use) {
+                    targetVs = frameVs;
+                    targetVx = frameVx;
+                    targetVy = frameVy;
+                }
+
+                targetAllow = use;
+                mouseAllow = !use;
+
+            }
+            public void SetTargetTop(double y, double x = 0.5, double s = 1) {
+                SetTargetCenter(y + frameDy / 2, x, s);
+            }
+            public void SetTargetBottom(double y, double x = 0.5, double s = 1) {
+                SetTargetCenter(y - frameDy / 2, x, s);
+            }
+            public void SetTargetCenter(double y, double x = 0.5, double s = 1) {
+                targetVx = x;
+                targetVy = y;
+                targetVs = s;
+            }
+            public double GetTargetDistance() {
+                var dx = targetVx - frameVx;
+                var dy = targetVy - frameVy;
+                var dist = Math.Sqrt(dx * dx + dy * dy);
+                return dist;
+            }
+            public void MoveToTarget(double dist = -1) {
+
+                //
+                if (!targetAllow)
+                    return;
+
+                if (targetDist == 0)
+                    return;
+
+                //
+                if (dist <= 0 || dist >= targetDist) {
+                    frameVx = targetVx;
+                    frameVy = targetVy;
+                    frameVs = targetVs;
+                }
+                else {
+
+                    double precent = dist / targetDist;
+
+                    frameVx += targetDx * precent;
+                    frameVy += targetDy * precent;
+                    frameVs += targetDs * precent;
+                }
+
+                //
+                updateView();
+            }
+            
+            public void MoveDirect(double y, double x, double s) {
+
+                //
+                targetVy = y;
+                targetVs = s;
+                targetVx = x;
 
                 //
                 frameVx = x;
@@ -397,11 +482,22 @@ Image           BLOB
                 //
                 updateView();
             }
-            public void ViewFrame(double y) {
-                View(0.5, y, 1);
+            public void MoveDirect(double y) {
+                MoveDirect(y, 0.5, 1);
             }
 
-            #region 鼠标事件
+            #region 事件
+
+            //
+            bool targetAllow = false;
+            double targetVx =0.5;
+            double targetVy =1;
+            double targetVs =1;
+
+            double targetDx { get { return targetVx - frameVx; } }
+            double targetDy { get { return targetVy - frameVy; } }
+            double targetDs { get { return targetVs - frameVs; } }
+            double targetDist {  get { return Math.Sqrt(targetDx * targetDx + targetDy * targetDy); } }
             
             //
             bool mouseAllow = true;
@@ -412,9 +508,34 @@ Image           BLOB
             double mouseFrameY = 0;
 
             //
-            void initMouse(HWindowControl hwindow) {
+            void initEvent(HWindowControl hwindow) {
 
+                //
                 hwindow.SizeChanged += (o, e) => updateView();
+
+                //
+                hwindow.PreviewKeyDown += (o, e) => {
+                    if (!mouseAllow) return;
+
+                    //
+                    switch (e.KeyCode) {
+                        case Keys.Left: frameVx -= frameDx / 10; break;
+                        case Keys.Right: frameVx += frameDx / 10; break;
+
+                        case Keys.Up: frameVy -= frameDy / 10; break;
+                        case Keys.Down: frameVy += frameDy / 10; break;
+                        case Keys.PageUp: frameVy -= frameDy; break;
+                        case Keys.PageDown: frameVy += frameDy; break;
+                        case Keys.Home: frameVy = frameStartLimit; break;
+                        case Keys.End: frameVy = frameEndLimit; break;
+                            
+                        default: return;
+                    }
+
+                    updateView();
+                };
+
+                //
                 hwindow.MouseLeave += (o, e) => mouseIsMove = false;
                 hwindow.MouseUp += (o, e) => mouseIsMove = false;
                 hwindow.MouseDown += (o, e) => {
@@ -455,6 +576,8 @@ Image           BLOB
 
                     updateView();
                 };
+
+
             }
 
             #endregion
@@ -473,7 +596,7 @@ Image           BLOB
             int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
 
             //
-            double frameVx = 1;
+            double frameVx = 0.5;
             double frameVy = 1;
             double frameVs = 1;
 
@@ -495,8 +618,8 @@ Image           BLOB
             int frameEndRequire { get { return (int)Math.Ceiling(frameY2); } }
 
             int frameStartLimit { get { return Grab.Min; } }
-            int frameEndLimit { get { return Grab.Max; } }
-            
+            int frameEndLimit { get { return Grab.Max+1; } }
+
             //
             void updateView() {
 
@@ -523,11 +646,14 @@ Image           BLOB
                     if (Image == null)
                         return;
 
+                    if (!Box.IsHandleCreated)
+                        return;
+
                     //显示图像
                     {
                         //
                         Func<double, double> getPixelX = framex => framex * grabWidth;
-                        Func<double ,double > getPixelY = framey => (framey - frameStart) * grabHeight;
+                        Func<double, double> getPixelY = framey => (framey - frameStart) * grabHeight;
 
                         //
                         int row1 = (int)getPixelY(frameY1);
