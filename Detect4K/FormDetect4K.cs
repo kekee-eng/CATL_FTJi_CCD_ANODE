@@ -35,6 +35,9 @@ namespace Detect4K {
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
                 record.InnerGrab.Cache.RemoveOld(Config.App.RecordCacheSize);
+
+                //
+                UtilTool.ShowHImage(hwin, obj.Image);
             };
             device.InnerCamera.OnComplete += () => {
 
@@ -49,24 +52,17 @@ namespace Detect4K {
             device.OuterCamera.OnImageReady += obj => {
 
                 //线程2：外侧相机取图、处理
-                //
-                record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerGrab.Cache.RemoveOld(Config.App.RecordCacheSize);
             };
             device.OuterCamera.OnComplete += () => {
-
-                //
-                device.OuterCamera.Stop();
-                device.OuterCamera.Reset();
-                device.OuterCamera.Start();
+                
             };
             
             //
-            Task.Run(() => {
+            new Thread(new ThreadStart(() => {
 
                 //线程3：写数据库
                 while (!isQuit) {
-                    Thread.Sleep(200);
+                    Thread.Sleep(500);
 
                     record.Transaction(() => {
                         record.InnerGrab.SaveToDB();
@@ -76,7 +72,7 @@ namespace Detect4K {
                 //
                 record.Close();
                 device.Close();
-            });
+            })).Start();
 
             //
             this.FormClosing += (o, e) => {
@@ -112,7 +108,7 @@ namespace Detect4K {
         private void timer1_Tick(object sender, EventArgs e) {
 
             UtilTool.BindAutoInfo("AutoInfo_", this, dataGridView1);
-            
+
         }
         private void btnGrabStart_Click(object sender, EventArgs e) {
             device.InnerCamera.m_fpsControl = 20;

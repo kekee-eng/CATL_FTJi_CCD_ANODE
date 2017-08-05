@@ -133,6 +133,9 @@ Image           BLOB
             public int Max { get { return store.Count == 0 ? 0 : store.Keys.Max(); } }
             public int Count { get { return store.Count; } }
 
+            public int Width = 0;
+            public int Height = 0;
+
             public int LastKey = 0;
             public DataGrab this[int i] {
                 get {
@@ -142,6 +145,11 @@ Image           BLOB
                     LastKey = i;
                     store[i] = value;
                     value.IsCache = true;
+
+                    //
+                    if (store.Count == 1) {
+                        value.Image.GetImageSize(out Width, out Height);
+                    }
                 }
             }
 
@@ -179,7 +187,7 @@ Image           BLOB
 
         #endregion
 
-        #region 
+        #region 入口
 
         public class EntryGrab {
 
@@ -209,10 +217,117 @@ Image           BLOB
 
             public CacheGrab Cache;
             public DBTableGrab DB;
+            public ViewerImageGrab Viewer;
 
             public void SaveToDB() {
                 Cache.SaveToDB(DB);
             }
+            
+            public HImage GetImage(int i) {
+                var dt = this[i];
+                return dt == null ? null : dt.Image;
+            }
+            public HImage GetImage(int start, int end) {
+
+                //变量定义
+                int w = Cache.Width;
+                int h = Cache.Height;
+                if (w == 0 || h == 0)
+                    return null;
+
+                //分配内存
+                int newLength = end - start + 1;
+                var newImage = new HImage("byte", w, h * newLength);
+
+                //填充数据
+                for (int i = start; i <= end; i++) {
+                    var srcImage = GetImage(i);
+                    UtilTool.CopyImageOffset(newImage, srcImage, (i - start) * h, 0, h);
+                }
+
+                return newImage;
+            }
+            public HImage GetImage(double start, double end) {
+
+                //变量定义
+                int w = Cache.Width;
+                int h = Cache.Height;
+                if (w == 0 || h == 0)
+                    return null;
+
+                //计算偏移
+                int p1 = (int)Math.Floor(start);
+                int p2 = (int)Math.Floor(end) + 1;
+
+                double p1f = start - p1;
+                double p2f = p2 - end;
+
+                int p1start = (int)(p1f * h);
+                int p1len = h - p1start;
+
+                int p2start = 0;
+                int p2len = (int)((1 - p2f) * h);
+
+                //分配内存
+                int nh = p1len + p2len + (p2 - p1 - 2) * h;
+                if (nh < 0)
+                    return null;
+                var newImage = new HImage("byte", w, nh);
+
+                //填充数据
+                for (int i = p1; i < p2; i++) {
+
+                    int hsrc;
+                    int hdst;
+                    int hcopy;
+
+                    if (i == p1 && i == p2 - 1) {
+                        hcopy = p1len + p2len - h;
+                        hsrc = p1start;
+                        hdst = 0;
+                    }
+                    else if (i == p1) {
+                        hcopy = p1len;
+                        hsrc = p1start;
+                        hdst = 0;
+                    }
+                    else if (i == p2 - 1) {
+                        hcopy = p2len;
+                        hsrc = p2start;
+                        hdst = p1len + (i - p1 - 1) * h;
+                    }
+                    else {
+                        hcopy = h;
+                        hsrc = 0;
+                        hdst = p1len + (i - p1 - 1) * h;
+                    }
+
+                    var srcImage = GetImage(i);
+                    UtilTool.CopyImageOffset(newImage, srcImage, hdst, hsrc, hcopy);
+                }
+
+                return newImage;
+            }
+
+        }
+
+        #endregion
+
+        #region 可视化工具
+
+        public class ViewerImageGrab {
+
+            public ViewerImageGrab(HWindowControl hwin, EntryGrab grab) {
+
+                //
+                ImageBox = hwin;
+
+
+            }
+
+            public HWindowControl ImageBox;
+            public EntryGrab ImageSource;
+
         }
 
         #endregion

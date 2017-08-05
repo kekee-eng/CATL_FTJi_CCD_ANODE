@@ -29,6 +29,7 @@
             this.btnGrabStart = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.hwin = new HalconDotNet.HWindowControl();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -79,11 +80,23 @@
             this.dataGridView1.Size = new System.Drawing.Size(401, 632);
             this.dataGridView1.TabIndex = 3;
             // 
+            // hwin
+            // 
+            this.hwin.BackColor = System.Drawing.Color.Black;
+            this.hwin.BorderColor = System.Drawing.Color.Black;
+            this.hwin.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
+            this.hwin.Location = new System.Drawing.Point(437, 230);
+            this.hwin.Name = "hwin";
+            this.hwin.Size = new System.Drawing.Size(588, 414);
+            this.hwin.TabIndex = 7;
+            this.hwin.WindowSize = new System.Drawing.Size(588, 414);
+            // 
             // FormDetect4K
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1037, 694);
+            this.Controls.Add(this.hwin);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
             this.Name = "FormDetect4K";
@@ -100,6 +113,7 @@
         private System.Windows.Forms.Button btnGrabStop;
         private System.Windows.Forms.Button btnGrabStart;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private HalconDotNet.HWindowControl hwin;
     }
 }
 

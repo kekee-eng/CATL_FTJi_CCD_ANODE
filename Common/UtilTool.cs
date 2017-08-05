@@ -30,13 +30,29 @@ namespace Common {
         [DllImport("kernel32.dll")]
         public static extern void CopyMemory(IntPtr dst, IntPtr src, int len);
 
-        public static void CopyImageOffset(HImage imgSrc, HImage imgDst, int hsrc, int hdst, int hcopy) {
+        [DllImport("kernel32.dll")]
+        public static extern void ZeroMemory(IntPtr dst, int len);
 
+        public static void CopyImageOffset(HImage imgDst, HImage imgSrc, int hdst, int hsrc, int hcopy) {
+
+            if (imgDst == null)
+                return;
+
+            //
             string type;
             int w, h;
-            IntPtr psrc = imgSrc.GetImagePointer1(out type, out w, out h);
             IntPtr pdst = imgDst.GetImagePointer1(out type, out w, out h);
-            CopyMemory(pdst + hdst * w, psrc + hsrc * w, hcopy * w);
+            if (imgSrc == null) {
+
+                //
+                ZeroMemory(pdst + hdst * w, hcopy * w);
+            }
+            else {
+
+                //
+                IntPtr psrc = imgSrc.GetImagePointer1(out type, out w, out h);
+                CopyMemory(pdst + hdst * w, psrc + hsrc * w, hcopy * w);
+            }
         }
 
         public static long TimeCounting(Action act) {
@@ -108,5 +124,39 @@ namespace Common {
                 grid.FirstDisplayedScrollingRowIndex = q;
 
         }
+        
+        public static void ShowHImage(HWindowControl hwindow, HImage himg) {
+
+            if (himg == null)
+                return;
+
+            try {
+                int w, h;
+                himg.GetImageSize(out w, out h);
+
+                int w0 = hwindow.Width;
+                int h0 = hwindow.Height;
+
+                double f0 = 1.0 * w0 / h0;
+                double f1 = 1.0 * w / h;
+
+                int w1, h1;
+                if (f0 > f1) {
+                    h1 = h;
+                    w1 = (int)(h * f0);
+                }
+                else {
+                    w1 = w;
+                    h1 = (int)(w / f0);
+                }
+
+                hwindow.HalconWindow.SetPart(0, 0, h1, w1);
+                hwindow.HalconWindow.DispImage(himg);
+            }
+            catch {
+
+            }
+        }
+
     }
 }
