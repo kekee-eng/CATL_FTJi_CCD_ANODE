@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#if MONO
+using TypeConn = Mono.Data.Sqlite.SqliteConnection;
+using TypeAdapter = Mono.Data.Sqlite.SqliteDataAdapter;
+#else
+using TypeConn = System.Data.SQLite.SQLiteConnection;
+using TypeAdapter = System.Data.SQLite.SQLiteDataAdapter;
+#endif
 
 namespace Common {
     public class TemplateDB :IDisposable{
@@ -16,7 +20,7 @@ namespace Common {
                 return false;
 
             try {
-                m_conn = new SQLiteConnection();
+                m_conn = new TypeConn();
                 m_conn.ConnectionString = "Data Source=" + path;
                 m_conn.Open();
             }
@@ -29,7 +33,7 @@ namespace Common {
         public void Close() {
             if (m_conn != null) {
                 m_conn.Close();
-                SQLiteConnection.ClearPool(m_conn);
+                TypeConn.ClearPool(m_conn);
 
                 m_conn.Dispose();
                 m_conn = null;
@@ -56,7 +60,7 @@ namespace Common {
         }
 
         //
-        public SQLiteConnection m_conn = null;
+        public TypeConn m_conn = null;
         public bool m_isOpen = false;
 
         //
@@ -71,7 +75,7 @@ namespace Common {
         public List<object[]> Read(string cmdtext) {
             DataSet ds = new DataSet();
             {
-                var adapter = new SQLiteDataAdapter(cmdtext, m_conn);
+                var adapter = new TypeAdapter(cmdtext, m_conn);
                 adapter.FillSchema(ds, SchemaType.Source, "root");
                 adapter.Fill(ds, "root");
                 adapter.Dispose();

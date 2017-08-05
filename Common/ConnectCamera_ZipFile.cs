@@ -63,24 +63,29 @@ namespace Common {
                         return null;
 
                 //
-                var data = new DataGrab();
-                data.Camera = getCameraName(zipfilename);
-                data.Frame = v[7];
-                data.Encoder = -1;
-                data.GenTimeStamp(new DateTime(v[0], v[1], v[2], v[3], v[4], v[5], v[6] / 10));
+                var data = new DataGrab() {
+                    Camera = m_camera_name,
+                    Frame = v[7],
+                    Encoder = 0,
+                    Timestamp = DataGrab.GenTimeStamp(new DateTime(v[0], v[1], v[2], v[3], v[4], v[5], v[6] / 10)),
 
-                //
-                m_camera_name = data.Camera;
+                };
 
                 return data;
             };
 
             isReady = false;
             await Task.Run(() => {
+
+                //
+                m_camera_name = getCameraName(zipfilename);
+
+                //
                 m_zipfile = new ZipFile(zipfilename);
                 m_entrys = new Dictionary<int, ZipEntry>();
                 m_datas = new Dictionary<int, DataGrab>();
 
+                //
                 foreach (var entry in m_zipfile.Entries) {
                     if (entry.FileName.ToUpper().Contains(".BMP")) {
                         var data = getImageData(entry.FileName);
@@ -90,15 +95,13 @@ namespace Common {
                     }
                 }
 
-                if (m_datas.Count > 0) {
-                    m_frameMin = m_datas.Keys.Min();
-                    m_frameMax = m_datas.Keys.Max();
-                    isReady = true;
-                }
-            });
+                //
+                m_frame = m_frameStart;
 
-            //
-            m_frame = m_frameStart;
+                //
+                isReady = true;
+
+            });
         }
         DataGrab prepareImage() {
 
@@ -108,11 +111,11 @@ namespace Common {
 
             //
             m_frame++;
-            if (m_frame > m_frameMax)
-                m_frame = m_frameMax + 1;
+            if (m_frame > Max)
+                m_frame = Max + 1;
 
-            if (m_frame < m_frameMin)
-                m_frame = m_frameMin;
+            if (m_frame < Min)
+                m_frame = Min;
 
             //
             if (!m_entrys.Keys.Contains(m_frame))
@@ -154,7 +157,7 @@ namespace Common {
 
             Stopwatch watch = new Stopwatch();
             while (!isQuit) {
-                Thread.Sleep(10);
+                Thread.Sleep(1);
                 if (!isRun && watch.IsRunning) {
                     watch.Stop();
                     watch.Reset();
@@ -209,7 +212,7 @@ namespace Common {
                     if (dg != null)
                         OnImageReady?.Invoke(dg);
                     
-                    if (m_frame == m_frameMax)
+                    if (m_frame == Max)
                         OnComplete?.Invoke();
                     
                 }
@@ -228,7 +231,7 @@ namespace Common {
         public void Stop() {
             if (isRun) {
                 isRun = false;
-                while (!isQuit && !isStopOk && m_frame != m_frameMax) {
+                while (!isQuit && !isStopOk && m_frame != Max) {
                     Thread.Sleep(10);
                 }
             }
@@ -239,7 +242,7 @@ namespace Common {
             }
         }
         public string GetTitle() {
-            return string.Format("{0} [离线][{1}-{2}] [{3}]", m_camera_name, m_frameMin, m_frameMax, m_frame);
+            return string.Format("{0} [离线][{1}-{2}] [{3}]", m_camera_name, Min, Max, m_frame);
         }
 
         public virtual void Dispose() {
@@ -258,8 +261,8 @@ namespace Common {
         public bool isRun = false;
         public bool isStopOk = false;
 
-        public int m_frameMin = 0;
-        public int m_frameMax = 0;
+        public int Min { get { return m_datas.Count == 0 ? 0 : m_datas.Keys.Min(); } }
+        public int Max { get { return m_datas.Count == 0 ? 0 : m_datas.Keys.Max(); } }
 
         public int m_frame = 0;
         public int m_frameStart = 0;

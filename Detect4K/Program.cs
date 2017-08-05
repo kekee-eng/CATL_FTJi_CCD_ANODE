@@ -13,9 +13,7 @@ namespace Detect4K {
         /// </summary>
         [STAThread]
         static void Main() {
-
-            var kk = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
-
+            
             Config.Init();
 
             Application.EnableVisualStyles();

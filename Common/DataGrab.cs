@@ -28,8 +28,8 @@ namespace Common {
         public bool IsStore = false;
 
         //生成时间戳
-        public void GenTimeStamp(System.DateTime time) {
-            Timestamp = time.ToString("yyyy/MM/dd HH:mm:ss.fff");
+        public static string GenTimeStamp(System.DateTime time) {
+            return time.ToString("yyyy/MM/dd HH:mm:ss.fff");
         }
 
         #region 数据库接口

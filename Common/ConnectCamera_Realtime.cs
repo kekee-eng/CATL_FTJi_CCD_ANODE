@@ -56,14 +56,18 @@ namespace Common {
         public bool m_isOpen = false;
         public bool m_isGrab = false;
 
+        public string m_camera_name = "";
+
         public int m_count = 0;
         public double m_fps = 0;
+        public int m_encoder = 0;
 
-        Stopwatch watch = new Stopwatch();
-        double watch_time = 0;
-        double watch_time_prev = 0;
+        Stopwatch fps_watch = new Stopwatch();
+        double fps_watch_time = 0;
+        double fps_watch_time_prev = 0;
 
-        public string m_camera_name = "";
+        int encoder_base = 0;
+        int encoder_current { get { return GetEncoder != null ? GetEncoder() : (int)Buffers.CounterStamp; } }
 
         bool create_objects() {
 
@@ -166,23 +170,30 @@ namespace Common {
             return true;
         }
         private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
-
+            
             //
             if (m_count == 0) {
-                watch.Stop();
-                watch.Reset();
-                watch.Start();
-                watch_time_prev = watch.ElapsedMilliseconds;
+
+                //
+                fps_watch.Stop();
+                fps_watch.Reset();
+                fps_watch.Start();
+                fps_watch_time_prev = fps_watch.ElapsedMilliseconds;
                 m_fps = 1.0;
+                
+                encoder_base = encoder_current;
             }
             else {
-                watch_time = watch.ElapsedMilliseconds;
-                m_fps = 1000 / (watch_time - watch_time_prev);
-                watch_time_prev = watch_time;
+
+                //
+                fps_watch_time = fps_watch.ElapsedMilliseconds;
+                m_fps = 1000 / (fps_watch_time - fps_watch_time_prev);
+                fps_watch_time_prev = fps_watch_time;
             }
 
             //
             m_count++;
+            m_encoder = encoder_current - encoder_base;
 
             //
             if (OnImageReady != null) {
@@ -191,8 +202,8 @@ namespace Common {
                 DataGrab dg = new DataGrab() {
                     Camera = m_camera_name,
                     Frame = m_count,
-                    Encoder = GetEncoder != null ? GetEncoder() : (int)e.HostTimeStamp,
-                    Timestamp = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff"),
+                    Encoder = m_encoder,
+                    Timestamp = DataGrab.GenTimeStamp(DateTime.Now),
                 };
 
                 //
@@ -201,7 +212,8 @@ namespace Common {
                 IntPtr data;
                 Buffers.GetAddress(out data);
                 dg.Image = new HalconDotNet.HImage("byte", w, h, data);
-
+                dg.IsCreated = true;
+                
                 //
                 OnImageReady(dg);
             }

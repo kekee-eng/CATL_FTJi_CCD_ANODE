@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -34,32 +34,8 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DALSA.SaperaLT.SapClassBasic, Version=8.30.0.1809, Culture=neutral, PublicKeyToken=4d8604101dcb6b58, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\DALSA.SaperaLT.SapClassBasic.dll</HintPath>
-    </Reference>
-    <Reference Include="halcondotnetxl, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\halcondotnetxl.dll</HintPath>
-    </Reference>
-    <Reference Include="hdevenginedotnetxl, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\hdevenginedotnetxl.dll</HintPath>
-    </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -68,6 +44,27 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="DALSA.SaperaLT.SapClassBasic">
+      <HintPath>..\..\build\Bin\DALSA.SaperaLT.SapClassBasic.dll</HintPath>
+    </Reference>
+    <Reference Include="halcondotnetxl">
+      <HintPath>..\..\build\Bin\halcondotnetxl.dll</HintPath>
+    </Reference>
+    <Reference Include="hdevenginedotnetxl">
+      <HintPath>..\..\build\Bin\hdevenginedotnetxl.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\build\Bin\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\build\Bin\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\build\Bin\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectCamera_ZipFile.cs" />
@@ -92,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZedGraph\ZedGraph.csproj">
-      <Project>{2541686b-1673-43bf-af89-3163945db009}</Project>
+      <Project>{2541686B-1673-43BF-AF89-3163945DB009}</Project>
       <Name>ZedGraph</Name>
     </ProjectReference>
   </ItemGroup>

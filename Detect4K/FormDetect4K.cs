@@ -27,7 +27,8 @@ namespace Detect4K {
             device = new ModDevice();
 
             //
-            device.InnerCamera = new ConnectCamera_ZipFile(@"D:\#DAT\[2B][20170728][125247-130642][1283][F1-F1283].zip");
+            string prefix = ( HalconDotNet.HalconAPI.isWindows? "D:/": "/media/fra/DATA/");
+            device.InnerCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2B][20170728][125247-130642][1283][F1-F1283].zip");
             device.InnerCamera.OnImageReady += obj => {
 
                 //线程1：内侧相机取图、处理
@@ -44,7 +45,7 @@ namespace Detect4K {
             };
 
             //
-            device.OuterCamera = new ConnectCamera_ZipFile(@"D:\#DAT\[2A][20170728][125247-130642][1283][F1-F1283].zip");
+            device.OuterCamera = new ConnectCamera_ZipFile(prefix +"#DAT/[2A][20170728][125247-130642][1283][F1-F1283].zip");
             device.OuterCamera.OnImageReady += obj => {
 
                 //线程2：外侧相机取图、处理
@@ -95,7 +96,7 @@ namespace Detect4K {
         public bool AutoInfo_Inner_Grab_IsRun() { return device.InnerCamera.isRun; }
         public int AutoInfo_Inner_Grab_Frame() { return device.InnerCamera.m_frame; }
         public int AutoInfo_Inner_Grab_FrameStart() { return device.InnerCamera.m_frameStart; }
-        public int AutoInfo_Inner_Grab_FrameEndMax() { return device.InnerCamera.m_frameMax; }
+        public int AutoInfo_Inner_Grab_FrameEndMax() { return device.InnerCamera.Max; }
         public double AutoInfo_Inner_Grab_FpsControl() { return device.InnerCamera.m_fpsControl; }
         public double AutoInfo_Inner_Grab_FpsRealtime() { return device.InnerCamera.m_fpsRealtime; }
 
