@@ -96,7 +96,7 @@ namespace Common {
                 }
 
                 //
-                m_frame = m_frameStart;
+                m_frame = m_frameReset;
 
                 //
                 isReady = true;
@@ -146,7 +146,7 @@ namespace Common {
                 IntPtr dst = outdata.Image.GetImagePointer1(out type, out w, out h);
 
                 //
-                UtilTool.CopyMemory(dst, src, w * h);
+                UtilTool.Image.CopyMemory(dst, src, w * h);
             }
 
             //
@@ -225,7 +225,7 @@ namespace Common {
         //
         public void Reset() {
             if (!isRun) {
-                m_frame = m_frameStart;
+                m_frame = m_frameReset;
             }
         }
         public void Stop() {
@@ -265,7 +265,7 @@ namespace Common {
         public int Max { get { return m_datas?.Count > 0 ? m_datas.Keys.Max() : 0; } }
 
         public int m_frame = 0;
-        public int m_frameStart = 0;
+        public int m_frameReset = 0;
         public double m_fpsControl = 1.0;
         public double m_fpsRealtime = 0.0;
 

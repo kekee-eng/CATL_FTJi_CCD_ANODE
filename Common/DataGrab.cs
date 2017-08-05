@@ -45,7 +45,7 @@ namespace Common {
                 Frame = (int)(long)getDef(objs[2], 0),
                 Encoder = (int)(long)getDef(objs[3], 0),
                 Timestamp = (string)getDef(objs[4], ""),
-                
+
                 IsCreated = true,
                 IsCache = true,
                 IsStore = true,
@@ -62,8 +62,8 @@ namespace Common {
 
         }
 
-        public class DBTableGrab {
-            public DBTableGrab(TemplateDB parent, string tableName) {
+        public class GrabDB {
+            public GrabDB(TemplateDB parent, string tableName) {
 
                 //
                 db = parent;
@@ -155,7 +155,7 @@ Image           BLOB
 
         #region 缓存接口
 
-        public class CacheGrab {
+        public class GrabCache {
 
             public ConcurrentDictionary<int, DataGrab> store = new ConcurrentDictionary<int, DataGrab>();
             public int Min { get { return store.Count == 0 ? 0 : store.Keys.Min(); } }
@@ -178,8 +178,9 @@ Image           BLOB
                     if (store.Count == 0) {
                         Width = w;
                         Height = h;
-                    }else {
-                        if(Width!=w || Height!=h)
+                    }
+                    else {
+                        if (Width != w || Height != h)
                             throw new Exception("DataGrab: CacheGrab: Set: Image Size Error.");
                     }
 
@@ -213,10 +214,10 @@ Image           BLOB
                 }
             }
 
-            public void SaveToDB(DBTableGrab tg) {
+            public void SaveToDB(GrabDB tg) {
 
                 //
-                foreach(var val in store.Values) {
+                foreach (var val in store.Values) {
                     tg.Save(val);
                 }
 
@@ -228,18 +229,22 @@ Image           BLOB
 
         #region 入口
 
-        public class EntryGrab {
+        public class GrabEntry {
 
             //
-            public EntryGrab(TemplateDB parent, string tableName) {
-                DB = new DBTableGrab(parent, tableName);
-                Cache = new CacheGrab();
+            public GrabEntry(TemplateDB parent, string tableName) {
+                DB = new GrabDB(parent, tableName);
+                Cache = new GrabCache();
             }
 
             //
             public void Save() {
                 Cache.SaveToDB(DB);
             }
+
+            //
+            public int Width { get { return Math.Max(Cache.Width, DB.Width); } }
+            public int Height { get { return Math.Max(Cache.Height, DB.Height); } }
 
             //
             public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
@@ -252,7 +257,7 @@ Image           BLOB
                     }
 
                     var ret2 = DB[i];
-                    if(ret2!=null) {
+                    if (ret2 != null) {
                         Cache[i] = ret2;
                         return ret2;
                     }
@@ -262,20 +267,23 @@ Image           BLOB
             }
 
             //
-            public CacheGrab Cache;
-            public DBTableGrab DB;
-            public ViewerImageGrab Viewer;
-            
+            public GrabCache Cache;
+            public GrabDB DB;
+
             //
             public HImage GetImage(int i) {
-                var dt = this[i];
-                return dt == null ? null : dt.Image;
+                try {
+                    return this[i].Image;
+                }
+                catch {
+                    return null;
+                }
             }
             public HImage GetImage(int start, int end) {
 
                 //变量定义
-                int w = Math.Max( Cache.Width, DB.Width);
-                int h = Math.Max(Cache.Height,DB.Height);
+                int w = Width;
+                int h = Height;
                 if (w == 0 || h == 0)
                     return null;
 
@@ -286,7 +294,7 @@ Image           BLOB
                 //填充数据
                 for (int i = start; i <= end; i++) {
                     var srcImage = GetImage(i);
-                    UtilTool.CopyImageOffset(newImage, srcImage, (i - start) * h, 0, h);
+                    UtilTool.Image.CopyImageOffset(newImage, srcImage, (i - start) * h, 0, h);
                 }
 
                 return newImage;
@@ -294,8 +302,8 @@ Image           BLOB
             public HImage GetImage(double start, double end) {
 
                 //变量定义
-                int w = Math.Max(Cache.Width, DB.Width);
-                int h = Math.Max(Cache.Height, DB.Height);
+                int w = Width;
+                int h = Height;
                 if (w == 0 || h == 0)
                     return null;
 
@@ -347,31 +355,209 @@ Image           BLOB
                     }
 
                     var srcImage = GetImage(i);
-                    UtilTool.CopyImageOffset(newImage, srcImage, hdst, hsrc, hcopy);
+                    UtilTool.Image.CopyImageOffset(newImage, srcImage, hdst, hsrc, hcopy);
                 }
 
                 return newImage;
             }
+            public void Check(ref int start, ref int end) {
 
+                if (start > end) {
+                    int tmp = start;
+                    start = end;
+                    end = tmp;
+                }
+                start = Math.Min(Math.Max(start, Min), Max);
+                end = Math.Min(Math.Max(end, start), Max);
+            }
         }
 
         #endregion
 
         #region 可视化工具
 
-        public class ViewerImageGrab {
+        public class ImageViewer {
 
-            public ViewerImageGrab(HWindowControl hwindow, EntryGrab grab) {
+            public ImageViewer(HWindowControl hwindow, GrabEntry grab) {
 
                 //
-                ImageBox = hwindow;
-                ImageSource = grab;
+                Box = hwindow;
+                Grab = grab;
+
+                //绘图句柄
+                g = hwindow.HalconWindow;
+                g.SetWindowParam("background_color", "cyan");
+                g.ClearWindow();
+
+                //
+                initMouse(hwindow);
+            }
+
+            public HImage Image;
+            public GrabEntry Grab;
+            public HWindowControl Box;
+            public HWindow g;
+
+            public void View(double x, double y, double s) {
+
+                //
+                frameX = x;
+                frameY = y;
+                frameS = s;
+
+                //
+                updateView();
+            }
+
+            #region 鼠标事件
+            
+            //
+            bool mouseAllow = true;
+            bool mouseIsMove = false;
+            int mouseBoxX = 0;
+            int mouseBoxY = 0;
+            double mouseFrameX = 0;
+            double mouseFrameY = 0;
+
+            //
+            void initMouse(HWindowControl hwindow) {
+
+                hwindow.SizeChanged += (o, e) => updateView();
+                hwindow.MouseLeave += (o, e) => mouseIsMove = false;
+                hwindow.MouseUp += (o, e) => mouseIsMove = false;
+                hwindow.MouseDown += (o, e) => {
+                    if (!mouseAllow) return;
+
+                    if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                        mouseFrameX = frameX;
+                        mouseFrameY = frameY;
+                        mouseBoxX = e.X;
+                        mouseBoxY = e.Y;
+                        mouseIsMove = true;
+                    }
+                };
+                hwindow.MouseMove += (o, e) => {
+                    if (mouseAllow && mouseIsMove) {
+                        double dy = mouseBoxY - e.Y;
+                        double dx = mouseBoxX - e.X;
+
+                        if (Math.Abs(dx) > 3 || Math.Abs(dy) > 3) {
+                            frameX = mouseFrameX + dx / refBoxWidth * frameS;
+                            frameY = mouseFrameY + dy / refBoxHeight * frameS;
+
+                            updateView();
+                        }
+                    }
+                };
+                hwindow.HMouseWheel += (o, e) => {
+                    if (!mouseAllow) return;
+
+                    double s1 = frameS;
+                    frameS *= (e.Delta < 0 ? 1.1 : 1 / 1.1);
+                    frameS = Math.Min(frameS, 2);
+                    frameS = Math.Max(frameS, 0.005);
+                    double s2 = frameS;
+
+                    frameX += (e.X / 640.0 - 1) * (s1 - s2);
+                    frameY += (e.Y / 480.0 - 1) * (s1 - s2) * refGrabHeight / grabHeight;
+
+                    updateView();
+                };
+            }
+
+            #endregion
+
+            #region 显示
+
+            //
+            int grabWidth { get { return Grab.Width; } }
+            int grabHeight { get { return Grab.Height; } }
+            int boxWidth { get { return Box.Width; } }
+            int boxHeight { get { return Box.Height; } }
+
+            int refGrabWidth { get { return grabWidth; } }
+            int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
+            int refBoxWidth { get { return boxWidth; } }
+            int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
+
+            //
+            double frameX = 1;
+            double frameY = 1;
+            double frameS = 1;
+
+            double frameX0 { get { return frameX - frameS * refGrabWidth / grabWidth; } }
+            double frameY0 { get { return frameY - frameS * refGrabHeight / grabHeight; } }
+
+            int frameStart = 0;
+            int frameEnd = 0;
+
+            int frameStartLimit { get { return Grab.Min; } }
+            int frameEndLimit { get { return Grab.Max; } }
+
+            int frameStartRequire { get { return (int)Math.Floor(frameY0); } }
+            int frameEndRequire { get { return (int)Math.Ceiling(frameY); } }
+
+            //
+            int pixelPartRow1 { get { return (int)getPixelY(frameY0); } }
+            int pixelPartRow2 { get { return (int)getPixelY(frameY); } }
+            int pixelPartCol1 { get { return (int)getPixelX(frameX0); } }
+            int pixelPartCol2 { get { return (int)getPixelX(frameX); } }
+
+            //
+            double getPixelX(double framex) { return framex * grabWidth; }
+            double getPixelY(double framey) { return (framey - frameStart) * grabHeight; }
+
+            void updateView() {
+
+                if (frameEndRequire < frameStartLimit || frameStartRequire > frameEndLimit) {
+
+                    //超过显示范围
+                    g.ClearWindow();
+                }
+                else {
+
+                    //准备图像
+                    if ((frameStart != frameStartLimit && frameStart > frameStartRequire) ||
+                    (frameEnd != frameEndLimit && frameEnd < frameEndRequire)) {
+
+                        //
+                        frameStart = frameStartRequire;
+                        frameEnd = frameEndRequire;
+
+                        //
+                        Grab.Check(ref frameStart, ref frameEnd);
+                        Image = Grab.GetImage(frameStart, frameEnd);
+                    }
+
+                    //显示图像
+                    if (Image == null)
+                        return;
+
+                    g.SetPart(pixelPartRow1, pixelPartCol1, pixelPartRow2, pixelPartCol2);
+                    g.DispImage(Image);
+
+                    //显示极耳
+
+
+                    //清空不显示区域
+                    double x1 = 1.0 * boxWidth * (0 - pixelPartCol1) / (pixelPartCol2 - pixelPartCol1);
+                    double x2 = 1.0 * boxWidth * (grabWidth - pixelPartCol1) / (pixelPartCol2 - pixelPartCol1);
+                    double y1 = 1.0 * boxHeight * (0 - pixelPartRow1) / (pixelPartRow2 - pixelPartRow1);
+                    double y2 = 1.0 * boxHeight * (grabHeight * (frameEnd - frameStart + 1) - pixelPartRow1) / (pixelPartRow2 - pixelPartRow1);
+                    int w = boxWidth;
+                    int h = boxHeight;
+
+                    if (x1 > 0) g.ClearRectangle(0, 0, h, x1);
+                    if (x2 < w) g.ClearRectangle(0, x2, h, w);
+                    if (y1 > 0) g.ClearRectangle(0, 0, y1, w);
+                    if (y2 < h) g.ClearRectangle(y2, 0, h, w);
+
+                }
 
             }
 
-            public HWindowControl ImageBox;
-            public EntryGrab ImageSource;
-
+            #endregion
+            
         }
 
         #endregion

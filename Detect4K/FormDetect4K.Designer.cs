@@ -30,27 +30,36 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.hwin = new HalconDotNet.HWindowControl();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnGrabStop);
             this.groupBox1.Controls.Add(this.btnGrabStart);
-            this.groupBox1.Location = new System.Drawing.Point(446, 29);
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(143, 125);
+            this.groupBox1.Size = new System.Drawing.Size(110, 86);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "取相";
             // 
             // btnGrabStop
             // 
-            this.btnGrabStop.Location = new System.Drawing.Point(29, 66);
+            this.btnGrabStop.Location = new System.Drawing.Point(17, 49);
             this.btnGrabStop.Name = "btnGrabStop";
             this.btnGrabStop.Size = new System.Drawing.Size(75, 23);
             this.btnGrabStop.TabIndex = 4;
@@ -60,7 +69,7 @@
             // 
             // btnGrabStart
             // 
-            this.btnGrabStart.Location = new System.Drawing.Point(29, 37);
+            this.btnGrabStart.Location = new System.Drawing.Point(17, 20);
             this.btnGrabStart.Name = "btnGrabStart";
             this.btnGrabStart.Size = new System.Drawing.Size(75, 23);
             this.btnGrabStart.TabIndex = 3;
@@ -77,66 +86,91 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(401, 632);
+            this.dataGridView1.Size = new System.Drawing.Size(483, 694);
             this.dataGridView1.TabIndex = 3;
             // 
             // hwin
             // 
             this.hwin.BackColor = System.Drawing.Color.Black;
             this.hwin.BorderColor = System.Drawing.Color.Black;
+            this.hwin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hwin.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
-            this.hwin.Location = new System.Drawing.Point(437, 230);
+            this.hwin.Location = new System.Drawing.Point(0, 0);
             this.hwin.Name = "hwin";
-            this.hwin.Size = new System.Drawing.Size(588, 414);
+            this.hwin.Size = new System.Drawing.Size(550, 563);
             this.hwin.TabIndex = 7;
-            this.hwin.WindowSize = new System.Drawing.Size(588, 414);
+            this.hwin.WindowSize = new System.Drawing.Size(550, 563);
             // 
-            // textBox1
+            // splitContainer1
             // 
-            this.textBox1.Location = new System.Drawing.Point(740, 57);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
-            this.textBox1.TabIndex = 8;
-            this.textBox1.Text = "1";
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
             // 
-            // textBox2
+            // splitContainer1.Panel1
             // 
-            this.textBox2.Location = new System.Drawing.Point(740, 84);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 21);
-            this.textBox2.TabIndex = 9;
-            this.textBox2.Text = "2.4";
+            this.splitContainer1.Panel1.Controls.Add(this.dataGridView1);
             // 
-            // button1
+            // splitContainer1.Panel2
             // 
-            this.button1.Location = new System.Drawing.Point(765, 111);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+            this.splitContainer1.Size = new System.Drawing.Size(1037, 694);
+            this.splitContainer1.SplitterDistance = 483;
+            this.splitContainer1.TabIndex = 8;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.flowLayoutPanel1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.hwin);
+            this.splitContainer2.Size = new System.Drawing.Size(550, 694);
+            this.splitContainer2.SplitterDistance = 127;
+            this.splitContainer2.TabIndex = 0;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(550, 127);
+            this.flowLayoutPanel1.TabIndex = 2;
             // 
             // FormDetect4K
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1037, 694);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.hwin);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.splitContainer1);
             this.Name = "FormDetect4K";
             this.Text = "Detect4K";
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -147,9 +181,9 @@
         private System.Windows.Forms.Button btnGrabStart;
         private System.Windows.Forms.DataGridView dataGridView1;
         private HalconDotNet.HWindowControl hwin;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
 

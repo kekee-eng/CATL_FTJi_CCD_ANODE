@@ -12,13 +12,13 @@ namespace Detect4K {
         public void Init() {
             
             //
-            InnerGrab = new EntryGrab(this, "InnerGrab");
-            OuterGrab = new EntryGrab(this, "OuterGrab");
+            InnerGrab = new GrabEntry(this, "InnerGrab");
+            OuterGrab = new GrabEntry(this, "OuterGrab");
 
         }
 
-        public EntryGrab InnerGrab;
-        public EntryGrab OuterGrab;
+        public GrabEntry InnerGrab;
+        public GrabEntry OuterGrab;
         
 
 

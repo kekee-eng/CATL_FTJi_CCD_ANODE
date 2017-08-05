@@ -17,48 +17,33 @@ namespace Detect4K {
             InitializeComponent();
 
             //
-            //System.IO.File.Delete(Config.FolderRecord + "01.db");
-
-            record = new ModRecord();
-            record.Open(Config.FolderRecord + "01.db");
-            record.Init();
+            init_device();
+            init_record();
+            init_viewer();
 
             //
-            device = new ModDevice();
+            init_monitor();
+            init_form();
+
 
             //
-            string prefix = ( HalconDotNet.HalconAPI.isWindows? "D:/": "/media/fra/DATA/");
-            device.InnerCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2B][20170728][125247-130642][1283][F1-F1283].zip");
-            device.InnerCamera.OnImageReady += obj => {
+            viewer.InnerImage.View(1, 5, 1);
+        }
 
-                //线程1：内侧相机取图、处理
-                //
-                record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerGrab.Cache.RemoveOld(Config.App.RecordCacheSize);
-
-                //
-                UtilTool.ShowHImage(hwin, obj.Image);
-            };
-            device.InnerCamera.OnComplete += () => {
-
-                //
-                device.InnerCamera.Stop();
-                device.InnerCamera.Reset();
-                device.InnerCamera.Start();
-            };
+        void init_form() {
 
             //
-            device.OuterCamera = new ConnectCamera_ZipFile(prefix +"#DAT/[2A][20170728][125247-130642][1283][F1-F1283].zip");
-            device.OuterCamera.OnImageReady += obj => {
+            Task.Run(() => {
 
-                //线程2：外侧相机取图、处理
-            };
-            device.OuterCamera.OnComplete += () => {
-                
-            };
-            
+                //线程：更新显示
+                while (!isQuit) {
+                    Thread.Sleep(10);
+                    //viewer.InnerImage.View(1, device.InnerCamera.m_frame, 1);
+                }
+            });
+
             //
-            new Thread(new ThreadStart(() => {
+            Task.Run(() => {
 
                 //线程3：写数据库
                 while (!isQuit) {
@@ -72,42 +57,129 @@ namespace Detect4K {
                 //
                 record.Close();
                 device.Close();
-            })).Start();
+            });
 
             //
             this.FormClosing += (o, e) => {
                 isQuit = true;
             };
+
+        }
+        void init_device() {
+
+            //
+            device = new ModDevice();
+
+            //
+            string prefix = (HalconDotNet.HalconAPI.isWindows ? "D:/" : "/media/fra/DATA/");
+            device.InnerCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2B][20170728][125247-130642][1283][F1-F1283].zip");
+            device.InnerCamera.OnImageReady += obj => {
+
+                //线程1：内侧相机取图、处理
+                //
+                record.InnerGrab.Cache[obj.Frame] = obj;
+                record.InnerGrab.Cache.RemoveOld(Config.App.RecordCacheSize);
+
+            };
+            device.InnerCamera.OnComplete += () => {
+
+                //
+                device.InnerCamera.Stop();
+                device.InnerCamera.Reset();
+                device.InnerCamera.Start();
+            };
+
+            //
+            device.OuterCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2A][20170728][125247-130642][1283][F1-F1283].zip");
+            device.OuterCamera.OnImageReady += obj => {
+
+                //线程2：外侧相机取图、处理
+            };
+            device.OuterCamera.OnComplete += () => {
+
+            };
+
+        }
+        void init_record() {
+
+            //
+            //System.IO.File.Delete(Config.FolderRecord + "01.db");
+            record = new ModRecord();
+            record.Open(Config.FolderRecord + "01.db");
+            record.Init();
             
+        }
+        void init_viewer() {
+
+            //
+            viewer = new ModViewer();
+            viewer.InnerImage = new DataGrab.ImageViewer(hwin, record.InnerGrab);
+            
+        }
+        void init_monitor() {
+
+            //
+            var monitor = new Dictionary<string, Func<object>>();
+
+            monitor["Inner_Grab"] = () => ">=====<";
+            monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;
+            monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isReady;
+            monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isRun;
+            monitor["Inner_Grab_Frame"] = () => device.InnerCamera.m_frame;
+            monitor["Inner_Grab_FrameReset"] = () => device.InnerCamera.m_frameReset;
+            monitor["Inner_Grab_FrameMax"] = () => device.InnerCamera.Max;
+            monitor["Inner_Grab_FpsControl"] = () => device.InnerCamera.m_fpsControl;
+            monitor["Inner_Grab_FpsRealtime"] = () => device.InnerCamera.m_fpsRealtime;
+
+            monitor["Inner_Record"] = () => ">=====<";
+            monitor["Inner_Record_GrabCacheMin"] = () => record.InnerGrab.Cache.Min;
+            monitor["Inner_Record_GrabCacheMax"] = () => record.InnerGrab.Cache.Max;
+            monitor["Inner_Record_GrabCacheCount"] = () => record.InnerGrab.Cache.Count;
+            monitor["Inner_Record_GrabDBMin"] = () => record.InnerGrab.DB.Min;
+            monitor["Inner_Record_GrabDBMax"] = () => record.InnerGrab.DB.Max;
+            monitor["Inner_Record_GrabDBCount"] = () => record.InnerGrab.DB.Count;
+            monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
+
+            monitor["Inner_Viewer"] = () => ">=====<";
+            monitor["Inner_Viewer_frameS"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameS");
+            monitor["Inner_Viewer_frameX0"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX0");
+            monitor["Inner_Viewer_frameX"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX");
+            monitor["Inner_Viewer_frameY0"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY0");
+            monitor["Inner_Viewer_frameY"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY");
+            monitor["Inner_Viewer_frameStart"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStart");
+            monitor["Inner_Viewer_frameEnd"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEnd");
+            monitor["Inner_Viewer_frameStartRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartRequire");
+            monitor["Inner_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndRequire");
+            monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartLimit");
+            monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndLimit");
+            monitor["Inner_Viewer_pixelPartRow1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartRow1");
+            monitor["Inner_Viewer_pixelPartRow2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartRow2");
+            monitor["Inner_Viewer_pixelPartCol1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartCol1");
+            monitor["Inner_Viewer_pixelPartCol2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "pixelPartCol2");
+            monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabWidth");
+            monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabHeight");
+            monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "boxWidth");
+            monitor["Inner_Viewer_boxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "boxHeight");
+            monitor["Inner_Viewer_refGrabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refGrabWidth");
+            monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refGrabHeight");
+            monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxWidth");
+            monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxHeight");
+
+            //
+            UtilTool.AutoInfo.InitGrid(dataGridView1, monitor);
+
         }
         
         bool isQuit = false;
         
         ModRecord record;
         ModDevice device;
+        ModViewer viewer;
 
-        //公用信息，自动显示到控件上
-        public string AutoInfo_Inner_Grab_Name() { return device.InnerCamera.m_camera_name; }
-        public bool AutoInfo_Inner_Grab_IsReady() { return device.InnerCamera.isReady; }
-        public bool AutoInfo_Inner_Grab_IsRun() { return device.InnerCamera.isRun; }
-        public int AutoInfo_Inner_Grab_Frame() { return device.InnerCamera.m_frame; }
-        public int AutoInfo_Inner_Grab_FrameStart() { return device.InnerCamera.m_frameStart; }
-        public int AutoInfo_Inner_Grab_FrameEndMax() { return device.InnerCamera.Max; }
-        public double AutoInfo_Inner_Grab_FpsControl() { return device.InnerCamera.m_fpsControl; }
-        public double AutoInfo_Inner_Grab_FpsRealtime() { return device.InnerCamera.m_fpsRealtime; }
-
-        public int AutoInfo_Inner_Record_GrabCacheMin() { return record.InnerGrab.Cache.Min; }
-        public int AutoInfo_Inner_Record_GrabCacheMax() { return record.InnerGrab.Cache.Max; }
-        public int AutoInfo_Inner_Record_GrabCacheCount() { return record.InnerGrab.Cache.Count; }
-        public int AutoInfo_Inner_Record_GrabDBMin() { return record.InnerGrab.DB.Min; }
-        public int AutoInfo_Inner_Record_GrabDBMax() { return record.InnerGrab.DB.Max; }
-        public int AutoInfo_Inner_Record_GrabDBCount() { return record.InnerGrab.DB.Count; }
-        public int AutoInfo_Inner_Record_GrabCacheRemain() { return Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max); }
-        
         //
         private void timer1_Tick(object sender, EventArgs e) {
 
-            UtilTool.BindAutoInfo("AutoInfo_", this, dataGridView1);
+            UtilTool.AutoInfo.Update();
 
         }
         private void btnGrabStart_Click(object sender, EventArgs e) {
@@ -119,15 +191,7 @@ namespace Detect4K {
         }
 
         private void button1_Click(object sender, EventArgs e) {
-
-            var d1 = double.Parse(textBox1.Text);
-            var d2 = double.Parse(textBox2.Text);
-
-            var img = record.InnerGrab.GetImage(d1, d1 + d2);
-
-            hwin.HalconWindow.ClearWindow();
-            UtilTool.ShowHImage(hwin, img);
-
+            
         }
     }
 }
