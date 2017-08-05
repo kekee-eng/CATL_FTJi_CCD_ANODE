@@ -28,7 +28,7 @@ namespace Common {
         public bool IsStore = false;
 
         //生成时间戳
-        public static string GenTimeStamp(System.DateTime time) {
+        public static string GenTimeStamp(DateTime time) {
             return time.ToString("yyyy/MM/dd HH:mm:ss.fff");
         }
 
@@ -89,20 +89,8 @@ Image           BLOB
             TemplateDB db;
             string name;
 
-            public int Min {
-                get {
-                    if (Count == 0)
-                        return 0;
-                    return (int)(long)db.Read(string.Format(@"SELECT MIN(Frame) FROM {0}", name))[0][0];
-                }
-            }
-            public int Max {
-                get {
-                    if (Count == 0)
-                        return 0;
-                    return (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", name))[0][0];
-                }
-            }
+            public int Min { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MIN(Frame) FROM {0}", name))[0][0]; } }
+            public int Max { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", name))[0][0]; } }
             public int Count { get { return db.Count(name); } }
 
             public int Width = -1;
@@ -158,9 +146,10 @@ Image           BLOB
         public class GrabCache {
 
             public ConcurrentDictionary<int, DataGrab> store = new ConcurrentDictionary<int, DataGrab>();
-            public int Min { get { return store.Count == 0 ? 0 : store.Keys.Min(); } }
-            public int Max { get { return store.Count == 0 ? 0 : store.Keys.Max(); } }
+            public int Min { get { return store.Count == 0 ? 1 : store.Keys.Min(); } }
+            public int Max { get { return store.Count == 0 ? 1 : store.Keys.Max(); } }
             public int Count { get { return store.Count; } }
+            public int CountLimit = 200;
 
             public int Width = -1;
             public int Height = -1;
@@ -189,30 +178,28 @@ Image           BLOB
                     store[i] = value;
                     value.IsCache = true;
 
-                }
-            }
-
-            public void RemoveAll() {
-
-                foreach (var key in store.Keys.ToArray()) {
-                    DataGrab dg;
-                    if (store.TryRemove(key, out dg)) {
-                        dg.Image.Dispose();
-                    }
-                }
-            }
-            public void RemoveOld(int max) {
-
-                int del = this.store.Count - max;
-                if (del > 0) {
-                    foreach (var key in store.Keys.OrderByDescending(x => Math.Abs(x - LastKey)).Take(del).ToList()) {
-                        DataGrab dg;
-                        if (store.TryRemove(key, out dg)) {
-                            dg.Image.Dispose();
+                    //RemoveOld
+                    int del = Count - CountLimit;
+                    if (del > 0) {
+                        foreach (var key in store.Keys.OrderByDescending(x => Math.Abs(x - LastKey)).Take(del).ToList()) {
+                            DataGrab dg;
+                            if (store.TryRemove(key, out dg)) {
+                                dg.Image.Dispose();
+                            }
                         }
                     }
+
                 }
             }
+            
+            //public void RemoveAll() {
+            //    foreach (var key in store.Keys.ToArray()) {
+            //        DataGrab dg;
+            //        if (store.TryRemove(key, out dg)) {
+            //            dg.Image.Dispose();
+            //        }
+            //    }
+            //}
 
             public void SaveToDB(GrabDB tg) {
 
@@ -235,6 +222,8 @@ Image           BLOB
             public GrabEntry(TemplateDB parent, string tableName) {
                 DB = new GrabDB(parent, tableName);
                 Cache = new GrabCache();
+
+                //
             }
 
             //
@@ -247,7 +236,7 @@ Image           BLOB
             public int Height { get { return Math.Max(Cache.Height, DB.Height); } }
 
             //
-            public int Min { get { return Math.Max(Cache.Min, DB.Min); } }
+            public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
             public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
             public DataGrab this[int i] {
                 get {

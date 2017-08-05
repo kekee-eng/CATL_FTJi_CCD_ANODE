@@ -61,7 +61,7 @@ namespace Common {
 
         public class Form {
 
-            public static void AddCaptionTag(Control form) {
+            public static void AddBuildTag(Control form) {
                 var version = Assembly.GetExecutingAssembly().GetName().Version;
                 var tbuild = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
 
@@ -73,7 +73,6 @@ namespace Common {
 #endif
                 form.Text += tag;
             }
-
             public static void ShowHImage(HWindowControl hwindow, HImage himg) {
 
                 if (himg == null)
@@ -150,7 +149,7 @@ namespace Common {
 
             static DataGridView _grid;
             static Dictionary<string, Func<object>> _func;
-            public static string C_SPACE_TEXT = ">=====<";
+            public static string C_SPACE_TEXT = "——————";
             public static void InitGrid(DataGridView grid, Dictionary<string, Func<object>> func) {
 
                 _grid = grid;
@@ -208,6 +207,7 @@ namespace Common {
                         _grid.Rows.Add(++i, name, "");
                         _grid.Rows[_grid.Rows.Count - 1].Cells[2].Style.BackColor = Color.LightGray;
                     }
+
                 }
 
                 if (lastTitle != null) {
@@ -218,6 +218,15 @@ namespace Common {
             }
             public static void Update() {
 
+                //
+                Func<int, string, Color> getColor = (id, value) => {
+                    if (id == 1) return Color.Wheat;
+                    if (value == "On") return Color.LightGreen;
+                    if (value == "Off") return Color.Pink;
+                    return Color.LightGray;
+                };
+
+                //
                 bool isChanged = false;
                 foreach (KeyValuePair<string, Func<object>> kv in _func) {
 
@@ -230,26 +239,26 @@ namespace Common {
                         string name0 = _grid.Rows[i].Cells[1].Value.ToString();
                         string value0 = _grid.Rows[i].Cells[2].Value.ToString();
 
-                        if (name0 == name && value0 != value) {
+                        if (name0 == name && value != C_SPACE_TEXT) {
 
-                            _grid.Rows[i].Cells[2].Value = value;
+                            if (value0 != value) {
+                                _grid.Rows[i].Cells[2].Value = value;
+                                _grid.Rows[i].Cells[2].Style.BackColor = getColor(1, value);
+                                isChanged = true;
+                            }
+                            else {
+                                _grid.Rows[i].Cells[2].Style.BackColor = getColor(0, value);
+                            }
 
-                            Func<Color> getColor = () => {
-                                if (value == "On") return Color.LightGreen;
-                                if (value == "Off") return Color.Pink;
-                                return Color.LightGray;
-                            };
-                            
-                            _grid.Rows[i].Cells[2].Style.BackColor = getColor();
-
-                            isChanged = true;
                         }
                     }
                 }
 
+                //
                 if (isChanged)
                     _grid.Invalidate();
             }
+
         }
 
     }

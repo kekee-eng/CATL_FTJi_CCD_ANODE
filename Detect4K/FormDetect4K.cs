@@ -32,6 +32,9 @@ namespace Detect4K {
         void init_form() {
 
             //
+            UtilTool.Form.AddBuildTag(this);
+
+            //
             Task.Run(() => {
 
                 //线程：更新显示
@@ -77,7 +80,6 @@ namespace Detect4K {
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerGrab.Cache.RemoveOld(Config.App.RecordCacheSize);
 
             };
             device.InnerCamera.OnComplete += () => {
