@@ -81,7 +81,7 @@ CfgParamSelf    BLOB
         public CfgParamSelf param_self;
 
         public double Fx { get { return param_self.ScaleX * grab.Width; } }
-        public double Fy { get { return param_self.ScaleX * grab.Width; } }
+        public double Fy { get { return param_self.ScaleY * grab.Height; } }
 
         public bool TryDetect(int frame) {
 
@@ -106,13 +106,13 @@ CfgParamSelf    BLOB
                 bool isNewData = true;
                 if (Tabs.Count > 0) {
                     var lastData = Tabs.Last();
-                    if (Math.Abs(data.TabY1 - lastData.TabY2) < param.TabMergeDistance) {
+                    if (Math.Abs(data.TabY1 - lastData.TabY2)*Fy < param.TabMergeDistance) {
 
                         //更新极耳大小
                         lastData.TabY1 = Math.Min(lastData.TabY1, data.TabY1);
                         lastData.TabY2 = Math.Max(lastData.TabY2, data.TabY2);
                         lastData.ValHeight = (lastData.TabY2 - lastData.TabY1) * Fy;
-                        lastData.IsSizeFail = lastData.ValHeight < param.TabHeightMin || lastData.ValHeight > param.TabHeightMax;
+                        lastData.IsHeightFail = lastData.ValHeight < param.TabHeightMin || lastData.ValHeight > param.TabHeightMax;
 
                         //
                         isNewData = false;
@@ -124,8 +124,8 @@ CfgParamSelf    BLOB
 
                     //检测宽度
                     double bx1, bx2;
-                    double bfy1 = data.TabY1 + param.TabWidthStart;
-                    double bfy2 = data.TabY1 + param.TabWidthEnd;
+                    double bfy1 = data.TabY1 + param.TabWidthStart/Fy;
+                    double bfy2 = data.TabY1 + param.TabWidthEnd/Fy;
 
                     var bimage = grab.GetImage(bfy1, bfy2);
                     if (bimage != null && ImageProcess.DetWidth(bimage, out bx1, out bx2)) {
@@ -137,8 +137,8 @@ CfgParamSelf    BLOB
 
                     //检测是否EA头
                     double cx, cy;
-                    double cfy1 = data.TabY1 + param.EAStart;
-                    double cfy2 = data.TabY1 + param.EAEnd;
+                    double cfy1 = data.TabY1 + param.EAStart/Fy;
+                    double cfy2 = data.TabY1 + param.EAEnd/Fy;
                     var cimage = grab.GetImage(cfy1, cfy2);
                     if (ImageProcess.DetEAMark(cimage, out cx, out cy)) {
 
@@ -151,6 +151,7 @@ CfgParamSelf    BLOB
 
                     //
                     Tabs.Add(data);
+                    adjustER();
 
                     //
                     return true;
@@ -160,5 +161,43 @@ CfgParamSelf    BLOB
             //
             return false;
         }
+
+        void adjustER() {
+
+            //排序
+            Tabs = Tabs.OrderBy(x => x.TabY1).ToList();
+
+            //重新生成
+            int ea = 0;
+            int er = 0;
+            for (int i = 0; i < Tabs.Count; i++) {
+
+                if (Tabs[i].IsNewEA) {
+                    ea++;
+                    er = 1;
+                }
+                else {
+                    er++;
+                }
+
+                //EA值
+                Tabs[i].ID = i + 1;
+                Tabs[i].EA = ea;
+                Tabs[i].TAB = er;
+
+                //测量值
+                Tabs[i].ValWidth = (Tabs[i].WidthX2 - Tabs[i].WidthX1) * Fx;
+                Tabs[i].ValHeight = (Tabs[i].TabY2 - Tabs[i].TabY1) * Fy;
+                Tabs[i].ValDist = (i == 0) ? 0 : (Tabs[i].TabY1 - Tabs[i - 1].TabY1) * Fy;
+                Tabs[i].ValDistDiff = (i < 2) ? 0 : Tabs[i].ValDist - Tabs[i - 1].ValDist;
+                Tabs[i].IsWidthFail = Tabs[i].ValWidth < param.TabWidthMin || Tabs[i].ValWidth > param.TabWidthMax;
+                Tabs[i].IsHeightFail = Tabs[i].ValHeight < param.TabHeightMin || Tabs[i].ValHeight > param.TabHeightMax;
+                Tabs[i].IsDistFail = Tabs[i].ValDist < param.TabDistMin || Tabs[i].ValDist > param.TabDistMax;
+                Tabs[i].IsDistDiffFail = Tabs[i].ValDistDiff < param.TabDistDiffMin || Tabs[i].ValDistDiff > param.TabDistDiffMax;
+
+            }
+
+        }
+
     }
 }

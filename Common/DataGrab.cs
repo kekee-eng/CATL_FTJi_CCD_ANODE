@@ -209,16 +209,7 @@ Image           BLOB
                 }
 
             }
-
-            //public void RemoveAll() {
-            //    foreach (var key in store.Keys.ToArray()) {
-            //        DataGrab dg;
-            //        if (store.TryRemove(key, out dg)) {
-            //            dg.Image.Dispose();
-            //        }
-            //    }
-            //}
-
+            
         }
         
     }

@@ -40,7 +40,7 @@ namespace Detect4K {
 
                 //
                 Dictionary<string, HTuple> dict = new Dictionary<string, HTuple>();
-                for (int i = 0; i < procedure.GetOutputCtrlParamCount(); i++) {
+                for (int i = 1; i <= procedure.GetOutputCtrlParamCount(); i++) {
 
                     string name = procedure.GetOutputCtrlParamName(i);
                     dict[name] = call.GetOutputCtrlParamTuple(i);

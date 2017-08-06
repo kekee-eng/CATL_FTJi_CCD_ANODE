@@ -18,14 +18,14 @@ namespace Common {
 
         //后期数据
         public double ValWidth;
-        public double ValGap;
-        public double ValGapDiff;
+        public double ValDist;
+        public double ValDistDiff;
         public double ValHeight;
 
         public bool IsWidthFail;
-        public bool IsGapFail;
-        public bool IsGapDiffFail;
-        public bool IsSizeFail;
+        public bool IsDistFail;
+        public bool IsDistDiffFail;
+        public bool IsHeightFail;
 
         public double EAX; //EA起始处
         public double EAY; //EA起始处
@@ -40,7 +40,7 @@ namespace Common {
         public bool IsFix = false; //补测
         
         //
-        public bool IsFail { get { return IsWidthFail || IsGapFail || IsGapDiffFail || IsSizeFail; } }
+        public bool IsFail { get { return IsWidthFail || IsDistFail || IsDistDiffFail || IsHeightFail; } }
         
     }
 }

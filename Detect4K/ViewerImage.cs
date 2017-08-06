@@ -10,11 +10,13 @@ using System.Windows.Forms;
 namespace Detect4K {
     class ViewerImage {
 
-        public ViewerImage(HWindowControl hwindow, EntryGrab grab) {
+        public ViewerImage(HWindowControl hwindow, EntryGrab grab, EntryDetect detect) {
+
 
             //
-            Box = hwindow;
             Grab = grab;
+            Detect = detect;
+            Box = hwindow;
             g = hwindow.HalconWindow;
 
             //
@@ -24,6 +26,7 @@ namespace Detect4K {
 
         //
         public EntryGrab Grab;
+        public EntryDetect Detect;
 
         //
         public HImage Image;
@@ -273,9 +276,6 @@ namespace Detect4K {
 
                 mouseAllow = false;
 
-                Func<double> GetFx = () => 0.05 * 4096;
-                Func<double> GetFy = () => 0.05 * 1000;
-
                 double x1 = pixCol1 + (pixCol2 - pixCol1) / 4;
                 double x2 = pixCol2 - (pixCol2 - pixCol1) / 4;
                 double y1 = (pixRow1 + pixRow2) / 2;
@@ -286,8 +286,8 @@ namespace Detect4K {
                 g.SetLineWidth(2);
                 g.DrawLineMod(y1, x1, y2, x2, out y1, out x1, out y2, out x2);
 
-                double dx = (x2 - x1) * GetFx() / grabWidth;
-                double dy = (y2 - y1) * GetFy() / grabHeight;
+                double dx = (x2 - x1) * Detect.Fx / grabWidth;
+                double dy = (y2 - y1) * Detect.Fy / grabHeight;
                 double dist = Math.Sqrt(dy * dy + dx * dx);
 
                 g.SetDraw("margin");
@@ -401,65 +401,144 @@ namespace Detect4K {
 
                 //超过显示范围
                 g.ClearWindow();
+                return;
             }
-            else {
 
-                //准备图像
-                if ((frameStart != frameStartLimit && frameStart > frameStartRequire) ||
-                (frameEnd != frameEndLimit && frameEnd < frameEndRequire)) {
+            //准备图像
+            if ((frameStart != frameStartLimit && frameStart > frameStartRequire) ||
+            (frameEnd != frameEndLimit && frameEnd < frameEndRequire)) {
 
-                    //
-                    frameStart = frameStartRequire;
-                    frameEnd = frameEndRequire;
+                //
+                frameStart = frameStartRequire;
+                frameEnd = frameEndRequire;
 
-                    //
-                    Grab.Check(ref frameStart, ref frameEnd);
-                    Image = Grab.GetImage(frameStart, frameEnd);
+                //
+                Grab.Check(ref frameStart, ref frameEnd);
+                Image = Grab.GetImage(frameStart, frameEnd);
+            }
+
+            if (Image == null)
+                return;
+
+            if (!Box.IsHandleCreated)
+                return;
+
+            //显示图像
+            //
+            g.SetPart(pixRow1, pixCol1, pixRow2, pixCol2);
+            g.DispImage(Image);
+
+            //
+            double offs = 50;
+            double crossSize = 100;
+            double crossAngle = Math.PI / 4;
+            double arrowSize = 10;
+
+            //极耳
+            var selectTabs = Detect.Tabs.TakeWhile(x => x.TabY2 >= frameStart || x.WidthY1 <= frameEnd);
+            foreach (var tab in selectTabs) {
+
+                if (showContextTab) {
+
+                    //极耳外框
+                    g.SetDraw("margin");
+                    g.SetColor(tab.IsFix ? "red" : "green");
+                    g.SetLineWidth(1);
+                    g.DispRectangle1(getPixRow(tab.TabY1) - offs, getPixCol(tab.TabX) - offs, getPixRow(tab.TabY2) + offs, getPixCol(tab.TabX) + offs);
+
+                    //极耳控制点
+                    g.SetDraw("margin");
+                    g.SetColor("blue");
+                    g.SetLineWidth(3);
+                    g.DispCross(getPixRow(tab.TabY1), getPixCol(tab.TabX), crossSize, crossAngle);
+                    g.DispCross(getPixRow(tab.TabY2), getPixCol(tab.TabX), crossSize, crossAngle);
+
+                    //极耳标识
+                    g.SetDraw("margin");
+                    g.SetColor("yellow");
+                    g.SetLineWidth(1);
+                    g.SetTposition((int)getPixRow(tab.TabY1), (int)(getPixCol(tab.WidthX1) + offs));
+                    g.WriteString(string.Format("#{0}.#{1}", tab.EA, tab.TAB));
+
                 }
+                if (showContextWidth) {
 
-                if (Image == null)
-                    return;
+                    //测宽
+                    g.SetDraw("margin");
+                    g.SetColor(tab.IsWidthFail ? "red" : "green");
+                    g.SetLineWidth(1);
+                    g.DispLine(getPixRow(tab.WidthY1), getPixCol(tab.WidthX1), getPixRow(tab.WidthY2), getPixCol(tab.WidthX1));
+                    g.DispLine(getPixRow(tab.WidthY1), getPixCol(tab.WidthX2), getPixRow(tab.WidthY2), getPixCol(tab.WidthX2));
+                    g.DispArrow(getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol((tab.WidthX1 + tab.WidthX2) / 2), getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol(tab.WidthX1), arrowSize);
+                    g.DispArrow(getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol((tab.WidthX1 + tab.WidthX2) / 2), getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol(tab.WidthX2), arrowSize);
 
-                if (!Box.IsHandleCreated)
-                    return;
+                    //侧宽标识
+                    g.SetDraw("margin");
+                    g.SetColor("yellow");
+                    g.SetLineWidth(1);
+                    g.SetTposition((int)getPixRow(tab.WidthY1), (int)(getPixCol(tab.WidthX1) + offs));
+                    g.WriteString(tab.ValWidth.ToString("0.000"));
 
-                //显示图像
-                {
-                    //
-                    g.SetPart(pixRow1, pixCol1, pixRow2, pixCol2);
-                    g.DispImage(Image);
+                }
+                if (showContextEA && tab.IsNewEA) {
 
-                    //显示极耳
+                    //EA-Mark点
+                    g.SetDraw("margin");
+                    g.SetColor("blue");
+                    g.SetLineWidth(3);
+                    g.DispCross(getPixRow(tab.EAY), getPixCol(tab.EAX), crossSize, crossAngle);
 
+                    //EA头部显示
+                    g.SetDraw("margin");
+                    g.SetColor("yellow");
+                    g.SetLineWidth(1);
+                    g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
+                    g.DispLine(getPixRow(tab.EAY), getPixCol(0), getPixRow(tab.EAY), getPixCol(1));
+                    g.SetLineStyle(new HTuple());
 
-                    if (showContextCross) {
+                    g.SetTposition((int)getPixRow(tab.EAY), (int)getPixCol(0));
+                    g.WriteString(string.Format("EA=#{0}", tab.EA));
 
-                        g.SetDraw("margin");
-                        g.SetColor("red");
-                        g.SetLineWidth(1);
-
-                        g.DispLine(pixRow1, pixCol0, pixRow2, pixCol0);
-                        g.DispLine(pixRow0, pixCol1, pixRow0, pixCol2);
-
-                    }
-
-                    //清空不显示区域
-                    int bw = boxWidth;
-                    int bh = boxHeight;
-                    int gw = grabWidth;
-                    int gh = grabHeight;
-
-                    double x1 = 1.0 * bw * (0 - pixCol1) / (pixCol2 - pixCol1);
-                    double x2 = 1.0 * bw * (gw - pixCol1) / (pixCol2 - pixCol1);
-                    double y1 = 1.0 * bh * (0 - pixRow1) / (pixRow2 - pixRow1);
-                    double y2 = 1.0 * bh * (gh * (frameEnd - frameStart + 1) - pixRow1) / (pixRow2 - pixRow1);
-
-                    if (x1 > 0) g.ClearRectangle(0, 0, bh, x1);
-                    if (x2 < bw) g.ClearRectangle(0, x2, bh, bw);
-                    if (y1 > 0) g.ClearRectangle(0, 0, y1, bw);
-                    if (y2 < bh) g.ClearRectangle(y2, 0, bh, bw);
                 }
             }
+
+            //瑕疵
+            if (showContextNG) {
+
+            }
+
+            //打标
+            if (showContextLabel) {
+
+            }
+
+            //定位准星
+            if (showContextCross) {
+
+                g.SetDraw("margin");
+                g.SetColor("red");
+                g.SetLineWidth(1);
+
+                g.DispLine(pixRow1, pixCol0, pixRow2, pixCol0);
+                g.DispLine(pixRow0, pixCol1, pixRow0, pixCol2);
+
+            }
+
+            //清空不显示区域
+            int bw = boxWidth;
+            int bh = boxHeight;
+            int gw = grabWidth;
+            int gh = grabHeight;
+
+            double x1 = 1.0 * bw * (0 - pixCol1) / (pixCol2 - pixCol1);
+            double x2 = 1.0 * bw * (gw - pixCol1) / (pixCol2 - pixCol1);
+            double y1 = 1.0 * bh * (0 - pixRow1) / (pixRow2 - pixRow1);
+            double y2 = 1.0 * bh * (gh * (frameEnd - frameStart + 1) - pixRow1) / (pixRow2 - pixRow1);
+
+            if (x1 > 0) g.ClearRectangle(0, 0, bh, x1);
+            if (x2 < bw) g.ClearRectangle(0, x2, bh, bw);
+            if (y1 > 0) g.ClearRectangle(0, 0, y1, bw);
+            if (y2 < bh) g.ClearRectangle(y2, 0, bh, bw);
 
         }
 
@@ -523,17 +602,6 @@ namespace Detect4K {
         int frameEndLimit { get { return Grab.Max + 1; } }
 
         //
-        int grabWidth { get { return Grab.Width; } }
-        int grabHeight { get { return Grab.Height; } }
-        int boxWidth { get { return Box.Width; } }
-        int boxHeight { get { return Box.Height; } }
-
-        int refGrabWidth { get { return grabWidth; } }
-        int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
-        int refBoxWidth { get { return boxWidth; } }
-        int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
-
-        //
         double getFrameX(double px) { return px / grabWidth; }
         double getFrameY(double py) { return py / grabHeight + frameStart; }
         double getPixCol(double framex) { return framex * grabWidth; }
@@ -547,5 +615,16 @@ namespace Detect4K {
         int pixRow1 { get { return (int)getPixRow(frameY1); } }
         int pixRow2 { get { return (int)getPixRow(frameY2); } }
 
+        //
+        int grabWidth { get { return Grab.Width; } }
+        int grabHeight { get { return Grab.Height; } }
+        int boxWidth { get { return Box.Width; } }
+        int boxHeight { get { return Box.Height; } }
+
+        int refGrabWidth { get { return grabWidth; } }
+        int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
+        int refBoxWidth { get { return boxWidth; } }
+        int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
+        
     }
 }

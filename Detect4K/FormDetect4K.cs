@@ -115,6 +115,9 @@ namespace Detect4K {
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
+                record.InnerDetect.TryDetect(obj.Frame) ;
+
+
                 viewer.InnerImage.SetBottomTarget(obj.Frame);
             };
             device.InnerCamera.OnComplete += () => {
@@ -149,7 +152,7 @@ namespace Detect4K {
 
             //
             viewer = new ModViewer();
-            viewer.InnerImage = new ViewerImage(hwin, record.InnerGrab);
+            viewer.InnerImage = new ViewerImage(hwin, record.InnerGrab, record.InnerDetect);
             
         }
         void init_monitor() {
@@ -184,6 +187,7 @@ namespace Detect4K {
             monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
             monitor["Inner_Record_LastLoadCache"] = () => record.InnerGrab.LastLoadCache;
             monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
+            monitor["Inner_Record_TabsCount"] = () => record.InnerDetect.Tabs.Count;
 
             monitor["Inner_Viewer"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageStatic");
@@ -231,9 +235,7 @@ namespace Detect4K {
             monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxWidth");
             monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxHeight");
 
-
-
-
+            
             //
             UtilTool.AutoInfo.InitGrid(dataGridView1, monitor);
 
