@@ -57,6 +57,10 @@
     <Reference Include="log4net">
       <HintPath>..\..\build\Bin\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="ZedGraph, Version=5.1.5.15371, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CfgApp.cs" />
@@ -78,6 +82,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="ViewerChart.cs" />
     <EmbeddedResource Include="FormDetect4K.resx">
       <DependentUpon>FormDetect4K.cs</DependentUpon>
     </EmbeddedResource>

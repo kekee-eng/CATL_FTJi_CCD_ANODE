@@ -69,8 +69,8 @@ namespace Detect4K {
                     frameVs += targetDs * precent;
                 }
 
-                //
-                updateView();
+                try { updateView(); }
+                catch { }
             }
         }
         public void MoveTargetDirect() {
@@ -399,6 +399,12 @@ namespace Detect4K {
         }
         void updateView() {
 
+            if (!Box.IsHandleCreated)
+                return;
+
+            if (Box.IsDisposed)
+                return;
+
             if (frameEndRequire < frameStartLimit || frameStartRequire > frameEndLimit) {
 
                 //超过显示范围
@@ -568,7 +574,7 @@ namespace Detect4K {
         double mouseFrameY = 0;
 
         //
-        double fpsControl = 60;
+        double fpsControl = 25;
         double fpsRealtime = 1;
         Stopwatch fpsWatch = new Stopwatch();
 

@@ -23,11 +23,10 @@ namespace Detect4K {
             init_viewer();
 
             //
-            init_monitor();
             init_form();
-            
+
             //
-            Task.Run(()=>{
+            Task.Run(() => {
 
                 Thread.Sleep(1000);
 
@@ -36,7 +35,7 @@ namespace Detect4K {
 
             });
         }
-        
+
         void init_form() {
 
             //
@@ -47,7 +46,7 @@ namespace Detect4K {
 
                 //线程：更新显示
                 var tView1 = Task.Run(() => {
-                    
+
                     while (!isQuit) {
                         Thread.Sleep(10);
 
@@ -69,20 +68,6 @@ namespace Detect4K {
                         });
 
                         Thread.Sleep(500);
-                    } while (!isQuit);
-
-                });
-
-                //线程：更新界面
-                var tUpdate = Task.Run(() => {
-
-                    do {
-
-                        if (IsHandleCreated && !IsDisposed) BeginInvoke(new Action(() => {
-                            UtilTool.AutoInfo.Update();
-                        }));
-
-                        Thread.Sleep(1000);
                     } while (!isQuit);
 
                 });
@@ -115,7 +100,7 @@ namespace Detect4K {
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerDetect.TryDetect(obj.Frame) ;
+                record.InnerDetect.TryDetect(obj.Frame);
 
 
                 viewer.InnerImage.SetBottomTarget(obj.Frame);
@@ -146,14 +131,14 @@ namespace Detect4K {
             record = new ModRecord();
             record.Open(Config.FolderRecord + "01.db");
             record.Init();
-            
+
         }
         void init_viewer() {
 
             //
             viewer = new ModViewer();
             viewer.InnerImage = new ViewerImage(hwin, record.InnerGrab, record.InnerDetect);
-            
+
         }
         void init_monitor() {
 
@@ -198,7 +183,7 @@ namespace Detect4K {
             monitor["Inner_Viewer_showContextNG"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextNG");
             monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextLabel");
             monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextCross");
-            
+
             monitor["Inner_Viewer_fpsControl"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsControl");
             monitor["Inner_Viewer_fpsRealtime"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsRealtime");
 
@@ -235,14 +220,14 @@ namespace Detect4K {
             monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxWidth");
             monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxHeight");
 
-            
+
             //
             UtilTool.AutoInfo.InitGrid(dataGridView1, monitor);
 
         }
-        
+
         bool isQuit = false;
-        
+
         ModRecord record;
         ModDevice device;
         ModViewer viewer;
@@ -260,5 +245,31 @@ namespace Detect4K {
             device.InnerCamera.Stop();
         }
 
+        int gridMode = -1;
+        private void rtoolInfo_Click(object sender, EventArgs e) {
+
+            gridMode = -1;
+            init_monitor();
+            gridMode = 0;
+
+        }
+        private void rtoolTab_Click(object sender, EventArgs e) {
+
+            gridMode = -1;
+            ViewerChart.initTabGrid(dataGridView1);
+            gridMode = 1;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e) {
+
+            if (IsHandleCreated && !IsDisposed) {
+
+                switch (gridMode) {
+                    default: break;
+                    case 0: UtilTool.AutoInfo.Update(); break;
+                    case 1: ViewerChart.syncTabGrid(dataGridView1, record.InnerDetect); break;
+                }
+            }
+        }
     }
 }
