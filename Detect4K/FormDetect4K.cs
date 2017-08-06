@@ -26,12 +26,17 @@ namespace Detect4K {
             init_monitor();
             init_form();
 
-            //
-            viewer.InnerImage.MoveDirect(1);
-        }
 
-        double fpsControl = 25;
-        double fpsRealtime;
+            Task.Run(()=>{
+
+                Thread.Sleep(1000);
+
+                viewer.InnerImage.SetCenterTarget(1);
+                viewer.InnerImage.MoveTargetDirect();
+
+            });
+        }
+        
         void init_form() {
 
             //
@@ -42,26 +47,13 @@ namespace Detect4K {
 
                 //线程：更新显示
                 var tView1 = Task.Run(() => {
-
-                    Stopwatch watch = new Stopwatch();
+                    
                     while (!isQuit) {
                         Thread.Sleep(10);
-                        
-                        if (fpsControl < 1) fpsControl = 1;
-                        if (!watch.IsRunning ||  watch.ElapsedMilliseconds > 1000 / fpsControl) {
 
-                            //实时显示帧率
-                            fpsRealtime = 1000.0 / watch.ElapsedMilliseconds;
+                        double refFps = device.InnerCamera.isRun ? device.InnerCamera.m_fpsRealtime : 10;
+                        viewer.InnerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
 
-                            //重置定时器
-                            watch.Restart();
-
-                            //设定目标
-                            double dist = viewer.InnerImage.GetTargetDistance();
-
-                            dist = Math.Max(dist, 1) * device.InnerCamera.m_fpsRealtime / fpsRealtime;
-                            viewer.InnerImage.MoveToTarget(dist);
-                        }
                     };
 
                 });
@@ -122,7 +114,7 @@ namespace Detect4K {
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                viewer.InnerImage.SetTargetBottom(obj.Frame);
+                viewer.InnerImage.SetBottomTarget(obj.Frame);
             };
             device.InnerCamera.OnComplete += () => {
 
@@ -193,14 +185,26 @@ namespace Detect4K {
             monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
 
             monitor["Inner_Viewer"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
-            monitor["Inner_Viewer_FpsControl"] = () => fpsControl;
-            monitor["Inner_Viewer_FpsRealtime"] = () => fpsRealtime;
+            monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageStatic");
+            monitor["Inner_Viewer_showImageDynamic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageDynamic");
+            monitor["Inner_Viewer_showContextEA"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextEA");
+            monitor["Inner_Viewer_showContextTab"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextTab");
+            monitor["Inner_Viewer_showContextWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextWidth");
+            monitor["Inner_Viewer_showContextNG"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextNG");
+            monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextLabel");
+            monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextCross");
+
+            monitor["Inner_Viewer_fpsMoveRef"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsMoveRef");
+            monitor["Inner_Viewer_fpsControl"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsControl");
+            monitor["Inner_Viewer_fpsRealtime"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsRealtime");
+
+            monitor["Inner_Viewer_mouseAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "mouseAllow");
+            monitor["Inner_Viewer_targetAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetAllow");
             monitor["Inner_Viewer_targetVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVs");
             monitor["Inner_Viewer_targetVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVx");
             monitor["Inner_Viewer_targetVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVy");
             monitor["Inner_Viewer_targetDist"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetDist");
-            monitor["Inner_Viewer_targetAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetAllow");
-            monitor["Inner_Viewer_mouseAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "mouseAllow");
+
             monitor["Inner_Viewer_frameVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVs");
             monitor["Inner_Viewer_frameVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVx");
             monitor["Inner_Viewer_frameVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVy");
@@ -210,12 +214,14 @@ namespace Detect4K {
             monitor["Inner_Viewer_frameX2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX2");
             monitor["Inner_Viewer_frameY1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY1");
             monitor["Inner_Viewer_frameY2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY2");
+
             monitor["Inner_Viewer_frameStart"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStart");
             monitor["Inner_Viewer_frameEnd"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEnd");
             monitor["Inner_Viewer_frameStartRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartRequire");
             monitor["Inner_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndRequire");
             monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartLimit");
             monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndLimit");
+
             monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabWidth");
             monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabHeight");
             monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "boxWidth");
@@ -224,14 +230,6 @@ namespace Detect4K {
             monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refGrabHeight");
             monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxWidth");
             monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxHeight");
-            monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageStatic");
-            monitor["Inner_Viewer_showImageDynamic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageDynamic");
-            monitor["Inner_Viewer_showContextEA"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextEA");
-            monitor["Inner_Viewer_showContextTab"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextTab");
-            monitor["Inner_Viewer_showContextWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextWidth");
-            monitor["Inner_Viewer_showContextNG"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextNG");
-            monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextLabel");
-            monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextCross");
 
 
 
@@ -255,10 +253,6 @@ namespace Detect4K {
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
             device.InnerCamera.Stop();
-        }
-
-        private void button1_Click(object sender, EventArgs e) {
-            
         }
         
     }

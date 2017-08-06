@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Diagnostics;
+using System.Drawing;
 
 namespace Common {
 #pragma warning disable 0649
@@ -403,99 +405,86 @@ Image           BLOB
                 initMenu(hwindow);
             }
 
+            //
             public HImage Image;
             public GrabEntry Grab;
             public HWindowControl Box;
             public HWindow g;
 
-            public void SetTargetUsed(bool use) {
+            public void MoveTargetSync(double refFps) {
 
-                if(use) {
-                    targetVs = frameVs;
-                    targetVx = frameVx;
-                    targetVy = frameVy;
+                double fpsNow = Math.Max(1, showImageDynamic ? fpsControl : 1);
+                if (!fpsWatch.IsRunning || fpsWatch.ElapsedMilliseconds > 1000 / fpsNow) {
+
+                    //实时显示帧率
+                    fpsRealtime = 1000.0 / fpsWatch.ElapsedMilliseconds;
+
+                    //重置定时器
+                    fpsWatch.Restart();
+
+                    //
+                    if (!targetAllow)
+                        return;
+
+                    //
+                    double distTotal = targetDist;
+                    if (distTotal == 0)
+                        return;
+
+                    //
+                    double distMove = Math.Max(distTotal, 1) * refFps / fpsRealtime;
+
+                    //
+                    if (showImageStatic || distMove <= 0 || distMove >= distTotal) {
+                        frameVx = targetVx;
+                        frameVy = targetVy;
+                        frameVs = targetVs;
+                    }
+                    else {
+                        double precent = distMove / distTotal;
+                        frameVx += targetDx * precent;
+                        frameVy += targetDy * precent;
+                        frameVs += targetDs * precent;
+                    }
+
+                    //
+                    updateView();
                 }
-
-                targetAllow = use;
-                mouseAllow = !use;
-
             }
-            public void SetTargetTop(double y, double x = 0.5, double s = 1) {
-                SetTargetCenter(y + frameDy / 2, x, s);
-            }
-            public void SetTargetBottom(double y, double x = 0.5, double s = 1) {
-                SetTargetCenter(y - frameDy / 2, x, s);
-            }
-            public void SetTargetCenter(double y, double x = 0.5, double s = 1) {
-                targetVx = x;
-                targetVy = y;
-                targetVs = s;
-            }
-            public double GetTargetDistance() {
-                var dx = targetVx - frameVx;
-                var dy = targetVy - frameVy;
-                var dist = Math.Sqrt(dx * dx + dy * dy);
-                return dist;
-            }
-            public void MoveToTarget(double dist = -1) {
+            public void MoveTargetDirect() {
 
                 //
-                if (!targetAllow)
-                    return;
-
-                if (targetDist == 0)
-                    return;
-
-                //
-                if (dist <= 0 || dist >= targetDist) {
-                    frameVx = targetVx;
-                    frameVy = targetVy;
-                    frameVs = targetVs;
-                }
-                else {
-
-                    double precent = dist / targetDist;
-
-                    frameVx += targetDx * precent;
-                    frameVy += targetDy * precent;
-                    frameVs += targetDs * precent;
-                }
+                frameVx = targetVx;
+                frameVy = targetVy;
+                frameVs = targetVs;
 
                 //
                 updateView();
             }
-            
-            public void MoveDirect(double y, double x, double s) {
 
-                //
+            public void SetTopTarget(double y, double x = 0.5, double s = 1) {
+                SetCenterTarget(y + frameDy / 2, x, s);
+            }
+            public void SetBottomTarget(double y, double x = 0.5, double s = 1) {
+                SetCenterTarget(y - frameDy / 2, x, s);
+            }
+            public void SetCenterTarget(double y, double x = 0.5, double s = 1) {
+                targetVx = x;
                 targetVy = y;
                 targetVs = s;
-                targetVx = x;
-
-                //
-                frameVx = x;
-                frameVy = y;
-                frameVs = s;
-
-                //
-                updateView();
-            }
-            public void MoveDirect(double y) {
-                MoveDirect(y, 0.5, 1);
             }
 
-            #region 右键菜单
+            public void MoveFrame(double frame) {
 
-            bool showImageStatic = false;
-            bool showImageDynamic = false;
+                SetCenterTarget(frame);
+                MoveTargetSync(fpsMoveRef);
 
-            bool showContextEA = false;
-            bool showContextTab = false;
-            bool showContextWidth = false;
-            bool showContextNG = false;
-            bool showContextLabel = false;
-            bool showContextCross = false;
+            }
+            public void MoveEA(int ea, int tab) {
 
+            }
+
+            //
             void initMenu(HWindowControl hwindow) {
 
                 //
@@ -522,7 +511,6 @@ Image           BLOB
 
                     throw new Exception("DataGrab: ImageViewer: initMenu: addSeq: unknow type.");
                 };
-
                 Action<ToolStripMenuItem, Action<bool>> bindItem = (item, func) => {
                     item.Click += (o, e) => item.Checked ^= true;
                     if (func != null) item.CheckedChanged += (o, e) => func(item.Checked);
@@ -550,16 +538,28 @@ Image           BLOB
                 var rtContextCross = addItem(rtContext, "定位准星");
 
                 //
-                addSp(rtMenu);
+                var rtLocFrameText = new ToolStripTextBox();
+                var rtLocEAText1 = new ToolStripTextBox();
+                var rtLocEAText2 = new ToolStripTextBox();
 
                 //
+                addSp(rtMenu);
                 var rtEnableUser = addItem(rtMenu, "启用交互");
-
-                var tReset = new ToolStripMenuItem("复位视图");
+                addSp(rtMenu);
+                var rtReset = addItem(rtMenu, "复位视图");
+                var rtLoc = addItem(rtMenu, "定位到");
+                var rtLocFrame = addItem(rtLoc, "Frame");
+                rtLocFrame.DropDownItems.Add(rtLocFrameText);
+                var rtLocEA = addItem(rtLoc, "EA");
+                rtLocEA.DropDownItems.Add(rtLocEAText1);
+                rtLocEA.DropDownItems.Add(rtLocEAText2);
+                var rtMeasure = addItem(rtMenu, "测量工具");
+                var rtMeasureLocPoint = addItem(rtMeasure, "定位点坐标");
+                var rtMeasurePPDist = addItem(rtMeasure, "点到点测距");
 
                 //
                 bindItem(rtImageStatic, b => rtImageDynamic.Checked = !(showImageStatic = b));
-                bindItem(rtImageDynamic, b => rtImageStatic.Checked =!( showImageDynamic = b));
+                bindItem(rtImageDynamic, b => rtImageStatic.Checked = !(showImageDynamic = b));
 
                 bindItem(rtContextDef1, null);
                 bindItem(rtContextDef2, null);
@@ -572,10 +572,10 @@ Image           BLOB
                 bindItem(rtContextCross, b => showContextCross = b);
 
                 bindItem(rtEnableUser, b => mouseAllow = !(targetAllow = !b));
-                
+
                 //
                 rtContextDef1.CheckedChanged += (o, e) => {
-                    bool b = rtContextDef1.Checked;
+                    bool b = (o as ToolStripMenuItem).Checked;
                     rtContextEA.Checked = b;
                     rtContextTab.Checked = b;
                     rtContextWidth.Checked = b;
@@ -583,55 +583,52 @@ Image           BLOB
                     rtContextLabel.Checked = b;
                 };
                 rtContextDef2.CheckedChanged += (o, e) => {
-                    bool b = rtContextDef2.Checked;
+                    bool b = (o as ToolStripMenuItem).Checked;
                     rtContextCross.Checked = b;
                 };
+                rtEnableUser.CheckedChanged += (o, e) => {
+                    bool b = (o as ToolStripMenuItem).Checked;
+                    rtReset.Visible = b;
+                    rtLoc.Visible = b;
+                    rtMeasure.Visible = b;
+                };
 
-                tReset.Click += (o, e) => {
+                rtReset.Click += (o, e) => {
+                    frameVs = 1.0;
+                    frameVx = Math.Min(Math.Max(frameVx, 0), 1);
+                    frameVy = Math.Min(Math.Max(frameVy, frameStartLimit), frameEndLimit);
+                    updateView();
+                };
+
+                rtLocFrameText.KeyDown += (o, e) => {
+
+                };
+
+                rtMeasureLocPoint.Click += (o, e) => {
+
+                };
+                rtMeasurePPDist.Click += (o, e) => {
 
                 };
 
                 //
                 rtImageDynamic.Checked = true;
                 rtContextDef1.Checked = true;
+
+                rtEnableUser.Checked = true;
                 rtEnableUser.Checked = false;
 
                 //
                 hwindow.ContextMenuStrip = rtMenu;
 
             }
-
-            #endregion
-
-            #region 事件
-
-            //
-            bool targetAllow = false;
-            double targetVx =0.5;
-            double targetVy =1;
-            double targetVs =1;
-
-            double targetDx { get { return targetVx - frameVx; } }
-            double targetDy { get { return targetVy - frameVy; } }
-            double targetDs { get { return targetVs - frameVs; } }
-            double targetDist {  get { return Math.Sqrt(targetDx * targetDx + targetDy * targetDy); } }
-            
-            //
-            bool mouseAllow = true;
-            bool mouseIsMove = false;
-            int mouseBoxX = 0;
-            int mouseBoxY = 0;
-            double mouseFrameX = 0;
-            double mouseFrameY = 0;
-
-            //
             void initEvent(HWindowControl hwindow) {
-                
+
                 //
                 hwindow.SizeChanged += (o, e) => {
 
-                    try { updateView();}
-                    catch{}
+                    try { updateView(); }
+                    catch { }
 
                 };
                 hwindow.HInitWindow += (o, e) => {
@@ -654,7 +651,7 @@ Image           BLOB
                         case Keys.PageDown: frameVy += frameDy; break;
                         case Keys.Home: frameVy = frameStartLimit; break;
                         case Keys.End: frameVy = frameEndLimit; break;
-                            
+
                         default: return;
                     }
 
@@ -705,48 +702,6 @@ Image           BLOB
 
 
             }
-
-            #endregion
-
-            #region 显示
-
-            //
-            int grabWidth { get { return Grab.Width; } }
-            int grabHeight { get { return Grab.Height; } }
-            int boxWidth { get { return Box.Width; } }
-            int boxHeight { get { return Box.Height; } }
-
-            int refGrabWidth { get { return grabWidth; } }
-            int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
-            int refBoxWidth { get { return boxWidth; } }
-            int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
-
-            //
-            double frameVx = 0.5;
-            double frameVy = 1;
-            double frameVs = 1;
-
-            //
-            double frameDx { get { return  frameVs * refGrabWidth / grabWidth; } }
-            double frameDy { get { return  frameVs * refGrabHeight / grabHeight; } }
-
-            double frameX1 { get { return frameVx - frameDx/2; } }
-            double frameY1 { get { return frameVy - frameDy/2; } }
-
-            double frameX2 { get { return frameVx + frameDx/2; } }
-            double frameY2 { get { return frameVy + frameDy/2; } }
-
-            //
-            int frameStart = 0;
-            int frameEnd = 0;
-
-            int frameStartRequire { get { return (int)Math.Floor(frameY1); } }
-            int frameEndRequire { get { return (int)Math.Ceiling(frameY2); } }
-
-            int frameStartLimit { get { return Grab.Min; } }
-            int frameEndLimit { get { return Grab.Max+1; } }
-
-            //
             void updateView() {
 
                 if (frameEndRequire < frameStartLimit || frameStartRequire > frameEndLimit) {
@@ -794,6 +749,17 @@ Image           BLOB
                         //显示极耳
 
 
+                        if (showContextCross) {
+
+                            g.SetDraw("margin");
+                            g.SetColor("red");
+                            g.SetLineWidth(1);
+
+                            g.DispLine(getPixelY(frameVy), getPixelX(frameX1), getPixelY(frameVy), getPixelX(frameX2));
+                            g.DispLine(getPixelY(frameY1), getPixelX(frameVx), getPixelY(frameY2), getPixelX(frameVx));
+
+                        }
+
                         //清空不显示区域
                         int bw = boxWidth;
                         int bh = boxHeight;
@@ -813,8 +779,77 @@ Image           BLOB
                 }
 
             }
+            
+            //
+            bool showImageStatic = false;
+            bool showImageDynamic = false;
 
-            #endregion
+            bool showContextEA = false;
+            bool showContextTab = false;
+            bool showContextWidth = false;
+            bool showContextNG = false;
+            bool showContextLabel = false;
+            bool showContextCross = false;
+
+            //
+            double fpsMoveRef = 10;
+            double fpsControl = 25;
+            double fpsRealtime = 1;
+            Stopwatch fpsWatch = new Stopwatch();
+
+            //
+            bool targetAllow = false;
+            double targetVx =0.5;
+            double targetVy =1;
+            double targetVs =1;
+
+            double targetDx { get { return targetVx - frameVx; } }
+            double targetDy { get { return targetVy - frameVy; } }
+            double targetDs { get { return targetVs - frameVs; } }
+            double targetDist {  get { return Math.Sqrt(targetDx * targetDx + targetDy * targetDy); } }
+            
+            //
+            bool mouseAllow = true;
+            bool mouseIsMove = false;
+            int mouseBoxX = 0;
+            int mouseBoxY = 0;
+            double mouseFrameX = 0;
+            double mouseFrameY = 0;
+            
+            //
+            int grabWidth { get { return Grab.Width; } }
+            int grabHeight { get { return Grab.Height; } }
+            int boxWidth { get { return Box.Width; } }
+            int boxHeight { get { return Box.Height; } }
+
+            int refGrabWidth { get { return grabWidth; } }
+            int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
+            int refBoxWidth { get { return boxWidth; } }
+            int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
+
+            //
+            double frameVx = 0.5;
+            double frameVy = 1;
+            double frameVs = 1;
+            
+            double frameDx { get { return  frameVs * refGrabWidth / grabWidth; } }
+            double frameDy { get { return  frameVs * refGrabHeight / grabHeight; } }
+
+            double frameX1 { get { return frameVx - frameDx/2; } }
+            double frameY1 { get { return frameVy - frameDy/2; } }
+
+            double frameX2 { get { return frameVx + frameDx/2; } }
+            double frameY2 { get { return frameVy + frameDy/2; } }
+
+            //
+            int frameStart = 0;
+            int frameEnd = 0;
+
+            int frameStartRequire { get { return (int)Math.Floor(frameY1); } }
+            int frameEndRequire { get { return (int)Math.Ceiling(frameY2); } }
+
+            int frameStartLimit { get { return Grab.Min; } }
+            int frameEndLimit { get { return Grab.Max+1; } }
             
         }
 
