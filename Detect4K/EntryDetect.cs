@@ -78,6 +78,40 @@ CfgParamSelf    BLOB
         public List<DataDefect> Defects = new List<DataDefect>();
         public List<DataLabel> Labels = new List<DataLabel>();
 
+        public int EACount { get { return Tabs.Select(x => x.EA).Distinct().Count(); } }
+        public List<DataEA> EAs {
+            get {
+                List<DataEA> objs = new List<DataEA>();
+
+                var ids = Tabs.Select(x => x.EA).Distinct().OrderBy(x => x);
+
+                foreach (var id in ids) {
+
+                    DataEA obj = new DataEA();
+                    obj.EA = id;
+                    obj.TabCount = Tabs.Count(x => x.EA == id);
+                    obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
+                    obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
+                    obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
+                    obj.IsTabCountFail = obj.TabCount != param.TabCount;
+                    obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > param.TabWidthCount;
+                    obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > param.TabHeightCount;
+                    obj.IsTabDistFailCountFail = obj.TabDistFailCount > param.TabDistCount;
+
+                    var firstER = Tabs.Find(x => x.EA == id && x.TAB == 1);
+                    if (firstER == null)
+                        throw new Exception("DetectResult: GetEA");
+
+                    obj.EAX = firstER.EAX;
+                    obj.EAY = firstER.EAY;
+
+                    objs.Add(obj);
+                }
+
+                return objs;
+            }
+        }
+
         public CfgParamShare param;
         public CfgParamSelf param_self;
 

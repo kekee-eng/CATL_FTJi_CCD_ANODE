@@ -11,17 +11,17 @@ namespace Common {
         public double EAY; //EA起始处
 
         public int EA;
-        public int ERCount;
-        public int ERWidthFailCount;
-        public int ERGapFailCount;
-        public int ERSizeFailCount;
+        public int TabCount;
+        public int TabWidthFailCount;
+        public int TabDistFailCount;
+        public int TabHeightFailCount;
 
-        public bool IsERCountFail;
-        public bool IsERWidthFailCountFail;
-        public bool IsERGapFailCountFail;
-        public bool IsERSizeFailCountFail;
+        public bool IsTabCountFail;
+        public bool IsTabWidthFailCountFail;
+        public bool IsTabDistFailCountFail;
+        public bool IsTabHeightFailCountFail;
 
-        public bool IsFail { get { return IsERCountFail || IsERWidthFailCountFail || IsERGapFailCountFail || IsERSizeFailCountFail; } }
+        public bool IsFail { get { return IsTabCountFail || IsTabWidthFailCountFail || IsTabDistFailCountFail || IsTabHeightFailCountFail; } }
 
     }
 }

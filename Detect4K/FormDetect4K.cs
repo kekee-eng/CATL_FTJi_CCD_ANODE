@@ -245,20 +245,6 @@ namespace Detect4K {
             device.InnerCamera.Stop();
         }
 
-        int gridMode = -1;
-        private void rtoolInfo_Click(object sender, EventArgs e) {
-
-            gridMode = -1;
-            init_monitor();
-            gridMode = 0;
-
-        }
-        private void rtoolTab_Click(object sender, EventArgs e) {
-
-            gridMode = -1;
-            ViewerChart.initTabGrid(dataGridView1);
-            gridMode = 1;
-        }
 
         private void timer1_Tick(object sender, EventArgs e) {
 
@@ -267,9 +253,47 @@ namespace Detect4K {
                 switch (gridMode) {
                     default: break;
                     case 0: UtilTool.AutoInfo.Update(); break;
-                    case 1: ViewerChart.syncTabGrid(dataGridView1, record.InnerDetect); break;
+                    case 1: ViewerChart.SyncTabGrid(dataGridView1, record.InnerDetect); break;
+                    case 2:ViewerChart.SyncEAGrid(dataGridView1, record.InnerDetect);break;
                 }
             }
+        }
+
+        int gridMode = -1;
+        void createNewGrid() {
+            gridMode = -1;
+
+            this.splitContainer1.Panel1.Controls.Remove(dataGridView1);
+            dataGridView1.Dispose();
+            dataGridView1 = null;
+
+            dataGridView1 = new DataGridView();
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.splitContainer1.Panel1.Controls.Add(dataGridView1);
+        }
+        private void rtoolInfo_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            init_monitor();
+            gridMode = 0;
+
+        }
+        private void rtoolTab_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            ViewerChart.InitTabGrid(dataGridView1 , x=> {
+                viewer.InnerImage.MoveToTAB(x);
+            });
+            gridMode = 1;
+        }
+        private void rtoolEA_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            ViewerChart.InitEAGrid(dataGridView1, x => {
+                viewer.InnerImage.MoveToEA(x, 1);
+            });
+            gridMode = 2;
         }
     }
 }

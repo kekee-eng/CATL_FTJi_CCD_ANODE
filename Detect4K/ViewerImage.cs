@@ -97,12 +97,24 @@ namespace Detect4K {
         }
 
         public void MoveToFrame(double frame) {
+            if (!mouseAllow) return;
 
             SetCenterTarget(frame);
             MoveTargetDirect();
 
         }
-        public void MoveToEA(int ea, int tab) {
+        public void MoveToEA(int idEa, int idTab) {
+            if (!mouseAllow) return;
+
+            var obj = Detect.Tabs.Find(x => x.EA == idEa && x.TAB == idTab);
+            if (obj != null) MoveToFrame(obj.TabY1);
+
+        }
+        public void MoveToTAB(int id) {
+            if (!mouseAllow) return;
+
+            var obj = Detect.Tabs.Find(x => x.ID == id);
+            if (obj != null) MoveToFrame(obj.TabY1);
 
         }
 

@@ -35,62 +35,6 @@ namespace Detect4K {
             }
         }
 
-        static void initEAGrid(DataGridView grid) {
-
-            //
-            setGridInit(grid);
-            grid.Columns.AddRange(
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "EA" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳数" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度不良" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "模切不良" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "间距不良" }
-                );
-
-        }
-        static void addEAGrid(DataGridView grid, DataEA dt) {
-
-            //        
-            grid.Rows.Insert(0, 1);
-            grid.Rows[0].SetValues(
-                dt.EA,
-                dt.EAY.ToString("0.000"),
-                dt.ERCount,
-                dt.ERWidthFailCount,
-                dt.ERSizeFailCount,
-                dt.ERGapFailCount
-                );
-            grid.Rows[0].Tag = dt;
-
-            //
-            setGridRowStyle(grid, 0,
-                dt.IsFail,
-                false,
-                dt.IsERCountFail,
-                dt.IsERWidthFailCountFail,
-                dt.IsERSizeFailCountFail,
-                dt.IsERGapFailCountFail
-                );
-
-        }
-
-        public static void initTabGrid(DataGridView grid) {
-
-            //
-            setGridInit(grid);
-            grid.Columns.AddRange(
-                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "序号" },
-                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
-                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "ER" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极片宽度" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳长度" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳间距" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳间距差" }
-                );
-
-        }
         static void addTabGrid(DataGridView grid, DataTab dt) {
 
             //        
@@ -120,13 +64,94 @@ namespace Detect4K {
                 );
 
         }
-        public static void syncTabGrid(DataGridView grid, EntryDetect detect) {
+        public static void SyncTabGrid(DataGridView grid, EntryDetect detect) {
 
             for (int i = grid.Rows.Count; i < detect.Tabs.Count; i++)
                 addTabGrid(grid, detect.Tabs[i]);
+
+        }
+        public static void InitTabGrid(DataGridView grid, Action<int> onMove) {
+
+            //
+            setGridInit(grid);
+            grid.Columns.AddRange(
+                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "序号" },
+                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
+                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "TAB" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极片宽度" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳长度" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳间距" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳间距差" }
+                );
+
+            //
+            grid.CellClick += (o, e) => onMove(grid.Rows.Count - e.RowIndex);
+
         }
 
-        static void initSyncTabGrid(DataGridView grid) {
+        static void addEAGrid(DataGridView grid, DataEA dt) {
+
+            //        
+            grid.Rows.Insert(0, 1);
+            grid.Rows[0].SetValues(
+                dt.EA,
+                dt.EAY.ToString("0.000"),
+                dt.TabCount,
+                dt.TabWidthFailCount,
+                dt.TabHeightFailCount,
+                dt.TabDistFailCount
+                );
+            grid.Rows[0].Tag = dt;
+
+            //
+            setGridRowStyle(grid, 0,
+                dt.IsFail,
+                false,
+                dt.IsTabCountFail,
+                dt.IsTabWidthFailCountFail,
+                dt.IsTabHeightFailCountFail,
+                dt.IsTabDistFailCountFail
+                );
+
+        }
+        public static void SyncEAGrid(DataGridView grid, EntryDetect detect) {
+
+            int eaCount = detect.EACount;
+            int gridCount = grid.Rows.Count;
+            if(gridCount < eaCount) {
+
+                var EAs = detect.EAs;
+                for (int i = gridCount; i < eaCount; i++)
+                    addEAGrid(grid, EAs[i]);
+
+            }
+
+        }
+        public static void InitEAGrid(DataGridView grid, Action<int> onMove) {
+
+            //
+            setGridInit(grid);
+            grid.Columns.AddRange(
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "EA" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳数" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度不良" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "模切不良" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "间距不良" }
+                );
+
+            //
+            grid.CellClick += (o, e) => {
+                if (e.RowIndex >= 0)
+                    onMove((int)grid.Rows[e.RowIndex].Cells[0].Value);
+            };
+        }
+
+
+
+
+        static void initMergeTabGrid(DataGridView grid) {
 
             //
             setGridInit(grid);
@@ -142,7 +167,7 @@ namespace Detect4K {
                 );
 
         }
-        static void addSyncTabGrid(DataGridView grid, DataTab dtInside, DataTab dtOutside) {
+        static void addMergeTabGrid(DataGridView grid, DataTab dtInside, DataTab dtOutside) {
 
             //
             if (dtInside.ID != dtOutside.ID)
@@ -287,7 +312,7 @@ namespace Detect4K {
 
         }
 
-        static void initSyncTabChart(ZedGraphControl chart) {
+        static void initMergeTabChart(ZedGraphControl chart) {
 
             //
             setGraphInit(chart);
@@ -295,7 +320,7 @@ namespace Detect4K {
             setGraphAdd(chart, "外侧极宽", Color.Green, true);
 
         }
-        static void addSyncTabChart(ZedGraphControl chart, DataTab dtInside, DataTab dtOutside) {
+        static void addMergeTabChart(ZedGraphControl chart, DataTab dtInside, DataTab dtOutside) {
 
             //绘制对象
             var g = chart.GraphPane;
@@ -305,7 +330,7 @@ namespace Detect4K {
             g.CurveList[1].AddPoint(dtInside.ID, dtOutside.ValWidth);
 
         }
-        static void setSyncTabChart(ZedGraphControl chart, double min, double max, double step) {
+        static void setMergeTabChart(ZedGraphControl chart, double min, double max, double step) {
 
             //绘制对象
             var g = chart.GraphPane;

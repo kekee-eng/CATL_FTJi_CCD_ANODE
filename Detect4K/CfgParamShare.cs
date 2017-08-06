@@ -41,9 +41,8 @@ namespace Detect4K {
         //计数
         public int TabCount = 33;
         public int TabWidthCount = 10;
-        public int TabSizeCount = 0;
+        public int TabHeightCount = 0;
         public int TabDistCount = 0;
-        public int TabDistDiffCount = 0;
 
     }
 }
