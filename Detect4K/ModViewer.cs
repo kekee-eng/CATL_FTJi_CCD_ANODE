@@ -8,7 +8,7 @@ using static Common.DataGrab;
 namespace Detect4K {
     class ModViewer {
 
-        public ImageViewer InnerImage;
+        public ViewerImage InnerImage;
 
 
 

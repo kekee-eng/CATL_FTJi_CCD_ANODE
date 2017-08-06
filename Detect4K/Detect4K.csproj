@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="hdevenginedotnetxl, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\hdevenginedotnetxl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,7 +62,10 @@
     <Compile Include="CfgApp.cs" />
     <Compile Include="CfgParamShare.cs" />
     <Compile Include="CfgParamSelf.cs" />
-    <Compile Include="DetectEntry.cs" />
+    <Compile Include="EntryDetect.cs" />
+    <Compile Include="EntryGrab.cs" />
+    <Compile Include="ImageProcess.cs" />
+    <Compile Include="ViewerImage.cs" />
     <Compile Include="ModRecord.cs" />
     <Compile Include="ModDevice.cs" />
     <Compile Include="FormDetect4K.cs">

@@ -20,7 +20,7 @@ namespace Common {
         public double ValWidth;
         public double ValGap;
         public double ValGapDiff;
-        public double ValSize;
+        public double ValHeight;
 
         public bool IsWidthFail;
         public bool IsGapFail;

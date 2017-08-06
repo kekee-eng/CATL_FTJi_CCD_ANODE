@@ -149,7 +149,7 @@ namespace Detect4K {
 
             //
             viewer = new ModViewer();
-            viewer.InnerImage = new DataGrab.ImageViewer(hwin, record.InnerGrab);
+            viewer.InnerImage = new ViewerImage(hwin, record.InnerGrab);
             
         }
         void init_monitor() {

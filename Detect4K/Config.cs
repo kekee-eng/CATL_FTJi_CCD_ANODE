@@ -61,6 +61,8 @@ namespace Detect4K {
             //
             Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);
 
+            //
+            ImageProcess.Init(PathImageProcess);
         }
 
         public static void Uninit() {

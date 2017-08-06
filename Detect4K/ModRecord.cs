@@ -10,22 +10,22 @@ namespace Detect4K {
     class ModRecord : TemplateDB {
 
         public void Init() {
-            
-            //
-            InnerGrab = new GrabEntry(this, "InnerGrab", Config.App.RecordCacheSize);
-            OuterGrab = new GrabEntry(this, "OuterGrab", Config.App.RecordCacheSize);
 
             //
-            InnerDetect = new DetectEntry(this, "InnerDetect", Config.ParamShare, Config.ParamInner);
-            OuterDetect = new DetectEntry(this, "OuterDetect", Config.ParamShare, Config.ParamOuter);
+            InnerGrab = new EntryGrab(this, "InnerGrab", Config.App.RecordCacheSize);
+            OuterGrab = new EntryGrab(this, "OuterGrab", Config.App.RecordCacheSize);
+
+            //
+            InnerDetect = new EntryDetect(this, "InnerDetect", Config.ParamShare, Config.ParamInner, InnerGrab);
+            OuterDetect = new EntryDetect(this, "OuterDetect", Config.ParamShare, Config.ParamOuter, OuterGrab);
 
         }
 
-        public GrabEntry InnerGrab;
-        public GrabEntry OuterGrab;
+        public EntryGrab InnerGrab;
+        public EntryGrab OuterGrab;
 
-        public DetectEntry InnerDetect;
-        public DetectEntry OuterDetect;
+        public EntryDetect InnerDetect;
+        public EntryDetect OuterDetect;
 
 
 
