@@ -265,7 +265,7 @@ Image           BLOB
                     return null;
                 }
             }
-            public void SaveDB() {
+            public void Save() {
                 Cache.SaveToDB(DB);
             }
 

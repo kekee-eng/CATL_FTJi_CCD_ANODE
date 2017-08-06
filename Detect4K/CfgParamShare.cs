@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Detect4K {
 
+    [Serializable]
     class CfgParamShare : Common.TemplateConfig {
         public CfgParamShare(string path) : base(path) { }
 

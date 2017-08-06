@@ -25,8 +25,8 @@ namespace Detect4K {
             //
             init_monitor();
             init_form();
-
-
+            
+            //
             Task.Run(()=>{
 
                 Thread.Sleep(1000);
@@ -64,7 +64,8 @@ namespace Detect4K {
                     do {
 
                         record.Transaction(() => {
-                            record.InnerGrab.SaveDB();
+                            record.InnerGrab.Save();
+                            record.InnerDetect.Save();
                         });
 
                         Thread.Sleep(500);

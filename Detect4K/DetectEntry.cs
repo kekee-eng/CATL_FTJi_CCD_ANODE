@@ -20,7 +20,7 @@ namespace Detect4K {
             //
             db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
 (
-ID              INTEGER，
+ID              INTEGER, 
 Tabs            BLOB,
 Defects         BLOB,
 Labels          BLOB,
@@ -35,6 +35,10 @@ CfgParamSelf    BLOB
         }
 
         public void Save() {
+
+            if (!needSave)
+                return;
+            needSave = false;
 
             db.Write(string.Format(@"REPLACE INTO {0} ( ID, Tabs, Defects, Labels, CfgParamShare, CfgParamSelf ) VALUES (?,?,?,?,?,?) ", tname),
                 0,
@@ -71,7 +75,7 @@ CfgParamSelf    BLOB
 
         public CfgParamShare param_share;
         public CfgParamSelf param_self;
-        
 
+        public bool needSave = false;
     }
 }
