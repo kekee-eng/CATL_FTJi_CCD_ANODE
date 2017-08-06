@@ -402,7 +402,7 @@ Image           BLOB
 
                 //
                 initEvent(hwindow);
-                initMenu(hwindow);
+                initRightMenu(hwindow);
             }
 
             //
@@ -474,18 +474,18 @@ Image           BLOB
                 targetVs = s;
             }
 
-            public void MoveFrame(double frame) {
+            public void MoveToFrame(double frame) {
 
                 SetCenterTarget(frame);
-                MoveTargetSync(fpsMoveRef);
+                MoveTargetDirect();
 
             }
-            public void MoveEA(int ea, int tab) {
+            public void MoveToEA(int ea, int tab) {
 
             }
 
             //
-            void initMenu(HWindowControl hwindow) {
+            void initRightMenu(HWindowControl hwindow) {
 
                 //
                 Func<object, string, ToolStripMenuItem> addItem = (parent, name) => {
@@ -601,7 +601,33 @@ Image           BLOB
                 };
 
                 rtLocFrameText.KeyDown += (o, e) => {
-
+                    if (e.KeyCode == Keys.Enter) {
+                        double f;
+                        if (double.TryParse(rtLocFrameText.Text, out f)) {
+                            MoveToFrame(f);
+                            rtLocFrameText.Text = f.ToString("0.000");
+                        }
+                    }
+                };
+                rtLocEAText1.KeyDown += (o, e) => {
+                    if (e.KeyCode == Keys.Enter) {
+                        int t1, t2 = 1;
+                        if (int.TryParse(rtLocEAText1.Text, out t1)) {
+                            MoveToEA(t1, t2);
+                            rtLocEAText1.Text = t1.ToString();
+                            rtLocEAText2.Text = t2.ToString();
+                        }
+                    }
+                };
+                rtLocEAText2.KeyDown += (o, e) => {
+                    if (e.KeyCode == Keys.Enter) {
+                        int t1, t2;
+                        if (int.TryParse(rtLocEAText1.Text, out t1) && int.TryParse(rtLocEAText2.Text, out t2)) {
+                            MoveToEA(t1, t2);
+                            rtLocEAText1.Text = t1.ToString();
+                            rtLocEAText2.Text = t2.ToString();
+                        }
+                    }
                 };
 
                 rtMeasureLocPoint.Click += (o, e) => {
@@ -792,7 +818,14 @@ Image           BLOB
             bool showContextCross = false;
 
             //
-            double fpsMoveRef = 10;
+            bool mouseAllow = true;
+            bool mouseIsMove = false;
+            int mouseBoxX = 0;
+            int mouseBoxY = 0;
+            double mouseFrameX = 0;
+            double mouseFrameY = 0;
+
+            //
             double fpsControl = 25;
             double fpsRealtime = 1;
             Stopwatch fpsWatch = new Stopwatch();
@@ -808,25 +841,6 @@ Image           BLOB
             double targetDs { get { return targetVs - frameVs; } }
             double targetDist {  get { return Math.Sqrt(targetDx * targetDx + targetDy * targetDy); } }
             
-            //
-            bool mouseAllow = true;
-            bool mouseIsMove = false;
-            int mouseBoxX = 0;
-            int mouseBoxY = 0;
-            double mouseFrameX = 0;
-            double mouseFrameY = 0;
-            
-            //
-            int grabWidth { get { return Grab.Width; } }
-            int grabHeight { get { return Grab.Height; } }
-            int boxWidth { get { return Box.Width; } }
-            int boxHeight { get { return Box.Height; } }
-
-            int refGrabWidth { get { return grabWidth; } }
-            int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
-            int refBoxWidth { get { return boxWidth; } }
-            int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
-
             //
             double frameVx = 0.5;
             double frameVy = 1;
@@ -850,7 +864,18 @@ Image           BLOB
 
             int frameStartLimit { get { return Grab.Min; } }
             int frameEndLimit { get { return Grab.Max+1; } }
-            
+
+            //
+            int grabWidth { get { return Grab.Width; } }
+            int grabHeight { get { return Grab.Height; } }
+            int boxWidth { get { return Box.Width; } }
+            int boxHeight { get { return Box.Height; } }
+
+            int refGrabWidth { get { return grabWidth; } }
+            int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
+            int refBoxWidth { get { return boxWidth; } }
+            int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
+
         }
 
         #endregion

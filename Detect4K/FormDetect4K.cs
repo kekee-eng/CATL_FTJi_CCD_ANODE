@@ -193,8 +193,7 @@ namespace Detect4K {
             monitor["Inner_Viewer_showContextNG"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextNG");
             monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextLabel");
             monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextCross");
-
-            monitor["Inner_Viewer_fpsMoveRef"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsMoveRef");
+            
             monitor["Inner_Viewer_fpsControl"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsControl");
             monitor["Inner_Viewer_fpsRealtime"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsRealtime");
 
