@@ -31,7 +31,7 @@ namespace Detect4K {
 
                 Thread.Sleep(1000);
 
-                viewer.InnerImage.SetCenterTarget(1);
+                viewer.InnerImage.SetBottomTarget(0);
                 viewer.InnerImage.MoveTargetDirect();
 
             });
@@ -64,7 +64,7 @@ namespace Detect4K {
                     do {
 
                         record.Transaction(() => {
-                            record.InnerGrab.Save();
+                            record.InnerGrab.SaveDB();
                         });
 
                         Thread.Sleep(500);
@@ -245,9 +245,7 @@ namespace Detect4K {
         ModViewer viewer;
         
         private void btnGrabStart_Click(object sender, EventArgs e) {
-            device.InnerCamera.m_fpsControl = 0.3;
-            device.InnerCamera.m_frameReset = 10;
-            device.InnerCamera.m_frame = 10;
+            device.InnerCamera.m_fpsControl = 1;
             device.InnerCamera.Start();
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {

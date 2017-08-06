@@ -35,42 +35,13 @@ namespace Common {
             return time.ToString("yyyy/MM/dd HH:mm:ss.fff");
         }
 
-        #region 数据库接口
-
-        object[] ToDB() {
-            return new object[] { Camera, Frame, Encoder, Timestamp, UtilSerialization.obj2bytes(Image) };
-        }
-        static DataGrab FromDB(object[] objs) {
-            System.Func<object, object, object> getDef = (obj, def) => obj is System.DBNull ? def : obj;
-
-            var data = new DataGrab() {
-                Camera = (string)getDef(objs[1], ""),
-                Frame = (int)(long)getDef(objs[2], 0),
-                Encoder = (int)(long)getDef(objs[3], 0),
-                Timestamp = (string)getDef(objs[4], ""),
-
-                IsCreated = true,
-                IsCache = true,
-                IsStore = true,
-            };
-
-            var a = getDef(objs[5], null);
-            var b = (byte[])a;
-            var c = UtilSerialization.bytes2obj(b);
-            var d = (HImage)c;
-
-            data.Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null));
-
-            return data;
-
-        }
-
+        //数据库接口
         public class GrabDB {
             public GrabDB(TemplateDB parent, string tableName) {
 
                 //
                 db = parent;
-                name = tableName;
+                this.tname = tableName;
 
                 //
                 db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
@@ -81,7 +52,7 @@ Frame           INTEGER,
 Encoder         INTEGER,
 Timestamp       TEXT,
 Image           BLOB
-)", name));
+)", this.tname));
 
                 //
                 Count = QueryCount;
@@ -96,11 +67,11 @@ Image           BLOB
             }
 
             TemplateDB db;
-            string name;
+            string tname;
 
-            public int QueryMin { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MIN(Frame) FROM {0}", name))[0][0]; } }
-            public int QueryMax { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", name))[0][0]; } }
-            public int QueryCount { get { return db.Count(name); } }
+            public int QueryMin { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MIN(Frame) FROM {0}", tname))[0][0]; } }
+            public int QueryMax { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", tname))[0][0]; } }
+            public int QueryCount { get { return db.Count(tname); } }
 
             public int Min;
             public int Max;
@@ -111,13 +82,12 @@ Image           BLOB
 
             public DataGrab this[int i] {
                 get {
-                    var ret = db.Read(string.Format(@"SELECT * FROM {0} WHERE Frame=""{1}""", name, i));
+                    var ret = db.Read(string.Format(@"SELECT * FROM {0} WHERE Frame=""{1}""", tname, i));
                     if (ret.Count == 0)
                         return null;
                     return FromDB(ret[0]);
                 }
             }
-
             public void Save(DataGrab data) {
 
                 if (data == null)
@@ -126,13 +96,13 @@ Image           BLOB
                 if (data.IsStore)
                     return;
 
-                if (db.Count(name + " WHERE Frame=" + data.Frame) != 0) {
+                if (db.Count(tname + " WHERE Frame=" + data.Frame) != 0) {
                     data.IsStore = true;
                     return;
                 }
 
                 //
-                db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", name), data.ToDB());
+                db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", tname), ToDB(data));
                 data.IsStore = true;
 
                 //
@@ -154,17 +124,44 @@ Image           BLOB
                 Min = Math.Min(Min, data.Frame);
                 Max = Math.Max(Max, data.Frame);
                 Count++;
+
             }
 
+            static object[] ToDB(DataGrab data) {
+                return new object[] { data.Camera, data.Frame, data.Encoder, data.Timestamp, UtilSerialization.obj2bytes(data.Image) };
+            }
+            static DataGrab FromDB(object[] objs) {
+
+                System.Func<object, object, object> getDef = (obj, def) => obj is System.DBNull ? def : obj;
+
+                var data = new DataGrab() {
+                    Camera = (string)getDef(objs[1], ""),
+                    Frame = (int)(long)getDef(objs[2], 0),
+                    Encoder = (int)(long)getDef(objs[3], 0),
+                    Timestamp = (string)getDef(objs[4], ""),
+
+                    IsCreated = true,
+                    IsCache = true,
+                    IsStore = true,
+                };
+
+                var a = getDef(objs[5], null);
+                var b = (byte[])a;
+                var c = UtilSerialization.bytes2obj(b);
+                var d = (HImage)c;
+
+                data.Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null));
+
+                return data;
+
+            }
         }
-
-        #endregion
-
-        #region 缓存接口
-
+        
+        //缓存接口
         public class GrabCache {
 
-            public ConcurrentDictionary<int, DataGrab> store = new ConcurrentDictionary<int, DataGrab>();
+            ConcurrentDictionary<int, DataGrab> store = new ConcurrentDictionary<int, DataGrab>();
+
             public int Min { get { return store.Count == 0 ? 1 : store.Keys.Min(); } }
             public int Max { get { return store.Count == 0 ? 1 : store.Keys.Max(); } }
             public int Count { get { return store.Count; } }
@@ -174,6 +171,7 @@ Image           BLOB
             public int Height = -1;
 
             public int LastKey = 0;
+
             public DataGrab this[int i] {
                 get {
                     return store.Keys.Contains(i) ? store[i] : null;
@@ -210,6 +208,14 @@ Image           BLOB
 
                 }
             }
+            public void SaveToDB(GrabDB tg) {
+
+                //
+                foreach (var val in store.Values) {
+                    tg.Save(val);
+                }
+
+            }
 
             //public void RemoveAll() {
             //    foreach (var key in store.Keys.ToArray()) {
@@ -220,21 +226,9 @@ Image           BLOB
             //    }
             //}
 
-            public void SaveToDB(GrabDB tg) {
-
-                //
-                foreach (var val in store.Values) {
-                    tg.Save(val);
-                }
-
-            }
-
         }
 
-        #endregion
-
-        #region 入口
-
+        //入口
         public class GrabEntry {
 
             //
@@ -244,9 +238,8 @@ Image           BLOB
             }
 
             //
-            public void Save() {
-                Cache.SaveToDB(DB);
-            }
+            public GrabCache Cache;
+            public GrabDB DB;
 
             //
             public int Width { get { return Math.Max(Cache.Width, DB.Width); } }
@@ -279,10 +272,9 @@ Image           BLOB
                     return null;
                 }
             }
-
-            //
-            public GrabCache Cache;
-            public GrabDB DB;
+            public void SaveDB() {
+                Cache.SaveToDB(DB);
+            }
 
             //
             public HImage GetImage(int i) {
@@ -298,7 +290,7 @@ Image           BLOB
                 //变量定义
                 int w = Width;
                 int h = Height;
-                if (w == 0 || h == 0)
+                if (w <= 0 || h <= 0)
                     return null;
 
                 //分配内存
@@ -318,7 +310,7 @@ Image           BLOB
                 //变量定义
                 int w = Width;
                 int h = Height;
-                if (w == 0 || h == 0)
+                if (w <= 0 || h <= 0)
                     return null;
 
                 //计算偏移
@@ -385,12 +377,10 @@ Image           BLOB
                 start = Math.Min(Math.Max(start, Min), Max);
                 end = Math.Min(Math.Max(end, start), Max);
             }
+            
         }
 
-        #endregion
-
-        #region 可视化工具
-
+        //可视化工具
         public class ImageViewer {
 
             public ImageViewer(HWindowControl hwindow, GrabEntry grab) {
@@ -462,11 +452,11 @@ Image           BLOB
                 updateView();
             }
 
-            public void SetTopTarget(double y, double x = 0.5, double s = 1) {
-                SetCenterTarget(y + frameDy / 2, x, s);
+            public void SetTopTarget(double y) {
+                SetCenterTarget(y + frameDy / 2);
             }
-            public void SetBottomTarget(double y, double x = 0.5, double s = 1) {
-                SetCenterTarget(y - frameDy / 2, x, s);
+            public void SetBottomTarget(double y) {
+                SetCenterTarget(y + 1 - frameDy / 2);
             }
             public void SetCenterTarget(double y, double x = 0.5, double s = 1) {
                 targetVx = x;
@@ -929,8 +919,6 @@ Image           BLOB
             int pixRow2 { get { return (int)getPixRow(frameY2); } }
 
         }
-
-        #endregion
 
     }
 }

@@ -41,5 +41,7 @@ namespace Common {
         //
         public bool IsFail { get { return IsWidthFail || IsGapFail || IsGapDiffFail || IsSizeFail; } }
 
+        //数据库接口
+
     }
 }
