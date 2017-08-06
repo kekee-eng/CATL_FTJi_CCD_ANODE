@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Detect4K {
     class ImageProcess {
-        
+
         static HDevEngine m_engine;
         static HDevProgram m_program;
 
@@ -57,23 +57,24 @@ namespace Detect4K {
 
         }
 
-        public static bool DetectTab(HImage image, out double x, out double y1, out double y2) {
+        public static bool DetectTab(HImage image, out double x, out double[] y1, out double[] y2) {
 
             //
-            x = y1 = y2 = 0;
+            x = 0;
+            y1 = y2 = null;
 
             //
             var data = TemplateProcess("DetectTab", image);
-            if (data == null)  return false;
+            if (data == null) return false;
 
             //  
             x = data["OutX"];
-            y1 = data["OutY1"];
-            y2 = data["OutY2"];
+            y1 = data["OutY1"].ToDArr();
+            y2 = data["OutY2"].ToDArr();
             return true;
 
         }
-        public static bool DetWidth(HImage image, out double x1, out double x2) {
+        public static bool DetectWidth(HImage image, out double x1, out double x2) {
 
             //
             x1 = x2 = 0;
@@ -88,18 +89,42 @@ namespace Detect4K {
             return true;
 
         }
-        public static bool DetEAMark(HImage image, out double x, out double y) {
+        public static bool DetectMark(HImage image, out double[] x, out double[] y) {
 
             //
-            x = y = 0;
+            x = y = null;
 
             //
             var data = TemplateProcess("DetectMark", image);
             if (data == null) return false;
 
             //  
-            x = data["OutX"];
-            y = data["OutY"];
+            x = data["OutX"].ToDArr();
+            y = data["OutY"].ToDArr();
+            return true;
+        }
+        public static bool DetectDefectFast(HImage image) {
+            
+            //
+            var data = TemplateProcess("DetectDefectFast", image);
+            if (data == null) return false;
+            
+            return true;
+        }
+        public static bool DetectDefectDeep(HImage image, out double[] x, out double[] y, out double[] w, out double[] h) {
+
+            //
+            x = y = w = h = null;
+
+            //
+            var data = TemplateProcess("DetectDefectDeep", image);
+            if (data == null) return false;
+
+            //  
+            x = data["OutX"].ToDArr();
+            y = data["OutY"].ToDArr();
+            w = data["OutW"].ToDArr();
+            h = data["OutH"].ToDArr();
             return true;
         }
 

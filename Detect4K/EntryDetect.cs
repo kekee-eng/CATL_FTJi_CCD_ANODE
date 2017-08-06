@@ -127,7 +127,8 @@ CfgParamSelf    BLOB
 
             //检测极耳
             var aimage = grab.GetImage(frame);
-            double ax, ay1, ay2;
+            double ax;
+            double []ay1, ay2;
             if (aimage != null && ImageProcess.DetectTab(aimage, out ax, out ay1, out ay2)) {
 
                 int w = grab.Width;
@@ -136,8 +137,14 @@ CfgParamSelf    BLOB
                 //
                 var data = new DataTab();
                 data.TabX = ax / w;
-                data.TabY1 = frame + ay1 / h;
-                data.TabY2 = frame + ay2 / h;
+                
+                data.TabY1 = data.TabY1_P = frame + ay1[0] / h;
+                data.TabY2 = data.TabY2_P = frame + ay2[0] / h;
+
+                if (ay1.Length == 2 && ay2.Length == 2) {
+                    data.TabY1_P = frame + ay1[1] / h;
+                    data.TabY2_P = frame + ay2[1] / h;
+                }
 
                 data.EAX = data.TabX;
                 data.EAY = data.TabY1;
@@ -168,7 +175,7 @@ CfgParamSelf    BLOB
                     double bfy2 = data.TabY1 + param.TabWidthEnd/Fy;
 
                     var bimage = grab.GetImage(bfy1, bfy2);
-                    if (bimage != null && ImageProcess.DetWidth(bimage, out bx1, out bx2)) {
+                    if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
                         data.WidthY1 = bfy1;
                         data.WidthY2 = bfy2;
                         data.WidthX1 = bx1 / w;
@@ -176,16 +183,21 @@ CfgParamSelf    BLOB
                     }
 
                     //检测是否EA头
-                    double cx, cy;
+                    double[] cx, cy;
                     double cfy1 = data.TabY1 + param.EAStart/Fy;
                     double cfy2 = data.TabY1 + param.EAEnd/Fy;
                     var cimage = grab.GetImage(cfy1, cfy2);
-                    if (ImageProcess.DetEAMark(cimage, out cx, out cy)) {
+                    if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
 
                         //将最后一个极耳放到下个EA中
                         data.IsNewEA = true;
-                        data.EAX = cx / w;
-                        data.EAY = cfy1 + cy / h;
+                        data.EAX = data.EAX_P = cx[0] / w;
+                        data.EAY = data.EAY_P = cfy1 + cy[0] / h;
+
+                        if (cx.Length == 2 && cy.Length == 2) {
+                            data.EAX_P = cx[1] / w;
+                            data.EAY_P = cfy1 + cy[1] / h;
+                        }
 
                     }
 

@@ -9,6 +9,8 @@ namespace Common {
         public double TabX;
         public double TabY1;
         public double TabY2;
+        public double TabY1_P; //另一对极耳
+        public double TabY2_P;
 
         //测宽位置
         public double WidthX1;
@@ -29,6 +31,8 @@ namespace Common {
 
         public double EAX; //EA起始处
         public double EAY; //EA起始处
+        public double EAX_P; //另一对Mark孔
+        public double EAY_P;
 
         public int ID;
         public int EA;
