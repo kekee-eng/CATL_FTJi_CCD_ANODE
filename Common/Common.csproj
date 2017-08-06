@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectCamera_ZipFile.cs" />
+    <Compile Include="DataDefect.cs" />
+    <Compile Include="DataLabel.cs" />
     <Compile Include="TemplateCamera.cs" />
     <Compile Include="TemplateDB.cs" />
     <Compile Include="DataEA.cs" />

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Detect4K {
 
-    class CfgWork : Common.TemplateConfig {
-        public CfgWork(string path) : base(path) { }
+    class CfgParamSelf : Common.TemplateConfig {
+        public CfgParamSelf(string path) : base(path) { }
 
         //
         public double ImageWidth = 4096;

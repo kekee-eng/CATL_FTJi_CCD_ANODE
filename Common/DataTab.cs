@@ -2,7 +2,8 @@
 namespace Common {
 #pragma warning disable 0649
 
-    class DataTab {
+    [System.Serializable]
+    public class DataTab {
 
         //极耳位置
         public double TabX;
@@ -34,14 +35,12 @@ namespace Common {
         public int TAB;
 
         //
-        public bool IsNewEA = false; //
+        public bool IsNewEA = false; //EA起始
         public bool IsSync = false; //已同步
         public bool IsFix = false; //补测
         
         //
         public bool IsFail { get { return IsWidthFail || IsGapFail || IsGapDiffFail || IsSizeFail; } }
-
-        //数据库接口
-
+        
     }
 }

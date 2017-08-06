@@ -139,19 +139,12 @@ Image           BLOB
                     Frame = (int)(long)getDef(objs[2], 0),
                     Encoder = (int)(long)getDef(objs[3], 0),
                     Timestamp = (string)getDef(objs[4], ""),
-
+                    Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null)),
                     IsCreated = true,
                     IsCache = true,
                     IsStore = true,
                 };
-
-                var a = getDef(objs[5], null);
-                var b = (byte[])a;
-                var c = UtilSerialization.bytes2obj(b);
-                var d = (HImage)c;
-
-                data.Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null));
-
+                
                 return data;
 
             }

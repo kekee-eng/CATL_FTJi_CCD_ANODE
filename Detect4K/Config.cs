@@ -26,9 +26,9 @@ namespace Detect4K {
         public static string PathImageProcess { get { return FolderCfg + "image_process.hdev"; } }
 
         public static CfgApp App;
-        public static CfgParam Param;
-        public static CfgWork Inner;
-        public static CfgWork Outer;
+        public static CfgParamShare ParamShare;
+        public static CfgParamSelf ParamInner;
+        public static CfgParamSelf ParamOuter;
 
         public static ILog Log;
 
@@ -48,15 +48,15 @@ namespace Detect4K {
 
             //
             App = new CfgApp(PathCfgApp);
-            Param = new CfgParam(PathCfgParam);
-            Inner = new CfgWork(PathCfgInner);
-            Outer = new CfgWork(PathCfgOuter);
+            ParamShare = new CfgParamShare(PathCfgParam);
+            ParamInner = new CfgParamSelf(PathCfgInner);
+            ParamOuter = new CfgParamSelf(PathCfgOuter);
 
             //
             App.Save();
-            Param.Save();
-            Inner.Save();
-            Outer.Save();
+            ParamShare.Save();
+            ParamInner.Save();
+            ParamOuter.Save();
 
             //
             Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);

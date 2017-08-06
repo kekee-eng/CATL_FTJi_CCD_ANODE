@@ -58,6 +58,16 @@ namespace Common {
             }
         }
 
+        //复制
+        public void CopyTo(TemplateConfig other) {
+
+            //遍历所有公共字段
+            var fields = this.GetType().GetFields();
+            foreach (var field in fields) {
+                other.setValueFromField(field, getValueFromField(field));
+            }
+        }
+
         //文件读写
         public void Save() {
             SaveAs(m_config_path);

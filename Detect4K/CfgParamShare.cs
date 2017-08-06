@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Detect4K {
 
-    class CfgParam : Common.TemplateConfig {
-        public CfgParam(string path) : base(path) { }
+    class CfgParamShare : Common.TemplateConfig {
+        public CfgParamShare(string path) : base(path) { }
 
         //EA起始Mark孔判定位置
         public double EAStart = -40;
