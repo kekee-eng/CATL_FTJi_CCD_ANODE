@@ -217,7 +217,7 @@ namespace Detect4K {
 
             rtReset.Click += (o, e) => {
                 frameVs = 1.0;
-                frameVx = Math.Min(Math.Max(frameVx, 0), 1);
+                frameVx = !showContextCross ? 0.5 : Math.Min(Math.Max(frameVx, 0), 1);
                 frameVy = Math.Min(Math.Max(frameVy, frameStartLimit), frameEndLimit);
                 updateView();
             };
@@ -387,8 +387,10 @@ namespace Detect4K {
                 frameVs = Math.Max(frameVs, 0.005);
                 double s2 = frameVs;
 
-                frameVx += (e.X / 640.0 - 0.5) * (s1 - s2);
-                frameVy += (e.Y / 480.0 - 0.5) * (s1 - s2) * refGrabHeight / grabHeight;
+                if (!showContextCross) {
+                    frameVx += (e.X / 640.0 - 0.5) * (s1 - s2);
+                    frameVy += (e.Y / 480.0 - 0.5) * (s1 - s2) * refGrabHeight / grabHeight;
+                }
 
                 updateView();
             };
@@ -433,7 +435,7 @@ namespace Detect4K {
             double crossSize = 100;
             double crossAngle = Math.PI / 4;
             double arrowSize = 10;
-
+            
             //极耳
             var selectTabs = Detect.Tabs.TakeWhile(x => x.TabY2 >= frameStart || x.WidthY1 <= frameEnd).ToList();
             for (int i = 0; i < Detect.Tabs.Count; i++) {
@@ -566,7 +568,7 @@ namespace Detect4K {
         double mouseFrameY = 0;
 
         //
-        double fpsControl = 25;
+        double fpsControl = 60;
         double fpsRealtime = 1;
         Stopwatch fpsWatch = new Stopwatch();
 
