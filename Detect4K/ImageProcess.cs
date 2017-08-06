@@ -57,13 +57,13 @@ namespace Detect4K {
 
         }
 
-        public static bool DetTab(HImage image, out double x, out double y1, out double y2) {
+        public static bool DetectTab(HImage image, out double x, out double y1, out double y2) {
 
             //
             x = y1 = y2 = 0;
 
             //
-            var data = TemplateProcess("DetectElectRode", image);
+            var data = TemplateProcess("DetectTab", image);
             if (data == null)  return false;
 
             //  

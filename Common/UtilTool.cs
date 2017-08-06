@@ -144,7 +144,7 @@ namespace Common {
                     return ValueToString(d2.Invoke(obj, null));
                 }
 
-                throw new Exception("UtilTool: AutoInfo: GetPrivateValue");
+                throw new Exception("UtilTool: AutoInfo: GetPrivateValue: " + name);
             }
 
             static DataGridView _grid;

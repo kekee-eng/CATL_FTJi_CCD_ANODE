@@ -45,17 +45,18 @@ namespace Common {
             Close();
         }
 
-        public void Transaction(Action act) {
+        public bool Transaction(Action act) {
 
             //使用事务
             var trans = m_conn.BeginTransaction();
             try {
                 act();
                 trans.Commit();
+                return true;
             }
             catch {
                 trans.Rollback();
-                throw;
+                return false;
             }
 
         }

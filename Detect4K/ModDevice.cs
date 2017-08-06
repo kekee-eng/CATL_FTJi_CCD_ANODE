@@ -38,11 +38,11 @@ namespace Detect4K {
         public void Close() {
 
             InnerCamera.Dispose();
-            OuterCamera.Dispose();
+            //OuterCamera.Dispose();
         }
 
         public ConnectCamera_ZipFile InnerCamera;
-        public ConnectCamera_ZipFile OuterCamera;
+        //public ConnectCamera_ZipFile OuterCamera;
 
 
 

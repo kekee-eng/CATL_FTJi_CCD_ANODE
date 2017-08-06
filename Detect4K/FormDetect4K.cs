@@ -62,10 +62,13 @@ namespace Detect4K {
 
                     do {
 
-                        record.Transaction(() => {
-                            record.InnerGrab.Save();
+                        List<DataGrab> retInner = null;
+                        if (record.Transaction(() => {
+                            retInner = record.InnerGrab.Save();
                             record.InnerDetect.Save();
-                        });
+                        })) {
+                            retInner.AsParallel().ForAll(x => x.IsStore = true);
+                        }
 
                         Thread.Sleep(500);
                     } while (!isQuit);
@@ -77,7 +80,6 @@ namespace Detect4K {
 
                 //
                 record.Close();
-
             });
 
             //
@@ -90,11 +92,14 @@ namespace Detect4K {
         void init_device() {
 
             //
+            device?.Close();
             device = new ModDevice();
 
             //
-            string prefix = (HalconDotNet.HalconAPI.isWindows ? "D:/" : "/media/fra/DATA/");
-            device.InnerCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2B][20170728][125247-130642][1283][F1-F1283].zip");
+            //string prefix = (HalconDotNet.HalconAPI.isWindows ? "D:/" : "/media/fra/DATA/");
+            //device.InnerCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2B][20170728][125247-130642][1283][F1-F1283].zip");
+            device.InnerCamera = new ConnectCamera_ZipFile(Config.App.CameraZipFile);
+
             device.InnerCamera.OnImageReady += obj => {
 
                 //线程1：内侧相机取图、处理
@@ -112,22 +117,12 @@ namespace Detect4K {
                 device.InnerCamera.Reset();
                 device.InnerCamera.Start();
             };
-
-            //
-            device.OuterCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2A][20170728][125247-130642][1283][F1-F1283].zip");
-            device.OuterCamera.OnImageReady += obj => {
-
-                //线程2：外侧相机取图、处理
-            };
-            device.OuterCamera.OnComplete += () => {
-
-            };
-
+            
         }
         void init_record() {
 
             //
-            //System.IO.File.Delete(Config.FolderRecord + "01.db");
+            System.IO.File.Delete(Config.FolderRecord + "01.db");
             record = new ModRecord();
             record.Open(Config.FolderRecord + "01.db");
             record.Init();
@@ -140,6 +135,7 @@ namespace Detect4K {
             viewer.InnerImage = new ViewerImage(hwin, record.InnerGrab, record.InnerDetect);
 
         }
+
         void init_monitor() {
 
             //
@@ -153,6 +149,7 @@ namespace Detect4K {
             monitor["App_CpuLoad"] = () => string.Format("{0:0.00} %", UtilPerformance.GetCpuLoad());
 
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Inner_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.InnerCamera, "m_filename"); 
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;
             monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isReady;
             monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isRun;
@@ -232,20 +229,30 @@ namespace Detect4K {
         ModDevice device;
         ModViewer viewer;
 
+        private void btnLoadFile_Click(object sender, EventArgs e) {
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            if(ofd.ShowDialog() == DialogResult.OK) {
+                Config.App.CameraZipFile = ofd.FileName;
+
+                btnGrabRestart_Click(null, null);
+            }
+        }
         private void btnGrabRestart_Click(object sender, EventArgs e) {
-            record.InnerDetect.Discard();
-            device.InnerCamera.m_frame = 0;
-            device.InnerCamera.m_fpsControl = 5;
+            init_device();
+            //record.InnerDetect.Discard();
+            device.InnerCamera.m_frame = Config.App.CameraFrameReset;
+            device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
             device.InnerCamera.Start();
         }
         private void btnGrabStart_Click(object sender, EventArgs e) {
+            device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
             device.InnerCamera.Start();
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
             device.InnerCamera.Stop();
         }
-
-
+        
         private void timer1_Tick(object sender, EventArgs e) {
 
             if (IsHandleCreated && !IsDisposed) {

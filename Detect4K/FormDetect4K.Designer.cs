@@ -29,19 +29,20 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.rtoolInfo = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rtoolTab = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolEA = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.rtoolCfgApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolCfgShare = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolCfgInner = new System.Windows.Forms.ToolStripMenuItem();
             this.hwin = new HalconDotNet.HWindowControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnGrabRestart = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.rtoolCfgApp = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtoolCfgShare = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtoolCfgInner = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnLoadFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -57,7 +58,7 @@
             // 
             // btnGrabStop
             // 
-            this.btnGrabStop.Location = new System.Drawing.Point(165, 3);
+            this.btnGrabStop.Location = new System.Drawing.Point(246, 3);
             this.btnGrabStop.Name = "btnGrabStop";
             this.btnGrabStop.Size = new System.Drawing.Size(75, 23);
             this.btnGrabStop.TabIndex = 4;
@@ -67,7 +68,7 @@
             // 
             // btnGrabStart
             // 
-            this.btnGrabStart.Location = new System.Drawing.Point(84, 3);
+            this.btnGrabStart.Location = new System.Drawing.Point(165, 3);
             this.btnGrabStart.Name = "btnGrabStart";
             this.btnGrabStart.Size = new System.Drawing.Size(75, 23);
             this.btnGrabStart.TabIndex = 3;
@@ -98,28 +99,59 @@
             this.rtoolCfgShare,
             this.rtoolCfgInner});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 170);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 148);
             // 
             // rtoolInfo
             // 
             this.rtoolInfo.Name = "rtoolInfo";
-            this.rtoolInfo.Size = new System.Drawing.Size(152, 22);
+            this.rtoolInfo.Size = new System.Drawing.Size(129, 22);
             this.rtoolInfo.Text = "Info";
             this.rtoolInfo.Click += new System.EventHandler(this.rtoolInfo_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
             // 
             // rtoolTab
             // 
             this.rtoolTab.Name = "rtoolTab";
-            this.rtoolTab.Size = new System.Drawing.Size(152, 22);
+            this.rtoolTab.Size = new System.Drawing.Size(129, 22);
             this.rtoolTab.Text = "TAB";
             this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
             // 
             // rtoolEA
             // 
             this.rtoolEA.Name = "rtoolEA";
-            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
+            this.rtoolEA.Size = new System.Drawing.Size(129, 22);
             this.rtoolEA.Text = "EA";
             this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(126, 6);
+            // 
+            // rtoolCfgApp
+            // 
+            this.rtoolCfgApp.Name = "rtoolCfgApp";
+            this.rtoolCfgApp.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgApp.Text = "CfgApp";
+            this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
+            // 
+            // rtoolCfgShare
+            // 
+            this.rtoolCfgShare.Name = "rtoolCfgShare";
+            this.rtoolCfgShare.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgShare.Text = "CfgShare";
+            this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
+            // 
+            // rtoolCfgInner
+            // 
+            this.rtoolCfgInner.Name = "rtoolCfgInner";
+            this.rtoolCfgInner.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgInner.Text = "CfgInner";
+            this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
             // 
             // hwin
             // 
@@ -172,6 +204,7 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.btnLoadFile);
             this.flowLayoutPanel1.Controls.Add(this.btnGrabRestart);
             this.flowLayoutPanel1.Controls.Add(this.btnGrabStart);
             this.flowLayoutPanel1.Controls.Add(this.btnGrabStop);
@@ -183,7 +216,7 @@
             // 
             // btnGrabRestart
             // 
-            this.btnGrabRestart.Location = new System.Drawing.Point(3, 3);
+            this.btnGrabRestart.Location = new System.Drawing.Point(84, 3);
             this.btnGrabRestart.Name = "btnGrabRestart";
             this.btnGrabRestart.Size = new System.Drawing.Size(75, 23);
             this.btnGrabRestart.TabIndex = 6;
@@ -197,36 +230,15 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // toolStripSeparator1
+            // btnLoadFile
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
-            // 
-            // rtoolCfgApp
-            // 
-            this.rtoolCfgApp.Name = "rtoolCfgApp";
-            this.rtoolCfgApp.Size = new System.Drawing.Size(152, 22);
-            this.rtoolCfgApp.Text = "CfgApp";
-            this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
-            // 
-            // rtoolCfgShare
-            // 
-            this.rtoolCfgShare.Name = "rtoolCfgShare";
-            this.rtoolCfgShare.Size = new System.Drawing.Size(152, 22);
-            this.rtoolCfgShare.Text = "CfgShare";
-            this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
-            // 
-            // rtoolCfgInner
-            // 
-            this.rtoolCfgInner.Name = "rtoolCfgInner";
-            this.rtoolCfgInner.Size = new System.Drawing.Size(152, 22);
-            this.rtoolCfgInner.Text = "CfgInner";
-            this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
+            this.btnLoadFile.Location = new System.Drawing.Point(3, 3);
+            this.btnLoadFile.Name = "btnLoadFile";
+            this.btnLoadFile.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadFile.TabIndex = 7;
+            this.btnLoadFile.Text = "LoadFile";
+            this.btnLoadFile.UseVisualStyleBackColor = true;
+            this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
             // 
             // FormDetect4K
             // 
@@ -270,6 +282,7 @@
         private System.Windows.Forms.ToolStripMenuItem rtoolCfgApp;
         private System.Windows.Forms.ToolStripMenuItem rtoolCfgShare;
         private System.Windows.Forms.ToolStripMenuItem rtoolCfgInner;
+        private System.Windows.Forms.Button btnLoadFile;
     }
 }
 

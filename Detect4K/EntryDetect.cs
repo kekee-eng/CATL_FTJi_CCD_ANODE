@@ -128,7 +128,7 @@ CfgParamSelf    BLOB
             //检测极耳
             var aimage = grab.GetImage(frame);
             double ax, ay1, ay2;
-            if (aimage != null && ImageProcess.DetTab(aimage, out ax, out ay1, out ay2)) {
+            if (aimage != null && ImageProcess.DetectTab(aimage, out ax, out ay1, out ay2)) {
 
                 int w = grab.Width;
                 int h = grab.Height;

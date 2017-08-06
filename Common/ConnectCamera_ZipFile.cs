@@ -16,6 +16,7 @@ namespace Common {
     public class ConnectCamera_ZipFile : IDisposable {
 
         public ConnectCamera_ZipFile(string filename) {
+            m_filename = filename;
             prepareFile(filename);
             new Thread(new ThreadStart(threadProcess)).Start();
         }
@@ -26,6 +27,7 @@ namespace Common {
         }
 
         //
+        string m_filename;
         ZipFile m_zipfile;
         Dictionary<int, ZipEntry> m_entrys;
         Dictionary<int, DataGrab> m_datas;

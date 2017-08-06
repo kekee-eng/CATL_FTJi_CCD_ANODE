@@ -52,8 +52,8 @@ namespace Detect4K {
                 return null;
             }
         }
-        public void Save() {
-            Cache.SaveToDB(DB);
+        public List<DataGrab> Save() {
+            return Cache.SaveToDB(DB);
         }
 
         //

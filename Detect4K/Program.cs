@@ -19,6 +19,8 @@ namespace Detect4K {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDetect4K());
+
+            Config.Uninit();
         }
     }
 }

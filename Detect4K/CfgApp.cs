@@ -23,8 +23,11 @@ namespace Detect4K {
         public int RecordCacheSize = 200;
         public bool RecordIsSaveImageOK = true;
         public bool RecordIsSaveImageNG = true;
-        
+
         //显示参数
+        public string CameraZipFile = "";
+        public double CameraFpsControl = 10;
+        public int CameraFrameReset = 1;
 
     }
 

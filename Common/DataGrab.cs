@@ -88,22 +88,22 @@ Image           BLOB
                     return FromDB(ret[0]);
                 }
             }
-            public void Save(DataGrab data) {
+            public bool Save(DataGrab data) {
 
                 if (data == null)
-                    return;
+                    return false;
 
                 if (data.IsStore)
-                    return;
+                    return false;
 
                 if (db.Count(tname + " WHERE Frame=" + data.Frame) != 0) {
                     data.IsStore = true;
-                    return;
+                    return false;
                 }
 
                 //
                 db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", tname), ToDB(data));
-                data.IsStore = true;
+                //data.IsStore = true;
 
                 //
                 int w, h;
@@ -125,6 +125,7 @@ Image           BLOB
                 Max = Math.Max(Max, data.Frame);
                 Count++;
 
+                return true;
             }
 
             static object[] ToDB(DataGrab data) {
@@ -201,12 +202,17 @@ Image           BLOB
 
                 }
             }
-            public void SaveToDB(GrabDB tg) {
+            public List<DataGrab> SaveToDB(GrabDB tg) {
 
                 //
+                List<DataGrab> saveDatas = new List<DataGrab>();
                 foreach (var val in store.Values) {
-                    tg.Save(val);
+                    if (tg.Save(val))
+                        saveDatas.Add(val);
                 }
+
+                //
+                return saveDatas;
 
             }
             

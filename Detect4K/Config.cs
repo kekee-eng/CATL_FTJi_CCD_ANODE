@@ -64,8 +64,12 @@ namespace Detect4K {
             //
             ImageProcess.Init(PathImageProcess);
         }
-
         public static void Uninit() {
+
+            App.Save();
+            ParamShare.Save();
+            ParamInner.Save();
+            ParamOuter.Save();
 
         }
 
