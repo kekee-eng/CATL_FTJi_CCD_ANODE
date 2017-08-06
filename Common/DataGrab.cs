@@ -249,7 +249,7 @@ Image           BLOB
             //
             public int Width { get { return Math.Max(Cache.Width, DB.Width); } }
             public int Height { get { return Math.Max(Cache.Height, DB.Height); } }
-            
+
             public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
             public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
 
@@ -273,7 +273,7 @@ Image           BLOB
                         Cache[i] = ret2;
                         return ret2;
                     }
-                    
+
                     return null;
                 }
             }
@@ -300,14 +300,14 @@ Image           BLOB
                     return null;
 
                 //分配内存
-                int newLength = end - start + 1;
-                var newImage = new HImage("byte", w, h * newLength);
+                int len = end - start + 1;
+                var newImage = new HImage("byte", w, h * len);
 
                 //填充数据
-                for (int i = start; i <= end; i++) {
+                Enumerable.Range(start, len).AsParallel().ForAll(i => {
                     var srcImage = GetImage(i);
                     UtilTool.Image.CopyImageOffset(newImage, srcImage, (i - start) * h, 0, h);
-                }
+                });
 
                 return newImage;
             }
@@ -337,9 +337,9 @@ Image           BLOB
                 if (nh < 0)
                     return null;
                 var newImage = new HImage("byte", w, nh);
-
+                
                 //填充数据
-                for (int i = p1; i < p2; i++) {
+                Enumerable.Range(p1, p2 - p1).AsParallel().ForAll(i => {
 
                     int hsrc;
                     int hdst;
@@ -368,7 +368,8 @@ Image           BLOB
 
                     var srcImage = GetImage(i);
                     UtilTool.Image.CopyImageOffset(newImage, srcImage, hdst, hsrc, hcopy);
-                }
+
+                });
 
                 return newImage;
             }
@@ -395,6 +396,7 @@ Image           BLOB
                 //
                 Box = hwindow;
                 Grab = grab;
+                g = hwindow.HalconWindow;
 
                 //
                 initEvent(hwindow);
@@ -513,7 +515,6 @@ Image           BLOB
 
                 };
                 hwindow.HInitWindow += (o, e) => {
-                    g = hwindow.HalconWindow;
                     g.SetWindowParam("background_color", "cyan");
                     g.ClearWindow();
                 };

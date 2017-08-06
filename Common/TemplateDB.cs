@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-#if true
+#if false
 using TypeConn = Mono.Data.Sqlite.SqliteConnection;
 using TypeAdapter = Mono.Data.Sqlite.SqliteDataAdapter;
 #else
