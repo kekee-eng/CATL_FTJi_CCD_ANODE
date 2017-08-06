@@ -104,6 +104,22 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <!--
+  <PropertyGroup>
+    <PostBuildEvent>if "$(RemoteDebugEnabled)"=="false" goto :eof
+set path1="$(TargetDir)"
+set path2="\\$(RemoteDebugMachine)\D\%25path1:~4%25"
+echo ==========================
+echo %25path1%25
+echo %25path2%25
+echo ==========================
+rd /s /q %25path2%25
+mkdir %25path2%25
+copy /y %25path1%25 %25path2%25</PostBuildEvent>
+  </PropertyGroup>
+  -->
+
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

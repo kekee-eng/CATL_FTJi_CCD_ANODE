@@ -25,9 +25,6 @@ namespace Common {
                 return watch.ElapsedMilliseconds;
             }
 
-            public static void RunThread(Action act) {
-                new Thread(new ThreadStart(act)).Start();
-            }
         }
 
         public class Image {
@@ -260,7 +257,7 @@ namespace Common {
                         }
                     }
                 }
-                
+
             }
 
         }

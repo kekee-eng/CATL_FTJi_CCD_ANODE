@@ -400,6 +400,7 @@ Image           BLOB
 
                 //
                 initEvent(hwindow);
+                initMenu(hwindow);
             }
 
             public HImage Image;
@@ -482,6 +483,125 @@ Image           BLOB
             public void MoveDirect(double y) {
                 MoveDirect(y, 0.5, 1);
             }
+
+            #region 右键菜单
+
+            bool showImageStatic = false;
+            bool showImageDynamic = false;
+
+            bool showContextEA = false;
+            bool showContextTab = false;
+            bool showContextWidth = false;
+            bool showContextNG = false;
+            bool showContextLabel = false;
+            bool showContextCross = false;
+
+            void initMenu(HWindowControl hwindow) {
+
+                //
+                Func<object, string, ToolStripMenuItem> addItem = (parent, name) => {
+
+                    if (parent.GetType() == typeof(ContextMenuStrip))
+                        return (parent as ContextMenuStrip).Items.Add(name) as ToolStripMenuItem;
+
+                    if (parent.GetType() == typeof(ToolStripMenuItem)) {
+                        return (parent as ToolStripMenuItem).DropDownItems.Add(name) as ToolStripMenuItem;
+                    }
+
+                    throw new Exception("DataGrab: ImageViewer: initMenu: addItem: unknow type.");
+                };
+                Action<object> addSp = (parent) => {
+                    if (parent.GetType() == typeof(ContextMenuStrip)) {
+                        (parent as ContextMenuStrip).Items.Add(new ToolStripSeparator());
+                        return;
+                    }
+                    if (parent.GetType() == typeof(ToolStripMenuItem)) {
+                        (parent as ToolStripMenuItem).DropDownItems.Add(new ToolStripSeparator());
+                        return;
+                    }
+
+                    throw new Exception("DataGrab: ImageViewer: initMenu: addSeq: unknow type.");
+                };
+
+                Action<ToolStripMenuItem, Action<bool>> bindItem = (item, func) => {
+                    item.Click += (o, e) => item.Checked ^= true;
+                    if (func != null) item.CheckedChanged += (o, e) => func(item.Checked);
+                };
+
+                //
+                var rtMenu = new ContextMenuStrip();
+
+                //
+                var rtImage = addItem(rtMenu, "图像模式");
+                var rtImageStatic = addItem(rtImage, "静态图像");
+                var rtImageDynamic = addItem(rtImage, "滚动图像");
+
+                //
+                var rtContext = addItem(rtMenu, "显示内容");
+                var rtContextDef1 = addItem(rtContext, "[预设1] 开启检测");
+                var rtContextDef2 = addItem(rtContext, "[预设2] 开启定位");
+                addSp(rtContext);
+                var rtContextEA = addItem(rtContext, "EA分割线");
+                var rtContextTab = addItem(rtContext, "极耳位置");
+                var rtContextWidth = addItem(rtContext, "测宽检测结果");
+                var rtContextNG = addItem(rtContext, "瑕疵检测结果");
+                var rtContextLabel = addItem(rtContext, "打标位置");
+                addSp(rtContext);
+                var rtContextCross = addItem(rtContext, "定位准星");
+
+                //
+                addSp(rtMenu);
+
+                //
+                var rtEnableUser = addItem(rtMenu, "启用交互");
+
+                var tReset = new ToolStripMenuItem("复位视图");
+
+                //
+                bindItem(rtImageStatic, b => rtImageDynamic.Checked = !(showImageStatic = b));
+                bindItem(rtImageDynamic, b => rtImageStatic.Checked =!( showImageDynamic = b));
+
+                bindItem(rtContextDef1, null);
+                bindItem(rtContextDef2, null);
+
+                bindItem(rtContextEA, b => showContextEA = b);
+                bindItem(rtContextTab, b => showContextTab = b);
+                bindItem(rtContextWidth, b => showContextWidth = b);
+                bindItem(rtContextNG, b => showContextNG = b);
+                bindItem(rtContextLabel, b => showContextLabel = b);
+                bindItem(rtContextCross, b => showContextCross = b);
+
+                bindItem(rtEnableUser, b => mouseAllow = !(targetAllow = !b));
+                
+                //
+                rtContextDef1.CheckedChanged += (o, e) => {
+                    bool b = rtContextDef1.Checked;
+                    rtContextEA.Checked = b;
+                    rtContextTab.Checked = b;
+                    rtContextWidth.Checked = b;
+                    rtContextNG.Checked = b;
+                    rtContextLabel.Checked = b;
+                };
+                rtContextDef2.CheckedChanged += (o, e) => {
+                    bool b = rtContextDef2.Checked;
+                    rtContextCross.Checked = b;
+                };
+
+                tReset.Click += (o, e) => {
+
+                };
+
+                //
+                rtImageDynamic.Checked = true;
+                rtContextDef1.Checked = true;
+                rtEnableUser.Checked = false;
+
+                //
+                hwindow.ContextMenuStrip = rtMenu;
+
+            }
+
+            #endregion
 
             #region 事件
 

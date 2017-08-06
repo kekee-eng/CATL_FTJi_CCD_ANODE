@@ -26,6 +26,7 @@ namespace Detect4K {
             init_monitor();
             init_form();
 
+            //
             viewer.InnerImage.MoveDirect(1);
         }
 
@@ -43,15 +44,11 @@ namespace Detect4K {
                 var tView1 = Task.Run(() => {
 
                     Stopwatch watch = new Stopwatch();
-                    watch.Start();
-
                     while (!isQuit) {
                         Thread.Sleep(10);
-
-
-                        //控制显示帧率
+                        
                         if (fpsControl < 1) fpsControl = 1;
-                        if (watch.ElapsedMilliseconds > 1000 / fpsControl) {
+                        if (!watch.IsRunning ||  watch.ElapsedMilliseconds > 1000 / fpsControl) {
 
                             //实时显示帧率
                             fpsRealtime = 1000.0 / watch.ElapsedMilliseconds;
@@ -88,13 +85,11 @@ namespace Detect4K {
 
                     do {
 
-                        if (IsHandleCreated) Invoke(new Action(() => {
-
+                        if (IsHandleCreated && !IsDisposed) BeginInvoke(new Action(() => {
                             UtilTool.AutoInfo.Update();
-
                         }));
 
-                        Thread.Sleep(500);
+                        Thread.Sleep(1000);
                     } while (!isQuit);
 
                 });
@@ -104,6 +99,7 @@ namespace Detect4K {
 
                 //
                 record.Close();
+
             });
 
             //
@@ -228,6 +224,17 @@ namespace Detect4K {
             monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refGrabHeight");
             monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxWidth");
             monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxHeight");
+            monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageStatic");
+            monitor["Inner_Viewer_showImageDynamic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageDynamic");
+            monitor["Inner_Viewer_showContextEA"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextEA");
+            monitor["Inner_Viewer_showContextTab"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextTab");
+            monitor["Inner_Viewer_showContextWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextWidth");
+            monitor["Inner_Viewer_showContextNG"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextNG");
+            monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextLabel");
+            monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextCross");
+
+
+
 
             //
             UtilTool.AutoInfo.InitGrid(dataGridView1, monitor);
@@ -253,9 +260,6 @@ namespace Detect4K {
         private void button1_Click(object sender, EventArgs e) {
             
         }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e) {
-            viewer.InnerImage.SetTargetUsed(checkBox1.Checked);
-        }
+        
     }
 }
