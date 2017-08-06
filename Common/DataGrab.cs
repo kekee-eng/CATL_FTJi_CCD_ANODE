@@ -210,7 +210,7 @@ Image           BLOB
 
                 }
             }
-            
+
             //public void RemoveAll() {
             //    foreach (var key in store.Keys.ToArray()) {
             //        DataGrab dg;
@@ -339,7 +339,7 @@ Image           BLOB
                 if (nh < 0)
                     return null;
                 var newImage = new HImage("byte", w, nh);
-                
+
                 //填充数据
                 Enumerable.Range(p1, p2 - p1).AsParallel().ForAll(i => {
 
@@ -632,8 +632,56 @@ Image           BLOB
 
                 rtMeasureLocPoint.Click += (o, e) => {
 
+                    mouseAllow = false;
+
+                    g.SetDraw("margin");
+                    g.SetColor("red");
+                    g.SetLineWidth(2);
+
+                    double y, x;
+                    g.DrawPointMod(pixRow0, pixCol0, out y, out x);
+
+                    g.SetColor("green");
+                    g.DispCross(y, x, 100, Math.PI / 4);
+
+                    g.SetColor("yellow");
+                    g.SetTposition((int)y, (int)x);
+                    g.WriteString(string.Format("{0:0.000}, {1:0.000}", getFrameX(x), getFrameY(y)));
+                    
+                    mouseAllow = true;
                 };
                 rtMeasurePPDist.Click += (o, e) => {
+
+                    mouseAllow = false;
+
+                    Func<double> GetFx = () => 0.05 * 4096;
+                    Func<double> GetFy = () => 0.05 * 1000;
+
+                    double x1 = pixCol1 + (pixCol2 - pixCol1) / 4;
+                    double x2 = pixCol2 - (pixCol2 - pixCol1) / 4;
+                    double y1 = (pixRow1 + pixRow2) / 2;
+                    double y2 = (pixRow1 + pixRow2) / 2;
+
+                    g.SetDraw("margin");
+                    g.SetColor("red");
+                    g.SetLineWidth(2);
+                    g.DrawLineMod(y1, x1, y2, x2, out y1, out x1, out y2, out x2);
+
+                    double dx = (x2 - x1) * GetFx() / grabWidth;
+                    double dy = (y2 - y1) * GetFy() / grabHeight;
+                    double dist = Math.Sqrt(dy * dy + dx * dx);
+
+                    g.SetDraw("margin");
+                    g.SetColor("green");
+                    g.SetLineWidth(2);
+                    g.DispArrow(y1, x1, y2, x2, 10);
+                    g.DispArrow(y2, x2, y1, x1, 10);
+
+                    g.SetColor("yellow");
+                    g.SetTposition((int)((y1 + y2) / 2), (int)((x1 + x2) / 2));
+                    g.WriteString(dist.ToString("0.000"));
+
+                    mouseAllow = true;
 
                 };
 
@@ -759,17 +807,7 @@ Image           BLOB
                     //显示图像
                     {
                         //
-                        Func<double, double> getPixelX = framex => framex * grabWidth;
-                        Func<double, double> getPixelY = framey => (framey - frameStart) * grabHeight;
-
-                        //
-                        int row1 = (int)getPixelY(frameY1);
-                        int row2 = (int)getPixelY(frameY2);
-                        int col1 = (int)getPixelX(frameX1);
-                        int col2 = (int)getPixelX(frameX2);
-
-                        //
-                        g.SetPart(row1, col1, row2, col2);
+                        g.SetPart(pixRow1, pixCol1, pixRow2, pixCol2);
                         g.DispImage(Image);
 
                         //显示极耳
@@ -781,8 +819,8 @@ Image           BLOB
                             g.SetColor("red");
                             g.SetLineWidth(1);
 
-                            g.DispLine(getPixelY(frameVy), getPixelX(frameX1), getPixelY(frameVy), getPixelX(frameX2));
-                            g.DispLine(getPixelY(frameY1), getPixelX(frameVx), getPixelY(frameY2), getPixelX(frameVx));
+                            g.DispLine(pixRow1, pixCol0, pixRow2, pixCol0);
+                            g.DispLine(pixRow0, pixCol1, pixRow0, pixCol2);
 
                         }
 
@@ -792,10 +830,10 @@ Image           BLOB
                         int gw = grabWidth;
                         int gh = grabHeight;
 
-                        double x1 = 1.0 * bw * (0 - col1) / (col2 - col1);
-                        double x2 = 1.0 * bw * (gw - col1) / (col2 - col1);
-                        double y1 = 1.0 * bh * (0 - row1) / (row2 - row1);
-                        double y2 = 1.0 * bh * (gh * (frameEnd - frameStart + 1) - row1) / (row2 - row1);
+                        double x1 = 1.0 * bw * (0 - pixCol1) / (pixCol2 - pixCol1);
+                        double x2 = 1.0 * bw * (gw - pixCol1) / (pixCol2 - pixCol1);
+                        double y1 = 1.0 * bh * (0 - pixRow1) / (pixRow2 - pixRow1);
+                        double y2 = 1.0 * bh * (gh * (frameEnd - frameStart + 1) - pixRow1) / (pixRow2 - pixRow1);
 
                         if (x1 > 0) g.ClearRectangle(0, 0, bh, x1);
                         if (x2 < bw) g.ClearRectangle(0, x2, bh, bw);
@@ -805,7 +843,7 @@ Image           BLOB
                 }
 
             }
-            
+
             //
             bool showImageStatic = false;
             bool showImageDynamic = false;
@@ -832,28 +870,28 @@ Image           BLOB
 
             //
             bool targetAllow = false;
-            double targetVx =0.5;
-            double targetVy =1;
-            double targetVs =1;
+            double targetVx = 0.5;
+            double targetVy = 1;
+            double targetVs = 1;
 
             double targetDx { get { return targetVx - frameVx; } }
             double targetDy { get { return targetVy - frameVy; } }
             double targetDs { get { return targetVs - frameVs; } }
-            double targetDist {  get { return Math.Sqrt(targetDx * targetDx + targetDy * targetDy); } }
-            
+            double targetDist { get { return Math.Sqrt(targetDx * targetDx + targetDy * targetDy); } }
+
             //
             double frameVx = 0.5;
             double frameVy = 1;
             double frameVs = 1;
-            
-            double frameDx { get { return  frameVs * refGrabWidth / grabWidth; } }
-            double frameDy { get { return  frameVs * refGrabHeight / grabHeight; } }
 
-            double frameX1 { get { return frameVx - frameDx/2; } }
-            double frameY1 { get { return frameVy - frameDy/2; } }
+            double frameDx { get { return frameVs * refGrabWidth / grabWidth; } }
+            double frameDy { get { return frameVs * refGrabHeight / grabHeight; } }
 
-            double frameX2 { get { return frameVx + frameDx/2; } }
-            double frameY2 { get { return frameVy + frameDy/2; } }
+            double frameX1 { get { return frameVx - frameDx / 2; } }
+            double frameY1 { get { return frameVy - frameDy / 2; } }
+
+            double frameX2 { get { return frameVx + frameDx / 2; } }
+            double frameY2 { get { return frameVy + frameDy / 2; } }
 
             //
             int frameStart = 0;
@@ -863,7 +901,7 @@ Image           BLOB
             int frameEndRequire { get { return (int)Math.Ceiling(frameY2); } }
 
             int frameStartLimit { get { return Grab.Min; } }
-            int frameEndLimit { get { return Grab.Max+1; } }
+            int frameEndLimit { get { return Grab.Max + 1; } }
 
             //
             int grabWidth { get { return Grab.Width; } }
@@ -875,6 +913,20 @@ Image           BLOB
             int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
             int refBoxWidth { get { return boxWidth; } }
             int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
+
+            //
+            double getFrameX(double px) { return px / grabWidth; }
+            double getFrameY(double py) { return py / grabHeight + frameStart; }
+            double getPixCol(double framex) { return framex * grabWidth; }
+            double getPixRow(double framey) { return (framey - frameStart) * grabHeight; }
+
+            double pixCol0 { get { return (int)getPixCol(frameVx); } }
+            double pixRow0 { get { return (int)getPixRow(frameVy); } }
+
+            int pixCol1 { get { return (int)getPixCol(frameX1); } }
+            int pixCol2 { get { return (int)getPixCol(frameX2); } }
+            int pixRow1 { get { return (int)getPixRow(frameY1); } }
+            int pixRow2 { get { return (int)getPixRow(frameY2); } }
 
         }
 
