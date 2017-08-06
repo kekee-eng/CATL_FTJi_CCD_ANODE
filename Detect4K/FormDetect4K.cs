@@ -246,14 +246,19 @@ namespace Detect4K {
         ModRecord record;
         ModDevice device;
         ModViewer viewer;
-        
+
+        private void btnGrabRestart_Click(object sender, EventArgs e) {
+            record.InnerDetect.Discard();
+            device.InnerCamera.m_frame = 0;
+            device.InnerCamera.m_fpsControl = 5;
+            device.InnerCamera.Start();
+        }
         private void btnGrabStart_Click(object sender, EventArgs e) {
-            device.InnerCamera.m_fpsControl = 1;
             device.InnerCamera.Start();
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
             device.InnerCamera.Stop();
         }
-        
+
     }
 }

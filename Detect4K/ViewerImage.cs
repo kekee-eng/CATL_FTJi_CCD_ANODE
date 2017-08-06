@@ -435,70 +435,74 @@ namespace Detect4K {
             double arrowSize = 10;
 
             //极耳
-            var selectTabs = Detect.Tabs.TakeWhile(x => x.TabY2 >= frameStart || x.WidthY1 <= frameEnd);
-            foreach (var tab in selectTabs) {
+            var selectTabs = Detect.Tabs.TakeWhile(x => x.TabY2 >= frameStart || x.WidthY1 <= frameEnd).ToList();
+            for (int i = 0; i < Detect.Tabs.Count; i++) {
 
-                if (showContextTab) {
+                var tab = Detect.Tabs[i];
+                if (tab.TabY2 >= frameStart || tab.WidthY1 <= frameEnd) {
 
-                    //极耳外框
-                    g.SetDraw("margin");
-                    g.SetColor(tab.IsFix ? "red" : "green");
-                    g.SetLineWidth(1);
-                    g.DispRectangle1(getPixRow(tab.TabY1) - offs, getPixCol(tab.TabX) - offs, getPixRow(tab.TabY2) + offs, getPixCol(tab.TabX) + offs);
+                    if (showContextTab) {
 
-                    //极耳控制点
-                    g.SetDraw("margin");
-                    g.SetColor("blue");
-                    g.SetLineWidth(3);
-                    g.DispCross(getPixRow(tab.TabY1), getPixCol(tab.TabX), crossSize, crossAngle);
-                    g.DispCross(getPixRow(tab.TabY2), getPixCol(tab.TabX), crossSize, crossAngle);
+                        //极耳外框
+                        g.SetDraw("margin");
+                        g.SetColor(tab.IsFix ? "red" : "green");
+                        g.SetLineWidth(1);
+                        g.DispRectangle1(getPixRow(tab.TabY1) - offs, getPixCol(tab.TabX) - offs, getPixRow(tab.TabY2) + offs, getPixCol(tab.TabX) + offs);
 
-                    //极耳标识
-                    g.SetDraw("margin");
-                    g.SetColor("yellow");
-                    g.SetLineWidth(1);
-                    g.SetTposition((int)getPixRow(tab.TabY1), (int)(getPixCol(tab.WidthX1) + offs));
-                    g.WriteString(string.Format("#{0}.#{1}", tab.EA, tab.TAB));
+                        //极耳控制点
+                        g.SetDraw("margin");
+                        g.SetColor("blue");
+                        g.SetLineWidth(3);
+                        g.DispCross(getPixRow(tab.TabY1), getPixCol(tab.TabX), crossSize, crossAngle);
+                        g.DispCross(getPixRow(tab.TabY2), getPixCol(tab.TabX), crossSize, crossAngle);
 
-                }
-                if (showContextWidth) {
+                        //极耳标识
+                        g.SetDraw("margin");
+                        g.SetColor("yellow");
+                        g.SetLineWidth(1);
+                        g.SetTposition((int)getPixRow(tab.TabY1), (int)(getPixCol(tab.WidthX1) + offs));
+                        g.WriteString(string.Format("#{0}.#{1}", tab.EA, tab.TAB));
 
-                    //测宽
-                    g.SetDraw("margin");
-                    g.SetColor(tab.IsWidthFail ? "red" : "green");
-                    g.SetLineWidth(1);
-                    g.DispLine(getPixRow(tab.WidthY1), getPixCol(tab.WidthX1), getPixRow(tab.WidthY2), getPixCol(tab.WidthX1));
-                    g.DispLine(getPixRow(tab.WidthY1), getPixCol(tab.WidthX2), getPixRow(tab.WidthY2), getPixCol(tab.WidthX2));
-                    g.DispArrow(getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol((tab.WidthX1 + tab.WidthX2) / 2), getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol(tab.WidthX1), arrowSize);
-                    g.DispArrow(getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol((tab.WidthX1 + tab.WidthX2) / 2), getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol(tab.WidthX2), arrowSize);
+                    }
+                    if (showContextWidth) {
 
-                    //侧宽标识
-                    g.SetDraw("margin");
-                    g.SetColor("yellow");
-                    g.SetLineWidth(1);
-                    g.SetTposition((int)getPixRow(tab.WidthY1), (int)(getPixCol(tab.WidthX1) + offs));
-                    g.WriteString(tab.ValWidth.ToString("0.000"));
+                        //测宽
+                        g.SetDraw("margin");
+                        g.SetColor(tab.IsWidthFail ? "red" : "green");
+                        g.SetLineWidth(1);
+                        g.DispLine(getPixRow(tab.WidthY1), getPixCol(tab.WidthX1), getPixRow(tab.WidthY2), getPixCol(tab.WidthX1));
+                        g.DispLine(getPixRow(tab.WidthY1), getPixCol(tab.WidthX2), getPixRow(tab.WidthY2), getPixCol(tab.WidthX2));
+                        g.DispArrow(getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol((tab.WidthX1 + tab.WidthX2) / 2), getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol(tab.WidthX1), arrowSize);
+                        g.DispArrow(getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol((tab.WidthX1 + tab.WidthX2) / 2), getPixRow((tab.WidthY1 + tab.WidthY2) / 2), getPixCol(tab.WidthX2), arrowSize);
 
-                }
-                if (showContextEA && tab.IsNewEA) {
+                        //侧宽标识
+                        g.SetDraw("margin");
+                        g.SetColor("yellow");
+                        g.SetLineWidth(1);
+                        g.SetTposition((int)getPixRow(tab.WidthY1), (int)(getPixCol(tab.WidthX1) + offs));
+                        g.WriteString(tab.ValWidth.ToString("0.000"));
 
-                    //EA-Mark点
-                    g.SetDraw("margin");
-                    g.SetColor("blue");
-                    g.SetLineWidth(3);
-                    g.DispCross(getPixRow(tab.EAY), getPixCol(tab.EAX), crossSize, crossAngle);
+                    }
+                    if (showContextEA && tab.IsNewEA) {
 
-                    //EA头部显示
-                    g.SetDraw("margin");
-                    g.SetColor("yellow");
-                    g.SetLineWidth(1);
-                    g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
-                    g.DispLine(getPixRow(tab.EAY), getPixCol(0), getPixRow(tab.EAY), getPixCol(1));
-                    g.SetLineStyle(new HTuple());
+                        //EA-Mark点
+                        g.SetDraw("margin");
+                        g.SetColor("blue");
+                        g.SetLineWidth(3);
+                        g.DispCross(getPixRow(tab.EAY), getPixCol(tab.EAX), crossSize, crossAngle);
 
-                    g.SetTposition((int)getPixRow(tab.EAY), (int)getPixCol(0));
-                    g.WriteString(string.Format("EA=#{0}", tab.EA));
+                        //EA头部显示
+                        g.SetDraw("margin");
+                        g.SetColor("yellow");
+                        g.SetLineWidth(1);
+                        g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
+                        g.DispLine(getPixRow(tab.EAY), getPixCol(0), getPixRow(tab.EAY), getPixCol(1));
+                        g.SetLineStyle(new HTuple());
 
+                        g.SetTposition((int)getPixRow(tab.EAY), (int)getPixCol(0));
+                        g.WriteString(string.Format("EA=#{0}", tab.EA));
+
+                    }
                 }
             }
 

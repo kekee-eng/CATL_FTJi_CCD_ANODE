@@ -21,7 +21,7 @@ namespace Detect4K {
             //
             db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
 (
-ID              INTEGER, 
+ID              INTEGER   PRIMARY KEY, 
 Tabs            BLOB,
 Defects         BLOB,
 Labels          BLOB,
@@ -39,8 +39,9 @@ CfgParamSelf    BLOB
 
             if (!needSave)
                 return;
-            needSave = false;
 
+
+            needSave = false;
             db.Write(string.Format(@"REPLACE INTO {0} ( ID, Tabs, Defects, Labels, CfgParamShare, CfgParamSelf ) VALUES (?,?,?,?,?,?) ", tname),
                 0,
                 UtilSerialization.obj2bytes(Tabs),
@@ -83,6 +84,11 @@ CfgParamSelf    BLOB
         public double Fx { get { return param_self.ScaleX * grab.Width; } }
         public double Fy { get { return param_self.ScaleY * grab.Height; } }
 
+        public void Discard() {
+            Tabs.Clear();
+            Defects.Clear();
+            Labels.Clear();
+        }
         public bool TryDetect(int frame) {
 
             //检测极耳
@@ -105,14 +111,14 @@ CfgParamSelf    BLOB
                 //
                 bool isNewData = true;
                 if (Tabs.Count > 0) {
-                    var lastData = Tabs.Last();
-                    if (Math.Abs(data.TabY1 - lastData.TabY2)*Fy < param.TabMergeDistance) {
+                    var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
+                    if (Math.Abs(data.TabY1 - nearTab.TabY2)*Fy < param.TabMergeDistance) {
 
                         //更新极耳大小
-                        lastData.TabY1 = Math.Min(lastData.TabY1, data.TabY1);
-                        lastData.TabY2 = Math.Max(lastData.TabY2, data.TabY2);
-                        lastData.ValHeight = (lastData.TabY2 - lastData.TabY1) * Fy;
-                        lastData.IsHeightFail = lastData.ValHeight < param.TabHeightMin || lastData.ValHeight > param.TabHeightMax;
+                        nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
+                        nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
+                        nearTab.ValHeight = (nearTab.TabY2 - nearTab.TabY1) * Fy;
+                        nearTab.IsHeightFail = nearTab.ValHeight < param.TabHeightMin || nearTab.ValHeight > param.TabHeightMax;
 
                         //
                         isNewData = false;
@@ -197,6 +203,8 @@ CfgParamSelf    BLOB
 
             }
 
+            //
+            needSave = true;
         }
 
     }

@@ -73,9 +73,9 @@ Image           BLOB
             public int QueryMax { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", tname))[0][0]; } }
             public int QueryCount { get { return db.Count(tname); } }
 
-            public int Min;
-            public int Max;
-            public int Count;
+            public int Min =1;
+            public int Max =1;
+            public int Count =0;
 
             public int Width = -1;
             public int Height = -1;
