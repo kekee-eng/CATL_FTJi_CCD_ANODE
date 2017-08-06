@@ -7,13 +7,49 @@ using System.Threading.Tasks;
 namespace Common {
 
     using System.Diagnostics;
+    using System.Management;
 
     public class UtilPerformance {
-        static PerformanceCounter _App_DiskRead = new PerformanceCounter("Process", "IO Read Bytes/sec", Process.GetCurrentProcess().ProcessName);
-        static PerformanceCounter _App_DiskWrite = new PerformanceCounter("Process", "IO Write Bytes/sec", Process.GetCurrentProcess().ProcessName);
-        static PerformanceCounter _App_Memory = new PerformanceCounter("Process", "Working Set - Private", Process.GetCurrentProcess().ProcessName);
 
-        public static double GetMemory() { return _App_Memory.NextValue() / 1024 / 1024; }
+        static string processName = Process.GetCurrentProcess().ProcessName;
+
+        static PerformanceCounter _App_DiskRead = new PerformanceCounter("Process", "IO Read Bytes/sec", processName);
+        static PerformanceCounter _App_DiskWrite = new PerformanceCounter("Process", "IO Write Bytes/sec", processName);
+        static PerformanceCounter _App_MemoryLoad = new PerformanceCounter("Process", "Working Set - Private", processName);
+        static PerformanceCounter _App_CpuLoad = new PerformanceCounter("Process", "% Processor Time", processName);
+
+        static Lazy<int> _App_MemoryTotal = new Lazy<int>(() => {
+
+            if(!HalconDotNet.HalconAPI.isWindows)
+                return 0;
+            
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher();
+            searcher.Query = new SelectQuery("Win32_PhysicalMemory ", "", new string[] { "Capacity" });
+            ManagementObjectCollection collection = searcher.Get();
+            ManagementObjectCollection.ManagementObjectEnumerator em = collection.GetEnumerator();
+
+            long capacity = 0;
+            while (em.MoveNext()) {
+                ManagementBaseObject baseObj = em.Current;
+                if (baseObj.Properties["Capacity"].Value != null) {
+                    try {
+                        capacity += long.Parse(baseObj.Properties["Capacity"].Value.ToString());
+                    }
+                    catch {
+                        return 0;
+                    }
+                }
+            }
+            return (int)(capacity / 1024 / 1024);
+
+        });
+
+        public static int GetCpuCount() {  return Environment.ProcessorCount; }
+        public static double GetCpuLoad() { return _App_CpuLoad.NextValue()/ Environment.ProcessorCount; }
+        
+        public static int GetMemoryTotal() { return _App_MemoryTotal.Value; }
+        public static double GetMemoryLoad() { return _App_MemoryLoad.NextValue() / 1024 / 1024; }
+
         public static double GetDiskRead() { return _App_DiskRead.NextValue() / 1024 / 1024; }
         public static double GetDiskWrite() { return _App_DiskWrite.NextValue() / 1024 / 1024; }
 
@@ -69,7 +105,7 @@ namespace Common {
 剩余容量     = {5:0.0} G
 
 ",
-    GetMemory(),
+    GetMemoryLoad(),
 
     GetDiskRead(),
     GetDiskWrite(),

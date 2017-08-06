@@ -396,11 +396,6 @@ Image           BLOB
                 Box = hwindow;
                 Grab = grab;
 
-                //绘图句柄
-                g = hwindow.HalconWindow;
-                g.SetWindowParam("background_color", "cyan");
-                g.ClearWindow();
-
                 //
                 initEvent(hwindow);
             }
@@ -509,9 +504,19 @@ Image           BLOB
 
             //
             void initEvent(HWindowControl hwindow) {
-
+                
                 //
-                hwindow.SizeChanged += (o, e) => updateView();
+                hwindow.SizeChanged += (o, e) => {
+
+                    try { updateView();}
+                    catch{}
+
+                };
+                hwindow.HInitWindow += (o, e) => {
+                    g = hwindow.HalconWindow;
+                    g.SetWindowParam("background_color", "cyan");
+                    g.ClearWindow();
+                };
 
                 //
                 hwindow.PreviewKeyDown += (o, e) => {

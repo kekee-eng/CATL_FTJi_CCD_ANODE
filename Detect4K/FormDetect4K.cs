@@ -43,25 +43,21 @@ namespace Detect4K {
                 var tView1 = Task.Run(() => {
 
                     Stopwatch watch = new Stopwatch();
+                    watch.Start();
+
                     while (!isQuit) {
                         Thread.Sleep(10);
 
-                        if (!watch.IsRunning) {
-                            watch.Start();
-                        }
 
+                        //控制显示帧率
                         if (fpsControl < 1) fpsControl = 1;
-
-                        //控制帧率
                         if (watch.ElapsedMilliseconds > 1000 / fpsControl) {
 
                             //实时显示帧率
                             fpsRealtime = 1000.0 / watch.ElapsedMilliseconds;
 
                             //重置定时器
-                            watch.Stop();
-                            watch.Reset();
-                            watch.Start();
+                            watch.Restart();
 
                             //设定目标
                             double dist = viewer.InnerImage.GetTargetDistance();
@@ -92,13 +88,13 @@ namespace Detect4K {
 
                     do {
 
-                        if (IsHandleCreated) BeginInvoke(new Action(() => {
+                        if (IsHandleCreated) Invoke(new Action(() => {
 
                             UtilTool.AutoInfo.Update();
 
                         }));
 
-                        Thread.Sleep(1000);
+                        Thread.Sleep(500);
                     } while (!isQuit);
 
                 });
@@ -108,11 +104,11 @@ namespace Detect4K {
 
                 //
                 record.Close();
-                device.Close();
             });
 
             //
             this.FormClosing += (o, e) => {
+                device.Close();
                 isQuit = true;
             };
 
@@ -174,6 +170,10 @@ namespace Detect4K {
 
             monitor["App"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["App_RunTime"] = () => UtilPerformance.GetAppRuntime();
+            monitor["App_MemoryTotal"] = () => string.Format("{0:0.0} M", UtilPerformance.GetMemoryTotal());
+            monitor["App_MemoryLoad"] = () => string.Format("{0:0.0} M", UtilPerformance.GetMemoryLoad());
+            monitor["App_CpuCount"] = () => UtilPerformance.GetCpuCount();
+            monitor["App_CpuLoad"] = () => string.Format("{0:0.00} %", UtilPerformance.GetCpuLoad());
 
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;
@@ -202,6 +202,7 @@ namespace Detect4K {
             monitor["Inner_Viewer_targetVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVs");
             monitor["Inner_Viewer_targetVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVx");
             monitor["Inner_Viewer_targetVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVy");
+            monitor["Inner_Viewer_targetDist"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetDist");
             monitor["Inner_Viewer_targetAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetAllow");
             monitor["Inner_Viewer_mouseAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "mouseAllow");
             monitor["Inner_Viewer_frameVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVs");
