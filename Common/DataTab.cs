@@ -9,7 +9,8 @@ namespace Common {
         public double TabX;
         public double TabY1;
         public double TabY2;
-        public double TabY1_P; //另一对极耳
+        public double TabX_P; //另一对极耳
+        public double TabY1_P; 
         public double TabY2_P;
 
         //测宽位置
@@ -29,14 +30,18 @@ namespace Common {
         public bool IsDistDiffFail;
         public bool IsHeightFail;
 
-        public double EAX; //EA起始处
-        public double EAY; //EA起始处
-        public double EAX_P; //另一对Mark孔
-        public double EAY_P;
+        public double MarkX; //EA起始处
+        public double MarkY; 
+        public double MarkX_P; //另一对Mark孔
+        public double MarkY_P;
 
         public int ID;
         public int EA;
         public int TAB;
+
+        //
+        public bool HasTwoTab = false; //是否双侧极耳
+        public bool HasTwoMark = false; //是否有两个Mark孔
 
         //
         public bool IsNewEA = false; //EA起始

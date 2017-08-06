@@ -103,7 +103,10 @@ namespace Detect4K {
             MoveTargetDirect();
 
         }
-        public void MoveToEA(int idEa, int idTab) {
+        public void MoveToEA(int idEa) {
+            MoveToTAB(idEa, 1);
+        }
+        public void MoveToTAB(int idEa, int idTab) {
             if (!mouseAllow) return;
 
             var obj = Detect.Tabs.Find(x => x.EA == idEa && x.TAB == idTab);
@@ -116,6 +119,20 @@ namespace Detect4K {
             var obj = Detect.Tabs.Find(x => x.ID == id);
             if (obj != null) MoveToFrame(obj.TabY1);
 
+        }
+        public void MoveToDefect(int id) {
+            if (!mouseAllow) return;
+
+            if (id >= 0 && id < Detect.Defects.Count - 1) {
+                var obj = Detect.Defects[id];
+
+                double s = Math.Max(obj.W, obj.H * grabHeight / refGrabHeight) * 1.2;
+                s = Math.Min(s, 2);
+                s = Math.Max(s, 0.005);
+
+                SetCenterTarget(obj.Y, obj.X, s);
+                MoveTargetDirect();
+            }
         }
 
         //
@@ -198,7 +215,7 @@ namespace Detect4K {
             bindItem(rtContextDef1, null);
             bindItem(rtContextDef2, null);
 
-            bindItem(rtContextEA, b => showContextEA = b);
+            bindItem(rtContextEA, b => showContextMark = b);
             bindItem(rtContextTab, b => showContextTab = b);
             bindItem(rtContextWidth, b => showContextWidth = b);
             bindItem(rtContextNG, b => showContextNG = b);
@@ -247,7 +264,7 @@ namespace Detect4K {
                 if (e.KeyCode == Keys.Enter) {
                     int t1, t2 = 1;
                     if (int.TryParse(rtLocEAText1.Text, out t1)) {
-                        MoveToEA(t1, t2);
+                        MoveToTAB(t1, t2);
                         rtLocEAText1.Text = t1.ToString();
                         rtLocEAText2.Text = t2.ToString();
                     }
@@ -257,7 +274,7 @@ namespace Detect4K {
                 if (e.KeyCode == Keys.Enter) {
                     int t1, t2;
                     if (int.TryParse(rtLocEAText1.Text, out t1) && int.TryParse(rtLocEAText2.Text, out t2)) {
-                        MoveToEA(t1, t2);
+                        MoveToTAB(t1, t2);
                         rtLocEAText1.Text = t1.ToString();
                         rtLocEAText2.Text = t2.ToString();
                     }
@@ -453,9 +470,8 @@ namespace Detect4K {
             double crossSize = 100;
             double crossAngle = Math.PI / 4;
             double arrowSize = 10;
-            
+
             //极耳
-            var selectTabs = Detect.Tabs.TakeWhile(x => x.TabY2 >= frameStart || x.WidthY1 <= frameEnd).ToList();
             for (int i = 0; i < Detect.Tabs.Count; i++) {
 
                 var tab = Detect.Tabs[i];
@@ -468,6 +484,8 @@ namespace Detect4K {
                         g.SetColor(tab.IsFix ? "red" : "green");
                         g.SetLineWidth(1);
                         g.DispRectangle1(getPixRow(tab.TabY1) - offs, getPixCol(tab.TabX) - offs, getPixRow(tab.TabY2) + offs, getPixCol(tab.TabX) + offs);
+                        if (tab.HasTwoTab)
+                            g.DispRectangle1(getPixRow(tab.TabY1_P) - offs, getPixCol(tab.TabX_P) - offs, getPixRow(tab.TabY2_P) + offs, getPixCol(tab.TabX_P) + offs);
 
                         //极耳控制点
                         g.SetDraw("margin");
@@ -475,6 +493,10 @@ namespace Detect4K {
                         g.SetLineWidth(3);
                         g.DispCross(getPixRow(tab.TabY1), getPixCol(tab.TabX), crossSize, crossAngle);
                         g.DispCross(getPixRow(tab.TabY2), getPixCol(tab.TabX), crossSize, crossAngle);
+                        if (tab.HasTwoTab) {
+                            g.DispCross(getPixRow(tab.TabY1_P), getPixCol(tab.TabX_P), crossSize, crossAngle);
+                            g.DispCross(getPixRow(tab.TabY2_P), getPixCol(tab.TabX_P), crossSize, crossAngle);
+                        }
 
                         //极耳标识
                         g.SetDraw("margin");
@@ -503,23 +525,25 @@ namespace Detect4K {
                         g.WriteString(tab.ValWidth.ToString("0.000"));
 
                     }
-                    if (showContextEA && tab.IsNewEA) {
+                    if (showContextMark && tab.IsNewEA) {
 
                         //EA-Mark点
                         g.SetDraw("margin");
                         g.SetColor("blue");
                         g.SetLineWidth(3);
-                        g.DispCross(getPixRow(tab.EAY), getPixCol(tab.EAX), crossSize, crossAngle);
+                        g.DispCross(getPixRow(tab.MarkY), getPixCol(tab.MarkX), crossSize, crossAngle);
+                        if (tab.HasTwoMark)
+                            g.DispCross(getPixRow(tab.MarkY_P), getPixCol(tab.MarkX_P), crossSize, crossAngle);
 
                         //EA头部显示
                         g.SetDraw("margin");
                         g.SetColor("yellow");
                         g.SetLineWidth(1);
                         g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
-                        g.DispLine(getPixRow(tab.EAY), getPixCol(0), getPixRow(tab.EAY), getPixCol(1));
+                        g.DispLine(getPixRow(tab.MarkY), getPixCol(0), getPixRow(tab.MarkY), getPixCol(1));
                         g.SetLineStyle(new HTuple());
 
-                        g.SetTposition((int)getPixRow(tab.EAY), (int)getPixCol(0));
+                        g.SetTposition((int)getPixRow(tab.MarkY), (int)getPixCol(0));
                         g.WriteString(string.Format("EA=#{0}", tab.EA));
 
                     }
@@ -528,7 +552,23 @@ namespace Detect4K {
 
             //瑕疵
             if (showContextNG) {
+                for (int i = 0; i < Detect.Defects.Count; i++) {
 
+                    var def = Detect.Defects[i];
+                    if (def.Y - def.H / 2 < frameEnd || def.Y + def.H / 2 > frameStart) {
+
+                        //瑕疵
+                        g.SetDraw("margin");
+                        g.SetColor("red");
+                        g.SetLineWidth(1);
+                        g.DispRectangle1(
+                            getPixRow(def.Y - def.H / 2) - offs,
+                            getPixCol(def.X - def.W / 2) - offs,
+                            getPixRow(def.Y + def.H / 2) + offs,
+                            getPixCol(def.X + def.W / 2) + offs);
+                        
+                    }
+                }
             }
 
             //打标
@@ -570,7 +610,7 @@ namespace Detect4K {
         bool showImageStatic = false;
         bool showImageDynamic = false;
 
-        bool showContextEA = false;
+        bool showContextMark = false;
         bool showContextTab = false;
         bool showContextWidth = false;
         bool showContextNG = false;

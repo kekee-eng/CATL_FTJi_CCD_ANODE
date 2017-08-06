@@ -48,7 +48,10 @@ namespace Detect4K {
                 var tView1 = Task.Run(() => {
 
                     while (!isQuit) {
+
                         Thread.Sleep(10);
+                        if (device.InnerCamera == null)
+                            continue;
 
                         double refFps = device.InnerCamera.isRun ? device.InnerCamera.m_fpsRealtime : 10;
                         viewer.InnerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
@@ -105,7 +108,8 @@ namespace Detect4K {
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerDetect.TryDetect(obj.Frame);
+                record.InnerDetect.TryDetectTab(obj.Frame);
+                record.InnerDetect.TryDetectDefect(obj.Frame);
 
 
                 viewer.InnerImage.SetBottomTarget(obj.Frame);
@@ -169,7 +173,10 @@ namespace Detect4K {
             monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
             monitor["Inner_Record_LastLoadCache"] = () => record.InnerGrab.LastLoadCache;
             monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
-            monitor["Inner_Record_TabsCount"] = () => record.InnerDetect.Tabs.Count;
+            monitor["Inner_Record_TabCount"] = () => record.InnerDetect.Tabs.Count;
+            monitor["Inner_Record_EACount"] = () => record.InnerDetect.EACount;
+            monitor["Inner_Record_DefectCount"] = () => record.InnerDetect.Defects.Count;
+            monitor["Inner_Record_LabelCount"] = () => record.InnerDetect.Labels.Count;
 
             monitor["Inner_Viewer"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageStatic");
@@ -252,7 +259,7 @@ namespace Detect4K {
         private void btnGrabStop_Click(object sender, EventArgs e) {
             device.InnerCamera.Stop();
         }
-        
+
         private void timer1_Tick(object sender, EventArgs e) {
 
             if (IsHandleCreated && !IsDisposed) {
@@ -261,7 +268,8 @@ namespace Detect4K {
                     default: break;
                     case 0: UtilTool.AutoInfo.Update(); break;
                     case 1: ViewerChart.SyncTabGrid(dataGridView1, record.InnerDetect); break;
-                    case 2:ViewerChart.SyncEAGrid(dataGridView1, record.InnerDetect);break;
+                    case 2: ViewerChart.SyncEAGrid(dataGridView1, record.InnerDetect); break;
+                    case 3: ViewerChart.SyncDefectGrid(dataGridView1, record.InnerDetect); break;
                 }
             }
         }
@@ -279,30 +287,6 @@ namespace Detect4K {
             dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.splitContainer1.Panel1.Controls.Add(dataGridView1);
         }
-        private void rtoolInfo_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            init_monitor();
-            gridMode = 0;
-
-        }
-        private void rtoolTab_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            ViewerChart.InitTabGrid(dataGridView1 , x=> {
-                viewer.InnerImage.MoveToTAB(x);
-            });
-            gridMode = 1;
-        }
-        private void rtoolEA_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            ViewerChart.InitEAGrid(dataGridView1, x => {
-                viewer.InnerImage.MoveToEA(x, 1);
-            });
-            gridMode = 2;
-        }
-
         private void rtoolCfgApp_Click(object sender, EventArgs e) {
 
             createNewGrid();
@@ -321,6 +305,31 @@ namespace Detect4K {
             Config.ParamInner.BindDataGridView(dataGridView1);
 
         }
+        private void rtoolInfo_Click(object sender, EventArgs e) {
 
+            createNewGrid();
+            init_monitor();
+            gridMode = 0;
+
+        }
+        private void rtoolTab_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            ViewerChart.InitTabGrid(dataGridView1, viewer.InnerImage.MoveToTAB);
+            gridMode = 1;
+        }
+        private void rtoolEA_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            ViewerChart.InitEAGrid(dataGridView1, viewer.InnerImage.MoveToEA );
+            gridMode = 2;
+        }
+        private void rtoolDefect_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            ViewerChart.InitDefectGrid(dataGridView1, viewer.InnerImage.MoveToDefect );
+            gridMode = 3;
+        }
+        
     }
 }

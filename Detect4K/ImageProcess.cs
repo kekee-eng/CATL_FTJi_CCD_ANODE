@@ -57,18 +57,17 @@ namespace Detect4K {
 
         }
 
-        public static bool DetectTab(HImage image, out double x, out double[] y1, out double[] y2) {
+        public static bool DetectTab(HImage image, out double[] x, out double[] y1, out double[] y2) {
 
             //
-            x = 0;
-            y1 = y2 = null;
+            x = y1 = y2 = null;
 
             //
             var data = TemplateProcess("DetectTab", image);
             if (data == null) return false;
 
             //  
-            x = data["OutX"];
+            x = data["OutX"].ToDArr();
             y1 = data["OutY1"].ToDArr();
             y2 = data["OutY2"].ToDArr();
             return true;

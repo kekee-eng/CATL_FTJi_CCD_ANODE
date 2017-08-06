@@ -14,6 +14,9 @@ namespace Common {
         public double W;
         public double H;
 
+        public double Width;
+        public double Height;
+        
     }
 
 

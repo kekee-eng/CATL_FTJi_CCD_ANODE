@@ -40,9 +40,10 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnLoadFile = new System.Windows.Forms.Button();
             this.btnGrabRestart = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnLoadFile = new System.Windows.Forms.Button();
+            this.rtoolDefect = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -94,62 +95,63 @@
             this.toolStripSeparator1,
             this.rtoolTab,
             this.rtoolEA,
+            this.rtoolDefect,
             this.toolStripSeparator2,
             this.rtoolCfgApp,
             this.rtoolCfgShare,
             this.rtoolCfgInner});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 148);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 192);
             // 
             // rtoolInfo
             // 
             this.rtoolInfo.Name = "rtoolInfo";
-            this.rtoolInfo.Size = new System.Drawing.Size(129, 22);
+            this.rtoolInfo.Size = new System.Drawing.Size(152, 22);
             this.rtoolInfo.Text = "Info";
             this.rtoolInfo.Click += new System.EventHandler(this.rtoolInfo_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // rtoolTab
             // 
             this.rtoolTab.Name = "rtoolTab";
-            this.rtoolTab.Size = new System.Drawing.Size(129, 22);
+            this.rtoolTab.Size = new System.Drawing.Size(152, 22);
             this.rtoolTab.Text = "TAB";
             this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
             // 
             // rtoolEA
             // 
             this.rtoolEA.Name = "rtoolEA";
-            this.rtoolEA.Size = new System.Drawing.Size(129, 22);
+            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
             this.rtoolEA.Text = "EA";
             this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(126, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // rtoolCfgApp
             // 
             this.rtoolCfgApp.Name = "rtoolCfgApp";
-            this.rtoolCfgApp.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgApp.Size = new System.Drawing.Size(152, 22);
             this.rtoolCfgApp.Text = "CfgApp";
             this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
             // 
             // rtoolCfgShare
             // 
             this.rtoolCfgShare.Name = "rtoolCfgShare";
-            this.rtoolCfgShare.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgShare.Size = new System.Drawing.Size(152, 22);
             this.rtoolCfgShare.Text = "CfgShare";
             this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
             // 
             // rtoolCfgInner
             // 
             this.rtoolCfgInner.Name = "rtoolCfgInner";
-            this.rtoolCfgInner.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgInner.Size = new System.Drawing.Size(152, 22);
             this.rtoolCfgInner.Text = "CfgInner";
             this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
             // 
@@ -214,6 +216,16 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(563, 56);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
+            // btnLoadFile
+            // 
+            this.btnLoadFile.Location = new System.Drawing.Point(3, 3);
+            this.btnLoadFile.Name = "btnLoadFile";
+            this.btnLoadFile.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadFile.TabIndex = 7;
+            this.btnLoadFile.Text = "LoadFile";
+            this.btnLoadFile.UseVisualStyleBackColor = true;
+            this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
+            // 
             // btnGrabRestart
             // 
             this.btnGrabRestart.Location = new System.Drawing.Point(84, 3);
@@ -230,15 +242,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // btnLoadFile
+            // rtoolDefect
             // 
-            this.btnLoadFile.Location = new System.Drawing.Point(3, 3);
-            this.btnLoadFile.Name = "btnLoadFile";
-            this.btnLoadFile.Size = new System.Drawing.Size(75, 23);
-            this.btnLoadFile.TabIndex = 7;
-            this.btnLoadFile.Text = "LoadFile";
-            this.btnLoadFile.UseVisualStyleBackColor = true;
-            this.btnLoadFile.Click += new System.EventHandler(this.btnLoadFile_Click);
+            this.rtoolDefect.Name = "rtoolDefect";
+            this.rtoolDefect.Size = new System.Drawing.Size(152, 22);
+            this.rtoolDefect.Text = "Defect";
+            this.rtoolDefect.Click += new System.EventHandler(this.rtoolDefect_Click);
             // 
             // FormDetect4K
             // 
@@ -283,6 +292,7 @@
         private System.Windows.Forms.ToolStripMenuItem rtoolCfgShare;
         private System.Windows.Forms.ToolStripMenuItem rtoolCfgInner;
         private System.Windows.Forms.Button btnLoadFile;
+        private System.Windows.Forms.ToolStripMenuItem rtoolDefect;
     }
 }
 

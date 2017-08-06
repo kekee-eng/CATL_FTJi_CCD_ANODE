@@ -102,8 +102,8 @@ CfgParamSelf    BLOB
                     if (firstER == null)
                         throw new Exception("DetectResult: GetEA");
 
-                    obj.EAX = firstER.EAX;
-                    obj.EAY = firstER.EAY;
+                    obj.EAX = firstER.MarkX;
+                    obj.EAY = firstER.MarkY;
 
                     objs.Add(obj);
                 }
@@ -123,12 +123,48 @@ CfgParamSelf    BLOB
             Defects.Clear();
             Labels.Clear();
         }
-        public bool TryDetect(int frame) {
+
+        int maybeCount = 0;
+        public void TryDetectDefect(int frame) {
+
+            //检测缺陷
+            var dimage = grab.GetImage(frame);
+            bool maybe = (dimage != null && ImageProcess.DetectDefectFast(dimage));
+
+            if (maybe) maybeCount++;
+            if (maybeCount >= 10 || (!maybe && maybeCount > 0)) {
+
+                var eimage = grab.GetImage(frame - maybeCount, frame - 1);
+                double[] ex, ey, ew, eh;
+                if (eimage != null && ImageProcess.DetectDefectDeep(eimage, out ex, out ey, out ew, out eh)) {
+
+                    int w = grab.Width;
+                    int h = grab.Height;
+
+                    int ecc = new int[] { ex.Length, ey.Length, ew.Length, eh.Length }.Min();
+                    for (int i = 0; i < ecc; i++) {
+                        DataDefect defect = new DataDefect();
+                        defect.X = ex[i] / w;
+                        defect.Y = frame - maybeCount + ey[i] / h;
+                        defect.W = ew[i] / w;
+                        defect.H = eh[i] / h;
+
+                        defect.Width = defect.W * Fx;
+                        defect.Height = defect.H * Fy;
+
+                        Defects.Add(defect);
+                    }
+                }
+
+                //清空缓存
+                maybeCount = 0;
+            }
+        }
+        public bool TryDetectTab(int frame) {
 
             //检测极耳
             var aimage = grab.GetImage(frame);
-            double ax;
-            double []ay1, ay2;
+            double[] ax, ay1, ay2;
             if (aimage != null && ImageProcess.DetectTab(aimage, out ax, out ay1, out ay2)) {
 
                 int w = grab.Width;
@@ -136,24 +172,25 @@ CfgParamSelf    BLOB
 
                 //
                 var data = new DataTab();
-                data.TabX = ax / w;
-                
+                data.TabX = ax[0] / w;
                 data.TabY1 = data.TabY1_P = frame + ay1[0] / h;
                 data.TabY2 = data.TabY2_P = frame + ay2[0] / h;
 
-                if (ay1.Length == 2 && ay2.Length == 2) {
+                if (ax.Length == 2 && ay1.Length == 2 && ay2.Length == 2) {
+                    data.HasTwoTab = true;
+                    data.TabX_P = ax[1] / w;
                     data.TabY1_P = frame + ay1[1] / h;
                     data.TabY2_P = frame + ay2[1] / h;
                 }
 
-                data.EAX = data.TabX;
-                data.EAY = data.TabY1;
+                data.MarkX = data.TabX;
+                data.MarkY = data.TabY1;
 
                 //
                 bool isNewData = true;
                 if (Tabs.Count > 0) {
                     var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
-                    if (Math.Abs(data.TabY1 - nearTab.TabY2)*Fy < param.TabMergeDistance) {
+                    if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < param.TabMergeDistance) {
 
                         //更新极耳大小
                         nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
@@ -171,8 +208,8 @@ CfgParamSelf    BLOB
 
                     //检测宽度
                     double bx1, bx2;
-                    double bfy1 = data.TabY1 + param.TabWidthStart/Fy;
-                    double bfy2 = data.TabY1 + param.TabWidthEnd/Fy;
+                    double bfy1 = data.TabY1 + param.TabWidthStart / Fy;
+                    double bfy2 = data.TabY1 + param.TabWidthEnd / Fy;
 
                     var bimage = grab.GetImage(bfy1, bfy2);
                     if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
@@ -184,19 +221,20 @@ CfgParamSelf    BLOB
 
                     //检测是否EA头
                     double[] cx, cy;
-                    double cfy1 = data.TabY1 + param.EAStart/Fy;
-                    double cfy2 = data.TabY1 + param.EAEnd/Fy;
+                    double cfy1 = data.TabY1 + param.EAStart / Fy;
+                    double cfy2 = data.TabY1 + param.EAEnd / Fy;
                     var cimage = grab.GetImage(cfy1, cfy2);
                     if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
 
                         //将最后一个极耳放到下个EA中
                         data.IsNewEA = true;
-                        data.EAX = data.EAX_P = cx[0] / w;
-                        data.EAY = data.EAY_P = cfy1 + cy[0] / h;
+                        data.MarkX = data.MarkX_P = cx[0] / w;
+                        data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
 
                         if (cx.Length == 2 && cy.Length == 2) {
-                            data.EAX_P = cx[1] / w;
-                            data.EAY_P = cfy1 + cy[1] / h;
+                            data.HasTwoMark = true;
+                            data.MarkX_P = cx[1] / w;
+                            data.MarkY_P = cfy1 + cy[1] / h;
                         }
 
                     }

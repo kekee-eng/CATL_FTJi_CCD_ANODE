@@ -48,7 +48,6 @@ namespace Detect4K {
                 dt.ValDist.ToString("0.000"),
                 dt.ValDistDiff.ToString("0.000")
                 );
-            grid.Rows[0].Tag = dt;
 
             //
             setGridRowStyle(grid, 0,
@@ -101,7 +100,6 @@ namespace Detect4K {
                 dt.TabHeightFailCount,
                 dt.TabDistFailCount
                 );
-            grid.Rows[0].Tag = dt;
 
             //
             setGridRowStyle(grid, 0,
@@ -146,11 +144,57 @@ namespace Detect4K {
                     onMove((int)grid.Rows[e.RowIndex].Cells[0].Value);
             };
         }
-        
+
+        static void addDefectGrid(DataGridView grid, DataDefect dt) {
+
+            //        
+            grid.Rows.Insert(0, 1);
+            grid.Rows[0].SetValues(
+                grid.Rows.Count,
+                dt.X.ToString("0.000"),
+                dt.Y.ToString("0.000"),
+                dt.W.ToString("0.000"),
+                dt.H.ToString("0.000"),
+                dt.Width.ToString("0.000"),
+                dt.Height.ToString("0.000")
+                );
+
+        }
+        public static void SyncDefectGrid(DataGridView grid, EntryDetect detect) {
+
+            for (int i = grid.Rows.Count; i < detect.Tabs.Count; i++)
+                addDefectGrid(grid, detect.Defects[i]);
+
+        }
+        public static void InitDefectGrid(DataGridView grid, Action<int> onMove) {
+
+            //
+            setGridInit(grid);
+            grid.Columns.AddRange(
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "序号" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "X" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "Y" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "W" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "H" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)" }
+                );
+
+            //
+            grid.CellClick += (o, e) => {
+                if (e.RowIndex >= 0)
+                    onMove((int)grid.Rows[e.RowIndex].Cells[0].Value-1);
+            };
+        }
 
 
 
 
+
+
+
+
+        //UnTest
         static void initMergeTabGrid(DataGridView grid) {
 
             //
