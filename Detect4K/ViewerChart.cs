@@ -10,8 +10,7 @@ using ZedGraph;
 
 namespace Detect4K {
     class ViewerChart {
-
-
+        
         static void setGridInit(DataGridView grid) {
 
             //
@@ -147,6 +146,7 @@ namespace Detect4K {
                     onMove((int)grid.Rows[e.RowIndex].Cells[0].Value);
             };
         }
+        
 
 
 

@@ -295,5 +295,25 @@ namespace Detect4K {
             });
             gridMode = 2;
         }
+
+        private void rtoolCfgApp_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            Config.App.BindDataGridView(dataGridView1);
+
+        }
+        private void rtoolCfgShare_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            Config.ParamShare.BindDataGridView(dataGridView1);
+
+        }
+        private void rtoolCfgInner_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            Config.ParamInner.BindDataGridView(dataGridView1);
+
+        }
+
     }
 }

@@ -13,19 +13,19 @@ namespace Detect4K {
 
             //
             InnerGrab = new EntryGrab(this, "InnerGrab", Config.App.RecordCacheSize);
-            OuterGrab = new EntryGrab(this, "OuterGrab", Config.App.RecordCacheSize);
+            //OuterGrab = new EntryGrab(this, "OuterGrab", Config.App.RecordCacheSize);
 
             //
             InnerDetect = new EntryDetect(this, "InnerDetect", Config.ParamShare, Config.ParamInner, InnerGrab);
-            OuterDetect = new EntryDetect(this, "OuterDetect", Config.ParamShare, Config.ParamOuter, OuterGrab);
+            //OuterDetect = new EntryDetect(this, "OuterDetect", Config.ParamShare, Config.ParamOuter, OuterGrab);
 
         }
 
         public EntryGrab InnerGrab;
-        public EntryGrab OuterGrab;
-
         public EntryDetect InnerDetect;
-        public EntryDetect OuterDetect;
+
+        //public EntryGrab OuterGrab;
+        //public EntryDetect OuterDetect;
 
 
 

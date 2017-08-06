@@ -30,13 +30,18 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.rtoolInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolEA = new System.Windows.Forms.ToolStripMenuItem();
             this.hwin = new HalconDotNet.HWindowControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnGrabRestart = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.rtoolEA = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.rtoolCfgApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolCfgShare = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolCfgInner = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -85,10 +90,15 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rtoolInfo,
+            this.toolStripSeparator1,
             this.rtoolTab,
-            this.rtoolEA});
+            this.rtoolEA,
+            this.toolStripSeparator2,
+            this.rtoolCfgApp,
+            this.rtoolCfgShare,
+            this.rtoolCfgInner});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 170);
             // 
             // rtoolInfo
             // 
@@ -103,6 +113,13 @@
             this.rtoolTab.Size = new System.Drawing.Size(152, 22);
             this.rtoolTab.Text = "TAB";
             this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
+            // 
+            // rtoolEA
+            // 
+            this.rtoolEA.Name = "rtoolEA";
+            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
+            this.rtoolEA.Text = "EA";
+            this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
             // 
             // hwin
             // 
@@ -180,12 +197,36 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // rtoolEA
+            // toolStripSeparator1
             // 
-            this.rtoolEA.Name = "rtoolEA";
-            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
-            this.rtoolEA.Text = "EA";
-            this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // rtoolCfgApp
+            // 
+            this.rtoolCfgApp.Name = "rtoolCfgApp";
+            this.rtoolCfgApp.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgApp.Text = "CfgApp";
+            this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
+            // 
+            // rtoolCfgShare
+            // 
+            this.rtoolCfgShare.Name = "rtoolCfgShare";
+            this.rtoolCfgShare.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgShare.Text = "CfgShare";
+            this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
+            // 
+            // rtoolCfgInner
+            // 
+            this.rtoolCfgInner.Name = "rtoolCfgInner";
+            this.rtoolCfgInner.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgInner.Text = "CfgInner";
+            this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
             // 
             // FormDetect4K
             // 
@@ -224,6 +265,11 @@
         private System.Windows.Forms.ToolStripMenuItem rtoolTab;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripMenuItem rtoolEA;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem rtoolCfgApp;
+        private System.Windows.Forms.ToolStripMenuItem rtoolCfgShare;
+        private System.Windows.Forms.ToolStripMenuItem rtoolCfgInner;
     }
 }
 
