@@ -10,18 +10,23 @@ using System.Windows.Forms;
 namespace Detect4K {
     class ViewerImage {
 
-        public ViewerImage(HWindowControl hwindow, EntryGrab grab, EntryDetect detect) {
-
-
+        public ViewerImage(EntryGrab grab, EntryDetect detect) {
+            
             //
             Grab = grab;
             Detect = detect;
+        }
+
+        public void Init(HWindowControl hwindow) {
+
+            //
             Box = hwindow;
             g = hwindow.HalconWindow;
 
             //
             initEvent(hwindow);
             initRightMenu(hwindow);
+            
         }
 
         //

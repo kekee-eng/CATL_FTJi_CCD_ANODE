@@ -10,8 +10,45 @@ using ZedGraph;
 
 namespace Detect4K {
     class ViewerChart {
-        
-        static void setGridInit(DataGridView grid) {
+
+        public ViewerChart(EntryGrab grab, EntryDetect detect, ViewerImage viewer) {
+
+            //
+            this.Grab = grab;
+            this.Detect = detect;
+            this.ImageViewer = viewer;
+
+        }
+
+        //
+        public ViewerImage ImageViewer;
+        public EntryGrab Grab;
+        public EntryDetect Detect;
+
+        //
+        public static Control parentInit(Control parent, Control obj) {
+            if (parent.HasChildren) {
+                for (int i = parent.Controls.Count - 1; i >= 0; i--) {
+                    var ctrl = parent.Controls[i];
+                    parent.Controls.Remove(ctrl);
+                    ctrl.Dispose();
+                }
+            }
+            parent.Controls.Add(obj);
+            obj.Dock = DockStyle.Fill;
+            obj.ContextMenu = parent.ContextMenu;
+            return obj;
+        }
+        public static DataGridView gridParentInit(Control parent) {
+            var obj= parentInit(parent, new DataGridView()) as DataGridView;
+            gridInit(obj);
+            return obj;
+        }
+        public static DataGridView girdParentGet(Control parent) {
+            return parent.Controls[0] as DataGridView;
+        }
+
+        static void gridInit(DataGridView grid) {
 
             //
             grid.AllowUserToAddRows = false;
@@ -25,20 +62,27 @@ namespace Detect4K {
             grid.Columns.Clear();
 
         }
-        static void setGridRowStyle(DataGridView grid, int rowId, params bool[] rowStyle) {
+        static DataGridViewRow gridAdd(DataGridView grid, params object[] objs) {
+
+            grid.Rows.Insert(0, 1);
+            grid.Rows[0].SetValues(objs);
+            return grid.Rows[0];
+
+        }
+        static void gridStyle(DataGridViewRow row, params bool[] rowStyle) {
 
             //
-            for (int i = 0; i < Math.Min(grid.Rows[rowId].Cells.Count, rowStyle.Length); i++) {
+            for (int i = 0; i < Math.Min(row.Cells.Count, rowStyle.Length); i++) {
                 if (rowStyle[i])
-                    grid.Rows[rowId].Cells[i].Style.BackColor = Color.Pink;
+                    row.Cells[i].Style.BackColor = Color.Pink;
             }
         }
 
+        //
         static void addTabGrid(DataGridView grid, DataTab dt) {
 
             //        
-            grid.Rows.Insert(0, 1);
-            grid.Rows[0].SetValues(
+            var newRow = gridAdd(grid,
                 dt.ID,
                 dt.EA,
                 dt.TAB,
@@ -50,7 +94,7 @@ namespace Detect4K {
                 );
 
             //
-            setGridRowStyle(grid, 0,
+            gridStyle(newRow,
                 dt.IsFail,
                 false,
                 false,
@@ -62,16 +106,10 @@ namespace Detect4K {
                 );
 
         }
-        public static void SyncTabGrid(DataGridView grid, EntryDetect detect) {
-
-            for (int i = grid.Rows.Count; i < detect.Tabs.Count; i++)
-                addTabGrid(grid, detect.Tabs[i]);
-
-        }
-        public static void InitTabGrid(DataGridView grid, Action<int> onMove) {
+        public void InitTabGrid(Control parent) {
 
             //
-            setGridInit(grid);
+            var grid = gridParentInit(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "序号" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
@@ -84,15 +122,21 @@ namespace Detect4K {
                 );
 
             //
-            grid.CellClick += (o, e) => onMove(grid.Rows.Count - e.RowIndex);
+            grid.CellClick += (o, e) => ImageViewer.MoveToTAB(grid.Rows.Count - e.RowIndex);
+
+        }
+        public void SyncTabGrid(Control parent) {
+
+            var grid = girdParentGet(parent);
+            for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
+                addTabGrid(grid, Detect.Tabs[i]);
 
         }
 
-        static void addEAGrid(DataGridView grid, DataEA dt) {
+        void addEAGrid(DataGridView grid, DataEA dt) {
 
-            //        
-            grid.Rows.Insert(0, 1);
-            grid.Rows[0].SetValues(
+            //
+            var newRow = gridAdd(grid,
                 dt.EA,
                 dt.EAY.ToString("0.000"),
                 dt.TabCount,
@@ -102,7 +146,7 @@ namespace Detect4K {
                 );
 
             //
-            setGridRowStyle(grid, 0,
+            gridStyle(newRow,
                 dt.IsFail,
                 false,
                 dt.IsTabCountFail,
@@ -112,23 +156,10 @@ namespace Detect4K {
                 );
 
         }
-        public static void SyncEAGrid(DataGridView grid, EntryDetect detect) {
-
-            int eaCount = detect.EACount;
-            int gridCount = grid.Rows.Count;
-            if(gridCount < eaCount) {
-
-                var EAs = detect.EAs;
-                for (int i = gridCount; i < eaCount; i++)
-                    addEAGrid(grid, EAs[i]);
-
-            }
-
-        }
-        public static void InitEAGrid(DataGridView grid, Action<int> onMove) {
+        public void InitEAGrid(Control parent) {
 
             //
-            setGridInit(grid);
+            var grid = gridParentInit(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "EA" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
@@ -141,15 +172,28 @@ namespace Detect4K {
             //
             grid.CellClick += (o, e) => {
                 if (e.RowIndex >= 0)
-                    onMove((int)grid.Rows[e.RowIndex].Cells[0].Value);
+                    ImageViewer.MoveToEA((int)grid.Rows[e.RowIndex].Cells[0].Value);
             };
         }
+        public void SyncEAGrid(Control parent) {
 
-        static void addDefectGrid(DataGridView grid, DataDefect dt) {
+            var grid = girdParentGet(parent);
+            int eaCount = Detect.EACount;
+            int gridCount = grid.Rows.Count;
+            if (gridCount < eaCount) {
+
+                var EAs = Detect.EAs;
+                for (int i = gridCount; i < eaCount; i++)
+                    addEAGrid(grid, EAs[i]);
+
+            }
+
+        }
+
+        void addDefectGrid(DataGridView grid, DataDefect dt) {
 
             //        
-            grid.Rows.Insert(0, 1);
-            grid.Rows[0].SetValues(
+            gridAdd(grid,
                 grid.Rows.Count,
                 dt.X.ToString("0.000"),
                 dt.Y.ToString("0.000"),
@@ -160,16 +204,10 @@ namespace Detect4K {
                 );
 
         }
-        public static void SyncDefectGrid(DataGridView grid, EntryDetect detect) {
-
-            for (int i = grid.Rows.Count; i < detect.Tabs.Count; i++)
-                addDefectGrid(grid, detect.Defects[i]);
-
-        }
-        public static void InitDefectGrid(DataGridView grid, Action<int> onMove) {
+        public void InitDefectGrid(Control parent) {
 
             //
-            setGridInit(grid);
+            var grid = gridParentInit(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "序号" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "X" },
@@ -183,22 +221,22 @@ namespace Detect4K {
             //
             grid.CellClick += (o, e) => {
                 if (e.RowIndex >= 0)
-                    onMove((int)grid.Rows[e.RowIndex].Cells[0].Value-1);
+                    ImageViewer.MoveToDefect((int)grid.Rows[e.RowIndex].Cells[0].Value-1);
             };
         }
+        public void SyncDefectGrid(Control parent) {
 
+            var grid = girdParentGet(parent);
+            for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
+                addDefectGrid(grid, Detect.Defects[i]);
 
-
-
-
-
-
+        }
 
         //UnTest
         static void initMergeTabGrid(DataGridView grid) {
 
             //
-            setGridInit(grid);
+            gridInit(grid);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "序号" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
@@ -224,8 +262,7 @@ namespace Detect4K {
                 throw new Exception("AddSyncER: ER sync error.");
 
             //        
-            grid.Rows.Insert(0, 1);
-            grid.Rows[0].SetValues(
+            var newRow = gridAdd(grid,
                 dtInside.ID,
                 dtInside.EA,
                 dtInside.TAB,
@@ -238,7 +275,7 @@ namespace Detect4K {
             grid.Rows[0].Tag = new object[] { dtInside, dtOutside };
 
             //
-            setGridRowStyle(grid, 0,
+            gridStyle(newRow,
                 false,
                 false,
                 false,

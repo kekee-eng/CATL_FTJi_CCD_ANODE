@@ -26,7 +26,6 @@
             this.components = new System.ComponentModel.Container();
             this.btnGrabStop = new System.Windows.Forms.Button();
             this.btnGrabStart = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.rtoolInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolDebug = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +52,8 @@
             this.trackSpeed = new System.Windows.Forms.TrackBar();
             this.tbFrameStart = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.panelForViewer = new System.Windows.Forms.Panel();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -87,32 +87,22 @@
             this.btnGrabStart.UseVisualStyleBackColor = true;
             this.btnGrabStart.Click += new System.EventHandler(this.btnGrabStart_Click);
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(483, 561);
-            this.dataGridView1.TabIndex = 3;
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rtoolInfo,
+            this.toolStripSeparator3,
             this.rtoolDebug,
             this.toolStripSeparator1,
-            this.rtoolTab,
-            this.rtoolEA,
-            this.rtoolDefect,
-            this.toolStripSeparator2,
             this.rtoolCfgApp,
             this.rtoolCfgShare,
-            this.rtoolCfgInner});
+            this.rtoolCfgInner,
+            this.toolStripSeparator2,
+            this.rtoolTab,
+            this.rtoolEA,
+            this.rtoolDefect});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 192);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 198);
             // 
             // rtoolInfo
             // 
@@ -210,7 +200,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.dataGridView1);
+            this.splitContainer1.Panel1.Controls.Add(this.panelForViewer);
             // 
             // splitContainer1.Panel2
             // 
@@ -346,6 +336,20 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(126, 6);
+            // 
+            // panelForViewer
+            // 
+            this.panelForViewer.ContextMenuStrip = this.contextMenuStrip1;
+            this.panelForViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelForViewer.Location = new System.Drawing.Point(0, 0);
+            this.panelForViewer.Name = "panelForViewer";
+            this.panelForViewer.Size = new System.Drawing.Size(483, 561);
+            this.panelForViewer.TabIndex = 0;
+            // 
             // FormDetect4K
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -354,7 +358,6 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "FormDetect4K";
             this.Text = "Detect4K";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -374,7 +377,6 @@
         #endregion
         private System.Windows.Forms.Button btnGrabStop;
         private System.Windows.Forms.Button btnGrabStart;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private HalconDotNet.HWindowControl hwin;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
@@ -401,6 +403,8 @@
         private System.Windows.Forms.CheckBox checkReplay;
         private System.Windows.Forms.ToolStripMenuItem rtoolDebug;
         private System.Windows.Forms.ToolStripMenuItem rtoolDebugClear;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.Panel panelForViewer;
     }
 }
 

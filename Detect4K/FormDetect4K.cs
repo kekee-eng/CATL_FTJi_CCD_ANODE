@@ -20,24 +20,23 @@ namespace Detect4K {
             //
             init_device();
             init_record();
-            init_viewer();
 
             //
             init_form();
 
             //
-            Task.Run(() => {
+            Task.Run((Action)(() => {
 
                 Thread.Sleep(1000);
 
-                viewer.InnerImage.SetBottomTarget(0);
-                viewer.InnerImage.MoveTargetDirect();
+                this.record.InnerViewerImage.SetBottomTarget(0);
+                this.record.InnerViewerImage.MoveTargetDirect();
 
-            });
+            }));
 
             Config.App.BindTextBox(tbFrameStart, "CameraStartFrame");
             trackSpeed.Value = (int)(Config.App.CameraFpsControl * 10);
-            rtoolDebug_Click(null, null);
+            //rtoolDebug_Click(null, null);
         }
 
         void init_form() {
@@ -46,10 +45,10 @@ namespace Detect4K {
             UtilTool.Form.AddBuildTag(this);
 
             //管理线程
-            Task.Run(() => {
+            Task.Run((Action)(() => {
 
                 //线程：更新显示
-                var tView1 = Task.Run(() => {
+                var tView1 = Task.Run((Action)(() => {
 
                     while (!isQuit) {
 
@@ -58,21 +57,21 @@ namespace Detect4K {
                             continue;
 
                         double refFps = device.InnerCamera.isRun ? device.InnerCamera.m_fpsRealtime : 10;
-                        viewer.InnerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
+                        this.record.InnerViewerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
 
                     };
 
-                });
+                }));
 
                 //线程：写数据库
-                var tWriteDB = Task.Run(() => {
+                var tWriteDB = Task.Run((Action)(() => {
 
                     do {
 
                         List<DataGrab> retInner = null;
-                        if (record.Transaction(() => {
-                            retInner = record.InnerGrab.Save();
-                            record.InnerDetect.Save();
+                        if (this.record.Transaction(() => {
+                            retInner = this.record.InnerGrab.Save();
+                            this.record.InnerDetect.Save();
                         })) {
                             retInner.AsParallel().ForAll(x => x.IsStore = true);
                         }
@@ -80,14 +79,14 @@ namespace Detect4K {
                         Thread.Sleep(500);
                     } while (!isQuit);
 
-                });
+                }));
 
                 //
                 Task.WaitAll(tWriteDB, tView1);
 
                 //
-                record.Close();
-            });
+                this.record.Close();
+            }));
 
             //
             this.FormClosing += (o, e) => {
@@ -116,7 +115,7 @@ namespace Detect4K {
                 record.InnerDetect.TryDetectDefect(obj.Frame);
 
 
-                viewer.InnerImage.SetBottomTarget(obj.Frame);
+                record.InnerViewerImage.SetBottomTarget(obj.Frame);
             };
             device.InnerCamera.OnComplete += () => {
 
@@ -134,16 +133,9 @@ namespace Detect4K {
             record.Open(Config.FolderRecord + "01.db");
             record.Init();
 
+            record.InnerViewerImage.Init(hwin);
         }
-        void init_viewer() {
-
-            //
-            viewer = new ModViewer();
-            viewer.InnerImage = new ViewerImage(hwin, record.InnerGrab, record.InnerDetect);
-
-        }
-
-        void init_monitor() {
+        Dictionary<string, Func<object>> getMonitor() {
 
             //
             var monitor = new Dictionary<string, Func<object>>();
@@ -156,7 +148,7 @@ namespace Detect4K {
             monitor["App_CpuLoad"] = () => string.Format("{0:0.00} %", UtilPerformance.GetCpuLoad());
 
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
-            monitor["Inner_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.InnerCamera, "m_filename"); 
+            monitor["Inner_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.InnerCamera, "m_filename");
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;
             monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isReady;
             monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isRun;
@@ -182,58 +174,57 @@ namespace Detect4K {
             monitor["Inner_Record_LabelCount"] = () => record.InnerDetect.Labels.Count;
 
             monitor["Inner_Viewer"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
-            monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageStatic");
-            monitor["Inner_Viewer_showImageDynamic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageDynamic");
-            monitor["Inner_Viewer_showContextMark"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextMark");
-            monitor["Inner_Viewer_showContextTab"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextTab");
-            monitor["Inner_Viewer_showContextWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextWidth");
-            monitor["Inner_Viewer_showContextDefect"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextDefect");
-            monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextLabel");
-            monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextCross");
-            monitor["Inner_Viewer_countShowTab"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "countShowTab");
-            monitor["Inner_Viewer_countShowMark"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "countShowMark");
-            monitor["Inner_Viewer_countShowDefect"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "countShowDefect");
-            monitor["Inner_Viewer_countShowLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "countShowLabel");
+            monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showImageStatic");
+            monitor["Inner_Viewer_showImageDynamic"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showImageDynamic");
+            monitor["Inner_Viewer_showContextMark"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextMark");
+            monitor["Inner_Viewer_showContextTab"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextTab");
+            monitor["Inner_Viewer_showContextWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextWidth");
+            monitor["Inner_Viewer_showContextDefect"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextDefect");
+            monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextLabel");
+            monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextCross");
+            monitor["Inner_Viewer_countShowTab"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "countShowTab");
+            monitor["Inner_Viewer_countShowMark"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "countShowMark");
+            monitor["Inner_Viewer_countShowDefect"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "countShowDefect");
+            monitor["Inner_Viewer_countShowLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "countShowLabel");
 
-            monitor["Inner_Viewer_fpsControl"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsControl");
-            monitor["Inner_Viewer_fpsRealtime"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "fpsRealtime");
+            monitor["Inner_Viewer_fpsControl"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "fpsControl");
+            monitor["Inner_Viewer_fpsRealtime"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "fpsRealtime");
 
-            monitor["Inner_Viewer_mouseAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "mouseAllow");
-            monitor["Inner_Viewer_targetAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetAllow");
-            monitor["Inner_Viewer_targetVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVs");
-            monitor["Inner_Viewer_targetVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVx");
-            monitor["Inner_Viewer_targetVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetVy");
-            monitor["Inner_Viewer_targetDist"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "targetDist");
+            monitor["Inner_Viewer_mouseAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "mouseAllow");
+            monitor["Inner_Viewer_targetAllow"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "targetAllow");
+            monitor["Inner_Viewer_targetVs"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "targetVs");
+            monitor["Inner_Viewer_targetVx"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "targetVx");
+            monitor["Inner_Viewer_targetVy"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "targetVy");
+            monitor["Inner_Viewer_targetDist"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "targetDist");
 
-            monitor["Inner_Viewer_frameVs"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVs");
-            monitor["Inner_Viewer_frameVx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVx");
-            monitor["Inner_Viewer_frameVy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameVy");
-            monitor["Inner_Viewer_frameDx"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameDx");
-            monitor["Inner_Viewer_frameDy"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameDy");
-            monitor["Inner_Viewer_frameX1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX1");
-            monitor["Inner_Viewer_frameX2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameX2");
-            monitor["Inner_Viewer_frameY1"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY1");
-            monitor["Inner_Viewer_frameY2"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameY2");
+            monitor["Inner_Viewer_frameVs"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameVs");
+            monitor["Inner_Viewer_frameVx"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameVx");
+            monitor["Inner_Viewer_frameVy"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameVy");
+            monitor["Inner_Viewer_frameDx"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameDx");
+            monitor["Inner_Viewer_frameDy"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameDy");
+            monitor["Inner_Viewer_frameX1"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameX1");
+            monitor["Inner_Viewer_frameX2"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameX2");
+            monitor["Inner_Viewer_frameY1"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameY1");
+            monitor["Inner_Viewer_frameY2"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameY2");
 
-            monitor["Inner_Viewer_frameStart"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStart");
-            monitor["Inner_Viewer_frameEnd"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEnd");
-            monitor["Inner_Viewer_frameStartRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartRequire");
-            monitor["Inner_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndRequire");
-            monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameStartLimit");
-            monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "frameEndLimit");
+            monitor["Inner_Viewer_frameStart"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameStart");
+            monitor["Inner_Viewer_frameEnd"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEnd");
+            monitor["Inner_Viewer_frameStartRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameStartRequire");
+            monitor["Inner_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEndRequire");
+            monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameStartLimit");
+            monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEndLimit");
 
-            monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabWidth");
-            monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "grabHeight");
-            monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "boxWidth");
-            monitor["Inner_Viewer_boxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "boxHeight");
-            monitor["Inner_Viewer_refGrabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refGrabWidth");
-            monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refGrabHeight");
-            monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxWidth");
-            monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "refBoxHeight");
-
+            monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabWidth");
+            monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabHeight");
+            monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxWidth");
+            monitor["Inner_Viewer_boxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxHeight");
+            monitor["Inner_Viewer_refGrabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabWidth");
+            monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabHeight");
+            monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxWidth");
+            monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxHeight");
 
             //
-            UtilTool.AutoInfo.InitGrid(dataGridView1, monitor);
+            return monitor;
 
         }
 
@@ -241,7 +232,6 @@ namespace Detect4K {
 
         ModRecord record;
         ModDevice device;
-        ModViewer viewer;
 
         private void btnLoadFile_Click(object sender, EventArgs e) {
 
@@ -277,85 +267,61 @@ namespace Detect4K {
                 switch (gridMode) {
                     default: break;
                     case 0: UtilTool.AutoInfo.Update(); break;
-                    case 1: ViewerChart.SyncTabGrid(dataGridView1, record.InnerDetect); break;
-                    case 2: ViewerChart.SyncEAGrid(dataGridView1, record.InnerDetect); break;
-                    case 3: ViewerChart.SyncDefectGrid(dataGridView1, record.InnerDetect); break;
-                    case 4: dataGridView1.Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;break;
+                    case 1: record.InnerViewerChart.SyncTabGrid(panelForViewer); break;
+                    case 2: record.InnerViewerChart.SyncEAGrid(panelForViewer); break;
+                    case 3: record.InnerViewerChart.SyncDefectGrid(panelForViewer); break;
+                    case 4: ViewerChart.girdParentGet(panelForViewer).Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;break;
                 }
             }
         }
-
+        
         int gridMode = -1;
-        void createNewGrid() {
+        void viewerInit(int mode, Action<Control> act) {
             gridMode = -1;
-
-            this.splitContainer1.Panel1.Controls.Remove(dataGridView1);
-            dataGridView1.ContextMenuStrip = null;
-            dataGridView1.Dispose();
-            dataGridView1 = null;
-
-            dataGridView1 = new DataGridView();
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
-            this.splitContainer1.Panel1.Controls.Add(dataGridView1);
+            act(panelForViewer);
+            gridMode = mode;
         }
-        private void rtoolCfgApp_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            Config.App.BindDataGridView(dataGridView1);
-
-        }
-        private void rtoolCfgShare_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            Config.ParamShare.BindDataGridView(dataGridView1);
-
-        }
-        private void rtoolCfgInner_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            Config.ParamInner.BindDataGridView(dataGridView1);
-
-        }
+       
         private void rtoolInfo_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            init_monitor();
-            gridMode = 0;
-
+            viewerInit(0, x => UtilTool.AutoInfo.InitGrid(ViewerChart.gridParentInit(x),getMonitor()));
         }
         private void rtoolTab_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            ViewerChart.InitTabGrid(dataGridView1, viewer.InnerImage.MoveToTAB);
-            gridMode = 1;
+            viewerInit(1, record.InnerViewerChart.InitTabGrid);
         }
         private void rtoolEA_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            ViewerChart.InitEAGrid(dataGridView1, viewer.InnerImage.MoveToEA );
-            gridMode = 2;
+            viewerInit(2, record.InnerViewerChart.InitEAGrid);
         }
         private void rtoolDefect_Click(object sender, EventArgs e) {
-
-            createNewGrid();
-            ViewerChart.InitDefectGrid(dataGridView1, viewer.InnerImage.MoveToDefect );
-            gridMode = 3;
+            viewerInit(3, record.InnerViewerChart.InitDefectGrid);
         }
+
+        private void rtoolCfgApp_Click(object sender, EventArgs e) {
+            viewerInit(-1, x => Config.App.BindDataGridView(ViewerChart.gridParentInit(x)));
+        }
+        private void rtoolCfgShare_Click(object sender, EventArgs e) {
+            viewerInit(-1, x => Config.ParamShare.BindDataGridView(ViewerChart.gridParentInit(x)));
+        }
+        private void rtoolCfgInner_Click(object sender, EventArgs e) {
+            viewerInit(-1, x => Config.ParamInner.BindDataGridView(ViewerChart.gridParentInit(x)));
+        }
+
         private void rtoolDebug_Click(object sender, EventArgs e) {
+            viewerInit(4, x => {
 
-            createNewGrid();
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn() { Width = 500, HeaderText = "" });
-            dataGridView1.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridView1.Rows.Add("");
-            dataGridView1.Rows[0].Height = 500;
-            dataGridView1.Rows[0].Cells[0].Value = "";
+                var grid = ViewerChart.gridParentInit(x);
 
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-            dataGridView1.RowsDefaultCellStyle.WrapMode = (DataGridViewTriState.True);
+                grid.Columns.Add(new DataGridViewTextBoxColumn() { Width = 500, HeaderText = "" });
+                grid.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+                grid.Rows.Add("");
+                grid.Rows[0].Height = 500;
+                grid.Rows[0].Cells[0].Value = "";
 
-            gridMode = 4;
+                grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                grid.RowsDefaultCellStyle.WrapMode = (DataGridViewTriState.True);
+
+            });
+
         }
         private void rtoolDebugClear_Click(object sender, EventArgs e) {
             ImageProcess.ErrorMessage = "";
