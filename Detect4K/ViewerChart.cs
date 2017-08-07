@@ -77,6 +77,19 @@ namespace Detect4K {
                     row.Cells[i].Style.BackColor = Color.Pink;
             }
         }
+        static void gridEvent(DataGridView grid, Action<int> backcall) {
+
+            grid.CurrentCellChanged += (o, e) => {
+
+                if (grid.Rows.Count > 0 && grid.CurrentCell != null && grid.CurrentCell.ColumnIndex != 0) {
+                    int val;
+                    if (int.TryParse(grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value.ToString(), out val))
+                        backcall(val);
+                }
+
+            };
+
+        }
         
         static void addTabGrid(DataGridView grid, DataTab dt) {
 
@@ -121,7 +134,7 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => imageViewer.MoveToTAB((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
+            gridEvent(grid, imageViewer.MoveToTAB);
 
         }
         public void SyncTabGrid(Control parent) {
@@ -180,8 +193,8 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => imageViewer.MoveToEA((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
-            
+            gridEvent(grid, imageViewer.MoveToEA);
+
         }
         public void SyncEAGrid(Control parent) {
 
@@ -232,7 +245,7 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => imageViewer.MoveToDefect((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value -1));
+            gridEvent(grid, imageViewer.MoveToDefect);
 
         }
         public void SyncDefectGrid(Control parent) {

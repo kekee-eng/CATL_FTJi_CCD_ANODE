@@ -138,6 +138,7 @@ namespace Detect4K {
             if (!mouseAllow) return;
 
             Static.SafeRun(() => {
+                id = id - 1;
                 if (id >= 0 && id <= Detect.Defects.Count - 1) {
                     var obj = Detect.Defects[id];
 
