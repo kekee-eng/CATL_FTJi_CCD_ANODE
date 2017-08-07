@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 using static Common.DataGrab;
 
 namespace Detect4K {
-    class ModRecord : TemplateDB {
+    class ModRecord : TemplateDB, IDisposable {
+
+        public void Dispose() {
+            
+            InnerGrab.Cache.Dispose();
+            InnerViewerImage.Dispose();
+        }
 
         public void Init() {
 

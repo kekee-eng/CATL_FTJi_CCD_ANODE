@@ -135,6 +135,7 @@ namespace Detect4K {
 
             //
             record?.Close();
+            record?.Dispose();
             while (System.IO.File.Exists(path)) {
                 Thread.Sleep(100);
                 Static.SafeRun(() => System.IO.File.Delete(path));
@@ -259,7 +260,6 @@ namespace Detect4K {
         private void btnGrabRestart_Click(object sender, EventArgs e) {
             init_device();
             init_record();
-            record.InnerDetect.Discard();
             device.InnerCamera.m_frameStart = Static.ParamApp.CameraStartFrame;
             device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
             device.InnerCamera.Reset();

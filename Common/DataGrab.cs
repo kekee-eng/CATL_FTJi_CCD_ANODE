@@ -152,7 +152,17 @@ Image           BLOB
         }
         
         //缓存接口
-        public class GrabCache {
+        public class GrabCache:IDisposable {
+
+            public void Dispose() {
+
+                foreach (var key in store.Keys.ToList()) {
+                    DataGrab dg;
+                    if (store.TryRemove(key, out dg)) {
+                        dg.Image.Dispose();
+                    }
+                }
+            }
 
             ConcurrentDictionary<int, DataGrab> store = new ConcurrentDictionary<int, DataGrab>();
 
@@ -215,7 +225,7 @@ Image           BLOB
                 return saveDatas;
 
             }
-            
+
         }
         
     }

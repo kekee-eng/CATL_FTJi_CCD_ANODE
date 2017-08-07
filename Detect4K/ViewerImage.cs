@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Detect4K {
-    class ViewerImage {
+    class ViewerImage :IDisposable {
 
         public ViewerImage(EntryGrab grab, EntryDetect detect) {
             
             //
             Grab = grab;
             Detect = detect;
+        }
+        public void Dispose() {
+            mouseAllow = false;
+            Image?.Dispose();
         }
 
         public void Init(HWindowControl hwindow) {
@@ -784,5 +788,6 @@ namespace Detect4K {
         int refBoxWidth { get { return boxWidth; } }
         int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
         
+
     }
 }
