@@ -303,7 +303,7 @@ CfgParamSelf    BLOB
         void adjustER() {
 
             //排序
-            Tabs = Tabs.OrderBy(x => x.TabY1).ToList();
+            Tabs.Sort((a, b) => (int)((a.TabY1 - b.TabY1) * 1000));
 
             //重新生成
             int ea = 0;

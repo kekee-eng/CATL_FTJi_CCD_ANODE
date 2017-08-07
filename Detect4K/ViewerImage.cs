@@ -616,7 +616,7 @@ namespace Detect4K {
                 for (int i = frameStart; i <= frameEnd; i++) {
 
                     g.SetDraw("margin");
-                    g.SetColor("yellow");
+                    g.SetColor("violet");
                     g.SetLineWidth(1);
 
                     g.DispLine(getPixRow(i), pixCol1, getPixRow(i), pixCol2);
