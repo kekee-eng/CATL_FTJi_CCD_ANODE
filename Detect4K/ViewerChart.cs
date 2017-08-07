@@ -227,7 +227,7 @@ namespace Detect4K {
         public void SyncDefectGrid(Control parent) {
 
             var grid = girdParentGet(parent);
-            for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
+            for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
                 addDefectGrid(grid, Detect.Defects[i]);
 
         }

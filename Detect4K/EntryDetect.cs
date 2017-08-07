@@ -124,28 +124,39 @@ CfgParamSelf    BLOB
             Labels.Clear();
         }
 
-        int maybeCount = 0;
-        public void TryDetectDefect(int frame) {
+        int defectCount = 0;
+        public bool TryDetect(int frame) {
 
-            //检测缺陷
-            var dimage = grab.GetImage(frame);
-            bool maybe = (dimage != null && ImageProcess.DetectDefectFast(dimage));
+            //
+            int w = grab.Width;
+            int h = grab.Height;
 
-            if (maybe) maybeCount++;
-            if (maybeCount >= 10 || (!maybe && maybeCount > 0)) {
+            //极耳检测、并判断是否可能有瑕疵
+            var aimage = grab.GetImage(frame);
+            bool hasTab, hasDefect;
+            double[] ax, ay1, ay2;
+            if (aimage == null || !ImageProcess.DetectTab(aimage, out hasDefect, out hasTab, out ax, out ay1, out ay2))
+                return false;
 
-                var eimage = grab.GetImage(frame - maybeCount, frame - 1);
+            //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
+            if (hasDefect) defectCount++;
+            if (defectCount >= 10 || (!hasDefect && defectCount > 0)) {
+
+                //拼成大图进行瑕疵检测
+                int efx1 = frame - defectCount;
+                int efx2 = frame - 1;
+                defectCount = 0;
+
+                //TODO: Thread
+                var eimage = grab.GetImage(efx1, efx2);
                 double[] ex, ey, ew, eh;
-                if (eimage != null && ImageProcess.DetectDefectDeep(eimage, out ex, out ey, out ew, out eh)) {
-
-                    int w = grab.Width;
-                    int h = grab.Height;
-
+                if (eimage != null && ImageProcess.DetectDefect(eimage, out ex, out ey, out ew, out eh)) {
+                    
                     int ecc = new int[] { ex.Length, ey.Length, ew.Length, eh.Length }.Min();
                     for (int i = 0; i < ecc; i++) {
                         DataDefect defect = new DataDefect();
                         defect.X = ex[i] / w;
-                        defect.Y = frame - maybeCount + ey[i] / h;
+                        defect.Y = frame - defectCount + ey[i] / h;
                         defect.W = ew[i] / w;
                         defect.H = eh[i] / h;
 
@@ -156,153 +167,137 @@ CfgParamSelf    BLOB
                     }
                 }
 
-                //清空缓存
-                maybeCount = 0;
             }
-        }
-        public bool TryDetectTab(int frame) {
 
-            //检测极耳
-            var aimage = grab.GetImage(frame);
-            double[] ax, ay1, ay2;
-            if (aimage != null && ImageProcess.DetectTab(aimage, out ax, out ay1, out ay2)) {
+            //是否有极耳
+            if (!hasTab)
+                return false;
 
-                int w = grab.Width;
-                int h = grab.Height;
+            //极耳数据整理
+            var data = new DataTab();
+            data.TabX = ax[0] / w;
+            data.TabY1 = data.TabY1_P = frame + ay1[0] / h;
+            data.TabY2 = data.TabY2_P = frame + ay2[0] / h;
+            if (ax.Length == 2 && ay1.Length == 2 && ay2.Length == 2) {
+                data.HasTwoTab = true;
+                data.TabX_P = ax[1] / w;
+                data.TabY1_P = frame + ay1[1] / h;
+                data.TabY2_P = frame + ay2[1] / h;
+            }
 
-                //
-                var data = new DataTab();
-                data.TabX = ax[0] / w;
-                data.TabY1 = data.TabY1_P = frame + ay1[0] / h;
-                data.TabY2 = data.TabY2_P = frame + ay2[0] / h;
+            data.MarkX = data.TabX;
+            data.MarkY = data.TabY1;
 
-                if (ax.Length == 2 && ay1.Length == 2 && ay2.Length == 2) {
-                    data.HasTwoTab = true;
-                    data.TabX_P = ax[1] / w;
-                    data.TabY1_P = frame + ay1[1] / h;
-                    data.TabY2_P = frame + ay2[1] / h;
-                }
-
-                data.MarkX = data.TabX;
-                data.MarkY = data.TabY1;
-
-                //
-                bool isNewData = true;
-                if (Tabs.Count > 0) {
-                    var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
-                    if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < param.TabMergeDistance) {
+            //是否新极耳
+            bool isNewData = true;
+            if (Tabs.Count > 0) {
+                var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
+                if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < param.TabMergeDistance) {
+                    
+                    //更新极耳大小
+                    double dist = 10 / Fx; //10mm
+                    if (data.HasTwoTab || nearTab.HasTwoTab || Math.Abs(data.TabX - nearTab.TabX) >= dist) {
 
                         //
-                        double ck = 10 / Fx; //10mm内
-
-                        //更新极耳大小
-                        if (data.HasTwoTab || nearTab.HasTwoTab || Math.Abs(data.TabX - nearTab.TabX) >= ck) {
-
-                            //
-                            double leftx, rightx;
-                            if (data.HasTwoTab) {
-                                leftx = data.TabX;
-                                rightx = data.TabX_P;
-                            }
-                            else if (nearTab.HasTwoTab) {
-                                leftx = nearTab.TabX;
-                                rightx =nearTab.TabX_P;
-                            }
-                            else {
-                                leftx = Math.Min(data.TabX, nearTab.TabX);
-                                rightx = Math.Max(data.TabX, nearTab.TabX);
-                            }
-
-                            //
-                            Action<double, DataTab, List<double>> addPoint = (x, dt, list) => {
-                                if (Math.Abs(dt.TabX - x) < ck) {
-                                    list.Add(dt.TabY1);
-                                    list.Add(dt.TabY2);
-                                }
-
-                                if (dt.HasTwoTab &&  Math.Abs(dt.TabX_P - x) < ck) {
-                                    list.Add(dt.TabY1_P);
-                                    list.Add(dt.TabY2_P);
-                                }
-                            };
-
-                            //
-                            List<double> left = new List<double>();
-                            List<double> right = new List<double>();
-                            addPoint(leftx, data, left);
-                            addPoint(leftx, nearTab, left);
-                            addPoint(rightx, data, right);
-                            addPoint(rightx, nearTab, right);
-
-                            //
-                            nearTab.TabY1 = left.Min();
-                            nearTab.TabY2 = left.Max();
-                            nearTab.TabY1_P = right.Min();
-                            nearTab.TabY2_P = right.Max();
-
-                            //
-                            nearTab.HasTwoTab = true;
+                        double leftx, rightx;
+                        if (data.HasTwoTab) {
+                            leftx = data.TabX;
+                            rightx = data.TabX_P;
+                        }
+                        else if (nearTab.HasTwoTab) {
+                            leftx = nearTab.TabX;
+                            rightx = nearTab.TabX_P;
                         }
                         else {
-                            nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
-                            nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
+                            leftx = Math.Min(data.TabX, nearTab.TabX);
+                            rightx = Math.Max(data.TabX, nearTab.TabX);
                         }
-                        
-                        nearTab.ValHeight = (nearTab.TabY2 - nearTab.TabY1) * Fy;
-                        nearTab.IsHeightFail = nearTab.ValHeight < param.TabHeightMin || nearTab.ValHeight > param.TabHeightMax;
 
                         //
-                        isNewData = false;
+                        Action<double, DataTab, List<double>> addPoint = (x, dt, list) => {
+                            if (Math.Abs(dt.TabX - x) < dist) {
+                                list.Add(dt.TabY1);
+                                list.Add(dt.TabY2);
+                            }
+
+                            if (dt.HasTwoTab && Math.Abs(dt.TabX_P - x) < dist) {
+                                list.Add(dt.TabY1_P);
+                                list.Add(dt.TabY2_P);
+                            }
+                        };
+
+                        //
+                        List<double> left = new List<double>();
+                        List<double> right = new List<double>();
+                        addPoint(leftx, data, left);
+                        addPoint(leftx, nearTab, left);
+                        addPoint(rightx, data, right);
+                        addPoint(rightx, nearTab, right);
+
+                        //
+                        nearTab.TabY1 = left.Min();
+                        nearTab.TabY2 = left.Max();
+                        nearTab.TabY1_P = right.Min();
+                        nearTab.TabY2_P = right.Max();
+
+                        //
+                        nearTab.HasTwoTab = true;
                     }
-                }
-
-                //
-                if (isNewData) {
-
-                    //检测宽度
-                    double[] bx1, bx2;
-                    double bfy1 = data.TabY1 + param.TabWidthStart / Fy;
-                    double bfy2 = data.TabY1 + param.TabWidthEnd / Fy;
-
-                    var bimage = grab.GetImage(bfy1, bfy2);
-                    if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
-                        data.WidthY1 = bfy1;
-                        data.WidthY2 = bfy2;
-                        data.WidthX1 = bx1[0] / w;
-                        data.WidthX2 = bx2[0] / w;
+                    else {
+                        nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
+                        nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
                     }
 
-                    //检测是否EA头
-                    double[] cx, cy;
-                    double cfy1 = data.TabY1 + param.EAStart / Fy;
-                    double cfy2 = data.TabY1 + param.EAEnd / Fy;
-                    var cimage = grab.GetImage(cfy1, cfy2);
-                    if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
-
-                        //将最后一个极耳放到下个EA中
-                        data.IsNewEA = true;
-                        data.MarkX = data.MarkX_P = cx[0] / w;
-                        data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
-
-                        if (cx.Length == 2 && cy.Length == 2) {
-                            data.HasTwoMark = true;
-                            data.MarkX_P = cx[1] / w;
-                            data.MarkY_P = cfy1 + cy[1] / h;
-                        }
-
-                    }
+                    nearTab.ValHeight = (nearTab.TabY2 - nearTab.TabY1) * Fy;
+                    nearTab.IsHeightFail = nearTab.ValHeight < param.TabHeightMin || nearTab.ValHeight > param.TabHeightMax;
 
                     //
-                    Tabs.Add(data);
-                    adjustER();
-
-                    //
-                    return true;
+                    isNewData = false;
                 }
+            }
+
+            if (!isNewData)
+                return false;
+
+            //宽度检测
+            double[] bx1, bx2;
+            double bfy1 = data.TabY1 + param.TabWidthStart / Fy;
+            double bfy2 = data.TabY1 + param.TabWidthEnd / Fy;
+
+            var bimage = grab.GetImage(bfy1, bfy2);
+            if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
+                data.WidthY1 = bfy1;
+                data.WidthY2 = bfy2;
+                data.WidthX1 = bx1[0] / w;
+                data.WidthX2 = bx2[0] / w;
+            }
+
+            //EA头部Mark检测
+            double[] cx, cy;
+            double cfy1 = data.TabY1 + param.EAStart / Fy;
+            double cfy2 = data.TabY1 + param.EAEnd / Fy;
+            var cimage = grab.GetImage(cfy1, cfy2);
+            if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+
+                //将最后一个极耳放到下个EA中
+                data.IsNewEA = true;
+                data.MarkX = data.MarkX_P = cx[0] / w;
+                data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+
+                if (cx.Length == 2 && cy.Length == 2) {
+                    data.HasTwoMark = true;
+                    data.MarkX_P = cx[1] / w;
+                    data.MarkY_P = cfy1 + cy[1] / h;
+                }
+
             }
 
             //
-            return false;
+            Tabs.Add(data);
+            adjustER();
+
+            //
+            return true;
         }
 
         void adjustER() {

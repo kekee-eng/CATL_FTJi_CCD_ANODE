@@ -61,25 +61,30 @@ namespace Detect4K {
             }
 
         }
-        public static bool DetectTab(HImage image, out double[] x, out double[] y1, out double[] y2) {
+        public static bool DetectTab(HImage image, out bool hasDefect, out bool hasTab, out double[] x, out double[] y1, out double[] y2) {
 
             //
+            hasDefect = hasTab = false;
             x = y1 = y2 = null;
 
             //
             var data = TemplateProcess("DetectTab", image);
             if (data == null) return false;
             
-            //  
-            x = data["OutX"].ToDArr();
-            y1 = data["OutY1"].ToDArr();
-            y2 = data["OutY2"].ToDArr();
+            if (!data.Keys.Contains("OutHasDefect")) return false;
+            if (!data.Keys.Contains("OutHasTab")) return false;
 
-            //
-            if (x.Length == 0) return false;
-            if (y1.Length == 0) return false;
-            if (y2.Length == 0) return false;
+            hasDefect = data["OutHasDefect"];
+            hasTab = data["OutHasTab"];
 
+            if (hasTab) {
+                x = data["OutX"].ToDArr();
+                y1 = data["OutY1"].ToDArr();
+                y2 = data["OutY2"].ToDArr();
+
+                //
+                hasTab = (x.Length > 0) && (y1.Length > 0) && (y2.Length > 0);
+            }
             return true;
 
         }
@@ -126,21 +131,13 @@ namespace Detect4K {
             
             return true;
         }
-        public static bool DetectDefectFast(HImage image) {
-            
-            //
-            var data = TemplateProcess("DetectDefectFast", image);
-            if (data == null) return false;
-            
-            return true;
-        }
-        public static bool DetectDefectDeep(HImage image, out double[] x, out double[] y, out double[] w, out double[] h) {
+        public static bool DetectDefect(HImage image, out double[] x, out double[] y, out double[] w, out double[] h) {
 
             //
             x = y = w = h = null;
 
             //
-            var data = TemplateProcess("DetectDefectDeep", image);
+            var data = TemplateProcess("DetectDefect", image);
             if (data == null) return false;
             
             //  

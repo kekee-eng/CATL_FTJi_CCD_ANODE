@@ -68,12 +68,12 @@ namespace Detect4K {
 
                     do {
 
-                        List<DataGrab> retInner = null;
+                        List<DataGrab> ret1 = null;
                         if (this.record.Transaction(() => {
-                            retInner = this.record.InnerGrab.Save();
+                            ret1 = this.record.InnerGrab.Save();
                             this.record.InnerDetect.Save();
                         })) {
-                            retInner.AsParallel().ForAll(x => x.IsStore = true);
+                            ret1.AsParallel().ForAll(x => x.IsStore = true);
                         }
 
                         Thread.Sleep(500);
@@ -111,10 +111,8 @@ namespace Detect4K {
                 //线程1：内侧相机取图、处理
                 //
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerDetect.TryDetectTab(obj.Frame);
-                record.InnerDetect.TryDetectDefect(obj.Frame);
-
-
+                record.InnerDetect.TryDetect(obj.Frame);
+                
                 record.InnerViewerImage.SetBottomTarget(obj.Frame);
             };
             device.InnerCamera.OnComplete += () => {
