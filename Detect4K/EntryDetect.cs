@@ -201,12 +201,12 @@ CfgParamSelf    BLOB
                             //
                             double leftx, rightx;
                             if (data.HasTwoTab) {
-                                leftx = Math.Min(data.TabX, data.TabX_P);
-                                rightx = Math.Max(data.TabX, data.TabX_P);
+                                leftx = data.TabX;
+                                rightx = data.TabX_P;
                             }
                             else if (nearTab.HasTwoTab) {
-                                leftx = Math.Min(nearTab.TabX, nearTab.TabX_P);
-                                rightx = Math.Max(nearTab.TabX, nearTab.TabX_P);
+                                leftx = nearTab.TabX;
+                                rightx =nearTab.TabX_P;
                             }
                             else {
                                 leftx = Math.Min(data.TabX, nearTab.TabX);
