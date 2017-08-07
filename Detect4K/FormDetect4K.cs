@@ -264,12 +264,15 @@ namespace Detect4K {
             device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
             device.InnerCamera.Reset();
             device.InnerCamera.Start();
+            record.InnerViewerImage.SetUserEnable(false);
         }
         private void btnGrabStart_Click(object sender, EventArgs e) {
             device.InnerCamera.Start();
+            record.InnerViewerImage.SetUserEnable(false);
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
             device.InnerCamera.Stop();
+            record.InnerViewerImage.SetUserEnable(true);
         }
 
         private void timer1_Tick(object sender, EventArgs e) {

@@ -77,8 +77,7 @@ namespace Detect4K {
                     row.Cells[i].Style.BackColor = Color.Pink;
             }
         }
-
-        //
+        
         static void addTabGrid(DataGridView grid, DataTab dt) {
 
             //        
@@ -122,14 +121,18 @@ namespace Detect4K {
                 );
 
             //
-            grid.CellClick += (o, e) => ImageViewer.MoveToTAB(grid.Rows.Count - e.RowIndex);
+            grid.CurrentCellChanged += (o, e) => {
+                if (grid.CurrentCell != null) {
+                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex);
+                }
+            };
 
         }
         public void SyncTabGrid(Control parent) {
 
             var grid = girdParentGet(parent);
 
-            if (Detect.Tabs.Count >= grid.Rows.Count) {
+            if (Detect.Tabs.Count > grid.Rows.Count) {
 
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
@@ -137,7 +140,8 @@ namespace Detect4K {
                 for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
                     addTabGrid(grid, Detect.Tabs[i]);
             }
-            else {
+
+            if (Detect.Tabs.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
 
@@ -180,16 +184,19 @@ namespace Detect4K {
                 );
 
             //
-            grid.CellClick += (o, e) => {
-                if (e.RowIndex >= 0)
-                    ImageViewer.MoveToEA((int)grid.Rows[e.RowIndex].Cells[0].Value);
+            grid.CurrentCellChanged += (o, e) => {
+                if (grid.CurrentCell != null) {
+                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex);
+                }
             };
+
         }
         public void SyncEAGrid(Control parent) {
 
             var grid = girdParentGet(parent);
             int eaCount = Detect.EACount;
-            if (eaCount >= grid.Rows.Count) {
+
+            if (eaCount > grid.Rows.Count) {
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
 
@@ -198,7 +205,7 @@ namespace Detect4K {
                     addEAGrid(grid, EAs[i]);
 
             }
-            else {
+            if (eaCount < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
 
@@ -233,20 +240,21 @@ namespace Detect4K {
                 );
 
             //
-            grid.CellClick += (o, e) => {
-                if (e.RowIndex >= 0)
-                    ImageViewer.MoveToDefect((int)grid.Rows[e.RowIndex].Cells[0].Value-1);
+            grid.CurrentCellChanged += (o, e) => {
+                if (grid.CurrentCell != null) {
+                    ImageViewer.MoveToDefect(grid.Rows.Count - grid.CurrentCell.RowIndex);
+                }
             };
         }
         public void SyncDefectGrid(Control parent) {
 
             var grid = girdParentGet(parent);
 
-            if (Detect.Defects.Count >= grid.Rows.Count) {
+            if (Detect.Defects.Count > grid.Rows.Count) {
                 for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
                     addDefectGrid(grid, Detect.Defects[i]);
             }
-            else {
+            if (Detect.Defects.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
         }

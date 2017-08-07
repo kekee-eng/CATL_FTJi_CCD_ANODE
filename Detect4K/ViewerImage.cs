@@ -42,6 +42,10 @@ namespace Detect4K {
         public HWindowControl Box;
         public HWindow g;
 
+        public void SetUserEnable(bool allow) {
+            rtEnableUser.Checked = allow;
+        }
+
         public void MoveTargetSync(double refFps) {
 
             double fpsNow = Math.Max(1, showImageDynamic ? fpsControl : 1);
@@ -210,7 +214,7 @@ namespace Detect4K {
 
             //
             addSp(rtMenu);
-            var rtEnableUser = addItem(rtMenu, "启用交互");
+            rtEnableUser = addItem(rtMenu, "启用交互");
             addSp(rtMenu);
             var rtReset = addItem(rtMenu, "复位视图");
             var rtLoc = addItem(rtMenu, "定位到");
@@ -527,7 +531,8 @@ namespace Detect4K {
                         g.SetDraw("margin");
                         g.SetColor("yellow");
                         g.SetLineWidth(1);
-                        g.SetTposition((int)getPixRow(tab.TabY1), (int)(getPixCol(tab.WidthX1) + offs));
+                        double pos = tab.WidthX1 != 0 ? tab.WidthX1 : tab.TabX;
+                        g.SetTposition((int)getPixRow(tab.TabY1), (int)(getPixCol(pos) + offs));
                         g.WriteString(string.Format("#{0}.#{1}", tab.EA, tab.TAB));
 
                     }
@@ -695,6 +700,9 @@ namespace Detect4K {
             if (y2 < bh) g.ClearRectangle(y2, 0, bh, bw);
 
         }
+
+        //
+        ToolStripMenuItem rtEnableUser;
 
         //
         bool showImageStatic = false;

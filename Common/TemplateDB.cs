@@ -55,7 +55,7 @@ namespace Common {
                 return true;
             }
             catch {
-                //trans.Rollback();
+                trans.Rollback();
                 return false;
             }
 

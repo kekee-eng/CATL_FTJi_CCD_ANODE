@@ -133,6 +133,7 @@ CfgParamSelf    BLOB
 
         int defectCount = 0;
         bool statuPrev = false;
+
         public bool TryDetect(int frame) {
 
             bool statuCurr = tryDetect(frame);
@@ -173,7 +174,7 @@ CfgParamSelf    BLOB
                     for (int i = 0; i < ecc; i++) {
                         DataDefect defect = new DataDefect();
                         defect.X = ex[i] / w;
-                        defect.Y = frame - defectCount + ey[i] / h;
+                        defect.Y = efx1 + ey[i] / h;
                         defect.W = ew[i] / w;
                         defect.H = eh[i] / h;
 
@@ -249,6 +250,8 @@ CfgParamSelf    BLOB
                         addPoint(rightx, nearTab, right);
 
                         //
+                        nearTab.TabX = leftx;
+                        nearTab.TabX_P = rightx;
                         nearTab.TabY1 = left.Min();
                         nearTab.TabY2 = left.Max();
                         nearTab.TabY1_P = right.Min();
