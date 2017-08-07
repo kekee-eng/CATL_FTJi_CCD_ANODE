@@ -14,16 +14,16 @@ namespace Detect4K {
         public ViewerChart(EntryGrab grab, EntryDetect detect, ViewerImage viewer) {
 
             //
-            this.Grab = grab;
-            this.Detect = detect;
-            this.ImageViewer = viewer;
+            this.grab = grab;
+            this.detect = detect;
+            this.imageViewer = viewer;
 
         }
 
         //
-        public ViewerImage ImageViewer;
-        public EntryGrab Grab;
-        public EntryDetect Detect;
+        public ViewerImage imageViewer;
+        public EntryGrab grab;
+        public EntryDetect detect;
 
         //
         public static Control parentInit(Control parent, Control obj) {
@@ -121,23 +121,23 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => ImageViewer.MoveToTAB((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
+            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => imageViewer.MoveToTAB((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
 
         }
         public void SyncTabGrid(Control parent) {
 
             var grid = girdParentGet(parent);
 
-            if (Detect.Tabs.Count > grid.Rows.Count) {
+            if (detect.Tabs.Count > grid.Rows.Count) {
 
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
 
-                for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
-                    addTabGrid(grid, Detect.Tabs[i]);
+                for (int i = grid.Rows.Count; i < detect.Tabs.Count; i++)
+                    addTabGrid(grid, detect.Tabs[i]);
             }
 
-            if (Detect.Tabs.Count < grid.Rows.Count) {
+            if (detect.Tabs.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
 
@@ -180,19 +180,19 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => ImageViewer.MoveToEA((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
+            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => imageViewer.MoveToEA((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
             
         }
         public void SyncEAGrid(Control parent) {
 
             var grid = girdParentGet(parent);
-            int eaCount = Detect.EACount;
+            int eaCount = detect.EACount;
 
             if (eaCount > grid.Rows.Count) {
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
 
-                var EAs = Detect.EAs;
+                var EAs = detect.EAs;
                 for (int i = grid.Rows.Count; i < eaCount; i++)
                     addEAGrid(grid, EAs[i]);
 
@@ -205,7 +205,7 @@ namespace Detect4K {
 
         void addDefectGrid(DataGridView grid, DataDefect dt) {
 
-            //        
+            //
             gridAdd(grid,
                 grid.Rows.Count + 1,
                 dt.X.ToString("0.000"),
@@ -232,18 +232,18 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => ImageViewer.MoveToDefect((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value -1));
+            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => imageViewer.MoveToDefect((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value -1));
 
         }
         public void SyncDefectGrid(Control parent) {
 
             var grid = girdParentGet(parent);
 
-            if (Detect.Defects.Count > grid.Rows.Count) {
-                for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
-                    addDefectGrid(grid, Detect.Defects[i]);
+            if (detect.Defects.Count > grid.Rows.Count) {
+                for (int i = grid.Rows.Count; i < detect.Defects.Count; i++)
+                    addDefectGrid(grid, detect.Defects[i]);
             }
-            if (Detect.Defects.Count < grid.Rows.Count) {
+            if (detect.Defects.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
         }
