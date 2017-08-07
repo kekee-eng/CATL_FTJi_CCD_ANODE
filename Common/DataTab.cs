@@ -1,4 +1,5 @@
-﻿
+﻿using System.Linq;
+
 namespace Common {
 #pragma warning disable 0649
 
@@ -42,7 +43,7 @@ namespace Common {
         //
         public bool HasTwoTab = false; //是否双侧极耳
         public bool HasTwoMark = false; //是否有两个Mark孔
-
+        
         //
         public bool IsNewEA = false; //EA起始
         public bool IsSync = false; //已同步
@@ -51,5 +52,14 @@ namespace Common {
         //
         public bool IsFail { get { return IsWidthFail || IsDistFail || IsDistDiffFail || IsHeightFail; } }
         
+        //
+        public bool InRange(double start, double end) {
+
+            var list = new double[] { TabY1, TabY2, TabY1_P, TabY2_P, WidthY1, WidthY2, MarkY, MarkY_P }.TakeWhile(x => x > 0);
+            double min = list.Min();
+            double max = list.Max();
+
+            return max >= start && min <= end;
+        }
     }
 }

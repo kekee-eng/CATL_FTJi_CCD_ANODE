@@ -16,7 +16,16 @@ namespace Common {
 
         public double Width;
         public double Height;
-        
+
+        //
+        public bool InRange(double start, double end) {
+            var list = new double[] { Y - H / 2, Y + H / 2 }.TakeWhile(x => x > 0);
+            double min = list.Min();
+            double max = list.Max();
+
+            return max >= start && min <= end;
+        }
+
     }
 
 

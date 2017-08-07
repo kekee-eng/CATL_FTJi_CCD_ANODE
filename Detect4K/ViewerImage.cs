@@ -183,10 +183,11 @@ namespace Detect4K {
             var rtContextEA = addItem(rtContext, "EA分割线");
             var rtContextTab = addItem(rtContext, "极耳位置");
             var rtContextWidth = addItem(rtContext, "测宽检测结果");
-            var rtContextNG = addItem(rtContext, "瑕疵检测结果");
+            var rtContextDefect = addItem(rtContext, "瑕疵检测结果");
             var rtContextLabel = addItem(rtContext, "打标位置");
             addSp(rtContext);
             var rtContextCross = addItem(rtContext, "定位准星");
+            var rtContextFrame = addItem(rtContext, "帧分割");
 
             //
             var rtLocFrameText = new ToolStripTextBox();
@@ -218,9 +219,10 @@ namespace Detect4K {
             bindItem(rtContextEA, b => showContextMark = b);
             bindItem(rtContextTab, b => showContextTab = b);
             bindItem(rtContextWidth, b => showContextWidth = b);
-            bindItem(rtContextNG, b => showContextNG = b);
+            bindItem(rtContextDefect, b => showContextDefect = b);
             bindItem(rtContextLabel, b => showContextLabel = b);
             bindItem(rtContextCross, b => showContextCross = b);
+            bindItem(rtContextFrame, b => showContextFrame = b);
 
             bindItem(rtEnableUser, b => mouseAllow = !(targetAllow = !b));
 
@@ -230,7 +232,7 @@ namespace Detect4K {
                 rtContextEA.Checked = b;
                 rtContextTab.Checked = b;
                 rtContextWidth.Checked = b;
-                rtContextNG.Checked = b;
+                rtContextDefect.Checked = b;
                 rtContextLabel.Checked = b;
             };
             rtContextDef2.CheckedChanged += (o, e) => {
@@ -471,11 +473,18 @@ namespace Detect4K {
             double crossAngle = Math.PI / 4;
             double arrowSize = 10;
 
+            //
+            int countTab = 0;
+            int countMark = 0;
+            int countDefect = 0;
+            int countLabel = 0;
+
             //极耳
             for (int i = 0; i < Detect.Tabs.Count; i++) {
 
                 var tab = Detect.Tabs[i];
-                if (tab.TabY2 >= frameStart || tab.WidthY1 <= frameEnd) {
+                if (tab.InRange(frameStart, frameEnd)) {
+                    countTab++;
 
                     if (showContextTab) {
 
@@ -526,6 +535,7 @@ namespace Detect4K {
 
                     }
                     if (showContextMark && tab.IsNewEA) {
+                        countMark++;
 
                         //EA-Mark点
                         g.SetDraw("margin");
@@ -551,11 +561,12 @@ namespace Detect4K {
             }
 
             //瑕疵
-            if (showContextNG) {
+            if (showContextDefect) {
                 for (int i = 0; i < Detect.Defects.Count; i++) {
 
                     var def = Detect.Defects[i];
-                    if (def.Y - def.H / 2 < frameEnd || def.Y + def.H / 2 > frameStart) {
+                    if (def.InRange(frameStart, frameEnd)) {
+                        countDefect++;
 
                         //瑕疵
                         g.SetDraw("margin");
@@ -566,14 +577,21 @@ namespace Detect4K {
                             getPixCol(def.X - def.W / 2) - offs,
                             getPixRow(def.Y + def.H / 2) + offs,
                             getPixCol(def.X + def.W / 2) + offs);
-                        
+
                     }
                 }
             }
 
             //打标
             if (showContextLabel) {
+                for (int i = 0; i < Detect.Labels.Count; i++) {
 
+                    var lab = Detect.Labels[i];
+                    if (lab.InRange(frameStart, frameEnd)) {
+                        countLabel++;
+
+                    }
+                }
             }
 
             //定位准星
@@ -587,6 +605,25 @@ namespace Detect4K {
                 g.DispLine(pixRow0, pixCol1, pixRow0, pixCol2);
 
             }
+
+            //帧分割
+            if (showContextFrame) {
+                for (int i = frameStart; i <= frameEnd; i++) {
+
+                    g.SetDraw("margin");
+                    g.SetColor("yellow");
+                    g.SetLineWidth(1);
+
+                    g.DispLine(getPixRow(i), pixCol1, getPixRow(i), pixCol2);
+
+                }
+            }
+
+            //
+            countShowDefect = countDefect;
+            countShowLabel = countLabel;
+            countShowMark = countMark;
+            countShowTab = countTab;
 
             //清空不显示区域
             int bw = boxWidth;
@@ -613,9 +650,15 @@ namespace Detect4K {
         bool showContextMark = false;
         bool showContextTab = false;
         bool showContextWidth = false;
-        bool showContextNG = false;
+        bool showContextDefect = false;
         bool showContextLabel = false;
         bool showContextCross = false;
+        bool showContextFrame = false;
+
+        int countShowLabel = 0;
+        int countShowDefect = 0;
+        int countShowTab = 0;
+        int countShowMark = 0;
 
         //
         bool mouseAllow = true;

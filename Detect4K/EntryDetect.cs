@@ -192,9 +192,62 @@ CfgParamSelf    BLOB
                     var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
                     if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < param.TabMergeDistance) {
 
+                        //
+                        double ck = 10 / Fx; //10mm内
+
                         //更新极耳大小
-                        nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
-                        nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
+                        if (data.HasTwoTab || nearTab.HasTwoTab || Math.Abs(data.TabX - nearTab.TabX) >= ck) {
+
+                            //
+                            double leftx, rightx;
+                            if (data.HasTwoTab) {
+                                leftx = Math.Min(data.TabX, data.TabX_P);
+                                rightx = Math.Max(data.TabX, data.TabX_P);
+                            }
+                            else if (nearTab.HasTwoTab) {
+                                leftx = Math.Min(nearTab.TabX, nearTab.TabX_P);
+                                rightx = Math.Max(nearTab.TabX, nearTab.TabX_P);
+                            }
+                            else {
+                                leftx = Math.Min(data.TabX, nearTab.TabX);
+                                rightx = Math.Max(data.TabX, nearTab.TabX);
+                            }
+
+                            //
+                            Action<double, DataTab, List<double>> addPoint = (x, dt, list) => {
+                                if (Math.Abs(dt.TabX - x) < ck) {
+                                    list.Add(dt.TabY1);
+                                    list.Add(dt.TabY2);
+                                }
+
+                                if (dt.HasTwoTab &&  Math.Abs(dt.TabX_P - x) < ck) {
+                                    list.Add(dt.TabY1_P);
+                                    list.Add(dt.TabY2_P);
+                                }
+                            };
+
+                            //
+                            List<double> left = new List<double>();
+                            List<double> right = new List<double>();
+                            addPoint(leftx, data, left);
+                            addPoint(leftx, nearTab, left);
+                            addPoint(rightx, data, right);
+                            addPoint(rightx, nearTab, right);
+
+                            //
+                            nearTab.TabY1 = left.Min();
+                            nearTab.TabY2 = left.Max();
+                            nearTab.TabY1_P = right.Min();
+                            nearTab.TabY2_P = right.Max();
+
+                            //
+                            nearTab.HasTwoTab = true;
+                        }
+                        else {
+                            nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
+                            nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
+                        }
+                        
                         nearTab.ValHeight = (nearTab.TabY2 - nearTab.TabY1) * Fy;
                         nearTab.IsHeightFail = nearTab.ValHeight < param.TabHeightMin || nearTab.ValHeight > param.TabHeightMax;
 
@@ -207,7 +260,7 @@ CfgParamSelf    BLOB
                 if (isNewData) {
 
                     //检测宽度
-                    double bx1, bx2;
+                    double[] bx1, bx2;
                     double bfy1 = data.TabY1 + param.TabWidthStart / Fy;
                     double bfy2 = data.TabY1 + param.TabWidthEnd / Fy;
 
@@ -215,8 +268,8 @@ CfgParamSelf    BLOB
                     if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
                         data.WidthY1 = bfy1;
                         data.WidthY2 = bfy2;
-                        data.WidthX1 = bx1 / w;
-                        data.WidthX2 = bx2 / w;
+                        data.WidthX1 = bx1[0] / w;
+                        data.WidthX2 = bx2[0] / w;
                     }
 
                     //检测是否EA头

@@ -69,12 +69,7 @@ namespace Detect4K {
             //
             var data = TemplateProcess("DetectTab", image);
             if (data == null) return false;
-
-            //
-            if (!data.Keys.Contains("OutX")) return false;
-            if (!data.Keys.Contains("OutY1")) return false;
-            if (!data.Keys.Contains("OutY2")) return false;
-
+            
             //  
             x = data["OutX"].ToDArr();
             y1 = data["OutY1"].ToDArr();
@@ -88,22 +83,22 @@ namespace Detect4K {
             return true;
 
         }
-        public static bool DetectWidth(HImage image, out double x1, out double x2) {
+        public static bool DetectWidth(HImage image, out double[] x1, out double[] x2) {
 
             //
-            x1 = x2 = 0;
+            x1 = x2 = null;
 
             //
             var data = TemplateProcess("DetectWidth", image);
             if (data == null) return false;
-
-            //
-            if (!data.Keys.Contains("OutX1")) return false;
-            if (!data.Keys.Contains("OutX2")) return false;
-
+            
             //  
             x1 = data["OutX1"];
             x2 = data["OutX2"];
+
+            //
+            if (x1.Length == 0) return false;
+            if (x2.Length == 0) return false;
 
             return true;
 
@@ -121,7 +116,7 @@ namespace Detect4K {
             if (!data.Keys.Contains("OutX")) return false;
             if (!data.Keys.Contains("OutY")) return false;
 
-            //
+            //  
             x = data["OutX"].ToDArr();
             y = data["OutY"].ToDArr();
 
@@ -147,13 +142,7 @@ namespace Detect4K {
             //
             var data = TemplateProcess("DetectDefectDeep", image);
             if (data == null) return false;
-
-            //
-            if (!data.Keys.Contains("OutX")) return false;
-            if (!data.Keys.Contains("OutY")) return false;
-            if (!data.Keys.Contains("OutW")) return false;
-            if (!data.Keys.Contains("OutH")) return false;
-
+            
             //  
             x = data["OutX"].ToDArr();
             y = data["OutY"].ToDArr();

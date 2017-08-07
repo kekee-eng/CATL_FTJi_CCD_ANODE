@@ -29,6 +29,8 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.rtoolInfo = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolDebug = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolDebugClear = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rtoolTab = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolEA = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,7 +39,6 @@
             this.rtoolCfgApp = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolCfgShare = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolCfgInner = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtoolDebug = new System.Windows.Forms.ToolStripMenuItem();
             this.hwin = new HalconDotNet.HWindowControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -52,7 +53,6 @@
             this.trackSpeed = new System.Windows.Forms.TrackBar();
             this.tbFrameStart = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.rtoolDebugClear = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -95,7 +95,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(483, 783);
+            this.dataGridView1.Size = new System.Drawing.Size(483, 561);
             this.dataGridView1.TabIndex = 3;
             // 
             // contextMenuStrip1
@@ -112,75 +112,82 @@
             this.rtoolCfgShare,
             this.rtoolCfgInner});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 214);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 192);
             // 
             // rtoolInfo
             // 
             this.rtoolInfo.Name = "rtoolInfo";
-            this.rtoolInfo.Size = new System.Drawing.Size(152, 22);
+            this.rtoolInfo.Size = new System.Drawing.Size(129, 22);
             this.rtoolInfo.Text = "Info";
             this.rtoolInfo.Click += new System.EventHandler(this.rtoolInfo_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
-            // 
-            // rtoolTab
-            // 
-            this.rtoolTab.Name = "rtoolTab";
-            this.rtoolTab.Size = new System.Drawing.Size(152, 22);
-            this.rtoolTab.Text = "TAB";
-            this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
-            // 
-            // rtoolEA
-            // 
-            this.rtoolEA.Name = "rtoolEA";
-            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
-            this.rtoolEA.Text = "EA";
-            this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
-            // 
-            // rtoolDefect
-            // 
-            this.rtoolDefect.Name = "rtoolDefect";
-            this.rtoolDefect.Size = new System.Drawing.Size(152, 22);
-            this.rtoolDefect.Text = "Defect";
-            this.rtoolDefect.Click += new System.EventHandler(this.rtoolDefect_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
-            // 
-            // rtoolCfgApp
-            // 
-            this.rtoolCfgApp.Name = "rtoolCfgApp";
-            this.rtoolCfgApp.Size = new System.Drawing.Size(152, 22);
-            this.rtoolCfgApp.Text = "CfgApp";
-            this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
-            // 
-            // rtoolCfgShare
-            // 
-            this.rtoolCfgShare.Name = "rtoolCfgShare";
-            this.rtoolCfgShare.Size = new System.Drawing.Size(152, 22);
-            this.rtoolCfgShare.Text = "CfgShare";
-            this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
-            // 
-            // rtoolCfgInner
-            // 
-            this.rtoolCfgInner.Name = "rtoolCfgInner";
-            this.rtoolCfgInner.Size = new System.Drawing.Size(152, 22);
-            this.rtoolCfgInner.Text = "CfgInner";
-            this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
             // 
             // rtoolDebug
             // 
             this.rtoolDebug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rtoolDebugClear});
             this.rtoolDebug.Name = "rtoolDebug";
-            this.rtoolDebug.Size = new System.Drawing.Size(152, 22);
+            this.rtoolDebug.Size = new System.Drawing.Size(129, 22);
             this.rtoolDebug.Text = "Debug";
             this.rtoolDebug.Click += new System.EventHandler(this.rtoolDebug_Click);
+            // 
+            // rtoolDebugClear
+            // 
+            this.rtoolDebugClear.Name = "rtoolDebugClear";
+            this.rtoolDebugClear.Size = new System.Drawing.Size(106, 22);
+            this.rtoolDebugClear.Text = "Clear";
+            this.rtoolDebugClear.Click += new System.EventHandler(this.rtoolDebugClear_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
+            // 
+            // rtoolTab
+            // 
+            this.rtoolTab.Name = "rtoolTab";
+            this.rtoolTab.Size = new System.Drawing.Size(129, 22);
+            this.rtoolTab.Text = "TAB";
+            this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
+            // 
+            // rtoolEA
+            // 
+            this.rtoolEA.Name = "rtoolEA";
+            this.rtoolEA.Size = new System.Drawing.Size(129, 22);
+            this.rtoolEA.Text = "EA";
+            this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
+            // 
+            // rtoolDefect
+            // 
+            this.rtoolDefect.Name = "rtoolDefect";
+            this.rtoolDefect.Size = new System.Drawing.Size(129, 22);
+            this.rtoolDefect.Text = "Defect";
+            this.rtoolDefect.Click += new System.EventHandler(this.rtoolDefect_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(126, 6);
+            // 
+            // rtoolCfgApp
+            // 
+            this.rtoolCfgApp.Name = "rtoolCfgApp";
+            this.rtoolCfgApp.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgApp.Text = "CfgApp";
+            this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
+            // 
+            // rtoolCfgShare
+            // 
+            this.rtoolCfgShare.Name = "rtoolCfgShare";
+            this.rtoolCfgShare.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgShare.Text = "CfgShare";
+            this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
+            // 
+            // rtoolCfgInner
+            // 
+            this.rtoolCfgInner.Name = "rtoolCfgInner";
+            this.rtoolCfgInner.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgInner.Text = "CfgInner";
+            this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
             // 
             // hwin
             // 
@@ -190,9 +197,9 @@
             this.hwin.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwin.Location = new System.Drawing.Point(0, 0);
             this.hwin.Name = "hwin";
-            this.hwin.Size = new System.Drawing.Size(563, 674);
+            this.hwin.Size = new System.Drawing.Size(563, 452);
             this.hwin.TabIndex = 7;
-            this.hwin.WindowSize = new System.Drawing.Size(563, 674);
+            this.hwin.WindowSize = new System.Drawing.Size(563, 452);
             // 
             // splitContainer1
             // 
@@ -208,7 +215,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1050, 783);
+            this.splitContainer1.Size = new System.Drawing.Size(1050, 561);
             this.splitContainer1.SplitterDistance = 483;
             this.splitContainer1.TabIndex = 8;
             // 
@@ -234,7 +241,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.hwin);
-            this.splitContainer2.Size = new System.Drawing.Size(563, 783);
+            this.splitContainer2.Size = new System.Drawing.Size(563, 561);
             this.splitContainer2.SplitterDistance = 105;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -339,18 +346,11 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // rtoolDebugClear
-            // 
-            this.rtoolDebugClear.Name = "rtoolDebugClear";
-            this.rtoolDebugClear.Size = new System.Drawing.Size(152, 22);
-            this.rtoolDebugClear.Text = "Clear";
-            this.rtoolDebugClear.Click += new System.EventHandler(this.rtoolDebugClear_Click);
-            // 
             // FormDetect4K
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1050, 783);
+            this.ClientSize = new System.Drawing.Size(1050, 561);
             this.Controls.Add(this.splitContainer1);
             this.Name = "FormDetect4K";
             this.Text = "Detect4K";
