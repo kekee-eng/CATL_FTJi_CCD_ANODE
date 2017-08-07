@@ -309,6 +309,12 @@ CfgParamSelf    BLOB
                     data.MarkY_P = cfy1 + cy[1] / h;
                 }
 
+                //去除与Mark点重合的瑕疵
+                double ck = 0.5 / Fx;
+                Defects.RemoveAll(m =>
+                    (Math.Abs(m.X - data.MarkX) < ck && Math.Abs(m.Y - data.MarkY) < ck) ||
+                    (Math.Abs(m.X - data.MarkX_P) < ck && Math.Abs(m.Y - data.MarkY_P) < ck)
+                );
             }
 
             //

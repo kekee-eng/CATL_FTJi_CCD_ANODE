@@ -110,7 +110,7 @@ namespace Detect4K {
             //
             var grid = gridParentInit(parent);
             grid.Columns.AddRange(
-                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "序号" },
+                new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "TAB" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
@@ -121,11 +121,7 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => {
-                if (grid.CurrentCell != null) {
-                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex-1);
-                }
-            };
+            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => ImageViewer.MoveToTAB((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
 
         }
         public void SyncTabGrid(Control parent) {
@@ -175,7 +171,7 @@ namespace Detect4K {
             //
             var grid = gridParentInit(parent);
             grid.Columns.AddRange(
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "EA" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ID(EA)" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳数" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度不良" },
@@ -184,12 +180,8 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => {
-                if (grid.CurrentCell != null) {
-                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex-1);
-                }
-            };
-
+            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => ImageViewer.MoveToEA((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value));
+            
         }
         public void SyncEAGrid(Control parent) {
 
@@ -215,7 +207,7 @@ namespace Detect4K {
 
             //        
             gridAdd(grid,
-                grid.Rows.Count,
+                grid.Rows.Count + 1,
                 dt.X.ToString("0.000"),
                 dt.Y.ToString("0.000"),
                 dt.W.ToString("0.000"),
@@ -230,7 +222,7 @@ namespace Detect4K {
             //
             var grid = gridParentInit(parent);
             grid.Columns.AddRange(
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "序号" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "X" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "Y" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "W" },
@@ -240,11 +232,8 @@ namespace Detect4K {
                 );
 
             //
-            grid.CurrentCellChanged += (o, e) => {
-                if (grid.CurrentCell != null) {
-                    ImageViewer.MoveToDefect(grid.Rows.Count - grid.CurrentCell.RowIndex -1);
-                }
-            };
+            grid.CurrentCellChanged += (o, e) => Static.SafeRun(() => ImageViewer.MoveToDefect((int)grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value -1));
+
         }
         public void SyncDefectGrid(Control parent) {
 
