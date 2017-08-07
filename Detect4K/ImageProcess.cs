@@ -10,6 +10,7 @@ namespace Detect4K {
 
         static HDevEngine m_engine;
         static HDevProgram m_program;
+        public static string ErrorMessage;
         
         public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image) {
 
@@ -48,17 +49,18 @@ namespace Detect4K {
                     dict[name] = call.GetOutputCtrlParamTuple(i);
                 }
                 return dict;
-
             }
             catch (Exception ex) {
 
                 //
-                Config.Log.Error(string.Format("ImageProcess: {0}: {1}\n{2}", process, ex.Message, ex.StackTrace));
+                ErrorMessage = string.Format("ImageProcess: {0}: {1}\n{2}", process, ex.Message, ex.StackTrace);
+
+                //
+                Config.Log.Error(ErrorMessage);
                 return null;
             }
 
         }
-
         public static bool DetectTab(HImage image, out double[] x, out double[] y1, out double[] y2) {
 
             //
@@ -77,6 +79,12 @@ namespace Detect4K {
             x = data["OutX"].ToDArr();
             y1 = data["OutY1"].ToDArr();
             y2 = data["OutY2"].ToDArr();
+
+            //
+            if (x.Length == 0) return false;
+            if (y1.Length == 0) return false;
+            if (y2.Length == 0) return false;
+
             return true;
 
         }
@@ -96,6 +104,7 @@ namespace Detect4K {
             //  
             x1 = data["OutX1"];
             x2 = data["OutX2"];
+
             return true;
 
         }
@@ -115,6 +124,11 @@ namespace Detect4K {
             //
             x = data["OutX"].ToDArr();
             y = data["OutY"].ToDArr();
+
+            //
+            if (x.Length == 0) return false;
+            if (y.Length == 0) return false;
+            
             return true;
         }
         public static bool DetectDefectFast(HImage image) {
@@ -145,6 +159,13 @@ namespace Detect4K {
             y = data["OutY"].ToDArr();
             w = data["OutW"].ToDArr();
             h = data["OutH"].ToDArr();
+
+            //
+            if (x.Length == 0) return false;
+            if (y.Length == 0) return false;
+            if (w.Length == 0) return false;
+            if (h.Length == 0) return false;
+
             return true;
         }
 

@@ -37,9 +37,13 @@
             this.rtoolCfgApp = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolCfgShare = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolCfgInner = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolDebug = new System.Windows.Forms.ToolStripMenuItem();
             this.hwin = new HalconDotNet.HWindowControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.checkReplay = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbFrameCurrent = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -48,9 +52,7 @@
             this.trackSpeed = new System.Windows.Forms.TrackBar();
             this.tbFrameStart = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbFrameCurrent = new System.Windows.Forms.TextBox();
-            this.checkReplay = new System.Windows.Forms.CheckBox();
+            this.rtoolDebugClear = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -100,6 +102,7 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rtoolInfo,
+            this.rtoolDebug,
             this.toolStripSeparator1,
             this.rtoolTab,
             this.rtoolEA,
@@ -109,66 +112,75 @@
             this.rtoolCfgShare,
             this.rtoolCfgInner});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 170);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 214);
             // 
             // rtoolInfo
             // 
             this.rtoolInfo.Name = "rtoolInfo";
-            this.rtoolInfo.Size = new System.Drawing.Size(129, 22);
+            this.rtoolInfo.Size = new System.Drawing.Size(152, 22);
             this.rtoolInfo.Text = "Info";
             this.rtoolInfo.Click += new System.EventHandler(this.rtoolInfo_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // rtoolTab
             // 
             this.rtoolTab.Name = "rtoolTab";
-            this.rtoolTab.Size = new System.Drawing.Size(129, 22);
+            this.rtoolTab.Size = new System.Drawing.Size(152, 22);
             this.rtoolTab.Text = "TAB";
             this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
             // 
             // rtoolEA
             // 
             this.rtoolEA.Name = "rtoolEA";
-            this.rtoolEA.Size = new System.Drawing.Size(129, 22);
+            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
             this.rtoolEA.Text = "EA";
             this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
             // 
             // rtoolDefect
             // 
             this.rtoolDefect.Name = "rtoolDefect";
-            this.rtoolDefect.Size = new System.Drawing.Size(129, 22);
+            this.rtoolDefect.Size = new System.Drawing.Size(152, 22);
             this.rtoolDefect.Text = "Defect";
             this.rtoolDefect.Click += new System.EventHandler(this.rtoolDefect_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(126, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // rtoolCfgApp
             // 
             this.rtoolCfgApp.Name = "rtoolCfgApp";
-            this.rtoolCfgApp.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgApp.Size = new System.Drawing.Size(152, 22);
             this.rtoolCfgApp.Text = "CfgApp";
             this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
             // 
             // rtoolCfgShare
             // 
             this.rtoolCfgShare.Name = "rtoolCfgShare";
-            this.rtoolCfgShare.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgShare.Size = new System.Drawing.Size(152, 22);
             this.rtoolCfgShare.Text = "CfgShare";
             this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
             // 
             // rtoolCfgInner
             // 
             this.rtoolCfgInner.Name = "rtoolCfgInner";
-            this.rtoolCfgInner.Size = new System.Drawing.Size(129, 22);
+            this.rtoolCfgInner.Size = new System.Drawing.Size(152, 22);
             this.rtoolCfgInner.Text = "CfgInner";
             this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
+            // 
+            // rtoolDebug
+            // 
+            this.rtoolDebug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rtoolDebugClear});
+            this.rtoolDebug.Name = "rtoolDebug";
+            this.rtoolDebug.Size = new System.Drawing.Size(152, 22);
+            this.rtoolDebug.Text = "Debug";
+            this.rtoolDebug.Click += new System.EventHandler(this.rtoolDebug_Click);
             // 
             // hwin
             // 
@@ -225,6 +237,33 @@
             this.splitContainer2.Size = new System.Drawing.Size(563, 783);
             this.splitContainer2.SplitterDistance = 105;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // checkReplay
+            // 
+            this.checkReplay.AutoSize = true;
+            this.checkReplay.Location = new System.Drawing.Point(411, 71);
+            this.checkReplay.Name = "checkReplay";
+            this.checkReplay.Size = new System.Drawing.Size(120, 16);
+            this.checkReplay.TabIndex = 15;
+            this.checkReplay.Text = "完成后，重头播放";
+            this.checkReplay.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(364, 47);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(41, 12);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "当前帧";
+            // 
+            // tbFrameCurrent
+            // 
+            this.tbFrameCurrent.Enabled = false;
+            this.tbFrameCurrent.Location = new System.Drawing.Point(411, 44);
+            this.tbFrameCurrent.Name = "tbFrameCurrent";
+            this.tbFrameCurrent.Size = new System.Drawing.Size(140, 21);
+            this.tbFrameCurrent.TabIndex = 13;
             // 
             // label2
             // 
@@ -287,10 +326,10 @@
             this.trackSpeed.Value = 3;
             this.trackSpeed.Scroll += new System.EventHandler(this.trackSpeed_Scroll);
             // 
-            // tbStartFrame
+            // tbFrameStart
             // 
             this.tbFrameStart.Location = new System.Drawing.Point(411, 17);
-            this.tbFrameStart.Name = "tbStartFrame";
+            this.tbFrameStart.Name = "tbFrameStart";
             this.tbFrameStart.Size = new System.Drawing.Size(140, 21);
             this.tbFrameStart.TabIndex = 8;
             // 
@@ -300,32 +339,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // label3
+            // rtoolDebugClear
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(364, 47);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 12);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "当前帧";
-            // 
-            // tbFrameCurrent
-            // 
-            this.tbFrameCurrent.Enabled = false;
-            this.tbFrameCurrent.Location = new System.Drawing.Point(411, 44);
-            this.tbFrameCurrent.Name = "tbFrameCurrent";
-            this.tbFrameCurrent.Size = new System.Drawing.Size(140, 21);
-            this.tbFrameCurrent.TabIndex = 13;
-            // 
-            // checkReplay
-            // 
-            this.checkReplay.AutoSize = true;
-            this.checkReplay.Location = new System.Drawing.Point(411, 71);
-            this.checkReplay.Name = "checkReplay";
-            this.checkReplay.Size = new System.Drawing.Size(120, 16);
-            this.checkReplay.TabIndex = 15;
-            this.checkReplay.Text = "完成后，重头播放";
-            this.checkReplay.UseVisualStyleBackColor = true;
+            this.rtoolDebugClear.Name = "rtoolDebugClear";
+            this.rtoolDebugClear.Size = new System.Drawing.Size(152, 22);
+            this.rtoolDebugClear.Text = "Clear";
+            this.rtoolDebugClear.Click += new System.EventHandler(this.rtoolDebugClear_Click);
             // 
             // FormDetect4K
             // 
@@ -380,6 +399,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbFrameCurrent;
         private System.Windows.Forms.CheckBox checkReplay;
+        private System.Windows.Forms.ToolStripMenuItem rtoolDebug;
+        private System.Windows.Forms.ToolStripMenuItem rtoolDebugClear;
     }
 }
 

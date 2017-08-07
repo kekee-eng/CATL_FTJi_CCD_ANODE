@@ -243,9 +243,10 @@ namespace Detect4K {
             OpenFileDialog ofd = new OpenFileDialog();
             if(ofd.ShowDialog() == DialogResult.OK) {
                 Config.App.CameraZipFile = ofd.FileName;
-
+                tbFrameStart.Text = "1";
                 btnGrabRestart_Click(null, null);
             }
+
         }
         private void btnGrabRestart_Click(object sender, EventArgs e) {
             init_device();
@@ -274,6 +275,7 @@ namespace Detect4K {
                     case 1: ViewerChart.SyncTabGrid(dataGridView1, record.InnerDetect); break;
                     case 2: ViewerChart.SyncEAGrid(dataGridView1, record.InnerDetect); break;
                     case 3: ViewerChart.SyncDefectGrid(dataGridView1, record.InnerDetect); break;
+                    case 4: dataGridView1.Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;break;
                 }
             }
         }
@@ -283,6 +285,7 @@ namespace Detect4K {
             gridMode = -1;
 
             this.splitContainer1.Panel1.Controls.Remove(dataGridView1);
+            dataGridView1.ContextMenuStrip = null;
             dataGridView1.Dispose();
             dataGridView1 = null;
 
@@ -334,10 +337,29 @@ namespace Detect4K {
             ViewerChart.InitDefectGrid(dataGridView1, viewer.InnerImage.MoveToDefect );
             gridMode = 3;
         }
+        private void rtoolDebug_Click(object sender, EventArgs e) {
+
+            createNewGrid();
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn() { Width = 500, HeaderText = "" });
+            dataGridView1.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridView1.Rows.Add("");
+            dataGridView1.Rows[0].Height = 500;
+            dataGridView1.Rows[0].Cells[0].Value = "";
+
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            dataGridView1.RowsDefaultCellStyle.WrapMode = (DataGridViewTriState.True);
+
+            gridMode = 4;
+        }
+        private void rtoolDebugClear_Click(object sender, EventArgs e) {
+            ImageProcess.ErrorMessage = "";
+        }
 
         private void trackSpeed_Scroll(object sender, EventArgs e) {
             Config.App.CameraFpsControl = trackSpeed.Value / 10.0;
             device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
         }
+
     }
 }
