@@ -71,16 +71,13 @@ namespace Detect4K {
 
         }
         
-        public static void SafeRun(Action act, Action<string> errHandle = null) {
+        public static void SafeRun(Action act) {
 
             try {
                 act();
             }
             catch (Exception ex) {
-
-                var msg = string.Format("{0}\n{1}", ex.Message, ex.StackTrace);
-                Static.Log.Error(msg);
-                errHandle?.Invoke(msg);
+                Log.Error(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
             }
         }
 

@@ -53,12 +53,11 @@ namespace Detect4K {
                     while (!isQuit) {
 
                         Thread.Sleep(10);
-                        if (device.InnerCamera == null)
-                            continue;
 
-                        double refFps = device.InnerCamera.isRun ? device.InnerCamera.m_fpsRealtime : 10;
-                        this.record.InnerViewerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
-
+                        Static.SafeRun(() => {
+                            double refFps = device.InnerCamera.isRun ? device.InnerCamera.m_fpsRealtime : 10;
+                            this.record.InnerViewerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
+                        });
                     };
 
                 }));
@@ -68,13 +67,15 @@ namespace Detect4K {
 
                     do {
 
-                        List<DataGrab> ret1 = null;
-                        if (this.record.Transaction(() => {
-                            ret1 = this.record.InnerGrab.Save();
-                            this.record.InnerDetect.Save();
-                        })) {
-                            ret1.AsParallel().ForAll(x => x.IsStore = true);
-                        }
+                        Static.SafeRun(() => {
+                            List<DataGrab> ret1 = null;
+                            if (this.record.Transaction(() => {
+                                ret1 = this.record.InnerGrab.Save();
+                                this.record.InnerDetect.Save();
+                            })) {
+                                ret1.AsParallel().ForAll(x => x.IsStore = true);
+                            }
+                        });
 
                         Thread.Sleep(500);
                     } while (!isQuit);
@@ -125,14 +126,23 @@ namespace Detect4K {
         }
         void init_record() {
 
+            string path = Static.FolderRecord + "01.db";
+
             //
-            System.IO.File.Delete(Static.FolderRecord + "01.db");
+            record?.Close();
+            while (System.IO.File.Exists(path)) {
+                Thread.Sleep(100);
+                Static.SafeRun(() => System.IO.File.Delete(path));
+            }
+
+            //
             record = new ModRecord();
-            record.Open(Static.FolderRecord + "01.db");
+            record.Open(path);
             record.Init();
 
             record.InnerViewerImage.Init(hwin);
         }
+        
         Dictionary<string, Func<object>> getMonitor() {
 
             //
@@ -243,6 +253,7 @@ namespace Detect4K {
         }
         private void btnGrabRestart_Click(object sender, EventArgs e) {
             init_device();
+            init_record();
             record.InnerDetect.Discard();
             device.InnerCamera.m_frameStart = Static.ParamApp.CameraStartFrame;
             device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;

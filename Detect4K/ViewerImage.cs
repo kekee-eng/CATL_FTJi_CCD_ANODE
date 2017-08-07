@@ -190,12 +190,14 @@ namespace Detect4K {
             addSp(rtContext);
             var rtContextEA = addItem(rtContext, "EA分割线");
             var rtContextTab = addItem(rtContext, "极耳位置");
-            var rtContextWidth = addItem(rtContext, "测宽检测结果");
+            var rtContextWidth = addItem(rtContext, "宽度检测结果");
             var rtContextDefect = addItem(rtContext, "瑕疵检测结果");
             var rtContextLabel = addItem(rtContext, "打标位置");
             addSp(rtContext);
-            var rtContextCross = addItem(rtContext, "定位准星");
-            var rtContextFrame = addItem(rtContext, "帧分割");
+            var rtContextCross = addItem(rtContext, "显示定位准星");
+            var rtContextPosFrame = addItem(rtContext, "显示帧位置");
+            var rtContextPosWidth = addItem(rtContext, "显示宽度检测范围");
+            var rtContextPosMark = addItem(rtContext, "显示Mask检测范围");
 
             //
             var rtLocFrameText = new ToolStripTextBox();
@@ -230,7 +232,9 @@ namespace Detect4K {
             bindItem(rtContextDefect, b => showContextDefect = b);
             bindItem(rtContextLabel, b => showContextLabel = b);
             bindItem(rtContextCross, b => showContextCross = b);
-            bindItem(rtContextFrame, b => showContextFrame = b);
+            bindItem(rtContextPosFrame, b => showContextPosFrame = b);
+            bindItem(rtContextPosWidth, b => showContextPosWidth = b);
+            bindItem(rtContextPosMark, b => showContextPosMark = b);
 
             bindItem(rtEnableUser, b => mouseAllow = !(targetAllow = !b));
 
@@ -246,6 +250,9 @@ namespace Detect4K {
             rtContextDef2.CheckedChanged += (o, e) => {
                 bool b = (o as ToolStripMenuItem).Checked;
                 rtContextCross.Checked = b;
+                rtContextPosFrame.Checked = b;
+                rtContextPosWidth.Checked = b;
+                rtContextPosMark.Checked = b;
             };
             rtEnableUser.CheckedChanged += (o, e) => {
                 bool b = (o as ToolStripMenuItem).Checked;
@@ -562,6 +569,35 @@ namespace Detect4K {
                         g.WriteString(string.Format("EA=#{0}", tab.EA));
 
                     }
+
+                    if (showContextPosWidth) {
+
+                        g.SetDraw("margin");
+                        g.SetColor("pink");
+                        g.SetLineWidth(1);
+                        g.DispLine(getPixRow(tab.WidthY1), getPixCol(0), getPixRow(tab.WidthY1), getPixCol(1));
+                        g.DispLine(getPixRow(tab.WidthY2), getPixCol(0), getPixRow(tab.WidthY2), getPixCol(1));
+
+                        double dx = (tab.WidthY2 - tab.WidthY1) * grabHeight / grabWidth;
+                        for (double xp = 0; xp < 1 + dx; xp += 0.05) {
+                            g.DispLine(getPixRow(tab.WidthY1), getPixCol(xp), getPixRow(tab.WidthY2), getPixCol(xp - dx));
+                        }
+                    }
+
+                    if (showContextPosMark) {
+
+                        g.SetDraw("margin");
+                        g.SetColor("light blue");
+                        g.SetLineWidth(1);
+                        g.DispLine(getPixRow(tab.MarkY1), getPixCol(0), getPixRow(tab.MarkY1), getPixCol(1));
+                        g.DispLine(getPixRow(tab.MarkY2), getPixCol(0), getPixRow(tab.MarkY2), getPixCol(1));
+
+                        double dx = (tab.MarkY2 - tab.MarkY1) * grabHeight / grabWidth;
+                        for (double xp = -dx; xp < 1 ; xp += 0.05) {
+                            g.DispLine(getPixRow(tab.MarkY1), getPixCol(xp), getPixRow(tab.MarkY2), getPixCol(xp + dx));
+                        }
+                    }
+
                 }
             }
 
@@ -605,21 +641,29 @@ namespace Detect4K {
                 g.SetDraw("margin");
                 g.SetColor("red");
                 g.SetLineWidth(1);
-
                 g.DispLine(pixRow1, pixCol0, pixRow2, pixCol0);
                 g.DispLine(pixRow0, pixCol1, pixRow0, pixCol2);
+                
+                g.SetDraw("margin");
+                g.SetColor("yellow");
+                g.SetLineWidth(1);
+                g.SetTposition((int)pixRow0, (int)pixCol0);
+                g.WriteString(string.Format("{0:0.000}, {1:0.000}", frameVx, frameVy));
 
             }
 
             //帧分割
-            if (showContextFrame) {
+            if (showContextPosFrame) {
                 for (int i = frameStart; i <= frameEnd; i++) {
 
                     g.SetDraw("margin");
                     g.SetColor("violet");
                     g.SetLineWidth(1);
-
                     g.DispLine(getPixRow(i), pixCol1, getPixRow(i), pixCol2);
+                    
+                    g.SetLineWidth(1);
+                    g.SetTposition((int)getPixRow(i), 0);
+                    g.WriteString(string.Format("[{0}]", i));
 
                 }
             }
@@ -658,7 +702,9 @@ namespace Detect4K {
         bool showContextDefect = false;
         bool showContextLabel = false;
         bool showContextCross = false;
-        bool showContextFrame = false;
+        bool showContextPosFrame = false;
+        bool showContextPosWidth = false;
+        bool showContextPosMark = false;
 
         int countShowLabel = 0;
         int countShowDefect = 0;

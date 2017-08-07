@@ -201,10 +201,7 @@ CfgParamSelf    BLOB
                 data.TabY1_P = frame + ay1[1] / h;
                 data.TabY2_P = frame + ay2[1] / h;
             }
-
-            data.MarkX = data.TabX;
-            data.MarkY = data.TabY1;
-
+            
             //是否新极耳
             bool isNewData = true;
             if (Tabs.Count > 0) {
@@ -290,9 +287,14 @@ CfgParamSelf    BLOB
             double[] cx, cy;
             double cfy1 = data.TabY1 + param.EAStart / Fy;
             double cfy2 = data.TabY1 + param.EAEnd / Fy;
+
+            //
+            data.MarkY1 = cfy1;
+            data.MarkY2 = cfy2;
+
             var cimage = grab.GetImage(cfy1, cfy2);
             if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
-
+                
                 //将最后一个极耳放到下个EA中
                 data.IsNewEA = true;
                 data.MarkX = data.MarkX_P = cx[0] / w;

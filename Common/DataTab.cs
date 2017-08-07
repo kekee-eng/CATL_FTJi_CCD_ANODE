@@ -31,6 +31,9 @@ namespace Common {
         public bool IsDistDiffFail;
         public bool IsHeightFail;
 
+        public double MarkY1;
+        public double MarkY2;
+
         public double MarkX; //EA起始处
         public double MarkY; 
         public double MarkX_P; //另一对Mark孔
@@ -54,6 +57,9 @@ namespace Common {
         
         //
         public bool InRange(double start, double end) {
+
+            if (TAB == 0)
+                return false;
 
             var list = new double[] { TabY1, TabY2, TabY1_P, TabY2_P, WidthY1, WidthY2, MarkY, MarkY_P }.TakeWhile(x => x > 0);
             double min = list.Min();

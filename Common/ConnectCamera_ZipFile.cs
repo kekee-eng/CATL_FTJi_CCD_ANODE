@@ -260,8 +260,18 @@ namespace Common {
         public bool isRun = false;
         public bool isStopOk = false;
 
-        public int Min { get { return m_datas?.Count > 0 ? m_datas.Keys.Min() : 0; } }
-        public int Max { get { return m_datas?.Count > 0 ? m_datas.Keys.Max() : 0; } }
+        public int Min {
+            get {
+                try { return m_datas.Keys.Min(); }
+                catch { return 0; }
+            }
+        }
+        public int Max { 
+            get {
+                try { return m_datas.Keys.Max(); }
+                catch { return 0; }
+            }
+        }
 
         public int m_frame = 0;
         public int m_frameStart = 0;

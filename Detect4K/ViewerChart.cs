@@ -128,9 +128,17 @@ namespace Detect4K {
         public void SyncTabGrid(Control parent) {
 
             var grid = girdParentGet(parent);
-            for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++) {
-                if (Detect.Tabs[i].TAB != 0)
+
+            if (Detect.Tabs.Count >= grid.Rows.Count) {
+
+                if (grid.Rows.Count != 0)
+                    grid.Rows.RemoveAt(0);
+
+                for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
                     addTabGrid(grid, Detect.Tabs[i]);
+            }
+            else {
+                grid.Rows.Clear();
             }
 
         }
@@ -181,13 +189,17 @@ namespace Detect4K {
 
             var grid = girdParentGet(parent);
             int eaCount = Detect.EACount;
-            int gridCount = grid.Rows.Count;
-            if (gridCount < eaCount) {
+            if (eaCount >= grid.Rows.Count) {
+                if (grid.Rows.Count != 0)
+                    grid.Rows.RemoveAt(0);
 
                 var EAs = Detect.EAs;
-                for (int i = gridCount; i < eaCount; i++)
+                for (int i = grid.Rows.Count; i < eaCount; i++)
                     addEAGrid(grid, EAs[i]);
 
+            }
+            else {
+                grid.Rows.Clear();
             }
 
         }
@@ -229,9 +241,14 @@ namespace Detect4K {
         public void SyncDefectGrid(Control parent) {
 
             var grid = girdParentGet(parent);
-            for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
-                addDefectGrid(grid, Detect.Defects[i]);
 
+            if (Detect.Defects.Count >= grid.Rows.Count) {
+                for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
+                    addDefectGrid(grid, Detect.Defects[i]);
+            }
+            else {
+                grid.Rows.Clear();
+            }
         }
 
         //UnTest
