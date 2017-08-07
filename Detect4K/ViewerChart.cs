@@ -123,7 +123,7 @@ namespace Detect4K {
             //
             grid.CurrentCellChanged += (o, e) => {
                 if (grid.CurrentCell != null) {
-                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex);
+                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex-1);
                 }
             };
 
@@ -186,7 +186,7 @@ namespace Detect4K {
             //
             grid.CurrentCellChanged += (o, e) => {
                 if (grid.CurrentCell != null) {
-                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex);
+                    ImageViewer.MoveToTAB(grid.Rows.Count - grid.CurrentCell.RowIndex-1);
                 }
             };
 
@@ -242,7 +242,7 @@ namespace Detect4K {
             //
             grid.CurrentCellChanged += (o, e) => {
                 if (grid.CurrentCell != null) {
-                    ImageViewer.MoveToDefect(grid.Rows.Count - grid.CurrentCell.RowIndex);
+                    ImageViewer.MoveToDefect(grid.Rows.Count - grid.CurrentCell.RowIndex -1);
                 }
             };
         }

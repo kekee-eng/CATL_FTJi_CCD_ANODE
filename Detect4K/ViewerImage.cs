@@ -138,12 +138,15 @@ namespace Detect4K {
             if (!mouseAllow) return;
 
             Static.SafeRun(() => {
-                if (id >= 0 && id < Detect.Defects.Count - 1) {
+                if (id >= 0 && id <= Detect.Defects.Count - 1) {
                     var obj = Detect.Defects[id];
 
-                    double s = Math.Max(obj.W, obj.H * grabHeight / refGrabHeight) * 1.2;
+                    double sx = obj.W;
+                    double sy = obj.H * grabHeight / refGrabHeight;
+
+                    double s = Math.Max(sx, sy)*1.3;
                     s = Math.Min(s, 2);
-                    s = Math.Max(s, 0.005);
+                    s = Math.Max(s, 0.04);
 
                     SetCenterTarget(obj.Y, obj.X, s);
                     MoveTargetDirect();
@@ -623,10 +626,10 @@ namespace Detect4K {
                         g.SetColor("red");
                         g.SetLineWidth(1);
                         g.DispRectangle1(
-                            getPixRow(def.Y - def.H / 2) - offs,
-                            getPixCol(def.X - def.W / 2) - offs,
-                            getPixRow(def.Y + def.H / 2) + offs,
-                            getPixCol(def.X + def.W / 2) + offs);
+                            getPixRow(def.Y - def.H / 2 * 1.1),
+                            getPixCol(def.X - def.W / 2 * 1.1),
+                            getPixRow(def.Y + def.H / 2 * 1.1),
+                            getPixCol(def.X + def.W / 2 * 1.1));
 
                     }
                 }
@@ -657,7 +660,7 @@ namespace Detect4K {
                 g.SetColor("yellow");
                 g.SetLineWidth(1);
                 g.SetTposition((int)pixRow0, (int)pixCol0);
-                g.WriteString(string.Format("{0:0.000}, {1:0.000}", frameVx, frameVy));
+                g.WriteString(string.Format("{0:0.000}, {1:0.000}, {2:0.000}", frameVy, frameVx, frameVs));
 
             }
 
