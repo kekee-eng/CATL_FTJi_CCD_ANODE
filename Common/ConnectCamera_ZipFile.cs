@@ -96,10 +96,7 @@ namespace Common {
                         m_datas[data.Frame] = data;
                     }
                 }
-
-                //
-                m_frame = m_frameReset;
-
+                
                 //
                 isReady = true;
 
@@ -227,7 +224,7 @@ namespace Common {
         //
         public void Reset() {
             if (!isRun) {
-                m_frame = m_frameReset;
+                m_frame = m_frameStart;
             }
         }
         public void Stop() {
@@ -267,7 +264,7 @@ namespace Common {
         public int Max { get { return m_datas?.Count > 0 ? m_datas.Keys.Max() : 0; } }
 
         public int m_frame = 0;
-        public int m_frameReset = 0;
+        public int m_frameStart = 0;
         public double m_fpsControl = 1.0;
         public double m_fpsRealtime = 0.0;
 

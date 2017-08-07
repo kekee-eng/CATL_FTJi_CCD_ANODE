@@ -27,8 +27,10 @@ namespace Detect4K {
         //显示参数
         public string CameraZipFile = "";
         public double CameraFpsControl = 10;
-        public int CameraFrameReset = 1;
+        public int CameraStartFrame = 1;
 
+        //
+        public bool ProcessReload = true;
     }
 
 }

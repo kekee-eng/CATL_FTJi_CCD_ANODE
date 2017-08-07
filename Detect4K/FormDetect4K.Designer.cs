@@ -32,6 +32,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rtoolTab = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolEA = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtoolDefect = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.rtoolCfgApp = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolCfgShare = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,11 +40,17 @@
             this.hwin = new HalconDotNet.HWindowControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnLoadFile = new System.Windows.Forms.Button();
             this.btnGrabRestart = new System.Windows.Forms.Button();
+            this.trackSpeed = new System.Windows.Forms.TrackBar();
+            this.tbFrameStart = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.rtoolDefect = new System.Windows.Forms.ToolStripMenuItem();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbFrameCurrent = new System.Windows.Forms.TextBox();
+            this.checkReplay = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -55,6 +62,7 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGrabStop
@@ -101,57 +109,64 @@
             this.rtoolCfgShare,
             this.rtoolCfgInner});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 192);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 170);
             // 
             // rtoolInfo
             // 
             this.rtoolInfo.Name = "rtoolInfo";
-            this.rtoolInfo.Size = new System.Drawing.Size(152, 22);
+            this.rtoolInfo.Size = new System.Drawing.Size(129, 22);
             this.rtoolInfo.Text = "Info";
             this.rtoolInfo.Click += new System.EventHandler(this.rtoolInfo_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
             // 
             // rtoolTab
             // 
             this.rtoolTab.Name = "rtoolTab";
-            this.rtoolTab.Size = new System.Drawing.Size(152, 22);
+            this.rtoolTab.Size = new System.Drawing.Size(129, 22);
             this.rtoolTab.Text = "TAB";
             this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
             // 
             // rtoolEA
             // 
             this.rtoolEA.Name = "rtoolEA";
-            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
+            this.rtoolEA.Size = new System.Drawing.Size(129, 22);
             this.rtoolEA.Text = "EA";
             this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
+            // 
+            // rtoolDefect
+            // 
+            this.rtoolDefect.Name = "rtoolDefect";
+            this.rtoolDefect.Size = new System.Drawing.Size(129, 22);
+            this.rtoolDefect.Text = "Defect";
+            this.rtoolDefect.Click += new System.EventHandler(this.rtoolDefect_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(126, 6);
             // 
             // rtoolCfgApp
             // 
             this.rtoolCfgApp.Name = "rtoolCfgApp";
-            this.rtoolCfgApp.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgApp.Size = new System.Drawing.Size(129, 22);
             this.rtoolCfgApp.Text = "CfgApp";
             this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
             // 
             // rtoolCfgShare
             // 
             this.rtoolCfgShare.Name = "rtoolCfgShare";
-            this.rtoolCfgShare.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgShare.Size = new System.Drawing.Size(129, 22);
             this.rtoolCfgShare.Text = "CfgShare";
             this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
             // 
             // rtoolCfgInner
             // 
             this.rtoolCfgInner.Name = "rtoolCfgInner";
-            this.rtoolCfgInner.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgInner.Size = new System.Drawing.Size(129, 22);
             this.rtoolCfgInner.Text = "CfgInner";
             this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
             // 
@@ -163,9 +178,9 @@
             this.hwin.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwin.Location = new System.Drawing.Point(0, 0);
             this.hwin.Name = "hwin";
-            this.hwin.Size = new System.Drawing.Size(563, 723);
+            this.hwin.Size = new System.Drawing.Size(563, 674);
             this.hwin.TabIndex = 7;
-            this.hwin.WindowSize = new System.Drawing.Size(563, 723);
+            this.hwin.WindowSize = new System.Drawing.Size(563, 674);
             // 
             // splitContainer1
             // 
@@ -195,14 +210,39 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.checkReplay);
+            this.splitContainer2.Panel1.Controls.Add(this.label3);
+            this.splitContainer2.Panel1.Controls.Add(this.tbFrameCurrent);
+            this.splitContainer2.Panel1.Controls.Add(this.label2);
+            this.splitContainer2.Panel1.Controls.Add(this.label1);
             this.splitContainer2.Panel1.Controls.Add(this.flowLayoutPanel1);
+            this.splitContainer2.Panel1.Controls.Add(this.trackSpeed);
+            this.splitContainer2.Panel1.Controls.Add(this.tbFrameStart);
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.hwin);
             this.splitContainer2.Size = new System.Drawing.Size(563, 783);
-            this.splitContainer2.SplitterDistance = 56;
+            this.splitContainer2.SplitterDistance = 105;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(364, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "起始帧";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(25, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "速度";
             // 
             // flowLayoutPanel1
             // 
@@ -210,10 +250,9 @@
             this.flowLayoutPanel1.Controls.Add(this.btnGrabRestart);
             this.flowLayoutPanel1.Controls.Add(this.btnGrabStart);
             this.flowLayoutPanel1.Controls.Add(this.btnGrabStop);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 53);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(563, 56);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(339, 34);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
             // btnLoadFile
@@ -236,18 +275,57 @@
             this.btnGrabRestart.UseVisualStyleBackColor = true;
             this.btnGrabRestart.Click += new System.EventHandler(this.btnGrabRestart_Click);
             // 
+            // trackSpeed
+            // 
+            this.trackSpeed.Location = new System.Drawing.Point(60, 12);
+            this.trackSpeed.Maximum = 300;
+            this.trackSpeed.Minimum = 3;
+            this.trackSpeed.Name = "trackSpeed";
+            this.trackSpeed.Size = new System.Drawing.Size(236, 45);
+            this.trackSpeed.TabIndex = 10;
+            this.trackSpeed.TickFrequency = 10;
+            this.trackSpeed.Value = 3;
+            this.trackSpeed.Scroll += new System.EventHandler(this.trackSpeed_Scroll);
+            // 
+            // tbStartFrame
+            // 
+            this.tbFrameStart.Location = new System.Drawing.Point(411, 17);
+            this.tbFrameStart.Name = "tbStartFrame";
+            this.tbFrameStart.Size = new System.Drawing.Size(140, 21);
+            this.tbFrameStart.TabIndex = 8;
+            // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // rtoolDefect
+            // label3
             // 
-            this.rtoolDefect.Name = "rtoolDefect";
-            this.rtoolDefect.Size = new System.Drawing.Size(152, 22);
-            this.rtoolDefect.Text = "Defect";
-            this.rtoolDefect.Click += new System.EventHandler(this.rtoolDefect_Click);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(364, 47);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(41, 12);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "当前帧";
+            // 
+            // tbFrameCurrent
+            // 
+            this.tbFrameCurrent.Enabled = false;
+            this.tbFrameCurrent.Location = new System.Drawing.Point(411, 44);
+            this.tbFrameCurrent.Name = "tbFrameCurrent";
+            this.tbFrameCurrent.Size = new System.Drawing.Size(140, 21);
+            this.tbFrameCurrent.TabIndex = 13;
+            // 
+            // checkReplay
+            // 
+            this.checkReplay.AutoSize = true;
+            this.checkReplay.Location = new System.Drawing.Point(411, 71);
+            this.checkReplay.Name = "checkReplay";
+            this.checkReplay.Size = new System.Drawing.Size(120, 16);
+            this.checkReplay.TabIndex = 15;
+            this.checkReplay.Text = "完成后，重头播放";
+            this.checkReplay.UseVisualStyleBackColor = true;
             // 
             // FormDetect4K
             // 
@@ -264,10 +342,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.trackSpeed)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -293,6 +373,13 @@
         private System.Windows.Forms.ToolStripMenuItem rtoolCfgInner;
         private System.Windows.Forms.Button btnLoadFile;
         private System.Windows.Forms.ToolStripMenuItem rtoolDefect;
+        private System.Windows.Forms.TextBox tbFrameStart;
+        private System.Windows.Forms.TrackBar trackSpeed;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbFrameCurrent;
+        private System.Windows.Forms.CheckBox checkReplay;
     }
 }
 

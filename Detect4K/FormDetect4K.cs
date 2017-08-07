@@ -34,6 +34,9 @@ namespace Detect4K {
                 viewer.InnerImage.MoveTargetDirect();
 
             });
+
+            Config.App.BindTextBox(tbFrameStart, "CameraStartFrame");
+            trackSpeed.Value = (int)(Config.App.CameraFpsControl * 10);
         }
 
         void init_form() {
@@ -116,10 +119,9 @@ namespace Detect4K {
             };
             device.InnerCamera.OnComplete += () => {
 
-                //
-                device.InnerCamera.Stop();
-                device.InnerCamera.Reset();
-                device.InnerCamera.Start();
+                if (checkReplay.Checked) {
+                    btnGrabRestart_Click(null, null);
+                }
             };
             
         }
@@ -158,7 +160,7 @@ namespace Detect4K {
             monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isReady;
             monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isRun;
             monitor["Inner_Grab_Frame"] = () => device.InnerCamera.m_frame;
-            monitor["Inner_Grab_FrameReset"] = () => device.InnerCamera.m_frameReset;
+            monitor["Inner_Grab_FrameReset"] = () => device.InnerCamera.m_frameStart;
             monitor["Inner_Grab_FrameMax"] = () => device.InnerCamera.Max;
             monitor["Inner_Grab_FpsControl"] = () => device.InnerCamera.m_fpsControl;
             monitor["Inner_Grab_FpsRealtime"] = () => device.InnerCamera.m_fpsRealtime;
@@ -181,7 +183,7 @@ namespace Detect4K {
             monitor["Inner_Viewer"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Viewer_showImageStatic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageStatic");
             monitor["Inner_Viewer_showImageDynamic"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showImageDynamic");
-            monitor["Inner_Viewer_showContextEA"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextEA");
+            monitor["Inner_Viewer_showContextMark"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextMark");
             monitor["Inner_Viewer_showContextTab"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextTab");
             monitor["Inner_Viewer_showContextWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextWidth");
             monitor["Inner_Viewer_showContextNG"] = () => UtilTool.AutoInfo.GetPrivateValue(viewer.InnerImage, "showContextNG");
@@ -247,13 +249,13 @@ namespace Detect4K {
         }
         private void btnGrabRestart_Click(object sender, EventArgs e) {
             init_device();
-            //record.InnerDetect.Discard();
-            device.InnerCamera.m_frame = Config.App.CameraFrameReset;
+            record.InnerDetect.Discard();
+            device.InnerCamera.m_frameStart = Config.App.CameraStartFrame;
             device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
+            device.InnerCamera.Reset();
             device.InnerCamera.Start();
         }
         private void btnGrabStart_Click(object sender, EventArgs e) {
-            device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
             device.InnerCamera.Start();
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
@@ -263,6 +265,8 @@ namespace Detect4K {
         private void timer1_Tick(object sender, EventArgs e) {
 
             if (IsHandleCreated && !IsDisposed) {
+
+                tbFrameCurrent.Text = string.Format("{0} / {1}", device.InnerCamera.m_frame, device.InnerCamera.Max);
 
                 switch (gridMode) {
                     default: break;
@@ -330,6 +334,10 @@ namespace Detect4K {
             ViewerChart.InitDefectGrid(dataGridView1, viewer.InnerImage.MoveToDefect );
             gridMode = 3;
         }
-        
+
+        private void trackSpeed_Scroll(object sender, EventArgs e) {
+            Config.App.CameraFpsControl = trackSpeed.Value / 10.0;
+            device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
+        }
     }
 }

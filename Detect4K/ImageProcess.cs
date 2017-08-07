@@ -10,21 +10,23 @@ namespace Detect4K {
 
         static HDevEngine m_engine;
         static HDevProgram m_program;
-
-        public static bool Init(string program) {
-
-            if (m_engine == null)
-                m_engine = new HDevEngine();
-
-            if (m_program == null)
-                m_program = new HDevProgram(program);
-
-            return true;
-        }
+        
         public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image) {
 
             try {
 
+                //
+                if (m_engine == null)
+                    m_engine = new HDevEngine();
+
+                if (m_program == null)
+                    m_program = new HDevProgram(Config.PathImageProcess);
+
+                if(Config.App.ProcessReload) {
+                    m_program.Dispose();
+                    m_program = new HDevProgram(Config.PathImageProcess);
+                }
+                
                 //
                 var procedure = new HDevProcedure();
                 procedure.LoadProcedure(m_program, process);
@@ -66,6 +68,11 @@ namespace Detect4K {
             var data = TemplateProcess("DetectTab", image);
             if (data == null) return false;
 
+            //
+            if (!data.Keys.Contains("OutX")) return false;
+            if (!data.Keys.Contains("OutY1")) return false;
+            if (!data.Keys.Contains("OutY2")) return false;
+
             //  
             x = data["OutX"].ToDArr();
             y1 = data["OutY1"].ToDArr();
@@ -82,6 +89,10 @@ namespace Detect4K {
             var data = TemplateProcess("DetectWidth", image);
             if (data == null) return false;
 
+            //
+            if (!data.Keys.Contains("OutX1")) return false;
+            if (!data.Keys.Contains("OutX2")) return false;
+
             //  
             x1 = data["OutX1"];
             x2 = data["OutX2"];
@@ -97,7 +108,11 @@ namespace Detect4K {
             var data = TemplateProcess("DetectMark", image);
             if (data == null) return false;
 
-            //  
+            //
+            if (!data.Keys.Contains("OutX")) return false;
+            if (!data.Keys.Contains("OutY")) return false;
+
+            //
             x = data["OutX"].ToDArr();
             y = data["OutY"].ToDArr();
             return true;
@@ -118,6 +133,12 @@ namespace Detect4K {
             //
             var data = TemplateProcess("DetectDefectDeep", image);
             if (data == null) return false;
+
+            //
+            if (!data.Keys.Contains("OutX")) return false;
+            if (!data.Keys.Contains("OutY")) return false;
+            if (!data.Keys.Contains("OutW")) return false;
+            if (!data.Keys.Contains("OutH")) return false;
 
             //  
             x = data["OutX"].ToDArr();

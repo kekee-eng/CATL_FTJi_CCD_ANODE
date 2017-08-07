@@ -35,7 +35,7 @@ namespace Detect4K {
         public static void Init() {
 
             //
-            if (true) {
+            if (false) {
                 Action<string> DelFile = x => {
                     if (System.IO.File.Exists(x))
                         System.IO.File.Delete(x);
@@ -60,9 +60,7 @@ namespace Detect4K {
 
             //
             Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);
-
-            //
-            ImageProcess.Init(PathImageProcess);
+            
         }
         public static void Uninit() {
 
