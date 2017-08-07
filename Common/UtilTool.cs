@@ -17,12 +17,12 @@ namespace Common {
 
         public class Debug {
 
-            public static long TimeCounting(Action act) {
+            public static int TimeCounting(Action act) {
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
                 act();
                 watch.Stop();
-                return watch.ElapsedMilliseconds;
+                return (int)watch.ElapsedMilliseconds;
             }
 
         }

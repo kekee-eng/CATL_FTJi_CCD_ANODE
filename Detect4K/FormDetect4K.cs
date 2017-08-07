@@ -64,7 +64,7 @@ namespace Detect4K {
 
                 //线程：写数据库
                 var tWriteDB = Task.Run((Action)(() => {
-
+                    
                     do {
 
                         Static.SafeRun(() => {
@@ -160,6 +160,13 @@ namespace Detect4K {
             monitor["App_MemoryLoad"] = () => string.Format("{0:0.0} M", UtilPerformance.GetMemoryLoad());
             monitor["App_CpuCount"] = () => UtilPerformance.GetCpuCount();
             monitor["App_CpuLoad"] = () => string.Format("{0:0.00} %", UtilPerformance.GetCpuLoad());
+
+            monitor["ImageProcess"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["ImageProcess_DetectTab"] = () => ImageProcess.TimeDetectTab;
+            monitor["ImageProcess_DetectWidth"] = () => ImageProcess.TimeDetectWidth;
+            monitor["ImageProcess_DetectMark"] = () => ImageProcess.TimeDetectMark;
+            monitor["ImageProcess_DetectDefect"] = () => ImageProcess.TimeDetectDefect;
+
 
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.InnerCamera, "m_filename");

@@ -1,4 +1,5 @@
-﻿using HalconDotNet;
+﻿using Common;
+using HalconDotNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace Detect4K {
         static HDevProgram m_program;
         public static string ErrorMessage;
         
+        public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image, out int time) {
+
+            Dictionary<string, HTuple> call = null;
+            time = UtilTool.Debug.TimeCounting(() => call = TemplateProcess(process, image));
+            return call;
+
+        }
         public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image) {
 
             try {
@@ -68,7 +76,7 @@ namespace Detect4K {
             x = y1 = y2 = null;
 
             //
-            var data = TemplateProcess("DetectTab", image);
+            var data = TemplateProcess("DetectTab", image, out TimeDetectTab);
             if (data == null) return false;
             
             if (!data.Keys.Contains("OutHasDefect")) return false;
@@ -94,7 +102,7 @@ namespace Detect4K {
             x1 = x2 = null;
 
             //
-            var data = TemplateProcess("DetectWidth", image);
+            var data = TemplateProcess("DetectWidth", image, out TimeDetectWidth);
             if (data == null) return false;
             
             //  
@@ -114,7 +122,7 @@ namespace Detect4K {
             x = y = null;
 
             //
-            var data = TemplateProcess("DetectMark", image);
+            var data = TemplateProcess("DetectMark", image, out TimeDetectMark);
             if (data == null) return false;
 
             //
@@ -137,7 +145,7 @@ namespace Detect4K {
             x = y = w = h = null;
 
             //
-            var data = TemplateProcess("DetectDefect", image);
+            var data = TemplateProcess("DetectDefect", image, out TimeDetectDefect);
             if (data == null) return false;
             
             //  
@@ -154,6 +162,12 @@ namespace Detect4K {
 
             return true;
         }
+
+        public static int TimeDetectTab = 0;
+        public static int TimeDetectWidth = 0;
+        public static int TimeDetectMark = 0;
+        public static int TimeDetectDefect = 0;
+
 
     }
 }
