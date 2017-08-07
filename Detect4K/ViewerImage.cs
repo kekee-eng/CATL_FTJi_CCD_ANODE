@@ -229,6 +229,8 @@ namespace Detect4K {
             var rtMeasure = addItem(rtMenu, "测量工具");
             var rtMeasureLocPoint = addItem(rtMeasure, "定位点坐标");
             var rtMeasurePPDist = addItem(rtMeasure, "点到点测距");
+            var rtMeasureRect = addItem(rtMeasure, "方框测范围");
+            var rtMeasurePolygon = addItem(rtMeasure, "多边形测面积");
 
             //
             bindItem(rtImageStatic, b => rtImageDynamic.Checked = !(showImageStatic = b));
@@ -350,15 +352,65 @@ namespace Detect4K {
                 g.SetDraw("margin");
                 g.SetColor("green");
                 g.SetLineWidth(2);
-                g.DispArrow(y1, x1, y2, x2, 10);
-                g.DispArrow(y2, x2, y1, x1, 10);
+                g.DispArrow(y1, x1, y2, x2, dist/20);
+                g.DispArrow(y2, x2, y1, x1, dist/20);
 
                 g.SetColor("yellow");
                 g.SetTposition((int)((y1 + y2) / 2), (int)((x1 + x2) / 2));
-                g.WriteString(dist.ToString("0.000"));
+                g.WriteString(dist.ToString("0.000") + "mm");
 
                 mouseAllow = true;
 
+            };
+            rtMeasureRect.Click += (o, e) => {
+
+                mouseAllow = false;
+
+                double x1 = pixCol1 + (pixCol2 - pixCol1) / 4;
+                double x2 = pixCol2 - (pixCol2 - pixCol1) / 4;
+                double y1 = pixRow1 + (pixRow2 - pixRow1) / 4;
+                double y2 = pixRow2 - (pixRow2 - pixRow1) / 4;
+
+                g.SetDraw("margin");
+                g.SetColor("red");
+                g.SetLineWidth(2);
+                g.DrawRectangle1Mod(y1, x1, y2, x2, out y1, out x1, out y2, out x2);
+
+                double dx = (x2 - x1) * Detect.Fx / grabWidth;
+                double dy = (y2 - y1) * Detect.Fy / grabHeight;
+                
+                g.SetDraw("margin");
+                g.SetColor("green");
+                g.SetLineWidth(2);
+                g.DispRectangle1(y1, x1, y2, x2);
+
+                g.SetColor("yellow");
+                g.SetTposition((int)y1, (int)x1);
+                g.WriteString(string.Format("{0:0.000}*{1:0.000}mm", dx, dy));
+                
+                mouseAllow = true;
+            };
+            rtMeasurePolygon.Click += (o, e) => {
+
+                mouseAllow = false;
+
+                g.SetDraw("margin");
+                g.SetColor("red");
+                g.SetLineWidth(2);
+                var hg = g.DrawRegion();
+
+                double area = hg.Area * Detect.Fx / grabWidth * Detect.Fy / grabHeight;
+
+                g.SetDraw("margin");
+                g.SetColor("green");
+                g.SetLineWidth(2);
+                g.DispRegion(hg);
+
+                g.SetColor("yellow");
+                g.SetTposition((int)hg.Row.D, (int)hg.Column.D);
+                g.WriteString(string.Format("{0:0.000}mm2", area));
+
+                mouseAllow = true;
             };
 
             //
