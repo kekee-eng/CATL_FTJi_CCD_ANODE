@@ -34,8 +34,8 @@ namespace Detect4K {
 
             }));
 
-            Config.App.BindTextBox(tbFrameStart, "CameraStartFrame");
-            trackSpeed.Value = (int)(Config.App.CameraFpsControl * 10);
+            Static.ParamApp.BindTextBox(tbFrameStart, "CameraStartFrame");
+            trackSpeed.Value = (int)(Static.ParamApp.CameraFpsControl * 10);
             //rtoolDebug_Click(null, null);
         }
 
@@ -104,7 +104,7 @@ namespace Detect4K {
             //
             //string prefix = (HalconDotNet.HalconAPI.isWindows ? "D:/" : "/media/fra/DATA/");
             //device.InnerCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2B][20170728][125247-130642][1283][F1-F1283].zip");
-            device.InnerCamera = new ConnectCamera_ZipFile(Config.App.CameraZipFile);
+            device.InnerCamera = new ConnectCamera_ZipFile(Static.ParamApp.CameraZipFile);
 
             device.InnerCamera.OnImageReady += obj => {
 
@@ -126,9 +126,9 @@ namespace Detect4K {
         void init_record() {
 
             //
-            System.IO.File.Delete(Config.FolderRecord + "01.db");
+            System.IO.File.Delete(Static.FolderRecord + "01.db");
             record = new ModRecord();
-            record.Open(Config.FolderRecord + "01.db");
+            record.Open(Static.FolderRecord + "01.db");
             record.Init();
 
             record.InnerViewerImage.Init(hwin);
@@ -235,7 +235,7 @@ namespace Detect4K {
 
             OpenFileDialog ofd = new OpenFileDialog();
             if(ofd.ShowDialog() == DialogResult.OK) {
-                Config.App.CameraZipFile = ofd.FileName;
+                Static.ParamApp.CameraZipFile = ofd.FileName;
                 tbFrameStart.Text = "1";
                 btnGrabRestart_Click(null, null);
             }
@@ -244,8 +244,8 @@ namespace Detect4K {
         private void btnGrabRestart_Click(object sender, EventArgs e) {
             init_device();
             record.InnerDetect.Discard();
-            device.InnerCamera.m_frameStart = Config.App.CameraStartFrame;
-            device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
+            device.InnerCamera.m_frameStart = Static.ParamApp.CameraStartFrame;
+            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
             device.InnerCamera.Reset();
             device.InnerCamera.Start();
         }
@@ -294,13 +294,13 @@ namespace Detect4K {
         }
 
         private void rtoolCfgApp_Click(object sender, EventArgs e) {
-            viewerInit(-1, x => Config.App.BindDataGridView(ViewerChart.gridParentInit(x)));
+            viewerInit(-1, x => Static.ParamApp.BindDataGridView(ViewerChart.gridParentInit(x)));
         }
         private void rtoolCfgShare_Click(object sender, EventArgs e) {
-            viewerInit(-1, x => Config.ParamShare.BindDataGridView(ViewerChart.gridParentInit(x)));
+            viewerInit(-1, x => Static.ParamShare.BindDataGridView(ViewerChart.gridParentInit(x)));
         }
         private void rtoolCfgInner_Click(object sender, EventArgs e) {
-            viewerInit(-1, x => Config.ParamInner.BindDataGridView(ViewerChart.gridParentInit(x)));
+            viewerInit(-1, x => Static.ParamInner.BindDataGridView(ViewerChart.gridParentInit(x)));
         }
 
         private void rtoolDebug_Click(object sender, EventArgs e) {
@@ -326,8 +326,8 @@ namespace Detect4K {
         }
 
         private void trackSpeed_Scroll(object sender, EventArgs e) {
-            Config.App.CameraFpsControl = trackSpeed.Value / 10.0;
-            device.InnerCamera.m_fpsControl = Config.App.CameraFpsControl;
+            Static.ParamApp.CameraFpsControl = trackSpeed.Value / 10.0;
+            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
         }
 
     }

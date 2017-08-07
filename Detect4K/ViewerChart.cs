@@ -128,8 +128,10 @@ namespace Detect4K {
         public void SyncTabGrid(Control parent) {
 
             var grid = girdParentGet(parent);
-            for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
-                addTabGrid(grid, Detect.Tabs[i]);
+            for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++) {
+                if (Detect.Tabs[i].TAB != 0)
+                    addTabGrid(grid, Detect.Tabs[i]);
+            }
 
         }
 

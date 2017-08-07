@@ -74,8 +74,7 @@ namespace Detect4K {
                     frameVs += targetDs * precent;
                 }
 
-                try { updateView(); }
-                catch { }
+                Static.SafeRun(updateView);
             }
         }
         public void MoveTargetDirect() {
@@ -106,7 +105,6 @@ namespace Detect4K {
 
             SetCenterTarget(frame);
             MoveTargetDirect();
-
         }
         public void MoveToEA(int idEa) {
             MoveToTAB(idEa, 1);
@@ -114,30 +112,35 @@ namespace Detect4K {
         public void MoveToTAB(int idEa, int idTab) {
             if (!mouseAllow) return;
 
-            var obj = Detect.Tabs.Find(x => x.EA == idEa && x.TAB == idTab);
-            if (obj != null) MoveToFrame(obj.TabY1);
-
+            Static.SafeRun(() => {
+                var obj = Detect.Tabs.Find(x => x.EA == idEa && x.TAB == idTab);
+                if (obj != null) MoveToFrame(obj.TabY1);
+            });
         }
         public void MoveToTAB(int id) {
             if (!mouseAllow) return;
 
-            var obj = Detect.Tabs.Find(x => x.ID == id);
-            if (obj != null) MoveToFrame(obj.TabY1);
+            Static.SafeRun(() => {
+                var obj = Detect.Tabs.Find(x => x.ID == id);
+                if (obj != null) MoveToFrame(obj.TabY1);
+            });
 
         }
         public void MoveToDefect(int id) {
             if (!mouseAllow) return;
 
-            if (id >= 0 && id < Detect.Defects.Count - 1) {
-                var obj = Detect.Defects[id];
+            Static.SafeRun(() => {
+                if (id >= 0 && id < Detect.Defects.Count - 1) {
+                    var obj = Detect.Defects[id];
 
-                double s = Math.Max(obj.W, obj.H * grabHeight / refGrabHeight) * 1.2;
-                s = Math.Min(s, 2);
-                s = Math.Max(s, 0.005);
+                    double s = Math.Max(obj.W, obj.H * grabHeight / refGrabHeight) * 1.2;
+                    s = Math.Min(s, 2);
+                    s = Math.Max(s, 0.005);
 
-                SetCenterTarget(obj.Y, obj.X, s);
-                MoveTargetDirect();
-            }
+                    SetCenterTarget(obj.Y, obj.X, s);
+                    MoveTargetDirect();
+                }
+            });
         }
 
         //
@@ -354,12 +357,9 @@ namespace Detect4K {
         void initEvent(HWindowControl hwindow) {
 
             //
-            hwindow.SizeChanged += (o, e) => {
+            hwindow.SizeChanged += (o, e) => Static.SafeRun(updateView);
 
-                try { updateView(); }
-                catch { }
-
-            };
+            //
             hwindow.HInitWindow += (o, e) => {
                 g.SetWindowParam("background_color", "cyan");
                 g.ClearWindow();

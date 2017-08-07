@@ -21,11 +21,11 @@ namespace Detect4K {
                     m_engine = new HDevEngine();
 
                 if (m_program == null)
-                    m_program = new HDevProgram(Config.PathImageProcess);
+                    m_program = new HDevProgram(Static.PathImageProcess);
 
-                if(Config.App.ProcessReload) {
+                if(Static.ParamApp.ProcessReload) {
                     m_program.Dispose();
-                    m_program = new HDevProgram(Config.PathImageProcess);
+                    m_program = new HDevProgram(Static.PathImageProcess);
                 }
                 
                 //
@@ -56,7 +56,7 @@ namespace Detect4K {
                 ErrorMessage = string.Format("ImageProcess: {0}: {1}\n{2}", process, ex.Message, ex.StackTrace);
 
                 //
-                Config.Log.Error(ErrorMessage);
+                Static.Log.Error(ErrorMessage);
                 return null;
             }
 

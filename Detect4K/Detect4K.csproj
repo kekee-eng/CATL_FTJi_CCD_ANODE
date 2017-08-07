@@ -63,7 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CfgApp.cs" />
+    <Compile Include="CfgParamApp.cs" />
     <Compile Include="CfgParamShare.cs" />
     <Compile Include="CfgParamSelf.cs" />
     <Compile Include="EntryDetect.cs" />

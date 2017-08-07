@@ -58,12 +58,8 @@ namespace Detect4K {
 
         //
         public HImage GetImage(int i) {
-            try {
-                return this[i].Image;
-            }
-            catch {
-                return null;
-            }
+            try { return this[i].Image; }
+            catch { return null; }
         }
         public HImage GetImage(int start, int end) {
 

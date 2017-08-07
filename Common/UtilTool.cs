@@ -101,9 +101,7 @@ namespace Common {
                     hwindow.HalconWindow.SetPart(0, 0, h1, w1);
                     hwindow.HalconWindow.DispImage(himg);
                 }
-                catch {
-
-                }
+                catch {   }
             }
 
         }

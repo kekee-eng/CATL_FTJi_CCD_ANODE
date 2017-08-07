@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Detect4K {
 
-    class CfgApp : Common.TemplateConfig {
-        public CfgApp(string path) : base(path) { }
+    class CfgParamApp : Common.TemplateConfig {
+        public CfgParamApp(string path) : base(path) { }
 
         //运行模式：相机仿真、记录回溯
         public bool ModeByCamera = true;

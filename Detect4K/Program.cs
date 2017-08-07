@@ -14,13 +14,13 @@ namespace Detect4K {
         [STAThread]
         static void Main() {
             
-            Config.Init();
+            Static.Init();
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDetect4K());
 
-            Config.Uninit();
+            Static.Uninit();
         }
     }
 }

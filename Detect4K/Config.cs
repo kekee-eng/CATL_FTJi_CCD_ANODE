@@ -11,7 +11,7 @@ using System.IO;
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace Detect4K {
 
-    class Config {
+    class Static {
 
         public static string Root { get { return AppDomain.CurrentDomain.BaseDirectory; } }
 
@@ -25,7 +25,7 @@ namespace Detect4K {
         public static string PathCfgOuter { get { return FolderCfg + "cfg_outer.xml"; } }
         public static string PathImageProcess { get { return FolderCfg + "image_process.hdev"; } }
 
-        public static CfgApp App;
+        public static CfgParamApp ParamApp;
         public static CfgParamShare ParamShare;
         public static CfgParamSelf ParamInner;
         public static CfgParamSelf ParamOuter;
@@ -47,13 +47,13 @@ namespace Detect4K {
             }
 
             //
-            App = new CfgApp(PathCfgApp);
+            ParamApp = new CfgParamApp(PathCfgApp);
             ParamShare = new CfgParamShare(PathCfgParam);
             ParamInner = new CfgParamSelf(PathCfgInner);
             ParamOuter = new CfgParamSelf(PathCfgOuter);
 
             //
-            App.Save();
+            ParamApp.Save();
             ParamShare.Save();
             ParamInner.Save();
             ParamOuter.Save();
@@ -64,13 +64,25 @@ namespace Detect4K {
         }
         public static void Uninit() {
 
-            App.Save();
+            ParamApp.Save();
             ParamShare.Save();
             ParamInner.Save();
             ParamOuter.Save();
 
         }
+        
+        public static void SafeRun(Action act, Action<string> errHandle = null) {
 
+            try {
+                act();
+            }
+            catch (Exception ex) {
+
+                var msg = string.Format("{0}\n{1}", ex.Message, ex.StackTrace);
+                Static.Log.Error(msg);
+                errHandle?.Invoke(msg);
+            }
+        }
 
     }
 }

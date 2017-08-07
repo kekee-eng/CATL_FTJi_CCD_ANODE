@@ -12,21 +12,21 @@ namespace Detect4K {
         public void Init() {
 
             //
-            if(Config.App.ModeByRecord) {
+            if(Static.ParamApp.ModeByRecord) {
                 //记录回溯模式
             }
             else {
                 //仿真模式
-                if(Config.App.CameraByRealtime) {
+                if(Static.ParamApp.CameraByRealtime) {
                     //使用实时相机取图
                 }
-                else if(Config.App.CameraByZipFile) {
+                else if(Static.ParamApp.CameraByZipFile) {
                     //从Zip文件取图
                 }
-                else if(Config.App.CameraByFolder) {
+                else if(Static.ParamApp.CameraByFolder) {
                     //从文件夹取图
                 }
-                else if(Config.App.CameraByDB) {
+                else if(Static.ParamApp.CameraByDB) {
                     //从数据库中取图
                 }
             }

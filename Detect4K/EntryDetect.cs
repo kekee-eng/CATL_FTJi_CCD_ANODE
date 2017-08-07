@@ -78,35 +78,42 @@ CfgParamSelf    BLOB
         public List<DataDefect> Defects = new List<DataDefect>();
         public List<DataLabel> Labels = new List<DataLabel>();
 
-        public int EACount { get { return Tabs.Select(x => x.EA).Distinct().Count(); } }
+        public int EACount {
+            get {
+                int ret = 0;
+                Static.SafeRun(() => ret = Tabs.Select(x => x.EA).Distinct().Count());
+                return ret;
+            }
+        }
         public List<DataEA> EAs {
             get {
                 List<DataEA> objs = new List<DataEA>();
 
-                var ids = Tabs.Select(x => x.EA).Distinct().OrderBy(x => x);
+                Static.SafeRun(() => {
+                    var ids = Tabs.TakeWhile(x => x.TAB != 0).Select(x => x.EA).Distinct().OrderBy(x => x);
+                    foreach (var id in ids) {
 
-                foreach (var id in ids) {
+                        DataEA obj = new DataEA();
+                        obj.EA = id;
+                        obj.TabCount = Tabs.Count(x => x.EA == id);
+                        obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
+                        obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
+                        obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
+                        obj.IsTabCountFail = obj.TabCount != param.TabCount;
+                        obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > param.TabWidthCount;
+                        obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > param.TabHeightCount;
+                        obj.IsTabDistFailCountFail = obj.TabDistFailCount > param.TabDistCount;
 
-                    DataEA obj = new DataEA();
-                    obj.EA = id;
-                    obj.TabCount = Tabs.Count(x => x.EA == id);
-                    obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
-                    obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
-                    obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
-                    obj.IsTabCountFail = obj.TabCount != param.TabCount;
-                    obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > param.TabWidthCount;
-                    obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > param.TabHeightCount;
-                    obj.IsTabDistFailCountFail = obj.TabDistFailCount > param.TabDistCount;
+                        var firstER = Tabs.Find(x => x.EA == id && x.TAB == 1);
+                        if (firstER == null)
+                            throw new Exception("DetectResult: GetEA");
 
-                    var firstER = Tabs.Find(x => x.EA == id && x.TAB == 1);
-                    if (firstER == null)
-                        throw new Exception("DetectResult: GetEA");
+                        obj.EAX = firstER.MarkX;
+                        obj.EAY = firstER.MarkY;
 
-                    obj.EAX = firstER.MarkX;
-                    obj.EAY = firstER.MarkY;
-
-                    objs.Add(obj);
-                }
+                        objs.Add(obj);
+                    }
+                });
 
                 return objs;
             }
@@ -125,7 +132,17 @@ CfgParamSelf    BLOB
         }
 
         int defectCount = 0;
+        bool statuPrev = false;
         public bool TryDetect(int frame) {
+
+            bool statuCurr = tryDetect(frame);
+            if(!statuCurr && statuPrev ) {
+                adjustER();
+            }
+            statuPrev = statuCurr;
+            return statuCurr;
+        }
+        bool tryDetect(int frame) {
 
             //
             int w = grab.Width;
@@ -247,10 +264,7 @@ CfgParamSelf    BLOB
                         nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
                         nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
                     }
-
-                    nearTab.ValHeight = (nearTab.TabY2 - nearTab.TabY1) * Fy;
-                    nearTab.IsHeightFail = nearTab.ValHeight < param.TabHeightMin || nearTab.ValHeight > param.TabHeightMax;
-
+                    
                     //
                     isNewData = false;
                 }
@@ -294,9 +308,6 @@ CfgParamSelf    BLOB
 
             //
             Tabs.Add(data);
-            adjustER();
-
-            //
             return true;
         }
 
