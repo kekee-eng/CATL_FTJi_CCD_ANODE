@@ -109,20 +109,25 @@ namespace Detect4K {
 
             device.InnerCamera.OnImageReady += obj => {
 
-                //线程1：内侧相机取图、处理
-                //
-                record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerDetect.TryDetect(obj.Frame);
-                
-                record.InnerViewerImage.SetBottomTarget(obj.Frame);
+                Static.SafeRun(() => {
+                    //线程1：内侧相机取图、处理
+                    //
+                    record.InnerGrab.Cache[obj.Frame] = obj;
+                    record.InnerDetect.TryDetect(obj.Frame);
+
+                    record.InnerViewerImage.SetBottomTarget(obj.Frame);
+                });
+
             };
             device.InnerCamera.OnComplete += () => {
 
-                if (checkReplay.Checked) {
-                    btnGrabRestart_Click(null, null);
-                }
+                Static.SafeRun(() => {
+                    if (checkReplay.Checked) {
+                        btnGrabRestart_Click(null, null);
+                    }
+                });
             };
-            
+
         }
         void init_record() {
 
