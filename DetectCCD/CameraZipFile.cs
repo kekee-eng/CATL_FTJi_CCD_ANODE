@@ -221,19 +221,6 @@ namespace DetectCCD {
                 m_frame = m_frameStart;
             }
         }
-        public override void Freeze() {
-            if (isGrabbing) {
-                isGrabbing = false;
-                while (!isQuit && !isStopOk && m_frame != Max) {
-                    Thread.Sleep(10);
-                }
-            }
-        }
-        public override void Grab() {
-            if (!isGrabbing) {
-                isGrabbing = true;
-            }
-        }
         public override void Dispose() {
             isGrabbing = false;
             isQuit = true;
@@ -242,6 +229,19 @@ namespace DetectCCD {
             if (m_zipfile != null)
                 m_zipfile.Dispose();
 
+        }
+        public override void Grab() {
+            if (!isGrabbing) {
+                isGrabbing = true;
+            }
+        }
+        public override void Freeze() {
+            if (isGrabbing) {
+                isGrabbing = false;
+                while (!isQuit && !isStopOk && m_frame != Max) {
+                    Thread.Sleep(10);
+                }
+            }
         }
         public override int getMin() { return m_datas.Keys.Min(); }
         public override int getMax() { return m_datas.Keys.Max(); }

@@ -85,7 +85,8 @@
     <Compile Include="CfgParamApp.cs" />
     <Compile Include="CfgParamShare.cs" />
     <Compile Include="CfgParamSelf.cs" />
-    <Compile Include="ConnectCamera_Realtime.cs" />
+    <Compile Include="CameraRealtime.cs" />
+    <Compile Include="ZZConnectCamera_Realtime.cs" />
     <Compile Include="CameraZipFile.cs" />
     <Compile Include="DataDefect.cs" />
     <Compile Include="DataEA.cs" />
