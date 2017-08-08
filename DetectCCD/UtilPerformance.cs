@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace DetectCCD {
 
+    using System;
     using System.Diagnostics;
     using System.Management;
 
