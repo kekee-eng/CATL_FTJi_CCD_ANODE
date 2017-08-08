@@ -300,6 +300,7 @@ namespace DetectCCD {
                     case 2: record.InnerViewerChart.SyncEAGrid(panelForViewer); break;
                     case 3: record.InnerViewerChart.SyncDefectGrid(panelForViewer); break;
                     case 4: ViewerChart.parentGetGrid(panelForViewer).Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;break;
+                    case 5: record.InnerViewerChart.SyncTabChart(panelForViewer); break;
                 }
             }
         }
@@ -357,20 +358,47 @@ namespace DetectCCD {
         }
 
         private void rtoolTABChart_Click(object sender, EventArgs e) {
-
+            viewerInit(5, record.InnerViewerChart.InitTabChart);
+            widthToolStripMenuItem_Click(widthToolStripMenuItem, null);
         }
 
         private void widthToolStripMenuItem_Click(object sender, EventArgs e) {
+            widthToolStripMenuItem.Checked = false;
+            sizeToolStripMenuItem.Checked = false;
+            distanceDiffToolStripMenuItem.Checked = false;
+            distanceToolStripMenuItem.Checked = false;
+            (sender as ToolStripMenuItem).Checked = true;
 
+            record.InnerViewerChart.SelectTabChart(panelForViewer, 0);
         }
         private void sizeToolStripMenuItem_Click(object sender, EventArgs e) {
+            widthToolStripMenuItem.Checked = false;
+            sizeToolStripMenuItem.Checked = false;
+            distanceDiffToolStripMenuItem.Checked = false;
+            distanceToolStripMenuItem.Checked = false;
+            (sender as ToolStripMenuItem).Checked = true;
 
+            record.InnerViewerChart.SelectTabChart(panelForViewer, 1);
         }
         private void distanceToolStripMenuItem_Click(object sender, EventArgs e) {
+            widthToolStripMenuItem.Checked = false;
+            sizeToolStripMenuItem.Checked = false;
+            distanceDiffToolStripMenuItem.Checked = false;
+            distanceToolStripMenuItem.Checked = false;
+            (sender as ToolStripMenuItem).Checked = true;
 
+            record.InnerViewerChart.SelectTabChart(panelForViewer, 2);
         }
         private void distanceDiffToolStripMenuItem_Click(object sender, EventArgs e) {
+            widthToolStripMenuItem.Checked = false;
+            sizeToolStripMenuItem.Checked = false;
+            distanceDiffToolStripMenuItem.Checked = false;
+            distanceToolStripMenuItem.Checked = false;
+            (sender as ToolStripMenuItem).Checked = true;
 
+            record.InnerViewerChart.SelectTabChart(panelForViewer, 3);
         }
+        
+
     }
 }
