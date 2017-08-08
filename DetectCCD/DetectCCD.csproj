@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DetectCCD</RootNamespace>
+    <AssemblyName>DetectCCD</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseIntermediateOutputPath>..\..\build\Temp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BaseIntermediateOutputPath>..\..\build\Temp\obj\$(AssemblyName)\$(ConfigurationName)\</BaseIntermediateOutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\build\Bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DALSA.SaperaLT.SapClassBasic, Version=8.30.0.1809, Culture=neutral, PublicKeyToken=4d8604101dcb6b58, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\DALSA.SaperaLT.SapClassBasic.dll</HintPath>
+    </Reference>
+    <Reference Include="hdevenginedotnetxl, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\hdevenginedotnetxl.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="halcondotnetxl">
+      <HintPath>..\..\build\Bin\halcondotnetxl.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\build\Bin\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="ZedGraph, Version=5.1.5.15371, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Bin\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CfgParamApp.cs" />
+    <Compile Include="CfgParamShare.cs" />
+    <Compile Include="CfgParamSelf.cs" />
+    <Compile Include="ConnectCamera_Realtime.cs" />
+    <Compile Include="ConnectCamera_ZipFile.cs" />
+    <Compile Include="DataDefect.cs" />
+    <Compile Include="DataEA.cs" />
+    <Compile Include="DataGrab.cs" />
+    <Compile Include="DataLabel.cs" />
+    <Compile Include="DataTab.cs" />
+    <Compile Include="EntryDetect.cs" />
+    <Compile Include="EntryGrab.cs" />
+    <Compile Include="ImageProcess.cs" />
+    <Compile Include="TemplateCamera.cs" />
+    <Compile Include="TemplateConfig.cs" />
+    <Compile Include="TemplateDB.cs" />
+    <Compile Include="UtilPerformance.cs" />
+    <Compile Include="UtilSerialization.cs" />
+    <Compile Include="UtilTool.cs" />
+    <Compile Include="ViewerImage.cs" />
+    <Compile Include="ModRecord.cs" />
+    <Compile Include="ModDevice.cs" />
+    <Compile Include="FormDetectMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDetectMain.Designer.cs">
+      <DependentUpon>FormDetectMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="ViewerChart.cs" />
+    <Compile Include="_ENC7480.cs" />
+    <Compile Include="_ModbusTCP.cs" />
+    <EmbeddedResource Include="FormDetectMain.resx">
+      <DependentUpon>FormDetectMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!--
+  <PropertyGroup>
+    <PostBuildEvent>if "$(RemoteDebugEnabled)"=="false" goto :eof
+set path1="$(TargetDir)"
+set path2="\\$(RemoteDebugMachine)\D\%25path1:~4%25"
+echo ==========================
+echo %25path1%25
+echo %25path2%25
+echo ==========================
+rd /s /q %25path2%25
+mkdir %25path2%25
+copy /y %25path1%25 %25path2%25</PostBuildEvent>
+  </PropertyGroup>
+  -->
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
