@@ -70,6 +70,7 @@ namespace DetectCCD {
             }
 
         }
+
         public static bool DetectTab(HImage image, out bool hasDefect, out bool hasTab, out double[] x, out double[] y1, out double[] y2) {
 
             //

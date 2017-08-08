@@ -15,17 +15,17 @@ namespace DetectCCD {
         static void Main() {
 
             //初始化主题界面
-            UtilTool.Skin.Init();
+            UtilTool.XFSkin.Init();
 
             //显示载入界面
-            UtilTool.WaitForm.OpenStart();
+            UtilTool.XFWait.OpenStart();
 
             //
             Static.Init();
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new XFMain());
+            Application.Run(new XMain());
             //Application.Run(new FormDetect4K());
 
             Static.Uninit();

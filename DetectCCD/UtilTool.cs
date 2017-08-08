@@ -19,15 +19,59 @@ using System.Windows.Forms;
 namespace DetectCCD {
 
     public class UtilTool {
-        
-            public static int TimeCounting(Action act) {
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
-                act();
-                watch.Stop();
-                return (int)watch.ElapsedMilliseconds;
-            }
-            
+
+        public static void AddBuildTag(Control form) {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            var tbuild = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
+
+            string tag = string.Format("~[Version:{6}]~[Build:{0:0000}-{1:00}-{2:00} {3:00}:{4:00}:{5:00}]",
+                tbuild.Year, tbuild.Month, tbuild.Day, tbuild.Hour, tbuild.Minute, tbuild.Second, version.ToString());
+
+#if DEBUG
+            tag += "~[DEBUG]";
+#endif
+            form.Text += tag;
+        }
+
+        //public static void ShowHImage(HWindowControl hwindow, HImage himg) {
+
+        //    if (himg == null)
+        //        return;
+
+        //    try {
+        //        int w, h;
+        //        himg.GetImageSize(out w, out h);
+
+        //        int w0 = hwindow.Width;
+        //        int h0 = hwindow.Height;
+
+        //        double f0 = 1.0 * w0 / h0;
+        //        double f1 = 1.0 * w / h;
+
+        //        int w1, h1;
+        //        if (f0 > f1) {
+        //            h1 = h;
+        //            w1 = (int)(h * f0);
+        //        }
+        //        else {
+        //            w1 = w;
+        //            h1 = (int)(w / f0);
+        //        }
+
+        //        hwindow.HalconWindow.SetPart(0, 0, h1, w1);
+        //        hwindow.HalconWindow.DispImage(himg);
+        //    }
+        //    catch { }
+        //}
+
+        public static int TimeCounting(Action act) {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            act();
+            watch.Stop();
+            return (int)watch.ElapsedMilliseconds;
+        }
+
         public class Image {
 
             [DllImport("kernel32.dll")]
@@ -59,141 +103,95 @@ namespace DetectCCD {
             }
 
         }
-        
-            public static void AddBuildTag(Control form) {
-                var version = Assembly.GetExecutingAssembly().GetName().Version;
-                var tbuild = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
 
-                string tag = string.Format("~[Version:{6}]~[Build:{0:0000}-{1:00}-{2:00} {3:00}:{4:00}:{5:00}]",
-                    tbuild.Year, tbuild.Month, tbuild.Day, tbuild.Hour, tbuild.Minute, tbuild.Second, version.ToString());
+        public class XFSkin {
+            public static void Init() {
+                //窗体虚拟化
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-#if DEBUG
-                tag += "~[DEBUG]";
-#endif
-                form.Text += tag;
+                //注册样式
+                BonusSkins.Register();
+                SkinManager.EnableFormSkins();
             }
-            public static void ShowHImage(HWindowControl hwindow, HImage himg) {
+            public static void SetSkinStyle(string skinName) {
+                UserLookAndFeel.Default.SetSkinStyle(skinName);
+            }
+        }
 
-                if (himg == null)
-                    return;
+        public class XFWait {
+            public static bool isShow = false;
+            public static void OpenStart() {
+                if (isShow) Close();
+                isShow = true;
+                SplashScreenManager.ShowForm(typeof(XFSplashStart));
+            }
+            public static void Open() {
+                if (isShow) Close();
+                isShow = true;
+                SplashScreenManager.ShowForm(typeof(DemoWaitForm));
 
-                try {
-                    int w, h;
-                    himg.GetImageSize(out w, out h);
+                SetTitle("请稍候");
+                SetContext("正在运行中...");
+            }
+            public static void Close() {
+                if (isShow) {
+                    isShow = false;
+                    SplashScreenManager.CloseForm();
+                }
+            }
+            public static void SetTitle(string title) {
+                if (isShow)
+                    SplashScreenManager.Default.SetWaitFormCaption(title);
+            }
+            public static void SetContext(string context) {
+                if (isShow)
+                    SplashScreenManager.Default.SetWaitFormDescription(context);
+            }
+        }
 
-                    int w0 = hwindow.Width;
-                    int h0 = hwindow.Height;
 
-                    double f0 = 1.0 * w0 / h0;
-                    double f1 = 1.0 * w / h;
+        public class FullScreen {
+            public static void Set(Form form, bool fullscreen) {
+                //获取任务栏的句柄
+                Int32 hwnd = FindWindow("Shell_TrayWnd", null);
+                if (hwnd != 0) {
+                    if (fullscreen) {
+                        //隐藏任务栏
+                        ShowWindow(hwnd, SW_HIDE);
 
-                    int w1, h1;
-                    if (f0 > f1) {
-                        h1 = h;
-                        w1 = (int)(h * f0);
+                        //窗体设置
+                        form.FormBorderStyle = FormBorderStyle.None;
+                        form.Bounds = Screen.AllScreens[0].Bounds;
                     }
                     else {
-                        w1 = w;
-                        h1 = (int)(w / f0);
-                    }
+                        //显示任务栏
+                        ShowWindow(hwnd, SW_SHOW);
 
-                    hwindow.HalconWindow.SetPart(0, 0, h1, w1);
-                    hwindow.HalconWindow.DispImage(himg);
-                }
-                catch { }
-            }
+                        //窗体设置
+                        form.FormBorderStyle = FormBorderStyle.Sizable;
 
-            public class Skin {
-                public static void Init() {
-                    //窗体虚拟化
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
-
-                    //注册样式
-                    BonusSkins.Register();
-                    SkinManager.EnableFormSkins();
-                }
-
-                public static void SetSkinStyle(string skinName) {
-                    UserLookAndFeel.Default.SetSkinStyle(skinName);
-                }
-            }
-
-            public class WaitForm {
-                public static bool isShow = false;
-                public static void OpenStart() {
-                    if (isShow) Close();
-                    isShow = true;
-                    SplashScreenManager.ShowForm(typeof(XFSplashStart));
-                }
-                public static void Open() {
-                    if (isShow) Close();
-                    isShow = true;
-                    SplashScreenManager.ShowForm(typeof(DemoWaitForm));
-
-                    SetTitle("请稍候");
-                    SetContext("正在运行中...");
-                }
-                public static void Close() {
-                    if (isShow) {
-                        isShow = false;
-                        SplashScreenManager.CloseForm();
                     }
                 }
-                public static void SetTitle(string title) {
-                    if (isShow)
-                        SplashScreenManager.Default.SetWaitFormCaption(title);
-                }
-                public static void SetContext(string context) {
-                    if (isShow)
-                        SplashScreenManager.Default.SetWaitFormDescription(context);
-                }
             }
+            #region user32.dll
 
+            [DllImport("user32.dll", EntryPoint = "ShowWindow")]
+            static extern Int32 ShowWindow(Int32 hwnd, Int32 nCmdShow);
+            const Int32 SW_SHOW = 5; public const Int32 SW_HIDE = 0;
 
-            public class SetFormFullScreen {
-                public static void Set(Form form, bool fullscreen) {
-                    //获取任务栏的句柄
-                    Int32 hwnd = FindWindow("Shell_TrayWnd", null);
-                    if (hwnd != 0) {
-                        if (fullscreen) {
-                            //隐藏任务栏
-                            ShowWindow(hwnd, SW_HIDE);
+            [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
+            static extern Int32 SystemParametersInfo(Int32 uAction, Int32 uParam, ref Rectangle lpvParam, Int32 fuWinIni);
+            const Int32 SPIF_UPDATEINIFILE = 0x1;
+            const Int32 SPI_SETWORKAREA = 47;
+            const Int32 SPI_GETWORKAREA = 48;
 
-                            //窗体设置
-                            form.FormBorderStyle = FormBorderStyle.None;
-                            form.Bounds = Screen.AllScreens[0].Bounds;
-                        }
-                        else {
-                            //显示任务栏
-                            ShowWindow(hwnd, SW_SHOW);
+            [DllImport("user32.dll", EntryPoint = "FindWindow")]
+            static extern Int32 FindWindow(string lpClassName, string lpWindowName);
 
-                            //窗体设置
-                            form.FormBorderStyle = FormBorderStyle.Sizable;
+            #endregion
+        }
 
-                        }
-                    }
-                }
-
-                #region user32.dll
-
-                [DllImport("user32.dll", EntryPoint = "ShowWindow")]
-                static extern Int32 ShowWindow(Int32 hwnd, Int32 nCmdShow);
-                const Int32 SW_SHOW = 5; public const Int32 SW_HIDE = 0;
-
-                [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
-                static extern Int32 SystemParametersInfo(Int32 uAction, Int32 uParam, ref Rectangle lpvParam, Int32 fuWinIni);
-                const Int32 SPIF_UPDATEINIFILE = 0x1;
-                const Int32 SPI_SETWORKAREA = 47;
-                const Int32 SPI_GETWORKAREA = 48;
-
-                [DllImport("user32.dll", EntryPoint = "FindWindow")]
-                static extern Int32 FindWindow(string lpClassName, string lpWindowName);
-
-                #endregion
-
-            }
-            
         public class AutoInfo {
 
             public static string ValueToString(object val) {

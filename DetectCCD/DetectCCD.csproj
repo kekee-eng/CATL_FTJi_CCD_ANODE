@@ -104,22 +104,34 @@
     <Compile Include="ViewerImage.cs" />
     <Compile Include="ModRecord.cs" />
     <Compile Include="ModDevice.cs" />
-    <Compile Include="FormDetectMain.cs">
+    <Compile Include="XFUserLogin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormDetectMain.Designer.cs">
-      <DependentUpon>FormDetectMain.cs</DependentUpon>
+    <Compile Include="XFUserLogin.Designer.cs">
+      <DependentUpon>XFUserLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XFUserSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XFUserSelect.Designer.cs">
+      <DependentUpon>XFUserSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XMain.Designer.cs">
+      <DependentUpon>XMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ZZFormDetectMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZZFormDetectMain.Designer.cs">
+      <DependentUpon>ZZFormDetectMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ViewerChart.cs" />
-    <Compile Include="XFMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="XFMain.Designer.cs">
-      <DependentUpon>XFMain.cs</DependentUpon>
-    </Compile>
     <Compile Include="XFSplashStart.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,8 +140,17 @@
     </Compile>
     <Compile Include="_ENC7480.cs" />
     <Compile Include="_ModbusTCP.cs" />
-    <EmbeddedResource Include="FormDetectMain.resx">
-      <DependentUpon>FormDetectMain.cs</DependentUpon>
+    <EmbeddedResource Include="XFUserLogin.resx">
+      <DependentUpon>XFUserLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XFUserSelect.resx">
+      <DependentUpon>XFUserSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XMain.resx">
+      <DependentUpon>XMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZZFormDetectMain.resx">
+      <DependentUpon>ZZFormDetectMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -142,9 +163,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="XFMain.resx">
-      <DependentUpon>XFMain.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="XFSplashStart.resx">
       <DependentUpon>XFSplashStart.cs</DependentUpon>
     </EmbeddedResource>

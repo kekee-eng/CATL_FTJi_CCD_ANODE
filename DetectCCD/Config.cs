@@ -60,7 +60,7 @@ namespace DetectCCD {
 
             //
             Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);
-            
+
         }
         public static void Uninit() {
 
@@ -70,14 +70,14 @@ namespace DetectCCD {
             ParamOuter.Save();
 
         }
-        
+
         public static void SafeRun(Action act) {
 
             try {
                 act();
             }
             catch (Exception ex) {
-                Log.Error(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
+                Log.Error(string.Format("Run: {0}\n{1}", ex.Message, ex.StackTrace));
             }
         }
 
