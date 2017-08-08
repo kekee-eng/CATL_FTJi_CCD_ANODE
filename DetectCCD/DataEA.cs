@@ -15,13 +15,15 @@ namespace DetectCCD {
         public int TabWidthFailCount;
         public int TabDistFailCount;
         public int TabHeightFailCount;
+        public int DefectCount;
 
         public bool IsTabCountFail;
         public bool IsTabWidthFailCountFail;
         public bool IsTabDistFailCountFail;
         public bool IsTabHeightFailCountFail;
+        public bool IsDefectCountFail;
 
-        public bool IsFail { get { return IsTabCountFail || IsTabWidthFailCountFail || IsTabDistFailCountFail || IsTabHeightFailCountFail; } }
+        public bool IsFail { get { return IsDefectCountFail || IsTabCountFail || IsTabWidthFailCountFail || IsTabDistFailCountFail || IsTabHeightFailCountFail; } }
 
     }
 }

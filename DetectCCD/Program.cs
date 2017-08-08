@@ -25,7 +25,8 @@ namespace DetectCCD {
 
             var mm = new XMain();
             new XtraForm1(mm).Show();
-            new FormDetect4K(mm.m_device, mm.m_record).Show();
+
+            new XFViewerChart(mm.Device, mm.Record).Show();
 
             Application.Run(mm);
             //Application.Run(new FormDetect4K());

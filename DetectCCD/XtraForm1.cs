@@ -53,13 +53,13 @@ namespace DetectCCD {
         }
 
         private void btnGrabStart_Click(object sender, EventArgs e) {
-            XM.m_device.InnerCamera.Start();
-            XM.m_device.OuterCamera.Start();
+            XM.Device.InnerCamera.Start();
+            XM.Device.OuterCamera.Start();
         }
 
         private void btnGrabStop_Click(object sender, EventArgs e) {
-            XM.m_device.InnerCamera.Stop();
-            XM.m_device.OuterCamera.Stop();
+            XM.Device.InnerCamera.Stop();
+            XM.Device.OuterCamera.Stop();
         }
     }
 }

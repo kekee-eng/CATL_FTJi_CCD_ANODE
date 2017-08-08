@@ -40,8 +40,8 @@ namespace DetectCCD {
 
             //
             isQuit = true;
-            m_record?.Dispose();
-            m_device?.Dispose();
+            Record?.Dispose();
+            Device?.Dispose();
         }
 
 
@@ -155,9 +155,38 @@ namespace DetectCCD {
                 groupOnline.Enabled = isOnline;
                 groupOffline.Enabled = !isOnline;
 
+                //
+                _lc_inner_camera.Text = Device.InnerCamera.m_camera_name;
+                _lc_inner_fps.Text = Device.InnerCamera.m_fpsRealtime.ToString("0.000");
+                _lc_inner_frame.Text = Device.InnerCamera.m_frame.ToString();
+                _lc_inner_isgrabbing.Text = Device.InnerCamera.isRun ? "On" : "Off";
+                _lc_inner_isopen.Text = Device.InnerCamera.isReady ? "On" : "Off";
+                _lc_inner_isgrabbing.ForeColor = Device.InnerCamera.isRun ? Color.Green : Color.Red;
+                _lc_inner_isopen.ForeColor = Device.InnerCamera.isReady ? Color.Green : Color.Red;
+
+                _lc_inner_camera2.Text = Device.InnerCamera.m_camera_name;
+                _lc_inner_eaCount.Text = Record.InnerDetect.EACount.ToString();
+                _lc_inner_widthCount.Text = Record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                _lc_inner_defectCount.Text = Record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+
+                //
+                _lc_outer_camera.Text = Device.OuterCamera.m_camera_name;
+                _lc_outer_fps.Text = Device.OuterCamera.m_fpsRealtime.ToString("0.000");
+                _lc_outer_frame.Text = Device.OuterCamera.m_frame.ToString();
+                _lc_outer_isgrabbing.Text = Device.OuterCamera.isRun ? "On" : "Off";
+                _lc_outer_isopen.Text = Device.OuterCamera.isReady ? "On" : "Off";
+                _lc_outer_isgrabbing.ForeColor = Device.OuterCamera.isRun ? Color.Green : Color.Red;
+                _lc_outer_isopen.ForeColor = Device.OuterCamera.isReady ? Color.Green : Color.Red;
+
+                _lc_outer_camera2.Text = Device.OuterCamera.m_camera_name;
+                _lc_outer_eaCount.Text = Record.OuterDetect.EACount.ToString();
+                _lc_outer_widthCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                _lc_outer_defectCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                
+                
                 //状态栏
                 status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                status_device.ImageIndex = m_device.isRun ? 5 : 4;
+                status_device.ImageIndex = Device.isRun ? 5 : 4;
                 status_memory.Caption = string.Format("内存={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
@@ -172,7 +201,7 @@ namespace DetectCCD {
         }
         private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
             runAction("连接设备", () => {
-                m_device.Open();
+                Device.Open();
             });
         }
         private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
@@ -260,27 +289,27 @@ namespace DetectCCD {
         }
 
 
-        public ModRecord m_record = new ModRecord();
-        public ModDevice m_device = new ModDevice();
+        public ModRecord Record = new ModRecord();
+        public ModDevice Device = new ModDevice();
 
         void init_device() {
 
-            m_record.Init();
+            Record.Init();
 
-            m_record.InnerViewerImage.Init(hwinInner);
-            m_device.InnerCamera.OnImageReady += obj => {
+            Record.InnerViewerImage.Init(hwinInner);
+            Device.InnerCamera.OnImageReady += obj => {
 
-                m_record.InnerGrab.Cache[obj.Frame] = obj;
-                m_record.InnerDetect.TryDetect(obj.Frame);
-                m_record.InnerViewerImage.SetBottomTarget(obj.Frame);
+                Record.InnerGrab.Cache[obj.Frame] = obj;
+                Record.InnerDetect.TryDetect(obj.Frame);
+                Record.InnerViewerImage.SetBottomTarget(obj.Frame);
             };
 
-            m_record.OuterViewerImage.Init(hwinOuter);
-            m_device.OuterCamera.OnImageReady += obj => {
+            Record.OuterViewerImage.Init(hwinOuter);
+            Device.OuterCamera.OnImageReady += obj => {
 
-                m_record.OuterGrab.Cache[obj.Frame] = obj;
-                m_record.OuterDetect.TryDetect(obj.Frame);
-                m_record.OuterViewerImage.SetBottomTarget(obj.Frame);
+                Record.OuterGrab.Cache[obj.Frame] = obj;
+                Record.OuterDetect.TryDetect(obj.Frame);
+                Record.OuterViewerImage.SetBottomTarget(obj.Frame);
             };
 
 
@@ -295,8 +324,8 @@ namespace DetectCCD {
                         Thread.Sleep(10);
 
                         Static.SafeRun(() => {
-                            double refFps = m_device.InnerCamera.isRun ? m_device.InnerCamera.m_fpsRealtime : 10;
-                            m_record.InnerViewerImage.MoveTargetSync(m_device.InnerCamera.m_fpsRealtime);
+                            double refFps = Device.InnerCamera.isRun ? Device.InnerCamera.m_fpsRealtime : 10;
+                            Record.InnerViewerImage.MoveTargetSync(Device.InnerCamera.m_fpsRealtime);
                         });
                     };
 
@@ -310,8 +339,8 @@ namespace DetectCCD {
                         Thread.Sleep(10);
 
                         Static.SafeRun(() => {
-                            double refFps = m_device.OuterCamera.isRun ? m_device.OuterCamera.m_fpsRealtime : 10;
-                            m_record.OuterViewerImage.MoveTargetSync(m_device.OuterCamera.m_fpsRealtime);
+                            double refFps = Device.OuterCamera.isRun ? Device.OuterCamera.m_fpsRealtime : 10;
+                            Record.OuterViewerImage.MoveTargetSync(Device.OuterCamera.m_fpsRealtime);
                         });
                     };
 
@@ -324,9 +353,9 @@ namespace DetectCCD {
 
                         Static.SafeRun(() => {
                             List<DataGrab> ret1 = null;
-                            if (m_record.Transaction(() => {
-                                ret1 = m_record.InnerGrab.Save();
-                                m_record.InnerDetect.Save();
+                            if (Record.Transaction(() => {
+                                ret1 = Record.InnerGrab.Save();
+                                Record.InnerDetect.Save();
                             })) {
                                 ret1.AsParallel().ForAll(x => x.IsStore = true);
                             }
@@ -351,7 +380,7 @@ namespace DetectCCD {
             foreach (char rInvalidChar in Path.GetInvalidPathChars())
                 rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
 
-            m_record.Open(rPath);
+            Record.Open(rPath);
 
         }
 

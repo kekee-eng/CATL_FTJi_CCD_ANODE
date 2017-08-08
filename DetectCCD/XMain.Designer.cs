@@ -106,23 +106,23 @@
             this.hwinOuter = new HalconDotNet.HWindowControl();
             this.hwinInner = new HalconDotNet.HWindowControl();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_outer_defectCount = new DevExpress.XtraEditors.LabelControl();
             this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_outer_widthCount = new DevExpress.XtraEditors.LabelControl();
             this.labelControl15 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_outer_eaCount = new DevExpress.XtraEditors.LabelControl();
             this.labelControl19 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl21 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_outer_camera2 = new DevExpress.XtraEditors.LabelControl();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_inner_defectCount = new DevExpress.XtraEditors.LabelControl();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl36 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_inner_widthCount = new DevExpress.XtraEditors.LabelControl();
             this.labelControl37 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl38 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_inner_eaCount = new DevExpress.XtraEditors.LabelControl();
             this.labelControl39 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl40 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl41 = new DevExpress.XtraEditors.LabelControl();
+            this._lc_inner_camera2 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
@@ -1063,14 +1063,14 @@
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Controls.Add(this.labelControl9, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this._lc_outer_defectCount, 1, 3);
             this.tableLayoutPanel4.Controls.Add(this.labelControl11, 0, 3);
-            this.tableLayoutPanel4.Controls.Add(this.labelControl13, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this._lc_outer_widthCount, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.labelControl15, 0, 2);
-            this.tableLayoutPanel4.Controls.Add(this.labelControl17, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this._lc_outer_eaCount, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.labelControl19, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.labelControl21, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.labelControl24, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this._lc_outer_camera2, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(337, 4);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -1082,17 +1082,17 @@
             this.tableLayoutPanel4.Size = new System.Drawing.Size(327, 108);
             this.tableLayoutPanel4.TabIndex = 27;
             // 
-            // labelControl9
+            // _lc_outer_defectCount
             // 
-            this.labelControl9.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl9.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl9.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl9.Location = new System.Drawing.Point(167, 82);
-            this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(156, 22);
-            this.labelControl9.TabIndex = 34;
-            this.labelControl9.Text = "-";
+            this._lc_outer_defectCount.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_outer_defectCount.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_outer_defectCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_outer_defectCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_outer_defectCount.Location = new System.Drawing.Point(167, 82);
+            this._lc_outer_defectCount.Name = "_lc_outer_defectCount";
+            this._lc_outer_defectCount.Size = new System.Drawing.Size(156, 22);
+            this._lc_outer_defectCount.TabIndex = 34;
+            this._lc_outer_defectCount.Text = "-";
             // 
             // labelControl11
             // 
@@ -1106,17 +1106,17 @@
             this.labelControl11.TabIndex = 33;
             this.labelControl11.Text = "瑕疵NG数";
             // 
-            // labelControl13
+            // _lc_outer_widthCount
             // 
-            this.labelControl13.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl13.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl13.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl13.Location = new System.Drawing.Point(167, 56);
-            this.labelControl13.Name = "labelControl13";
-            this.labelControl13.Size = new System.Drawing.Size(156, 19);
-            this.labelControl13.TabIndex = 32;
-            this.labelControl13.Text = "-";
+            this._lc_outer_widthCount.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_outer_widthCount.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_outer_widthCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_outer_widthCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_outer_widthCount.Location = new System.Drawing.Point(167, 56);
+            this._lc_outer_widthCount.Name = "_lc_outer_widthCount";
+            this._lc_outer_widthCount.Size = new System.Drawing.Size(156, 19);
+            this._lc_outer_widthCount.TabIndex = 32;
+            this._lc_outer_widthCount.Text = "-";
             // 
             // labelControl15
             // 
@@ -1130,17 +1130,17 @@
             this.labelControl15.TabIndex = 31;
             this.labelControl15.Text = "幅宽NG数";
             // 
-            // labelControl17
+            // _lc_outer_eaCount
             // 
-            this.labelControl17.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl17.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl17.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl17.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl17.Location = new System.Drawing.Point(167, 30);
-            this.labelControl17.Name = "labelControl17";
-            this.labelControl17.Size = new System.Drawing.Size(156, 19);
-            this.labelControl17.TabIndex = 30;
-            this.labelControl17.Text = "-";
+            this._lc_outer_eaCount.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_outer_eaCount.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_outer_eaCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_outer_eaCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_outer_eaCount.Location = new System.Drawing.Point(167, 30);
+            this._lc_outer_eaCount.Name = "_lc_outer_eaCount";
+            this._lc_outer_eaCount.Size = new System.Drawing.Size(156, 19);
+            this._lc_outer_eaCount.TabIndex = 30;
+            this._lc_outer_eaCount.Text = "-";
             // 
             // labelControl19
             // 
@@ -1166,17 +1166,17 @@
             this.labelControl21.TabIndex = 26;
             this.labelControl21.Text = "检测位置";
             // 
-            // labelControl24
+            // _lc_outer_camera2
             // 
-            this.labelControl24.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl24.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl24.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl24.Location = new System.Drawing.Point(167, 4);
-            this.labelControl24.Name = "labelControl24";
-            this.labelControl24.Size = new System.Drawing.Size(156, 19);
-            this.labelControl24.TabIndex = 29;
-            this.labelControl24.Text = "-";
+            this._lc_outer_camera2.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_outer_camera2.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_outer_camera2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_outer_camera2.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_outer_camera2.Location = new System.Drawing.Point(167, 4);
+            this._lc_outer_camera2.Name = "_lc_outer_camera2";
+            this._lc_outer_camera2.Size = new System.Drawing.Size(156, 19);
+            this._lc_outer_camera2.TabIndex = 29;
+            this._lc_outer_camera2.Text = "-";
             // 
             // tableLayoutPanel6
             // 
@@ -1184,14 +1184,14 @@
             this.tableLayoutPanel6.ColumnCount = 2;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Controls.Add(this.labelControl6, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this._lc_inner_defectCount, 1, 3);
             this.tableLayoutPanel6.Controls.Add(this.labelControl8, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this.labelControl36, 1, 2);
+            this.tableLayoutPanel6.Controls.Add(this._lc_inner_widthCount, 1, 2);
             this.tableLayoutPanel6.Controls.Add(this.labelControl37, 0, 2);
-            this.tableLayoutPanel6.Controls.Add(this.labelControl38, 1, 1);
+            this.tableLayoutPanel6.Controls.Add(this._lc_inner_eaCount, 1, 1);
             this.tableLayoutPanel6.Controls.Add(this.labelControl39, 0, 1);
             this.tableLayoutPanel6.Controls.Add(this.labelControl40, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.labelControl41, 1, 0);
+            this.tableLayoutPanel6.Controls.Add(this._lc_inner_camera2, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(4, 4);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -1203,17 +1203,17 @@
             this.tableLayoutPanel6.Size = new System.Drawing.Size(326, 108);
             this.tableLayoutPanel6.TabIndex = 28;
             // 
-            // labelControl6
+            // _lc_inner_defectCount
             // 
-            this.labelControl6.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl6.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl6.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl6.Location = new System.Drawing.Point(166, 82);
-            this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(156, 22);
-            this.labelControl6.TabIndex = 34;
-            this.labelControl6.Text = "-";
+            this._lc_inner_defectCount.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_inner_defectCount.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_inner_defectCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_inner_defectCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_inner_defectCount.Location = new System.Drawing.Point(166, 82);
+            this._lc_inner_defectCount.Name = "_lc_inner_defectCount";
+            this._lc_inner_defectCount.Size = new System.Drawing.Size(156, 22);
+            this._lc_inner_defectCount.TabIndex = 34;
+            this._lc_inner_defectCount.Text = "-";
             // 
             // labelControl8
             // 
@@ -1227,17 +1227,17 @@
             this.labelControl8.TabIndex = 33;
             this.labelControl8.Text = "瑕疵NG数";
             // 
-            // labelControl36
+            // _lc_inner_widthCount
             // 
-            this.labelControl36.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl36.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl36.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl36.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl36.Location = new System.Drawing.Point(166, 56);
-            this.labelControl36.Name = "labelControl36";
-            this.labelControl36.Size = new System.Drawing.Size(156, 19);
-            this.labelControl36.TabIndex = 32;
-            this.labelControl36.Text = "-";
+            this._lc_inner_widthCount.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_inner_widthCount.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_inner_widthCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_inner_widthCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_inner_widthCount.Location = new System.Drawing.Point(166, 56);
+            this._lc_inner_widthCount.Name = "_lc_inner_widthCount";
+            this._lc_inner_widthCount.Size = new System.Drawing.Size(156, 19);
+            this._lc_inner_widthCount.TabIndex = 32;
+            this._lc_inner_widthCount.Text = "-";
             // 
             // labelControl37
             // 
@@ -1251,17 +1251,17 @@
             this.labelControl37.TabIndex = 31;
             this.labelControl37.Text = "幅宽NG数";
             // 
-            // labelControl38
+            // _lc_inner_eaCount
             // 
-            this.labelControl38.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl38.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl38.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl38.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl38.Location = new System.Drawing.Point(166, 30);
-            this.labelControl38.Name = "labelControl38";
-            this.labelControl38.Size = new System.Drawing.Size(156, 19);
-            this.labelControl38.TabIndex = 30;
-            this.labelControl38.Text = "-";
+            this._lc_inner_eaCount.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_inner_eaCount.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_inner_eaCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_inner_eaCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_inner_eaCount.Location = new System.Drawing.Point(166, 30);
+            this._lc_inner_eaCount.Name = "_lc_inner_eaCount";
+            this._lc_inner_eaCount.Size = new System.Drawing.Size(156, 19);
+            this._lc_inner_eaCount.TabIndex = 30;
+            this._lc_inner_eaCount.Text = "-";
             // 
             // labelControl39
             // 
@@ -1287,17 +1287,17 @@
             this.labelControl40.TabIndex = 26;
             this.labelControl40.Text = "检测位置";
             // 
-            // labelControl41
+            // _lc_inner_camera2
             // 
-            this.labelControl41.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl41.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl41.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl41.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl41.Location = new System.Drawing.Point(166, 4);
-            this.labelControl41.Name = "labelControl41";
-            this.labelControl41.Size = new System.Drawing.Size(156, 19);
-            this.labelControl41.TabIndex = 29;
-            this.labelControl41.Text = "-";
+            this._lc_inner_camera2.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this._lc_inner_camera2.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this._lc_inner_camera2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lc_inner_camera2.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
+            this._lc_inner_camera2.Location = new System.Drawing.Point(166, 4);
+            this._lc_inner_camera2.Name = "_lc_inner_camera2";
+            this._lc_inner_camera2.Size = new System.Drawing.Size(156, 19);
+            this._lc_inner_camera2.TabIndex = 29;
+            this._lc_inner_camera2.Text = "-";
             // 
             // xtraTabPage3
             // 
@@ -1471,23 +1471,23 @@
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private DevExpress.XtraEditors.LabelControl labelControl9;
+        private DevExpress.XtraEditors.LabelControl _lc_outer_defectCount;
         private DevExpress.XtraEditors.LabelControl labelControl11;
-        private DevExpress.XtraEditors.LabelControl labelControl13;
+        private DevExpress.XtraEditors.LabelControl _lc_outer_widthCount;
         private DevExpress.XtraEditors.LabelControl labelControl15;
-        private DevExpress.XtraEditors.LabelControl labelControl17;
+        private DevExpress.XtraEditors.LabelControl _lc_outer_eaCount;
         private DevExpress.XtraEditors.LabelControl labelControl19;
         private DevExpress.XtraEditors.LabelControl labelControl21;
-        private DevExpress.XtraEditors.LabelControl labelControl24;
+        private DevExpress.XtraEditors.LabelControl _lc_outer_camera2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private DevExpress.XtraEditors.LabelControl labelControl6;
+        private DevExpress.XtraEditors.LabelControl _lc_inner_defectCount;
         private DevExpress.XtraEditors.LabelControl labelControl8;
-        private DevExpress.XtraEditors.LabelControl labelControl36;
+        private DevExpress.XtraEditors.LabelControl _lc_inner_widthCount;
         private DevExpress.XtraEditors.LabelControl labelControl37;
-        private DevExpress.XtraEditors.LabelControl labelControl38;
+        private DevExpress.XtraEditors.LabelControl _lc_inner_eaCount;
         private DevExpress.XtraEditors.LabelControl labelControl39;
         private DevExpress.XtraEditors.LabelControl labelControl40;
-        private DevExpress.XtraEditors.LabelControl labelControl41;
+        private DevExpress.XtraEditors.LabelControl _lc_inner_camera2;
         private HalconDotNet.HWindowControl hwinOuter;
         private HalconDotNet.HWindowControl hwinInner;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;

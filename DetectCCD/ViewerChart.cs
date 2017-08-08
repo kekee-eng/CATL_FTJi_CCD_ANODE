@@ -408,30 +408,6 @@ namespace DetectCCD {
             //
             chartEvent(chart, ImageViewer.MoveToTAB);
         }
-        public void SyncTabChart(Control parent) {
-
-            //
-            var chart = parentGetChart(parent);
-
-            int numShow = chart.GraphPane.CurveList[0].Points.Count;
-            int numExist = Detect.Tabs.Count;
-
-            if (numShow < numExist - 1) {
-                for (int i = numShow; i < numExist - 1; i++)
-                    addTabChart(chart, Detect.Tabs[i]);
-
-                chart.Refresh();
-            }
-
-            if (numShow > numExist) {
-                chart.GraphPane.CurveList[0].Clear();
-                chart.GraphPane.CurveList[1].Clear();
-                chart.GraphPane.CurveList[2].Clear();
-                chart.GraphPane.CurveList[3].Clear();
-
-                chart.Refresh();
-            }
-        }
         public void SelectTabChart(Control parent, int select) {
 
             //绘制对象
@@ -478,7 +454,34 @@ namespace DetectCCD {
             chart.Refresh();
 
         }
+        public void SyncTabChart(Control parent) {
 
+            //
+            var chart = parentGetChart(parent);
+
+            int numShow = chart.GraphPane.CurveList[0].Points.Count;
+            int numExist = Detect.Tabs.Count;
+
+            if (numShow < numExist - 1) {
+                for (int i = numShow; i < numExist - 1; i++)
+                    addTabChart(chart, Detect.Tabs[i]);
+
+                chart.Refresh();
+            }
+
+            if (numShow > numExist) {
+                chart.GraphPane.CurveList[0].Clear();
+                chart.GraphPane.CurveList[1].Clear();
+                chart.GraphPane.CurveList[2].Clear();
+                chart.GraphPane.CurveList[3].Clear();
+
+                chart.Refresh();
+            }
+        }
+        public void SyncTabChart(Control parent, int select) {
+            SyncTabChart(parent);
+            SelectTabChart(parent, select);
+        }
 
         //UnTest
         static void initMergeTabGrid(DataGridView grid) {

@@ -141,6 +141,7 @@ namespace DetectCCD {
                     case 4: ViewerChart.parentGetGrid(panelForViewer).Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;break;
                     case 5: record.InnerViewerChart.SyncTabChart(panelForViewer); break;
                 }
+
             }
         }
         
