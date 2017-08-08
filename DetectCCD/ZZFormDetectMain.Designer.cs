@@ -39,6 +39,12 @@
             this.rtoolTab = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolEA = new System.Windows.Forms.ToolStripMenuItem();
             this.rtoolDefect = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.rtoolTABChart = new System.Windows.Forms.ToolStripMenuItem();
+            this.widthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.distanceDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hwin = new HalconDotNet.HWindowControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panelForViewer = new System.Windows.Forms.Panel();
@@ -54,12 +60,6 @@
             this.trackSpeed = new System.Windows.Forms.TrackBar();
             this.tbFrameStart = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.rtoolTABChart = new System.Windows.Forms.ToolStripMenuItem();
-            this.widthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.distanceDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -110,26 +110,26 @@
             this.toolStripSeparator4,
             this.rtoolTABChart});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 248);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(130, 226);
             // 
             // rtoolInfo
             // 
             this.rtoolInfo.Name = "rtoolInfo";
-            this.rtoolInfo.Size = new System.Drawing.Size(152, 22);
+            this.rtoolInfo.Size = new System.Drawing.Size(129, 22);
             this.rtoolInfo.Text = "Info";
             this.rtoolInfo.Click += new System.EventHandler(this.rtoolInfo_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(126, 6);
             // 
             // rtoolDebug
             // 
             this.rtoolDebug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rtoolDebugClear});
             this.rtoolDebug.Name = "rtoolDebug";
-            this.rtoolDebug.Size = new System.Drawing.Size(152, 22);
+            this.rtoolDebug.Size = new System.Drawing.Size(129, 22);
             this.rtoolDebug.Text = "Debug";
             this.rtoolDebug.Click += new System.EventHandler(this.rtoolDebug_Click);
             // 
@@ -143,66 +143,110 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
             // 
             // rtoolCfgApp
             // 
             this.rtoolCfgApp.Name = "rtoolCfgApp";
-            this.rtoolCfgApp.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgApp.Size = new System.Drawing.Size(129, 22);
             this.rtoolCfgApp.Text = "CfgApp";
             this.rtoolCfgApp.Click += new System.EventHandler(this.rtoolCfgApp_Click);
             // 
             // rtoolCfgShare
             // 
             this.rtoolCfgShare.Name = "rtoolCfgShare";
-            this.rtoolCfgShare.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgShare.Size = new System.Drawing.Size(129, 22);
             this.rtoolCfgShare.Text = "CfgShare";
             this.rtoolCfgShare.Click += new System.EventHandler(this.rtoolCfgShare_Click);
             // 
             // rtoolCfgInner
             // 
             this.rtoolCfgInner.Name = "rtoolCfgInner";
-            this.rtoolCfgInner.Size = new System.Drawing.Size(152, 22);
+            this.rtoolCfgInner.Size = new System.Drawing.Size(129, 22);
             this.rtoolCfgInner.Text = "CfgInner";
             this.rtoolCfgInner.Click += new System.EventHandler(this.rtoolCfgInner_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(126, 6);
             // 
             // rtoolTab
             // 
             this.rtoolTab.Name = "rtoolTab";
-            this.rtoolTab.Size = new System.Drawing.Size(152, 22);
+            this.rtoolTab.Size = new System.Drawing.Size(129, 22);
             this.rtoolTab.Text = "TAB";
             this.rtoolTab.Click += new System.EventHandler(this.rtoolTab_Click);
             // 
             // rtoolEA
             // 
             this.rtoolEA.Name = "rtoolEA";
-            this.rtoolEA.Size = new System.Drawing.Size(152, 22);
+            this.rtoolEA.Size = new System.Drawing.Size(129, 22);
             this.rtoolEA.Text = "EA";
             this.rtoolEA.Click += new System.EventHandler(this.rtoolEA_Click);
             // 
             // rtoolDefect
             // 
             this.rtoolDefect.Name = "rtoolDefect";
-            this.rtoolDefect.Size = new System.Drawing.Size(152, 22);
+            this.rtoolDefect.Size = new System.Drawing.Size(129, 22);
             this.rtoolDefect.Text = "Defect";
             this.rtoolDefect.Click += new System.EventHandler(this.rtoolDefect_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(126, 6);
+            // 
+            // rtoolTABChart
+            // 
+            this.rtoolTABChart.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.widthToolStripMenuItem,
+            this.sizeToolStripMenuItem,
+            this.distanceToolStripMenuItem,
+            this.distanceDiffToolStripMenuItem});
+            this.rtoolTABChart.Name = "rtoolTABChart";
+            this.rtoolTABChart.Size = new System.Drawing.Size(129, 22);
+            this.rtoolTABChart.Text = "TAB";
+            this.rtoolTABChart.Click += new System.EventHandler(this.rtoolTABChart_Click);
+            // 
+            // widthToolStripMenuItem
+            // 
+            this.widthToolStripMenuItem.Name = "widthToolStripMenuItem";
+            this.widthToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.widthToolStripMenuItem.Text = "Width";
+            this.widthToolStripMenuItem.Click += new System.EventHandler(this.widthToolStripMenuItem_Click);
+            // 
+            // sizeToolStripMenuItem
+            // 
+            this.sizeToolStripMenuItem.Name = "sizeToolStripMenuItem";
+            this.sizeToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.sizeToolStripMenuItem.Text = "Height";
+            this.sizeToolStripMenuItem.Click += new System.EventHandler(this.sizeToolStripMenuItem_Click);
+            // 
+            // distanceToolStripMenuItem
+            // 
+            this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
+            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.distanceToolStripMenuItem.Text = "Distance";
+            this.distanceToolStripMenuItem.Click += new System.EventHandler(this.distanceToolStripMenuItem_Click);
+            // 
+            // distanceDiffToolStripMenuItem
+            // 
+            this.distanceDiffToolStripMenuItem.Name = "distanceDiffToolStripMenuItem";
+            this.distanceDiffToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.distanceDiffToolStripMenuItem.Text = "DistanceDiff";
+            this.distanceDiffToolStripMenuItem.Click += new System.EventHandler(this.distanceDiffToolStripMenuItem_Click);
             // 
             // hwin
             // 
             this.hwin.BackColor = System.Drawing.Color.Black;
             this.hwin.BorderColor = System.Drawing.Color.Black;
-            this.hwin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hwin.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwin.Location = new System.Drawing.Point(0, 0);
             this.hwin.Name = "hwin";
-            this.hwin.Size = new System.Drawing.Size(563, 452);
+            this.hwin.Size = new System.Drawing.Size(351, 333);
             this.hwin.TabIndex = 7;
-            this.hwin.WindowSize = new System.Drawing.Size(563, 452);
+            this.hwin.WindowSize = new System.Drawing.Size(351, 333);
             // 
             // splitContainer1
             // 
@@ -357,51 +401,6 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
-            // 
-            // rtoolTABChart
-            // 
-            this.rtoolTABChart.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.widthToolStripMenuItem,
-            this.sizeToolStripMenuItem,
-            this.distanceToolStripMenuItem,
-            this.distanceDiffToolStripMenuItem});
-            this.rtoolTABChart.Name = "rtoolTABChart";
-            this.rtoolTABChart.Size = new System.Drawing.Size(152, 22);
-            this.rtoolTABChart.Text = "TAB";
-            this.rtoolTABChart.Click += new System.EventHandler(this.rtoolTABChart_Click);
-            // 
-            // widthToolStripMenuItem
-            // 
-            this.widthToolStripMenuItem.Name = "widthToolStripMenuItem";
-            this.widthToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.widthToolStripMenuItem.Text = "Width";
-            this.widthToolStripMenuItem.Click += new System.EventHandler(this.widthToolStripMenuItem_Click);
-            // 
-            // sizeToolStripMenuItem
-            // 
-            this.sizeToolStripMenuItem.Name = "sizeToolStripMenuItem";
-            this.sizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.sizeToolStripMenuItem.Text = "Height";
-            this.sizeToolStripMenuItem.Click += new System.EventHandler(this.sizeToolStripMenuItem_Click);
-            // 
-            // distanceToolStripMenuItem
-            // 
-            this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
-            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.distanceToolStripMenuItem.Text = "Distance";
-            this.distanceToolStripMenuItem.Click += new System.EventHandler(this.distanceToolStripMenuItem_Click);
-            // 
-            // distanceDiffToolStripMenuItem
-            // 
-            this.distanceDiffToolStripMenuItem.Name = "distanceDiffToolStripMenuItem";
-            this.distanceDiffToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.distanceDiffToolStripMenuItem.Text = "DistanceDiff";
-            this.distanceDiffToolStripMenuItem.Click += new System.EventHandler(this.distanceDiffToolStripMenuItem_Click);
             // 
             // FormDetect4K
             // 

@@ -24,30 +24,60 @@ namespace DetectCCD
             //
             init_status();
 
-            //关闭等待页面
+            //
             UtilTool.XFWait.Close();
         }
-        private void XFMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
+        private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
+
+#if !DEBUG
             if(XtraMessageBox.Show("当前操作将退出视觉检测系统，请确认是否退出？", "退出确认", MessageBoxButtons.OKCancel) != DialogResult.OK) {
                 e.Cancel = true;
                 return;
             }
 
+#endif
+
             //取消全屏显示
             UtilTool.FullScreen.Set(this, false);
         }
         
+        void appendLog(string msg, int msgStatus = 0) {
+            //
+            status_info.Caption = msg;
+            status_info.ItemAppearance.Normal.ForeColor = msgStatus == 0 ? Color.Black : msgStatus > 0 ? Color.Green : Color.Red;
+
+            //添加到日志文件中
+            Static.Log.Info(msg);
+        }
+
+        //操作模板
+        void RunAction(string actName, Action act) {
+            try {
+                appendLog(String.Format("正在{0}...", actName));
+                act();
+                appendLog(String.Format("{0}成功", actName));
+            }
+            catch (Exception ex) {
+                appendLog(String.Format("{0}失败: \r\n{1}", actName, ex.Message), -1);
+            }
+        }
+        
+        bool isOnline { get { return textMode.SelectedIndex == 0; } }
+        bool isRunning = false;
+        bool isReset = false;
+        bool isRollOk = false;
+
+        int rollType = -1;
+        string rollName = "";
+        int rollRepeat = 0;
+
         void init_status()
         {
             //选定用户
-            Static.ParamApp.select_userid = 0;
             changeUser();
 
-            //定时器
-            timer1.Tag = true;
-            timer1.Interval = 1000;
-            timer1.Enabled = true;
+            //
+            textMode.SelectedIndex = Static.ParamApp.run_mode;
 
 #if !DEBUG
             //全屏显示
@@ -56,6 +86,13 @@ namespace DetectCCD
 
             //连接设备
             status_plc_ItemClick(null, null);
+
+            //定时器
+            timer1.Tag = true;
+            timer1.Interval = 1000;
+            timer1.Enabled = true;
+            timer1_Tick(null, null);
+
         }
         void changeUser()
         {
@@ -108,13 +145,14 @@ namespace DetectCCD
             
             Static.SafeRun(() => {
                 
-                //系统时间
-                status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-
-                //PLC状态
-                status_plc.ImageIndex = true ? 5 : 4;
-
                 //
+                textMode.BackColor = isOnline ? Color.LightGreen : Color.Pink;
+                groupOnline.Enabled = isOnline;
+                groupOffline.Enabled = !isOnline;
+
+                //状态栏
+                status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                status_device.ImageIndex = true ? 5 : 4;
                 status_memory.Caption = string.Format("内存={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
@@ -123,15 +161,16 @@ namespace DetectCCD
 
         private void status_user_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            Static.SafeRun(() =>
+            RunAction("切换用户",() =>
             {
                 UserSelect.GShow(this);
                 changeUser();
             });
         }
-        private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+        private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
+            RunAction("连接设备", () => {
 
+            });
         }
         private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -160,7 +199,60 @@ namespace DetectCCD
             }
         }
         
-        
+        private void btnRollSet_Click(object sender, EventArgs e) {
+            RunAction((sender as SimpleButton).Text, () => {
+
+                if (!isRollOk) {
+                    if (textRollType.SelectedIndex == -1)
+                        throw new Exception("料号未设定！");
+
+                    if (textRollName.Text == "")
+                        throw new Exception("膜卷号未设定!");
+
+                    rollRepeat++;
+                    rollType = textRollType.SelectedIndex;
+                    rollName = textRollName.Text;
+                    textRollRepeat.Text = rollRepeat.ToString();
+
+                    textRollType.Enabled = false;
+                    textRollName.Enabled = false;
+                    isRollOk = true;
+                }
+                else {
+                    textRollType.Enabled = true;
+                    textRollName.Enabled = true;
+                    isRollOk = false;
+                }
+            });
+        }
+        private void btnDeivceQuit_Click(object sender, EventArgs e) {
+            RunAction((sender as SimpleButton).Text, () => {
+
+            });
+        }
+        private void btnDeviceStart_Click(object sender, EventArgs e) {
+            RunAction((sender as SimpleButton).Text, () => {
+
+                if (!isRollOk)
+                    throw new Exception("膜卷未设置！");
+
+            });
+        }
+        private void btnDeviceStop_Click(object sender, EventArgs e) {
+            RunAction((sender as SimpleButton).Text, () => {
+
+            });
+        }
+        private void btnDeviceReset_Click(object sender, EventArgs e) {
+            RunAction((sender as SimpleButton).Text, () => {
+
+            });
+        }
+        private void btnDeviceEStop_Click(object sender, EventArgs e) {
+            RunAction((sender as SimpleButton).Text, () => {
+
+            });
+        }
     }
 
 }

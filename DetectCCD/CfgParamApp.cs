@@ -9,9 +9,11 @@ namespace DetectCCD {
     class CfgParamApp : DetectCCD.TemplateConfig {
         public CfgParamApp(string path) : base(path) { }
 
-        //运行模式：相机仿真、记录回溯
-        public bool ModeByCamera = true;
-        public bool ModeByRecord = false;
+        //运行模式：0=在线（实时检测）、1=离线（仿真）
+        public int run_mode = 0;
+        
+        public bool ModeByRecord { get { return run_mode == 1; } }
+        public bool ModeByCamera { get { return run_mode != 1; } }
 
         //相机源：真实相机、Zip文件、文件夹、数据库
         public bool CameraByRealtime = false;
@@ -19,20 +21,24 @@ namespace DetectCCD {
         public bool CameraByFolder = false;
         public bool CameraByDB = false;
 
+        public string CameraFileInner = "";
+        public string CameraFileOuter = "";
+
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordIsSaveImageOK = true;
         public bool RecordIsSaveImageNG = true;
 
         //显示参数
-        public string CameraZipFile = "";
         public double CameraFpsControl = 10;
         public int CameraStartFrame = 1;
 
         //
-        public bool ProcessReload = true;
+        public bool ImageProcessReload = true;
+        
 
 
+        //
         public string operator_username = "operator";
         public string operator_password = "";
         public string operator_viewstyle = "DevExpress Style";

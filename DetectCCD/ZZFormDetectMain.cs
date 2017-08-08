@@ -91,32 +91,7 @@ namespace DetectCCD {
             //
             device?.Close();
             device = new ModDevice();
-
-            //
-            //string prefix = (HalconDotNet.HalconAPI.isWindows ? "D:/" : "/media/fra/DATA/");
-            //device.InnerCamera = new ConnectCamera_ZipFile(prefix + "#DAT/[2B][20170728][125247-130642][1283][F1-F1283].zip");
-            device.InnerCamera = new ConnectCamera_ZipFile(Static.ParamApp.CameraZipFile);
-
-            device.InnerCamera.OnImageReady += obj => {
-
-                Static.SafeRun(() => {
-                    //线程1：内侧相机取图、处理
-                    //
-                    record.InnerGrab.Cache[obj.Frame] = obj;
-                    record.InnerDetect.TryDetect(obj.Frame);
-
-                    record.InnerViewerImage.SetBottomTarget(obj.Frame);
-                });
-
-            };
-            device.InnerCamera.OnComplete += () => {
-
-                Static.SafeRun(() => {
-                    if (checkReplay.Checked) {
-                        btnGrabRestart_Click(null, null);
-                    }
-                });
-            };
+            device.Open();
 
         }
         void init_record() {
@@ -258,7 +233,7 @@ namespace DetectCCD {
 
             OpenFileDialog ofd = new OpenFileDialog();
             if(ofd.ShowDialog() == DialogResult.OK) {
-                Static.ParamApp.CameraZipFile = ofd.FileName;
+                Static.ParamApp.CameraFileInner = ofd.FileName;
                 tbFrameStart.Text = "1";
                 btnGrabRestart_Click(null, null);
             }

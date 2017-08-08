@@ -32,7 +32,7 @@ namespace DetectCCD {
                 if (m_program == null)
                     m_program = new HDevProgram(Static.PathImageProcess);
 
-                if(Static.ParamApp.ProcessReload) {
+                if(Static.ParamApp.ImageProcessReload) {
                     m_program.Dispose();
                     m_program = new HDevProgram(Static.PathImageProcess);
                 }

@@ -5,9 +5,12 @@ namespace DetectCCD {
     class ModRecord : TemplateDB, IDisposable {
 
         public void Dispose() {
-            
+
             InnerGrab.Cache.Dispose();
             InnerViewerImage.Dispose();
+
+            OuterGrab.Cache.Dispose();
+            OuterViewerImage.Dispose();
         }
 
         public void Init() {
@@ -18,19 +21,23 @@ namespace DetectCCD {
             InnerViewerImage = new ViewerImage(InnerGrab, InnerDetect);
             InnerViewerChart = new ViewerChart(InnerGrab, InnerDetect, InnerViewerImage);
 
+            //
+            OuterGrab = new EntryGrab(this, "OuterGrab", Static.ParamApp.RecordCacheSize);
+            OuterDetect = new EntryDetect(this, "OuterDetect", Static.ParamShare, Static.ParamOuter, OuterGrab);
+            OuterViewerImage = new ViewerImage(OuterGrab, OuterDetect);
+            OuterViewerChart = new ViewerChart(OuterGrab, OuterDetect, OuterViewerImage);
+
         }
 
         public EntryGrab InnerGrab;
         public EntryDetect InnerDetect;
-
         public ViewerImage InnerViewerImage;
         public ViewerChart InnerViewerChart;
 
-        //public EntryGrab OuterGrab;
-        //public EntryDetect OuterDetect;
-
-
-
-
+        public EntryGrab OuterGrab;
+        public EntryDetect OuterDetect;
+        public ViewerImage OuterViewerImage;
+        public ViewerChart OuterViewerChart;
+        
     }
 }

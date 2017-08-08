@@ -61,6 +61,11 @@ namespace DetectCCD {
             //
             Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);
 
+
+
+            //
+            ParamApp.select_userid = 0;
+
         }
         public static void Uninit() {
 

@@ -32,6 +32,8 @@ namespace DetectCCD {
             }
         }
         public void Close() {
+
+            m_isOpen = false;
             if (m_conn != null) {
                 m_conn.Close();
                 TypeConn.ClearPool(m_conn);
@@ -39,7 +41,6 @@ namespace DetectCCD {
                 m_conn.Dispose();
                 m_conn = null;
             }
-            m_isOpen = false;
         }
         void IDisposable.Dispose() {
             Close();
@@ -67,12 +68,14 @@ namespace DetectCCD {
 
         //
         public void Write(string cmdtext, params object[] args) {
+
             var cmd = m_conn.CreateCommand();
             cmd.CommandText = cmdtext;
             foreach (var g in args)
                 cmd.Parameters.AddWithValue("", g);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
+
         }
         public List<object[]> Read(string cmdtext) {
             DataSet ds = new DataSet();
