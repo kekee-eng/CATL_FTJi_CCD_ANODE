@@ -119,11 +119,18 @@
     <Compile Include="XFMain.Designer.cs">
       <DependentUpon>XFMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="XFSplashStart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XFSplashStart.Designer.cs">
+      <DependentUpon>XFSplashStart.cs</DependentUpon>
+    </Compile>
     <Compile Include="_ENC7480.cs" />
     <Compile Include="_ModbusTCP.cs" />
     <EmbeddedResource Include="FormDetectMain.resx">
       <DependentUpon>FormDetectMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -136,6 +143,9 @@
     </Compile>
     <EmbeddedResource Include="XFMain.resx">
       <DependentUpon>XFMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XFSplashStart.resx">
+      <DependentUpon>XFSplashStart.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

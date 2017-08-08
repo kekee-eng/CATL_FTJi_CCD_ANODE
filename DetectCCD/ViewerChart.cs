@@ -340,6 +340,7 @@ namespace DetectCCD {
             //
             gridAdd(grid,
                 grid.Rows.Count + 1,
+                dt.Type,
                 dt.X.ToString("0.000"),
                 dt.Y.ToString("0.000"),
                 dt.W.ToString("0.000"),
@@ -354,11 +355,12 @@ namespace DetectCCD {
             //
             var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ID" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "X" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "Y" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "W" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "H" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "Type" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)" }
                 );
