@@ -38,8 +38,7 @@ namespace DetectCCD {
             monitor["ImageProcess_DetectWidth"] = () => ImageProcess.TimeDetectWidth;
             monitor["ImageProcess_DetectMark"] = () => ImageProcess.TimeDetectMark;
             monitor["ImageProcess_DetectDefect"] = () => ImageProcess.TimeDetectDefect;
-
-
+            
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.InnerCamera, "m_filename");
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;

@@ -121,6 +121,12 @@
     <Compile Include="XFUserSelect.Designer.cs">
       <DependentUpon>XFUserSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="XFViewerChart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XFViewerChart.Designer.cs">
+      <DependentUpon>XFViewerChart.cs</DependentUpon>
+    </Compile>
     <Compile Include="XMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="XFUserSelect.resx">
       <DependentUpon>XFUserSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XFViewerChart.resx">
+      <DependentUpon>XFViewerChart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="XMain.resx">
       <DependentUpon>XMain.cs</DependentUpon>
