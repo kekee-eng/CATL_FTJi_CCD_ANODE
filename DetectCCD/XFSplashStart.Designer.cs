@@ -1,4 +1,4 @@
-﻿namespace CATL_WeldingDetect
+﻿namespace DetectCCD
 {
     partial class XFSplashStart
     {

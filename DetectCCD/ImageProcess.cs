@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DetectCCD {
+
     class ImageProcess {
 
         static HDevEngine m_engine;
@@ -16,7 +17,7 @@ namespace DetectCCD {
         public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image, out int time) {
 
             Dictionary<string, HTuple> call = null;
-            time = UtilTool.Debug.TimeCounting(() => call = TemplateProcess(process, image));
+            time = UtilTool.TimeCounting(() => call = TemplateProcess(process, image));
             return call;
 
         }

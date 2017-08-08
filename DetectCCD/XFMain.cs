@@ -13,6 +13,10 @@ namespace DetectCCD {
     public partial class XFMain : DevExpress.XtraEditors.XtraForm {
         public XFMain() {
             InitializeComponent();
+
+
+
+            UtilTool.WaitForm.Close();
         }
     }
 }

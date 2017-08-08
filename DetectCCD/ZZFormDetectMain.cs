@@ -32,7 +32,7 @@ namespace DetectCCD {
         void init_form() {
 
             //
-            UtilTool.Form.AddBuildTag(this);
+            UtilTool.AddBuildTag(this);
 
             //管理线程
             Task.Run((Action)(() => {

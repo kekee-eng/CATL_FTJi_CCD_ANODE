@@ -1,6 +1,6 @@
 ﻿using DevExpress.XtraSplashScreen;
 
-namespace CATL_WeldingDetect
+namespace DetectCCD
 {
     public partial class XFSplashStart : SplashScreen
     {
