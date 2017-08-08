@@ -105,7 +105,7 @@ namespace DetectCCD {
 
             grid.CurrentCellChanged += (o, e) => {
 
-                if (grid.Rows.Count > 0 && grid.CurrentCell != null && grid.CurrentCell.ColumnIndex != 0) {
+                if (grid.Rows.Count > 0 && grid.CurrentCell != null && grid.CurrentCell.ColumnIndex != 0 && grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value != null) {
                     int val;
                     if (int.TryParse(grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value.ToString(), out val))
                         backcall(val);
@@ -346,7 +346,8 @@ namespace DetectCCD {
                 dt.W.ToString("0.000"),
                 dt.H.ToString("0.000"),
                 dt.Width.ToString("0.000"),
-                dt.Height.ToString("0.000")
+                dt.Height.ToString("0.000"),
+                dt.Area.ToString("0.0")
                 );
 
         }
@@ -362,7 +363,8 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W" },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)" }
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)" }
                 );
 
             //

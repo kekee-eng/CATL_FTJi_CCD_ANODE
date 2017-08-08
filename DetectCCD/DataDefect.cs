@@ -18,6 +18,7 @@ namespace DetectCCD {
 
         public double Width;
         public double Height;
+        public double Area;
 
         //
         public bool InRange(double start, double end) {

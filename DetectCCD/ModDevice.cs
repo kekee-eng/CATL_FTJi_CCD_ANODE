@@ -20,8 +20,8 @@ namespace DetectCCD {
             }
             else if (Static.ParamApp.CameraByZipFile) {
                 //从Zip文件取图 
-                InnerCamera = new ConnectCamera_ZipFile(Static.ParamApp.CameraFileInner);
-                OuterCamera = new ConnectCamera_ZipFile(Static.ParamApp.CameraFileOuter);
+                InnerCamera = new CameraZipFile(Static.ParamApp.CameraFileInner);
+                OuterCamera = new CameraZipFile(Static.ParamApp.CameraFileOuter);
             }
             else if (Static.ParamApp.CameraByFolder) {
                 //从文件夹取图
@@ -40,10 +40,11 @@ namespace DetectCCD {
 
         }
 
-        public bool isRun { get { return InnerCamera.isRun && OuterCamera.isRun; } }
+        public bool isReady { get { return InnerCamera.isOpen && OuterCamera.isOpen; } }
+        public bool isRun { get { return InnerCamera.isGrabbing && OuterCamera.isGrabbing; } }
 
-        public ConnectCamera_ZipFile InnerCamera;
-        public ConnectCamera_ZipFile OuterCamera;
+        public TemplateCamera InnerCamera;
+        public TemplateCamera OuterCamera;
 
         public Action<DataGrab> EventInnerCamera;
         public Action<DataGrab> EventOuterCamera;

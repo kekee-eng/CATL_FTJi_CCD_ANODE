@@ -56,8 +56,8 @@ namespace DetectCCD {
 
         private void btnReset_Click(object sender, EventArgs e) {
 
-            device.InnerCamera.Stop();
-            device.OuterCamera.Stop();
+            device.InnerCamera.Freeze();
+            device.OuterCamera.Freeze();
 
             device.InnerCamera.m_frameStart = Static.ParamApp.CameraFrameStart;
             device.OuterCamera.m_frameStart = Static.ParamApp.CameraFrameStart;
@@ -79,15 +79,15 @@ namespace DetectCCD {
 
         }
         private void btnStart_Click(object sender, EventArgs e) {
-            device.InnerCamera.Start();
-            device.OuterCamera.Start();
+            device.InnerCamera.Grab();
+            device.OuterCamera.Grab();
 
             record.InnerViewerImage.SetUserEnable(false);
             record.OuterViewerImage.SetUserEnable(false);
         }
         private void btnStop_Click(object sender, EventArgs e) {
-            device.InnerCamera.Stop();
-            device.OuterCamera.Stop();
+            device.InnerCamera.Freeze();
+            device.OuterCamera.Freeze();
 
             record.InnerViewerImage.SetUserEnable(true);
             record.OuterViewerImage.SetUserEnable(true);
@@ -95,15 +95,17 @@ namespace DetectCCD {
 
         private void timer1_Tick(object sender, EventArgs e) {
 
-            btnLoadFileInner.Enabled = !device.isRun;
-            btnLoadFileOuter.Enabled = !device.isRun;
-            btnInit.Enabled = !device.isRun;
+            if (device.isReady) {
+                btnLoadFileInner.Enabled = !device.isRun;
+                btnLoadFileOuter.Enabled = !device.isRun;
+                btnInit.Enabled = !device.isRun;
 
-            btnReset.Enabled = !device.isRun;
-            btnStart.Enabled = !device.isRun;
-            btnStop.Enabled = device.isRun;
+                btnReset.Enabled = !device.isRun;
+                btnStart.Enabled = !device.isRun;
+                btnStop.Enabled = device.isRun;
 
-            textFrameStart.Enabled = !device.isRun;
+                textFrameStart.Enabled = !device.isRun;
+            }
 
         }
     }

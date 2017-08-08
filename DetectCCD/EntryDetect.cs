@@ -169,8 +169,8 @@ CfgParamSelf    BLOB
                 Task.Run(() => {
                     var eimage = grab.GetImage(efx1, efx2);
                     int[] etype;
-                    double[] ex, ey, ew, eh;
-                    if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh)) {
+                    double[] ex, ey, ew, eh, earea;
+                    if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
 
                         int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
                         for (int i = 0; i < ecc; i++) {
@@ -179,11 +179,12 @@ CfgParamSelf    BLOB
                                 X = ex[i] / w,
                                 Y = efx1 + ey[i] / h,
                                 W = ew[i] / w,
-                                H = eh[i] / h,
+                                H = eh[i] / h
                             };
 
                             defect.Width = defect.W * Fx;
                             defect.Height = defect.H * Fy;
+                            defect.Area = earea[i] * Fx * Fy / w / h;
 
                             Defects.Add(defect);
                         }

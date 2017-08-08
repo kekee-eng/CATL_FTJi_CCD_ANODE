@@ -141,11 +141,11 @@ namespace DetectCCD {
             
             return true;
         }
-        public static bool DetectDefect(HImage image, out int[] type, out double[] x, out double[] y, out double[] w, out double[] h) {
+        public static bool DetectDefect(HImage image, out int[] type, out double[] x, out double[] y, out double[] w, out double[] h, out double [] area) {
 
             //
             type = null;
-            x = y = w = h = null;
+            x = y = w = h =area = null;
 
             //
             var data = TemplateProcess("DetectDefect", image, out TimeDetectDefect);
@@ -157,6 +157,7 @@ namespace DetectCCD {
             y = data["OutY"].ToDArr();
             w = data["OutW"].ToDArr();
             h = data["OutH"].ToDArr();
+            area = data["OutArea"].ToDArr();
 
             //
             if (type.Length == 0) return false;
@@ -164,6 +165,7 @@ namespace DetectCCD {
             if (y.Length == 0) return false;
             if (w.Length == 0) return false;
             if (h.Length == 0) return false;
+            if (area.Length == 0) return false;
 
             return true;
         }

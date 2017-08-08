@@ -159,10 +159,10 @@ namespace DetectCCD {
                 _lc_inner_camera.Text = Device.InnerCamera.m_camera_name;
                 _lc_inner_fps.Text = Device.InnerCamera.m_fpsRealtime.ToString("0.000");
                 _lc_inner_frame.Text = Device.InnerCamera.m_frame.ToString();
-                _lc_inner_isgrabbing.Text = Device.InnerCamera.isRun ? "On" : "Off";
-                _lc_inner_isopen.Text = Device.InnerCamera.isReady ? "On" : "Off";
-                _lc_inner_isgrabbing.ForeColor = Device.InnerCamera.isRun ? Color.Green : Color.Red;
-                _lc_inner_isopen.ForeColor = Device.InnerCamera.isReady ? Color.Green : Color.Red;
+                _lc_inner_isgrabbing.Text = Device.InnerCamera.isGrabbing ? "On" : "Off";
+                _lc_inner_isopen.Text = Device.InnerCamera.isOpen ? "On" : "Off";
+                _lc_inner_isgrabbing.ForeColor = Device.InnerCamera.isGrabbing ? Color.Green : Color.Red;
+                _lc_inner_isopen.ForeColor = Device.InnerCamera.isOpen ? Color.Green : Color.Red;
 
                 _lc_inner_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamInner.Caption, Device.InnerCamera.m_camera_name, Device.InnerCamera.m_frame);
                 _lc_inner_eaCount.Text = Record.InnerDetect.EACount.ToString();
@@ -173,10 +173,10 @@ namespace DetectCCD {
                 _lc_outer_camera.Text = Device.OuterCamera.m_camera_name;
                 _lc_outer_fps.Text = Device.OuterCamera.m_fpsRealtime.ToString("0.000");
                 _lc_outer_frame.Text = Device.OuterCamera.m_frame.ToString();
-                _lc_outer_isgrabbing.Text = Device.OuterCamera.isRun ? "On" : "Off";
-                _lc_outer_isopen.Text = Device.OuterCamera.isReady ? "On" : "Off";
-                _lc_outer_isgrabbing.ForeColor = Device.OuterCamera.isRun ? Color.Green : Color.Red;
-                _lc_outer_isopen.ForeColor = Device.OuterCamera.isReady ? Color.Green : Color.Red;
+                _lc_outer_isgrabbing.Text = Device.OuterCamera.isGrabbing ? "On" : "Off";
+                _lc_outer_isopen.Text = Device.OuterCamera.isOpen ? "On" : "Off";
+                _lc_outer_isgrabbing.ForeColor = Device.OuterCamera.isGrabbing ? Color.Green : Color.Red;
+                _lc_outer_isopen.ForeColor = Device.OuterCamera.isOpen ? Color.Green : Color.Red;
 
                 _lc_outer_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamOuter.Caption, Device.OuterCamera.m_camera_name, Device.OuterCamera.m_frame);
                 _lc_outer_eaCount.Text = Record.OuterDetect.EACount.ToString();
@@ -323,7 +323,7 @@ namespace DetectCCD {
                         Thread.Sleep(10);
 
                         Static.SafeRun(() => {
-                            double refFps = Device.InnerCamera.isRun ? Device.InnerCamera.m_fpsRealtime : 10;
+                            double refFps = Device.InnerCamera.isGrabbing ? Device.InnerCamera.m_fpsRealtime : 10;
                             Record.InnerViewerImage.MoveTargetSync(Device.InnerCamera.m_fpsRealtime);
                         });
                     };
@@ -338,7 +338,7 @@ namespace DetectCCD {
                         Thread.Sleep(10);
 
                         Static.SafeRun(() => {
-                            double refFps = Device.OuterCamera.isRun ? Device.OuterCamera.m_fpsRealtime : 10;
+                            double refFps = Device.OuterCamera.isGrabbing ? Device.OuterCamera.m_fpsRealtime : 10;
                             Record.OuterViewerImage.MoveTargetSync(Device.OuterCamera.m_fpsRealtime);
                         });
                     };

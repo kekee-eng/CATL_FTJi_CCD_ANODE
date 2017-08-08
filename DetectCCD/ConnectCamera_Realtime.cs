@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace DetectCCD {
 
-    public class ConnectCamera_Realtime {
+    class ConnectCamera_Realtime {
 
         /// <summary> 连接GIGE相机 </summary>
         public ConnectCamera_Realtime(int serverIndex2, int resourceIndex2, int bufferCount, string configFile2 = "") {
@@ -48,7 +48,7 @@ namespace DetectCCD {
         public SapAcqDevice AcqDevice = null;
         public SapBuffer Buffers = null;
         public SapTransfer Xfer = null;
-        
+
         public event Action<DataGrab> OnImageReady = null;
         public event Func<int> GetEncoder;
 
@@ -58,7 +58,7 @@ namespace DetectCCD {
 
         public string m_camera_name = "";
 
-        public int m_count = 0;
+        public int m_frame = 0;
         public double m_fps = 0;
         public int m_encoder = 0;
 
@@ -165,14 +165,14 @@ namespace DetectCCD {
             AcqDevice.GetFeatureValue("DeviceUserID", out m_camera_name);
 
             //
-            m_count = 0;
+            m_frame = 0;
             m_isOpen = true;
             return true;
         }
         private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
-            
+
             //
-            if (m_count == 0) {
+            if (m_frame == 0) {
 
                 //
                 fps_watch.Stop();
@@ -180,7 +180,7 @@ namespace DetectCCD {
                 fps_watch.Start();
                 fps_watch_time_prev = fps_watch.ElapsedMilliseconds;
                 m_fps = 1.0;
-                
+
                 encoder_base = encoder_current;
             }
             else {
@@ -192,7 +192,7 @@ namespace DetectCCD {
             }
 
             //
-            m_count++;
+            m_frame++;
             m_encoder = encoder_current - encoder_base;
 
             //
@@ -201,7 +201,7 @@ namespace DetectCCD {
                 //
                 DataGrab dg = new DataGrab() {
                     Camera = m_camera_name,
-                    Frame = m_count,
+                    Frame = m_frame,
                     Encoder = m_encoder,
                     Timestamp = DataGrab.GenTimeStamp(DateTime.Now),
                 };
@@ -213,7 +213,7 @@ namespace DetectCCD {
                 Buffers.GetAddress(out data);
                 dg.Image = new HalconDotNet.HImage("byte", w, h, data);
                 dg.IsCreated = true;
-                
+
                 //
                 OnImageReady(dg);
             }
@@ -249,7 +249,7 @@ namespace DetectCCD {
             if (AcqDevice != null) { AcqDevice.Dispose(); AcqDevice = null; }
             if (Acq != null) { Acq.Dispose(); Acq = null; }
         }
-        
+
         public void Snap() {
             if (m_isOpen) {
                 Xfer.Snap();
@@ -266,7 +266,7 @@ namespace DetectCCD {
                 m_isGrab = false;
             }
         }
-        
+
         //Param
         public bool ParamTriggerMode {
             get {

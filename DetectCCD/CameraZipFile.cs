@@ -13,17 +13,12 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    public class ConnectCamera_ZipFile : IDisposable {
+    class CameraZipFile : TemplateCamera, IDisposable {
 
-        public ConnectCamera_ZipFile(string filename) {
+        public CameraZipFile(string filename) {
             m_filename = filename;
             prepareFile(filename);
             new Thread(new ThreadStart(threadProcess)).Start();
-        }
-        ~ConnectCamera_ZipFile() {
-            if (m_zipfile != null) {
-                m_zipfile.Dispose();
-            }
         }
 
         //
@@ -76,7 +71,7 @@ namespace DetectCCD {
                 return data;
             };
 
-            isReady = false;
+            isOpen = false;
             await Task.Run(() => {
 
                 //
@@ -98,14 +93,14 @@ namespace DetectCCD {
                 }
                 
                 //
-                isReady = true;
+                isOpen = true;
 
             });
         }
         DataGrab prepareImage() {
 
             //
-            if (!isReady)
+            if (!isOpen)
                 return null;
 
             //
@@ -157,12 +152,12 @@ namespace DetectCCD {
             Stopwatch watch = new Stopwatch();
             while (!isQuit) {
                 Thread.Sleep(1);
-                if (!isRun && watch.IsRunning) {
+                if (!isGrabbing && watch.IsRunning) {
                     watch.Stop();
                     watch.Reset();
                 }
 
-                if (isRun) {
+                if (isGrabbing) {
 
                     //
                     isStopOk = false;
@@ -172,7 +167,6 @@ namespace DetectCCD {
                         watch.Stop();
                         watch.Reset();
                         watch.Start();
-                        //callStart();
                     }
 
                     //定义变量
@@ -186,7 +180,7 @@ namespace DetectCCD {
 
                     //准备图像
                     DataGrab dg = null;
-                    while (isRun && dg == null) {
+                    while (isGrabbing && dg == null) {
                         Thread.Sleep(10);
                         dg = prepareImage();
                     }
@@ -202,17 +196,17 @@ namespace DetectCCD {
                         Thread.Sleep(1);
                         timeEnd = watch.ElapsedMilliseconds;
                         timeElapsedReal = timeEnd - timeStart;
-                    } while (isRun && timeElapsedReal < timeElapsedRequire);
+                    } while (isGrabbing && timeElapsedReal < timeElapsedRequire);
 
                     //计算实时帧率
                     m_fpsRealtime = 1000 / timeElapsedReal;
 
                     //回调
                     if (dg != null)
-                        OnImageReady?.Invoke(dg);
+                        callImageReady(dg);
 
                     if (m_frame == Max)
-                        OnComplete?.Invoke();
+                        callComplete();
 
                 }
                 else {
@@ -222,64 +216,39 @@ namespace DetectCCD {
         }
 
         //
-        public void Reset() {
-            if (!isRun) {
+        public override void Reset() {
+            if (!isGrabbing) {
                 m_frame = m_frameStart;
             }
         }
-        public void Stop() {
-            if (isRun) {
-                isRun = false;
+        public override void Freeze() {
+            if (isGrabbing) {
+                isGrabbing = false;
                 while (!isQuit && !isStopOk && m_frame != Max) {
                     Thread.Sleep(10);
                 }
             }
         }
-        public void Start() {
-            if (!isRun) {
-                isRun = true;
+        public override void Grab() {
+            if (!isGrabbing) {
+                isGrabbing = true;
             }
         }
-        public string GetTitle() {
-            return string.Format("{0} [离线][{1}-{2}] [{3}]", m_camera_name, Min, Max, m_frame);
-        }
-
-        public virtual void Dispose() {
-            isRun = false;
+        public override void Dispose() {
+            isGrabbing = false;
             isQuit = true;
             m_camera_name = "";
-        }
 
-        //事件
-        public event Action<DataGrab> OnImageReady = null;
-        public event Action OnComplete = null;
+            if (m_zipfile != null)
+                m_zipfile.Dispose();
+
+        }
+        public override int getMin() { return m_datas.Keys.Min(); }
+        public override int getMax() { return m_datas.Keys.Max(); }
 
         //变量
         public bool isQuit = false;
-        public bool isReady = false;
-        public bool isRun = false;
         public bool isStopOk = false;
-
-        public int Min {
-            get {
-                try { return m_datas.Keys.Min(); }
-                catch { return 0; }
-            }
-        }
-        public int Max { 
-            get {
-                try { return m_datas.Keys.Max(); }
-                catch { return 0; }
-            }
-        }
-
-        public int m_frame = 0;
-        public int m_frameStart = 0;
-        public double m_fpsControl = 1.0;
-        public double m_fpsRealtime = 0.0;
-
-        //
-        public string m_camera_name = "";
-
+        
     }
 }
