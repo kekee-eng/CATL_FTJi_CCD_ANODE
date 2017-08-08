@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    class CfgParamApp : DetectCCD.TemplateConfig {
+    class CfgParamApp : TemplateConfig {
         public CfgParamApp(string path) : base(path) { }
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
@@ -16,13 +16,30 @@ namespace DetectCCD {
         public bool ModeByCamera { get { return run_mode != 1; } }
 
         //相机源：真实相机、Zip文件、文件夹、数据库
-        public bool CameraByRealtime = false;
+        public bool CameraByRealtime4K = false;
+        public bool CameraByRealtime8K = false;
         public bool CameraByZipFile = false;
         public bool CameraByFolder = false;
         public bool CameraByDB = false;
 
         public string CameraFileInner = "";
         public string CameraFileOuter = "";
+
+        public int Camera4KInnerServer2 = 0;
+        public int Camera4KInnerResource2 = 0;
+
+        public int Camera8KInnerServer1 = 0;
+        public int Camera8KInnerResource1 = 0;
+        public int Camera8KInnerServer2 = 0;
+        public int Camera8KInnerResource2 = 0;
+
+        public int Camera4KOuterServer2 = 0;
+        public int Camera4KOuterResource2 = 0;
+
+        public int Camera8KOuterServer1 = 0;
+        public int Camera8KOuterResource1 = 0;
+        public int Camera8KOuterServer2 = 0;
+        public int Camera8KOuterResource2 = 0;
 
         //记录参数
         public int RecordCacheSize = 200;

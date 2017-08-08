@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DetectCCD {
 
     [Serializable]
-    class CfgParamShare : DetectCCD.TemplateConfig {
+    class CfgParamShare : TemplateConfig {
         public CfgParamShare(string path) : base(path) { }
 
         //EA起始Mark孔判定位置

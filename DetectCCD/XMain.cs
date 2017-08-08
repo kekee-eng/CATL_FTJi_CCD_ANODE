@@ -388,7 +388,7 @@ namespace DetectCCD {
         }
 
         private void btnOfflineControl_Click(object sender, EventArgs e) {
-            new XFCameraFileControl(Device, Record).Show();
+            new XFCameraControl(Device, Record).Show();
         }
 
     }

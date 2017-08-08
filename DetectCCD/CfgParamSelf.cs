@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DetectCCD {
 
     [Serializable]
-    class CfgParamSelf : DetectCCD.TemplateConfig {
+    class CfgParamSelf : TemplateConfig {
         public CfgParamSelf(string path) : base(path) { }
 
         public string Caption = "未定义";

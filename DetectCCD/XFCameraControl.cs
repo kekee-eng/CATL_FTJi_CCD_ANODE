@@ -10,8 +10,8 @@ using System.Windows.Forms;
 using DevExpress.XtraEditors;
 
 namespace DetectCCD {
-    partial class XFCameraFileControl : DevExpress.XtraEditors.XtraForm {
-        public XFCameraFileControl(ModDevice device, ModRecord record) {
+    partial class XFCameraControl : DevExpress.XtraEditors.XtraForm {
+        public XFCameraControl(ModDevice device, ModRecord record) {
             InitializeComponent();
 
             this.record = record;

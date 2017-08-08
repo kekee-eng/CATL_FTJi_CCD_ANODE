@@ -1,5 +1,5 @@
 ﻿namespace DetectCCD {
-    partial class XFCameraFileControl {
+    partial class XFCameraControl {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -23,7 +23,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
             this.btnLoadFileInner = new DevExpress.XtraEditors.SimpleButton();
             this.btnLoadFileOuter = new DevExpress.XtraEditors.SimpleButton();
             this.btnReset = new DevExpress.XtraEditors.SimpleButton();
@@ -34,16 +33,16 @@
             this.textFrameStart = new DevExpress.XtraEditors.TextEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.btnInit = new DevExpress.XtraEditors.SimpleButton();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer();
             ((System.ComponentModel.ISupportInitialize)(this.trackFps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackFps.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textFrameStart.Properties)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnLoadInner
+            // btnLoadFileInner
             // 
-            this.btnLoadFileInner.Location = new System.Drawing.Point(85, 35);
-            this.btnLoadFileInner.Name = "btnLoadInner";
+            this.btnLoadFileInner.Location = new System.Drawing.Point(44, 39);
+            this.btnLoadFileInner.Name = "btnLoadFileInner";
             this.btnLoadFileInner.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileInner.TabIndex = 7;
             this.btnLoadFileInner.Text = "设置内侧相机";
@@ -51,7 +50,7 @@
             // 
             // btnLoadFileOuter
             // 
-            this.btnLoadFileOuter.Location = new System.Drawing.Point(85, 71);
+            this.btnLoadFileOuter.Location = new System.Drawing.Point(44, 75);
             this.btnLoadFileOuter.Name = "btnLoadFileOuter";
             this.btnLoadFileOuter.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileOuter.TabIndex = 8;
@@ -60,7 +59,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(85, 183);
+            this.btnReset.Location = new System.Drawing.Point(44, 187);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(101, 30);
             this.btnReset.TabIndex = 9;
@@ -69,7 +68,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(85, 219);
+            this.btnStart.Location = new System.Drawing.Point(44, 223);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(101, 30);
             this.btnStart.TabIndex = 10;
@@ -78,7 +77,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(85, 255);
+            this.btnStop.Location = new System.Drawing.Point(44, 259);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(101, 30);
             this.btnStop.TabIndex = 11;
@@ -127,7 +126,7 @@
             // 
             // btnInit
             // 
-            this.btnInit.Location = new System.Drawing.Point(85, 107);
+            this.btnInit.Location = new System.Drawing.Point(44, 111);
             this.btnInit.Name = "btnInit";
             this.btnInit.Size = new System.Drawing.Size(101, 30);
             this.btnInit.TabIndex = 17;
@@ -140,7 +139,7 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // XFCameraFileControl
+            // XFCameraControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -155,8 +154,8 @@
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnLoadFileOuter);
             this.Controls.Add(this.btnLoadFileInner);
-            this.Name = "XFCameraFileControl";
-            this.Text = "XFCameraFileControl";
+            this.Name = "XFCameraControl";
+            this.Text = "XFCameraControl";
             ((System.ComponentModel.ISupportInitialize)(this.trackFps.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackFps)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textFrameStart.Properties)).EndInit();

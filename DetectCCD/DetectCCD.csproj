@@ -105,11 +105,11 @@
     <Compile Include="ViewerImage.cs" />
     <Compile Include="ModRecord.cs" />
     <Compile Include="ModDevice.cs" />
-    <Compile Include="XFCameraFileControl.cs">
+    <Compile Include="XFCameraControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="XFCameraFileControl.Designer.cs">
-      <DependentUpon>XFCameraFileControl.cs</DependentUpon>
+    <Compile Include="XFCameraControl.Designer.cs">
+      <DependentUpon>XFCameraControl.cs</DependentUpon>
     </Compile>
     <Compile Include="XFUserLogin.cs">
       <SubType>Form</SubType>
@@ -147,8 +147,8 @@
     </Compile>
     <Compile Include="_ENC7480.cs" />
     <Compile Include="_ModbusTCP.cs" />
-    <EmbeddedResource Include="XFCameraFileControl.resx">
-      <DependentUpon>XFCameraFileControl.cs</DependentUpon>
+    <EmbeddedResource Include="XFCameraControl.resx">
+      <DependentUpon>XFCameraControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="XFUserLogin.resx">
       <DependentUpon>XFUserLogin.cs</DependentUpon>

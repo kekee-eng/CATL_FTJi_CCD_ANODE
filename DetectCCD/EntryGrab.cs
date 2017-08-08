@@ -3,7 +3,6 @@ using HalconDotNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static DetectCCD.DataGrab;
 
 namespace DetectCCD {
 
@@ -11,13 +10,13 @@ namespace DetectCCD {
 
         //
         public EntryGrab(TemplateDB parent, string tableName, int cache) {
-            DB = new GrabDB(parent, tableName);
-            Cache = new GrabCache() { CountLimit = cache };
+            DB = new DataGrab.GrabDB(parent, tableName);
+            Cache = new DataGrab.GrabCache() { CountLimit = cache };
         }
 
         //
-        public GrabCache Cache;
-        public GrabDB DB;
+        public DataGrab.GrabCache Cache;
+        public DataGrab.GrabDB DB;
 
         //
         public int Width { get { return Math.Max(Cache.Width, DB.Width); } }
