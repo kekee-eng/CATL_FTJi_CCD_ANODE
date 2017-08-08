@@ -31,7 +31,7 @@ namespace DetectCCD {
 
         //显示参数
         public double CameraFpsControl = 10;
-        public int CameraStartFrame = 1;
+        public int CameraFrameStart = 1;
 
         //
         public bool ImageProcessReload = true;

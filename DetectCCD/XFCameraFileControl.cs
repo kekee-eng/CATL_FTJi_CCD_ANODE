@@ -16,6 +16,9 @@ namespace DetectCCD {
 
             this.record = record;
             this.device = device;
+
+            Static.ParamApp.BindTextBox(textFrameStart, "CameraFrameStart");
+            trackFps.Value = (int)( Static.ParamApp.CameraFpsControl * 10);
         }
 
         ModRecord record;
@@ -26,7 +29,13 @@ namespace DetectCCD {
             device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
             device.OuterCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
         }
-        private void btnLoadInner_Click(object sender, EventArgs e) {
+        private void textFrameStart_EditValueChanged(object sender, EventArgs e) {
+            int i;
+            if(int.TryParse(textFrameStart.Text, out i)) {
+                Static.ParamApp.CameraFrameStart = i;
+            }
+        }
+        private void btnLoadFileInner_Click(object sender, EventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == DialogResult.OK) {
                 Static.ParamApp.CameraFileInner = ofd.FileName;
@@ -50,11 +59,17 @@ namespace DetectCCD {
             device.InnerCamera.Stop();
             device.OuterCamera.Stop();
 
+            device.InnerCamera.m_frameStart = Static.ParamApp.CameraFrameStart;
+            device.OuterCamera.m_frameStart = Static.ParamApp.CameraFrameStart;
+
             device.InnerCamera.Reset();
             device.OuterCamera.Reset();
 
-            record.InnerDetect.Discard();
-            record.OuterDetect.Discard();
+            record.InnerGrab.Cache.Dispose();
+            record.OuterGrab.Cache.Dispose();
+
+            record.InnerDetect.Dispose();
+            record.OuterDetect.Dispose();
 
             record.InnerViewerImage.SetBottomTarget(0);
             record.InnerViewerImage.MoveTargetDirect();
@@ -78,5 +93,18 @@ namespace DetectCCD {
             record.OuterViewerImage.SetUserEnable(true);
         }
 
+        private void timer1_Tick(object sender, EventArgs e) {
+
+            btnLoadFileInner.Enabled = !device.isRun;
+            btnLoadFileOuter.Enabled = !device.isRun;
+            btnInit.Enabled = !device.isRun;
+
+            btnReset.Enabled = !device.isRun;
+            btnStart.Enabled = !device.isRun;
+            btnStop.Enabled = device.isRun;
+
+            textFrameStart.Enabled = !device.isRun;
+
+        }
     }
 }

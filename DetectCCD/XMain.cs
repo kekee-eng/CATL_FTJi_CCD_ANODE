@@ -73,8 +73,8 @@ namespace DetectCCD {
         bool isOnline { get { return textMode.SelectedIndex == 0; } }
 
         bool isQuit = false;
-        bool isRunning = false;
-        bool isReset = false;
+        //bool isRunning = false;
+        //bool isReset = false;
         bool isRollOk = false;
 
         int rollType = -1;
@@ -154,8 +154,7 @@ namespace DetectCCD {
                 textMode.BackColor = isOnline ? Color.LightGreen : Color.Pink;
                 groupOnline.Enabled = isOnline;
                 groupOffline.Enabled = !isOnline;
-
-
+                
                 //
                 _lc_inner_camera.Text = Device.InnerCamera.m_camera_name;
                 _lc_inner_fps.Text = Device.InnerCamera.m_fpsRealtime.ToString("0.000");
@@ -183,8 +182,7 @@ namespace DetectCCD {
                 _lc_outer_eaCount.Text = Record.OuterDetect.EACount.ToString();
                 _lc_outer_widthCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 _lc_outer_defectCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
-
-
+                
                 //状态栏
                 status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                 status_device.ImageIndex = Device.isRun ? 5 : 4;

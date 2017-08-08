@@ -23,7 +23,8 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.btnLoadInner = new DevExpress.XtraEditors.SimpleButton();
+            this.components = new System.ComponentModel.Container();
+            this.btnLoadFileInner = new DevExpress.XtraEditors.SimpleButton();
             this.btnLoadFileOuter = new DevExpress.XtraEditors.SimpleButton();
             this.btnReset = new DevExpress.XtraEditors.SimpleButton();
             this.btnStart = new DevExpress.XtraEditors.SimpleButton();
@@ -33,6 +34,7 @@
             this.textFrameStart = new DevExpress.XtraEditors.TextEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.btnInit = new DevExpress.XtraEditors.SimpleButton();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.trackFps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackFps.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textFrameStart.Properties)).BeginInit();
@@ -40,16 +42,16 @@
             // 
             // btnLoadInner
             // 
-            this.btnLoadInner.Location = new System.Drawing.Point(367, 12);
-            this.btnLoadInner.Name = "btnLoadInner";
-            this.btnLoadInner.Size = new System.Drawing.Size(101, 30);
-            this.btnLoadInner.TabIndex = 7;
-            this.btnLoadInner.Text = "设置内侧相机";
-            this.btnLoadInner.Click += new System.EventHandler(this.btnLoadInner_Click);
+            this.btnLoadFileInner.Location = new System.Drawing.Point(85, 35);
+            this.btnLoadFileInner.Name = "btnLoadInner";
+            this.btnLoadFileInner.Size = new System.Drawing.Size(101, 30);
+            this.btnLoadFileInner.TabIndex = 7;
+            this.btnLoadFileInner.Text = "设置内侧相机";
+            this.btnLoadFileInner.Click += new System.EventHandler(this.btnLoadFileInner_Click);
             // 
             // btnLoadFileOuter
             // 
-            this.btnLoadFileOuter.Location = new System.Drawing.Point(367, 48);
+            this.btnLoadFileOuter.Location = new System.Drawing.Point(85, 71);
             this.btnLoadFileOuter.Name = "btnLoadFileOuter";
             this.btnLoadFileOuter.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileOuter.TabIndex = 8;
@@ -58,7 +60,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(367, 166);
+            this.btnReset.Location = new System.Drawing.Point(85, 183);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(101, 30);
             this.btnReset.TabIndex = 9;
@@ -67,7 +69,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(367, 202);
+            this.btnStart.Location = new System.Drawing.Point(85, 219);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(101, 30);
             this.btnStart.TabIndex = 10;
@@ -76,7 +78,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(367, 238);
+            this.btnStop.Location = new System.Drawing.Point(85, 255);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(101, 30);
             this.btnStop.TabIndex = 11;
@@ -85,22 +87,22 @@
             // 
             // trackFps
             // 
-            this.trackFps.EditValue = 30;
-            this.trackFps.Location = new System.Drawing.Point(114, 187);
+            this.trackFps.EditValue = 10;
+            this.trackFps.Location = new System.Drawing.Point(85, 331);
             this.trackFps.Name = "trackFps";
             this.trackFps.Properties.LabelAppearance.Options.UseTextOptions = true;
             this.trackFps.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.trackFps.Properties.Maximum = 300;
-            this.trackFps.Properties.Minimum = 30;
+            this.trackFps.Properties.Minimum = 3;
             this.trackFps.Properties.TickFrequency = 10;
             this.trackFps.Size = new System.Drawing.Size(186, 45);
             this.trackFps.TabIndex = 12;
-            this.trackFps.Value = 30;
+            this.trackFps.Value = 10;
             this.trackFps.EditValueChanged += new System.EventHandler(this.trackFps_EditValueChanged);
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(60, 192);
+            this.labelControl1.Location = new System.Drawing.Point(31, 336);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(48, 14);
             this.labelControl1.TabIndex = 13;
@@ -108,15 +110,16 @@
             // 
             // textFrameStart
             // 
-            this.textFrameStart.Location = new System.Drawing.Point(114, 219);
+            this.textFrameStart.Location = new System.Drawing.Point(85, 363);
             this.textFrameStart.Name = "textFrameStart";
             this.textFrameStart.Properties.AutoHeight = false;
             this.textFrameStart.Size = new System.Drawing.Size(186, 25);
             this.textFrameStart.TabIndex = 15;
+            this.textFrameStart.EditValueChanged += new System.EventHandler(this.textFrameStart_EditValueChanged);
             // 
             // labelControl2
             // 
-            this.labelControl2.Location = new System.Drawing.Point(60, 224);
+            this.labelControl2.Location = new System.Drawing.Point(31, 368);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(48, 14);
             this.labelControl2.TabIndex = 16;
@@ -124,18 +127,24 @@
             // 
             // btnInit
             // 
-            this.btnInit.Location = new System.Drawing.Point(367, 84);
+            this.btnInit.Location = new System.Drawing.Point(85, 107);
             this.btnInit.Name = "btnInit";
             this.btnInit.Size = new System.Drawing.Size(101, 30);
             this.btnInit.TabIndex = 17;
             this.btnInit.Text = "初始化";
             this.btnInit.Click += new System.EventHandler(this.btnInit_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // XFCameraFileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(534, 310);
+            this.ClientSize = new System.Drawing.Size(313, 433);
             this.Controls.Add(this.btnInit);
             this.Controls.Add(this.labelControl2);
             this.Controls.Add(this.textFrameStart);
@@ -145,7 +154,7 @@
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnLoadFileOuter);
-            this.Controls.Add(this.btnLoadInner);
+            this.Controls.Add(this.btnLoadFileInner);
             this.Name = "XFCameraFileControl";
             this.Text = "XFCameraFileControl";
             ((System.ComponentModel.ISupportInitialize)(this.trackFps.Properties)).EndInit();
@@ -158,7 +167,7 @@
 
         #endregion
 
-        private DevExpress.XtraEditors.SimpleButton btnLoadInner;
+        private DevExpress.XtraEditors.SimpleButton btnLoadFileInner;
         private DevExpress.XtraEditors.SimpleButton btnLoadFileOuter;
         private DevExpress.XtraEditors.SimpleButton btnReset;
         private DevExpress.XtraEditors.SimpleButton btnStart;
@@ -168,5 +177,6 @@
         private DevExpress.XtraEditors.TextEdit textFrameStart;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.SimpleButton btnInit;
+        private System.Windows.Forms.Timer timer1;
     }
 }

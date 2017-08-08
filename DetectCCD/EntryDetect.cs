@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    class EntryDetect {
+    class EntryDetect :IDisposable {
 
         public EntryDetect(TemplateDB parent, string tableName, CfgParamShare pshare, CfgParamSelf pself, EntryGrab grab) {
 
@@ -17,8 +17,15 @@ namespace DetectCCD {
             this.param = pshare;
             this.param_self = pself;
             this.grab = grab;
-            
+
         }
+
+        public void Dispose() {
+            Tabs.Clear();
+            Defects.Clear();
+            Labels.Clear();
+        }
+
 
         public void CreateTable() {
 
@@ -123,12 +130,6 @@ CfgParamSelf    BLOB
 
         public double Fx { get { return param_self.ScaleX * grab.Width; } }
         public double Fy { get { return param_self.ScaleY * grab.Height; } }
-
-        public void Discard() {
-            Tabs.Clear();
-            Defects.Clear();
-            Labels.Clear();
-        }
 
         int defectCount = 0;
         bool statuPrev = false;

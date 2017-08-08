@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 
+using TextBox = DevExpress.XtraEditors.TextEdit;
+
 namespace DetectCCD {
 
     /// <summary> 配置文件基类，提供与文件和窗体控件交互功能 </summary>
@@ -16,6 +18,7 @@ namespace DetectCCD {
         public TemplateConfig(string path) {
             m_config_path = path;
             LoadAs(path);
+            
         }
 
         //字段操作（基于反射）
