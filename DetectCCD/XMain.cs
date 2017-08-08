@@ -283,7 +283,7 @@ namespace DetectCCD {
             device.EventInnerCamera = obj => {
 
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerDetect.TryDetect(obj.Frame);
+                record.InnerDetect.TryDetect(obj);
                 record.InnerViewerImage.SetBottomTarget(obj.Frame);
             };
 
@@ -291,7 +291,7 @@ namespace DetectCCD {
             device.EventOuterCamera = obj => {
 
                 record.OuterGrab.Cache[obj.Frame] = obj;
-                record.OuterDetect.TryDetect(obj.Frame);
+                record.OuterDetect.TryDetect(obj);
                 record.OuterViewerImage.SetBottomTarget(obj.Frame);
             };
 

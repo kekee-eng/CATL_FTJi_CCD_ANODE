@@ -134,9 +134,9 @@ CfgParamSelf    BLOB
         int defectCount = 0;
         bool statuPrev = false;
 
-        public bool TryDetect(int frame) {
+        public bool TryDetect(DataGrab obj) {
 
-            bool statuCurr = tryDetect(frame);
+            bool statuCurr = tryDetect(obj);
             if(!statuCurr && statuPrev ) {
                 adjustER();
                 adjustDefect();
@@ -144,12 +144,10 @@ CfgParamSelf    BLOB
             statuPrev = statuCurr;
             return statuCurr;
         }
-        bool tryDetect(int frame) {
+        bool tryDetect(DataGrab obj) {
 
             //
-            var cache = grab.Cache[frame];
-            if (cache != null)
-                return false;
+            int frame = obj.Frame;
             
             //
             int w = grab.Width;
@@ -158,15 +156,15 @@ CfgParamSelf    BLOB
             //极耳检测、并判断是否可能有瑕疵
             var aimage = grab.GetImage(frame);
             double[] ax, ay1, ay2;
-            if (aimage == null || !ImageProcess.DetectTab(aimage, out cache.hasDefect, out cache.hasTab, out ax, out ay1, out ay2))
+            if (aimage == null || !ImageProcess.DetectTab(aimage, out obj.hasDefect, out obj.hasTab, out ax, out ay1, out ay2))
                 return false;
 
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
-            if (cache.hasDefect) {
+            if (obj.hasDefect) {
                 defectCount++;
             }
 
-            if (defectCount >= 10 || (!cache.hasDefect && defectCount > 0)) {
+            if (defectCount >= 10 || (!obj.hasDefect && defectCount > 0)) {
 
                 //拼成大图进行瑕疵检测
                 int efx1 = frame - defectCount;
@@ -201,7 +199,7 @@ CfgParamSelf    BLOB
             }
 
             //是否有极耳
-            if (!cache.hasTab)
+            if (!obj.hasTab)
                 return false;
             
             //极耳数据整理
