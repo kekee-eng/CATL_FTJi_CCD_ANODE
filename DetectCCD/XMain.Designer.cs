@@ -50,6 +50,7 @@
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
@@ -61,7 +62,6 @@
             this.labelControl32 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl33 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl34 = new DevExpress.XtraEditors.LabelControl();
-            this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.groupStatuOuter = new DevExpress.XtraEditors.GroupControl();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -103,8 +103,8 @@
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.hWindowControl1 = new HalconDotNet.HWindowControl();
-            this.hwin = new HalconDotNet.HWindowControl();
+            this.hwinOuter = new HalconDotNet.HWindowControl();
+            this.hwinInner = new HalconDotNet.HWindowControl();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
@@ -135,9 +135,9 @@
             this.xtraTabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).BeginInit();
             this.xtraTabPage1.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
             this.groupControl2.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupStatuOuter)).BeginInit();
             this.groupStatuOuter.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -373,6 +373,18 @@
             this.xtraTabPage1.Size = new System.Drawing.Size(1078, 620);
             this.xtraTabPage1.Text = "设备控制";
             // 
+            // groupControl2
+            // 
+            this.groupControl2.Controls.Add(this.tableLayoutPanel5);
+            this.groupControl2.Controls.Add(this.labelControl4);
+            this.groupControl2.Controls.Add(this.groupStatuOuter);
+            this.groupControl2.Controls.Add(this.groupStatuInner);
+            this.groupControl2.Location = new System.Drawing.Point(673, 23);
+            this.groupControl2.Name = "groupControl2";
+            this.groupControl2.Size = new System.Drawing.Size(368, 277);
+            this.groupControl2.TabIndex = 1;
+            this.groupControl2.Text = "设备状态";
+            // 
             // tableLayoutPanel5
             // 
             this.tableLayoutPanel5.ColumnCount = 2;
@@ -518,18 +530,6 @@
             this.labelControl34.Size = new System.Drawing.Size(89, 19);
             this.labelControl34.TabIndex = 29;
             this.labelControl34.Text = "-";
-            // 
-            // groupControl2
-            // 
-            this.groupControl2.Controls.Add(this.tableLayoutPanel5);
-            this.groupControl2.Controls.Add(this.labelControl4);
-            this.groupControl2.Controls.Add(this.groupStatuOuter);
-            this.groupControl2.Controls.Add(this.groupStatuInner);
-            this.groupControl2.Location = new System.Drawing.Point(673, 23);
-            this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(368, 277);
-            this.groupControl2.TabIndex = 1;
-            this.groupControl2.Text = "设备状态";
             // 
             // labelControl4
             // 
@@ -1020,8 +1020,8 @@
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Controls.Add(this.hWindowControl1, 1, 1);
-            this.tableLayoutPanel3.Controls.Add(this.hwin, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.hwinOuter, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.hwinInner, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel6, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1033,29 +1033,29 @@
             this.tableLayoutPanel3.Size = new System.Drawing.Size(668, 616);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
-            // hWindowControl1
+            // hwinOuter
             // 
-            this.hWindowControl1.BackColor = System.Drawing.Color.Black;
-            this.hWindowControl1.BorderColor = System.Drawing.Color.Black;
-            this.hWindowControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hWindowControl1.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
-            this.hWindowControl1.Location = new System.Drawing.Point(337, 119);
-            this.hWindowControl1.Name = "hWindowControl1";
-            this.hWindowControl1.Size = new System.Drawing.Size(327, 493);
-            this.hWindowControl1.TabIndex = 30;
-            this.hWindowControl1.WindowSize = new System.Drawing.Size(327, 493);
+            this.hwinOuter.BackColor = System.Drawing.Color.Black;
+            this.hwinOuter.BorderColor = System.Drawing.Color.Black;
+            this.hwinOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hwinOuter.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
+            this.hwinOuter.Location = new System.Drawing.Point(337, 119);
+            this.hwinOuter.Name = "hwinOuter";
+            this.hwinOuter.Size = new System.Drawing.Size(327, 493);
+            this.hwinOuter.TabIndex = 30;
+            this.hwinOuter.WindowSize = new System.Drawing.Size(327, 493);
             // 
-            // hwin
+            // hwinInner
             // 
-            this.hwin.BackColor = System.Drawing.Color.Black;
-            this.hwin.BorderColor = System.Drawing.Color.Black;
-            this.hwin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hwin.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
-            this.hwin.Location = new System.Drawing.Point(4, 119);
-            this.hwin.Name = "hwin";
-            this.hwin.Size = new System.Drawing.Size(326, 493);
-            this.hwin.TabIndex = 29;
-            this.hwin.WindowSize = new System.Drawing.Size(326, 493);
+            this.hwinInner.BackColor = System.Drawing.Color.Black;
+            this.hwinInner.BorderColor = System.Drawing.Color.Black;
+            this.hwinInner.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hwinInner.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
+            this.hwinInner.Location = new System.Drawing.Point(4, 119);
+            this.hwinInner.Name = "hwinInner";
+            this.hwinInner.Size = new System.Drawing.Size(326, 493);
+            this.hwinInner.TabIndex = 29;
+            this.hwinInner.WindowSize = new System.Drawing.Size(326, 493);
             // 
             // tableLayoutPanel4
             // 
@@ -1365,9 +1365,9 @@
             this.xtraTabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).EndInit();
             this.xtraTabPage1.ResumeLayout(false);
-            this.tableLayoutPanel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
             this.groupControl2.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupStatuOuter)).EndInit();
             this.groupStatuOuter.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -1488,8 +1488,8 @@
         private DevExpress.XtraEditors.LabelControl labelControl39;
         private DevExpress.XtraEditors.LabelControl labelControl40;
         private DevExpress.XtraEditors.LabelControl labelControl41;
-        private HalconDotNet.HWindowControl hWindowControl1;
-        private HalconDotNet.HWindowControl hwin;
+        private HalconDotNet.HWindowControl hwinOuter;
+        private HalconDotNet.HWindowControl hwinInner;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private DevExpress.XtraEditors.LabelControl labelControl25;
         private DevExpress.XtraEditors.LabelControl labelControl26;

@@ -55,7 +55,7 @@ namespace DetectCCD {
             using (MemoryStream outStream = new MemoryStream()) {
                 using (GZipStream zipStream = new GZipStream(outStream, CompressionMode.Compress, true)) {
                     zipStream.Write(bytes, 0, bytes.Length);
-                    zipStream.Close();
+                    zipStream.Dispose();
                     ret = outStream.ToArray();
                 }
             }
@@ -70,7 +70,7 @@ namespace DetectCCD {
                 using (MemoryStream outStream = new MemoryStream()) {
                     using (GZipStream zipStream = new GZipStream(inputStream, CompressionMode.Decompress)) {
                         zipStream.CopyTo(outStream);
-                        zipStream.Close();
+                        zipStream.Dispose();
                         ret = outStream.ToArray();
                     }
                 }

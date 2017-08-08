@@ -14,18 +14,20 @@ namespace DetectCCD {
         [STAThread]
         static void Main() {
 
-            //初始化主题界面
+            //
             UtilTool.XFSkin.Init();
-
-            //显示载入界面
             UtilTool.XFWait.OpenStart();
+            Static.Init();
 
             //
-            Static.Init();
-            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new XMain());
+
+            var mm = new XMain();
+            new XtraForm1(mm).Show();
+            new FormDetect4K(mm.m_device, mm.m_record).Show();
+
+            Application.Run(mm);
             //Application.Run(new FormDetect4K());
 
             Static.Uninit();

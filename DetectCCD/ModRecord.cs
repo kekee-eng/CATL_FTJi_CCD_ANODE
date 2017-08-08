@@ -2,15 +2,33 @@
 using System;
 
 namespace DetectCCD {
-    class ModRecord : TemplateDB, IDisposable {
+    class ModRecord : TemplateDB {
 
-        public void Dispose() {
+        public override bool Open(string path) {
+            
+            if (base.Open(path)) {
+
+                InnerDetect.CreateTable();
+                InnerGrab.DB.CreateTable();
+                InnerGrab.Cache.Dispose();
+
+                OuterDetect.CreateTable();
+                OuterGrab.DB.CreateTable();
+                OuterGrab.Cache.Dispose();
+
+                return true;
+            }
+            return false;
+        }
+
+        public void Uninit() {
 
             InnerGrab.Cache.Dispose();
             InnerViewerImage.Dispose();
 
             OuterGrab.Cache.Dispose();
             OuterViewerImage.Dispose();
+
         }
 
         public void Init() {
@@ -38,6 +56,6 @@ namespace DetectCCD {
         public EntryDetect OuterDetect;
         public ViewerImage OuterViewerImage;
         public ViewerChart OuterViewerChart;
-        
+
     }
 }

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    class ModDevice {
+    class ModDevice:IDisposable {
         
         public void Open() {
 
             //
-            Close();
+            Dispose();
 
             //
             if (Static.ParamApp.CameraByRealtime) {
@@ -31,7 +31,7 @@ namespace DetectCCD {
             }
 
         }
-        public void Close() {
+        public void Dispose() {
 
             InnerCamera?.Dispose();
             OuterCamera?.Dispose();

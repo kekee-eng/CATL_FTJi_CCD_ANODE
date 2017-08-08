@@ -25,7 +25,7 @@ namespace DetectCCD
                 else
                 {
                     this.Pass = true;
-                    this.Close();
+                    this.Dispose();
                 }
             };
 
@@ -35,7 +35,7 @@ namespace DetectCCD
                 if (e1.KeyCode == Keys.Enter)
                     btnLogin.PerformClick();
                 if (e1.KeyCode == Keys.Escape)
-                    this.Close();
+                    this.Dispose();
             };
 
             //若密码为空，则不必弹出界面
@@ -44,7 +44,7 @@ namespace DetectCCD
                 if (password == "")
                 {
                     this.Pass = true;
-                    this.Close();
+                    this.Dispose();
                 }
             };
         }

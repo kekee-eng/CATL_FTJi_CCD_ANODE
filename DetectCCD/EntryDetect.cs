@@ -17,6 +17,10 @@ namespace DetectCCD {
             this.param = pshare;
             this.param_self = pself;
             this.grab = grab;
+            
+        }
+
+        public void CreateTable() {
 
             //
             db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
@@ -29,12 +33,7 @@ CfgParamShare   BLOB,
 CfgParamSelf    BLOB
 )", this.tname));
 
-            //
-            if (db.Count(tname) > 0) {
-                Load();
-            }
         }
-
         public void Save() {
 
             if (!needSave)
@@ -67,7 +66,7 @@ CfgParamSelf    BLOB
                 (UtilSerialization.bytes2obj((byte[])ret[0][5]) as CfgParamSelf).CopyTo(param_self);
             }
         }
-
+        
         bool needSave = false;
 
         EntryGrab grab;

@@ -432,13 +432,11 @@ namespace DetectCCD {
         void initEvent(HWindowControl hwindow) {
 
             //
-            hwindow.SizeChanged += (o, e) => Static.SafeRun(updateView);
+            g.SetWindowParam("background_color", "cyan");
+            g.ClearWindow();
 
             //
-            hwindow.HInitWindow += (o, e) => {
-                g.SetWindowParam("background_color", "cyan");
-                g.ClearWindow();
-            };
+            hwindow.SizeChanged += (o, e) => Static.SafeRun(updateView);
 
             //
             hwindow.PreviewKeyDown += (o, e) => {

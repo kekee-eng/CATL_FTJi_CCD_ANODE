@@ -30,7 +30,7 @@ namespace DetectCCD
             this.KeyDown += (o1, e1) =>
             {
                 if (e1.KeyCode == Keys.Escape)
-                    this.Close();
+                    this.Dispose();
             };
         }
 
@@ -40,7 +40,7 @@ namespace DetectCCD
                 picEdit_Click(o1, null);
 
             if (e1.KeyCode == Keys.Escape)
-                this.Close();
+                this.Dispose();
         }
 
         void picEdit_Click(object o1, EventArgs e1)
@@ -56,7 +56,7 @@ namespace DetectCCD
                     if (login.Pass)
                     {
                         Static.ParamApp.select_userid = i;
-                        this.Close();
+                        this.Dispose();
                     }
                 }
             }

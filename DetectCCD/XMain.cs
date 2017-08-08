@@ -13,19 +13,17 @@ using DetectCCD;
 using System.IO;
 using System.Diagnostics;
 
-namespace DetectCCD
-{
-    public partial class XMain : DevExpress.XtraEditors.XtraForm
-    {
-        public XMain()
-        {
+namespace DetectCCD {
+    partial class XMain : DevExpress.XtraEditors.XtraForm {
+        public XMain() {
             InitializeComponent();
 
             //
             init_status();
+            init_device();
 
             //
-            UtilTool.XFWait.Close();
+            UtilTool.XFWait.Dispose();
         }
         private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
 
@@ -39,30 +37,42 @@ namespace DetectCCD
 
             //取消全屏显示
             UtilTool.FullScreen.Set(this, false);
-        }
-        
-        void appendLog(string msg, int msgStatus = 0) {
-            //
-            status_info.Caption = msg;
-            status_info.ItemAppearance.Normal.ForeColor = msgStatus == 0 ? Color.Black : msgStatus > 0 ? Color.Green : Color.Red;
 
-            //添加到日志文件中
-            Static.Log.Info(msg);
+            //
+            isQuit = true;
+            m_record?.Dispose();
+            m_device?.Dispose();
         }
+
+
 
         //操作模板
-        void RunAction(string actName, Action act) {
+        void runAction(string actName, Action act) {
             try {
                 appendLog(String.Format("正在{0}...", actName));
                 act();
                 appendLog(String.Format("{0}成功", actName));
             }
             catch (Exception ex) {
-                appendLog(String.Format("{0}失败: \r\n{1}", actName, ex.Message), -1);
+                appendLog(String.Format("{0}失败: \r\n{1}", actName, ex.Message), -1, ex);
             }
         }
-        
+        void appendLog(string msg, int msgStatus = 0, Exception ex =null) {
+            //
+            status_info.Caption = msg;
+            status_info.ItemAppearance.Normal.ForeColor = msgStatus == 0 ? Color.Black : msgStatus > 0 ? Color.Green : Color.Red;
+
+            //添加到日志文件中
+            Static.Log.Info(msg);
+
+            if (ex != null)
+                Static.Log.Info(ex.StackTrace);
+
+        }
+
         bool isOnline { get { return textMode.SelectedIndex == 0; } }
+
+        bool isQuit = false;
         bool isRunning = false;
         bool isReset = false;
         bool isRollOk = false;
@@ -71,8 +81,7 @@ namespace DetectCCD
         string rollName = "";
         int rollRepeat = 0;
 
-        void init_status()
-        {
+        void init_status() {
             //选定用户
             changeUser();
 
@@ -94,8 +103,7 @@ namespace DetectCCD
             timer1_Tick(null, null);
 
         }
-        void changeUser()
-        {
+        void changeUser() {
             //隐藏按钮
             selectSkin.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             selectFullScreen.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
@@ -105,16 +113,14 @@ namespace DetectCCD
             xtraTabControl1.TabPages.Remove(xtraTabPage4);
 
             int userselect = Static.ParamApp.select_userid;
-            if (userselect == 0)
-            {
+            if (userselect == 0) {
                 //左下角图标
                 status_user.ImageIndex = 0;
 
                 //主题样式
                 UtilTool.XFSkin.SetSkinStyle(Static.ParamApp.operator_viewstyle);
             }
-            else if (userselect == 1)
-            {
+            else if (userselect == 1) {
                 //左下角图标
                 status_user.ImageIndex = 1;
 
@@ -124,8 +130,7 @@ namespace DetectCCD
                 //附加页面
                 xtraTabControl1.TabPages.Add(xtraTabPage3);
             }
-            else
-            {
+            else {
                 //左下角图标
                 status_user.ImageIndex = 2;
 
@@ -142,9 +147,9 @@ namespace DetectCCD
             }
         }
         private void timer1_Tick(object sender, EventArgs e) {
-            
+
             Static.SafeRun(() => {
-                
+
                 //
                 textMode.BackColor = isOnline ? Color.LightGreen : Color.Pink;
                 groupOnline.Enabled = isOnline;
@@ -152,33 +157,29 @@ namespace DetectCCD
 
                 //状态栏
                 status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                status_device.ImageIndex = true ? 5 : 4;
+                status_device.ImageIndex = m_device.isRun ? 5 : 4;
                 status_memory.Caption = string.Format("内存={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
             });
         }
 
-        private void status_user_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            RunAction("切换用户",() =>
-            {
+        private void status_user_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
+            runAction("切换用户", () => {
                 UserSelect.GShow(this);
                 changeUser();
             });
         }
         private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
-            RunAction("连接设备", () => {
-
+            runAction("连接设备", () => {
+                m_device.Open();
             });
         }
-        private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+        private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
             if (selectFullScreen.Tag == null)
                 selectFullScreen.Tag = false;
 
-            if ((bool)selectFullScreen.Tag)
-            {
+            if ((bool)selectFullScreen.Tag) {
                 //取消全屏
                 UtilTool.FullScreen.Set(this, false);
                 selectFullScreen.Tag = false;
@@ -188,19 +189,18 @@ namespace DetectCCD
                 //更改图标
                 selectFullScreen.ImageIndex = 7;
             }
-            else
-            {
+            else {
                 //全屏
                 UtilTool.FullScreen.Set(this, true);
                 selectFullScreen.Tag = true;
-                
+
                 //更改图标
                 selectFullScreen.ImageIndex = 6;
             }
         }
-        
+
         private void btnRollSet_Click(object sender, EventArgs e) {
-            RunAction((sender as SimpleButton).Text, () => {
+            runAction((sender as SimpleButton).Text, () => {
 
                 if (!isRollOk) {
                     if (textRollType.SelectedIndex == -1)
@@ -214,24 +214,29 @@ namespace DetectCCD
                     rollName = textRollName.Text;
                     textRollRepeat.Text = rollRepeat.ToString();
 
+                    _init_record();
+
                     textRollType.Enabled = false;
                     textRollName.Enabled = false;
+                    btnRollSet.Text = "结束膜卷";
                     isRollOk = true;
                 }
                 else {
                     textRollType.Enabled = true;
                     textRollName.Enabled = true;
+                    btnRollSet.Text = "设置膜卷";
                     isRollOk = false;
                 }
             });
         }
+
         private void btnDeivceQuit_Click(object sender, EventArgs e) {
-            RunAction((sender as SimpleButton).Text, () => {
+            runAction((sender as SimpleButton).Text, () => {
 
             });
         }
         private void btnDeviceStart_Click(object sender, EventArgs e) {
-            RunAction((sender as SimpleButton).Text, () => {
+            runAction((sender as SimpleButton).Text, () => {
 
                 if (!isRollOk)
                     throw new Exception("膜卷未设置！");
@@ -239,20 +244,118 @@ namespace DetectCCD
             });
         }
         private void btnDeviceStop_Click(object sender, EventArgs e) {
-            RunAction((sender as SimpleButton).Text, () => {
+            runAction((sender as SimpleButton).Text, () => {
 
             });
         }
         private void btnDeviceReset_Click(object sender, EventArgs e) {
-            RunAction((sender as SimpleButton).Text, () => {
+            runAction((sender as SimpleButton).Text, () => {
 
             });
         }
         private void btnDeviceEStop_Click(object sender, EventArgs e) {
-            RunAction((sender as SimpleButton).Text, () => {
+            runAction((sender as SimpleButton).Text, () => {
 
             });
         }
+
+
+        public ModRecord m_record = new ModRecord();
+        public ModDevice m_device = new ModDevice();
+
+        void init_device() {
+
+            m_record.Init();
+
+            m_record.InnerViewerImage.Init(hwinInner);
+            m_device.InnerCamera.OnImageReady += obj => {
+
+                m_record.InnerGrab.Cache[obj.Frame] = obj;
+                m_record.InnerDetect.TryDetect(obj.Frame);
+                m_record.InnerViewerImage.SetBottomTarget(obj.Frame);
+            };
+
+            m_record.OuterViewerImage.Init(hwinOuter);
+            m_device.OuterCamera.OnImageReady += obj => {
+
+                m_record.OuterGrab.Cache[obj.Frame] = obj;
+                m_record.OuterDetect.TryDetect(obj.Frame);
+                m_record.OuterViewerImage.SetBottomTarget(obj.Frame);
+            };
+
+
+            //管理线程
+            Task.Run((Action)(() => {
+
+                //线程：更新显示
+                var tView1 = Task.Run((Action)(() => {
+
+                    while (!isQuit) {
+
+                        Thread.Sleep(10);
+
+                        Static.SafeRun(() => {
+                            double refFps = m_device.InnerCamera.isRun ? m_device.InnerCamera.m_fpsRealtime : 10;
+                            m_record.InnerViewerImage.MoveTargetSync(m_device.InnerCamera.m_fpsRealtime);
+                        });
+                    };
+
+                }));
+
+                //线程：更新显示
+                var tView2 = Task.Run((Action)(() => {
+
+                    while (!isQuit) {
+
+                        Thread.Sleep(10);
+
+                        Static.SafeRun(() => {
+                            double refFps = m_device.OuterCamera.isRun ? m_device.OuterCamera.m_fpsRealtime : 10;
+                            m_record.OuterViewerImage.MoveTargetSync(m_device.OuterCamera.m_fpsRealtime);
+                        });
+                    };
+
+                }));
+
+                //线程：写数据库
+                var tWriteDB = Task.Run((Action)(() => {
+                    return;
+                    do {
+
+                        Static.SafeRun(() => {
+                            List<DataGrab> ret1 = null;
+                            if (m_record.Transaction(() => {
+                                ret1 = m_record.InnerGrab.Save();
+                                m_record.InnerDetect.Save();
+                            })) {
+                                ret1.AsParallel().ForAll(x => x.IsStore = true);
+                            }
+                        });
+
+                        Thread.Sleep(500);
+                    } while (!isQuit);
+
+                }));
+
+                //
+                Task.WaitAll(tWriteDB, tView1);
+                
+            }));
+            
+        }
+        void _init_record() {
+
+            string rPath = Static.FolderRecord + string.Format("[{0}][{1}][{2}].db", rollType, rollName, rollRepeat);
+
+            StringBuilder rBuilder = new StringBuilder(rPath);
+            foreach (char rInvalidChar in Path.GetInvalidPathChars())
+                rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
+
+            m_record.Open(rPath);
+
+        }
+
+
     }
 
 }

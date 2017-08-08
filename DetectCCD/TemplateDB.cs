@@ -14,7 +14,7 @@ namespace DetectCCD {
     public class TemplateDB :IDisposable{
 
         //
-        public bool Open(string path) {
+        public virtual bool Open(string path) {
 
             if (m_isOpen)
                 return false;
@@ -31,11 +31,11 @@ namespace DetectCCD {
                 return false;
             }
         }
-        public void Close() {
+        public void Dispose() {
 
             m_isOpen = false;
             if (m_conn != null) {
-                m_conn.Close();
+                m_conn.Dispose();
                 TypeConn.ClearPool(m_conn);
 
                 m_conn.Dispose();
@@ -43,10 +43,11 @@ namespace DetectCCD {
             }
         }
         void IDisposable.Dispose() {
-            Close();
+            Dispose();
         }
 
         public bool Transaction(Action act) {
+            if (!m_isOpen) return false;
 
             //使用事务
             var trans = m_conn.BeginTransaction();
@@ -68,6 +69,7 @@ namespace DetectCCD {
 
         //
         public void Write(string cmdtext, params object[] args) {
+            if (!m_isOpen) return;
 
             var cmd = m_conn.CreateCommand();
             cmd.CommandText = cmdtext;
@@ -78,6 +80,8 @@ namespace DetectCCD {
 
         }
         public List<object[]> Read(string cmdtext) {
+            if (!m_isOpen) return null;
+
             DataSet ds = new DataSet();
             {
                 var adapter = new TypeAdapter(cmdtext, m_conn);

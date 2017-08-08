@@ -44,17 +44,6 @@ namespace DetectCCD {
                 this.tname = tableName;
 
                 //
-                db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
-(
-ID              INTEGER     PRIMARY KEY     AUTOINCREMENT,
-Camera          TEXT,
-Frame           INTEGER,
-Encoder         INTEGER,
-Timestamp       TEXT,
-Image           BLOB
-)", this.tname));
-
-                //
                 Count = QueryCount;
 
                 //
@@ -100,10 +89,9 @@ Image           BLOB
                     data.IsStore = true;
                     return false;
                 }
-
+                
                 //
                 db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", tname), ToDB(data));
-                //data.IsStore = true;
 
                 //
                 int w, h;
@@ -126,6 +114,20 @@ Image           BLOB
                 Count++;
 
                 return true;
+            }
+            public void CreateTable() {
+
+                //
+                db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
+(
+ID              INTEGER     PRIMARY KEY     AUTOINCREMENT,
+Camera          TEXT,
+Frame           INTEGER,
+Encoder         INTEGER,
+Timestamp       TEXT,
+Image           BLOB
+)", this.tname));
+
             }
 
             static object[] ToDB(DataGrab data) {
@@ -173,7 +175,6 @@ Image           BLOB
 
             public int Width = -1;
             public int Height = -1;
-
             public int LastKey = 0;
 
             public DataGrab this[int i] {
@@ -225,7 +226,7 @@ Image           BLOB
                 return saveDatas;
 
             }
-
+            
         }
         
     }

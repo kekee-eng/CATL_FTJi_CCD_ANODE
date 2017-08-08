@@ -13,105 +13,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DetectCCD {
-    public partial class FormDetect4K : Form {
-        public FormDetect4K() {
+     partial class FormDetect4K : Form {
+        public FormDetect4K(ModDevice device, ModRecord record) {
             InitializeComponent();
 
-            //
-            init_device();
-            init_record();
-
-            //
-            init_form();
-            
-            //
-            Static.ParamApp.BindTextBox(tbFrameStart, "CameraStartFrame");
-            //rtoolDebug_Click(null, null);
-        }
-
-        void init_form() {
-
-            //
-            UtilTool.AddBuildTag(this);
-
-            //管理线程
-            Task.Run((Action)(() => {
-
-                //线程：更新显示
-                var tView1 = Task.Run((Action)(() => {
-
-                    while (!isQuit) {
-
-                        Thread.Sleep(10);
-
-                        Static.SafeRun(() => {
-                            double refFps = device.InnerCamera.isRun ? device.InnerCamera.m_fpsRealtime : 10;
-                            this.record.InnerViewerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
-                        });
-                    };
-
-                }));
-
-                //线程：写数据库
-                var tWriteDB = Task.Run((Action)(() => {
-                    
-                    do {
-
-                        Static.SafeRun(() => {
-                            List<DataGrab> ret1 = null;
-                            if (this.record.Transaction(() => {
-                                ret1 = this.record.InnerGrab.Save();
-                                this.record.InnerDetect.Save();
-                            })) {
-                                ret1.AsParallel().ForAll(x => x.IsStore = true);
-                            }
-                        });
-
-                        Thread.Sleep(500);
-                    } while (!isQuit);
-
-                }));
-
-                //
-                Task.WaitAll(tWriteDB, tView1);
-
-                //
-                this.record.Close();
-            }));
-
-            //
-            this.FormClosing += (o, e) => {
-                device.Close();
-                isQuit = true;
-            };
-
-        }
-        void init_device() {
-
-            //
-            device?.Close();
-            device = new ModDevice();
-            device.Open();
-
-        }
-        void init_record() {
-
-            string path = Static.FolderRecord + "01.db";
-
-            //
-            record?.Close();
-            record?.Dispose();
-            while (System.IO.File.Exists(path)) {
-                Thread.Sleep(100);
-                Static.SafeRun(() => System.IO.File.Delete(path));
-            }
-
-            //
-            record = new ModRecord();
-            record.Open(path);
-            record.Init();
-
-            record.InnerViewerImage.Init(hwin);
+            this.device = device;
+            this.record = record;
         }
         
         Dictionary<string, Func<object>> getMonitor() {
@@ -218,56 +125,14 @@ namespace DetectCCD {
             return monitor;
 
         }
-
-        bool isQuit = false;
-
+        
         ModRecord record;
         ModDevice device;
-
-        private void trackSpeed_Scroll(object sender, EventArgs e) {
-            Static.ParamApp.CameraFpsControl = trackSpeed.Value / 10.0;
-            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
-        }
-
-        private void btnLoadFile_Click(object sender, EventArgs e) {
-
-            OpenFileDialog ofd = new OpenFileDialog();
-            if(ofd.ShowDialog() == DialogResult.OK) {
-                Static.ParamApp.CameraFileInner = ofd.FileName;
-                tbFrameStart.Text = "1";
-                btnGrabRestart_Click(null, null);
-            }
-
-        }
-        private void btnGrabRestart_Click(object sender, EventArgs e) {
-            init_device();
-            init_record();
-            device.InnerCamera.m_frameStart = Static.ParamApp.CameraStartFrame;
-            device.InnerCamera.Reset();
-            device.InnerCamera.Start();
-
-            btnGrabRestart_Click(null, null);
-        }
-        private void btnGrabStart_Click(object sender, EventArgs e) {
-
-            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
-            device.InnerCamera.Start();
-            record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frameStart - 1);
-            record.InnerViewerImage.MoveTargetDirect();
-            record.InnerViewerImage.SetUserEnable(false);
-
-        }
-        private void btnGrabStop_Click(object sender, EventArgs e) {
-            device.InnerCamera.Stop();
-            record.InnerViewerImage.SetUserEnable(true);
-        }
-
+        
         private void timer1_Tick(object sender, EventArgs e) {
 
             if (IsHandleCreated && !IsDisposed) {
-
-                tbFrameCurrent.Text = string.Format("{0} / {1}", device.InnerCamera.m_frame, device.InnerCamera.Max);
-
+                
                 switch (gridMode) {
                     default: break;
                     case 0: UtilTool.AutoInfo.Update(); break;

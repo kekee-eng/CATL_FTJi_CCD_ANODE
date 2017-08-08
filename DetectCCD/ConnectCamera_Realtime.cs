@@ -73,19 +73,19 @@ namespace DetectCCD {
 
             if (m_isCameraLink && Acq != null && !Acq.Initialized) {
                 if (Acq.Create() == false) {
-                    Close();
+                    Dispose();
                     return false;
                 }
             }
             if (AcqDevice != null && !AcqDevice.Initialized) {
                 if (AcqDevice.Create() == false) {
-                    Close();
+                    Dispose();
                     return false;
                 }
             }
             if (Buffers != null && !Buffers.Initialized) {
                 if (Buffers.Create() == false) {
-                    Close();
+                    Dispose();
                     return false;
                 }
                 Buffers.Clear();
@@ -93,13 +93,13 @@ namespace DetectCCD {
             if (Xfer != null && Xfer.Pairs[0] != null) {
                 Xfer.Pairs[0].Cycle = SapXferPair.CycleMode.NextWithTrash;
                 if (Xfer.Pairs[0].Cycle != SapXferPair.CycleMode.NextWithTrash) {
-                    Close();
+                    Dispose();
                     return false;
                 }
             }
             if (Xfer != null && !Xfer.Initialized) {
                 if (Xfer.Create() == false) {
-                    Close();
+                    Dispose();
                     return false;
                 }
             }
@@ -143,7 +143,7 @@ namespace DetectCCD {
                     AcqDevice.SetFeatureValue("ImageTimeout", 60.0);
                 }
                 else {
-                    Close();
+                    Dispose();
                     return false;
                 }
 
@@ -243,7 +243,7 @@ namespace DetectCCD {
             m_camera_name = "";
         }
         public void Dispose() {
-            Close();
+            Dispose();
             if (Xfer != null) { Xfer.Dispose(); Xfer = null; }
             if (Buffers != null) { Buffers.Dispose(); Buffers = null; }
             if (AcqDevice != null) { AcqDevice.Dispose(); AcqDevice = null; }

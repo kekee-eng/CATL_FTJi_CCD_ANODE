@@ -3,7 +3,7 @@ namespace DetectCCD {
     using System.Runtime.InteropServices;
 
     public class ENC7480 {
-        //PCI Board Open/Close
+        //PCI Board Open/Dispose
         [DllImport("ENC7480.dll", EntryPoint = "Enc7480_Init", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern int Enc7480_Init();
         [DllImport("ENC7480.dll", EntryPoint = "Enc7480_Close", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]

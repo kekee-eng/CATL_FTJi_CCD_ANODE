@@ -162,7 +162,7 @@ namespace DetectCCD {
                 if (tcpAsyCl.Connected) {
                     try { tcpAsyCl.Shutdown(SocketShutdown.Both); }
                     catch { }
-                    tcpAsyCl.Close();
+                    tcpAsyCl.Dispose();
                 }
                 tcpAsyCl = null;
             }
@@ -170,7 +170,7 @@ namespace DetectCCD {
                 if (tcpSynCl.Connected) {
                     try { tcpSynCl.Shutdown(SocketShutdown.Both); }
                     catch { }
-                    tcpSynCl.Close();
+                    tcpSynCl.Dispose();
                 }
                 tcpSynCl = null;
             }
