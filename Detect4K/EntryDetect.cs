@@ -164,26 +164,30 @@ CfgParamSelf    BLOB
                 int efx1 = frame - defectCount;
                 int efx2 = frame - 1;
                 defectCount = 0;
+                
+                Task.Run(() => {
+                    var eimage = grab.GetImage(efx1, efx2);
+                    int[] etype;
+                    double[] ex, ey, ew, eh;
+                    if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh)) {
 
-                //TODO: Thread
-                var eimage = grab.GetImage(efx1, efx2);
-                double[] ex, ey, ew, eh;
-                if (eimage != null && ImageProcess.DetectDefect(eimage, out ex, out ey, out ew, out eh)) {
-                    
-                    int ecc = new int[] { ex.Length, ey.Length, ew.Length, eh.Length }.Min();
-                    for (int i = 0; i < ecc; i++) {
-                        DataDefect defect = new DataDefect();
-                        defect.X = ex[i] / w;
-                        defect.Y = efx1 + ey[i] / h;
-                        defect.W = ew[i] / w;
-                        defect.H = eh[i] / h;
+                        int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
+                        for (int i = 0; i < ecc; i++) {
+                            DataDefect defect = new DataDefect() {
+                                Type = etype[i],
+                                X = ex[i] / w,
+                                Y = efx1 + ey[i] / h,
+                                W = ew[i] / w,
+                                H = eh[i] / h,
+                            };
 
-                        defect.Width = defect.W * Fx;
-                        defect.Height = defect.H * Fy;
+                            defect.Width = defect.W * Fx;
+                            defect.Height = defect.H * Fy;
 
-                        Defects.Add(defect);
+                            Defects.Add(defect);
+                        }
                     }
-                }
+                });
 
             }
 
@@ -309,12 +313,6 @@ CfgParamSelf    BLOB
                     data.MarkY_P = cfy1 + cy[1] / h;
                 }
 
-                //去除与Mark点重合的瑕疵
-                double ck = 0.5 / Fx;
-                Defects.RemoveAll(m =>
-                    (Math.Abs(m.X - data.MarkX) < ck && Math.Abs(m.Y - data.MarkY) < ck) ||
-                    (Math.Abs(m.X - data.MarkX_P) < ck && Math.Abs(m.Y - data.MarkY_P) < ck)
-                );
             }
 
             //
@@ -322,6 +320,18 @@ CfgParamSelf    BLOB
             return true;
         }
 
+        void adjustDefect() {
+
+            //去除与Mark点重合的瑕疵
+            double ck = 0.5 / Fx;
+            var marks = Tabs.TakeWhile(x => x.IsNewEA).ToArray();
+            foreach (var mark in marks) {
+                Defects.RemoveAll(m =>
+                    (Math.Abs(m.X - mark.MarkX) < ck && Math.Abs(m.Y - mark.MarkY) < ck) ||
+                    (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) < ck && Math.Abs(m.Y - mark.MarkY_P) < ck)
+                );
+            }
+        }
         void adjustER() {
 
             //排序

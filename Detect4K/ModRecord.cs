@@ -27,6 +27,7 @@ namespace Detect4K {
 
         public EntryGrab InnerGrab;
         public EntryDetect InnerDetect;
+
         public ViewerImage InnerViewerImage;
         public ViewerChart InnerViewerChart;
 

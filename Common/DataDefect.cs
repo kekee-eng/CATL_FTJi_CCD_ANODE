@@ -9,6 +9,8 @@ namespace Common {
     [System.Serializable]
     public class DataDefect {
 
+        public int Type;
+
         public double X;
         public double Y;
         public double W;

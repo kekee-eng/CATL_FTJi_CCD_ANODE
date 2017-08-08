@@ -23,19 +23,9 @@ namespace Detect4K {
 
             //
             init_form();
-
+            
             //
-            Task.Run((Action)(() => {
-
-                Thread.Sleep(1000);
-
-                this.record.InnerViewerImage.SetBottomTarget(0);
-                this.record.InnerViewerImage.MoveTargetDirect();
-
-            }));
-
             Static.ParamApp.BindTextBox(tbFrameStart, "CameraStartFrame");
-            trackSpeed.Value = (int)(Static.ParamApp.CameraFpsControl * 10);
             //rtoolDebug_Click(null, null);
         }
 
@@ -183,12 +173,16 @@ namespace Detect4K {
             monitor["Inner_Record_GrabCacheMin"] = () => record.InnerGrab.Cache.Min;
             monitor["Inner_Record_GrabCacheMax"] = () => record.InnerGrab.Cache.Max;
             monitor["Inner_Record_GrabCacheCount"] = () => record.InnerGrab.Cache.Count;
+
             monitor["Inner_Record_GrabDBMin"] = () => record.InnerGrab.DB.Min;
             monitor["Inner_Record_GrabDBMax"] = () => record.InnerGrab.DB.Max;
             monitor["Inner_Record_GrabDBCount"] = () => record.InnerGrab.DB.Count;
+
             monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
+
             monitor["Inner_Record_LastLoadCache"] = () => record.InnerGrab.LastLoadCache;
             monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
+
             monitor["Inner_Record_TabCount"] = () => record.InnerDetect.Tabs.Count;
             monitor["Inner_Record_EACount"] = () => record.InnerDetect.EACount;
             monitor["Inner_Record_DefectCount"] = () => record.InnerDetect.Defects.Count;
@@ -203,6 +197,7 @@ namespace Detect4K {
             monitor["Inner_Viewer_showContextDefect"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextDefect");
             monitor["Inner_Viewer_showContextLabel"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextLabel");
             monitor["Inner_Viewer_showContextCross"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "showContextCross");
+
             monitor["Inner_Viewer_countShowTab"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "countShowTab");
             monitor["Inner_Viewer_countShowMark"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "countShowMark");
             monitor["Inner_Viewer_countShowDefect"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "countShowDefect");
@@ -235,14 +230,14 @@ namespace Detect4K {
             monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameStartLimit");
             monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEndLimit");
 
-            monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabWidth");
-            monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabHeight");
-            monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxWidth");
-            monitor["Inner_Viewer_boxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxHeight");
-            monitor["Inner_Viewer_refGrabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabWidth");
-            monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabHeight");
-            monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxWidth");
-            monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxHeight");
+            //monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabWidth");
+            //monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabHeight");
+            //monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxWidth");
+            //monitor["Inner_Viewer_boxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxHeight");
+            //monitor["Inner_Viewer_refGrabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabWidth");
+            //monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabHeight");
+            //monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxWidth");
+            //monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxHeight");
 
             //
             return monitor;
@@ -268,14 +263,19 @@ namespace Detect4K {
             init_device();
             init_record();
             device.InnerCamera.m_frameStart = Static.ParamApp.CameraStartFrame;
-            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
             device.InnerCamera.Reset();
             device.InnerCamera.Start();
-            record.InnerViewerImage.SetUserEnable(false);
+
+            btnGrabRestart_Click(null, null);
         }
         private void btnGrabStart_Click(object sender, EventArgs e) {
+
+            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
             device.InnerCamera.Start();
+            record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frameStart - 1);
+            record.InnerViewerImage.MoveTargetDirect();
             record.InnerViewerImage.SetUserEnable(false);
+
         }
         private void btnGrabStop_Click(object sender, EventArgs e) {
             device.InnerCamera.Stop();

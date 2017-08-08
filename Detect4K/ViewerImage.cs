@@ -106,6 +106,10 @@ namespace Detect4K {
             targetVx = x;
             targetVy = y;
             targetVs = s;
+
+            //Fix:
+            if (frameDy == 0)
+                targetVy = -10;
         }
 
         public void MoveToFrame(double frame) {
@@ -795,7 +799,7 @@ namespace Detect4K {
         //
         bool targetAllow = false;
         double targetVx = 0.5;
-        double targetVy = 1;
+        double targetVy = 0;
         double targetVs = 1;
 
         double targetDx { get { return targetVx - frameVx; } }
@@ -805,7 +809,7 @@ namespace Detect4K {
 
         //
         double frameVx = 0.5;
-        double frameVy = 1;
+        double frameVy = 0;
         double frameVs = 1;
 
         double frameDx { get { return frameVs * refGrabWidth / grabWidth; } }
@@ -833,6 +837,7 @@ namespace Detect4K {
         double getPixCol(double framex) { return framex * grabWidth; }
         double getPixRow(double framey) { return (framey - frameStart) * grabHeight; }
 
+        //
         double pixCol0 { get { return (int)getPixCol(frameVx); } }
         double pixRow0 { get { return (int)getPixRow(frameVy); } }
 

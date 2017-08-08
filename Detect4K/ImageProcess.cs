@@ -139,22 +139,25 @@ namespace Detect4K {
             
             return true;
         }
-        public static bool DetectDefect(HImage image, out double[] x, out double[] y, out double[] w, out double[] h) {
+        public static bool DetectDefect(HImage image, out int[] type, out double[] x, out double[] y, out double[] w, out double[] h) {
 
             //
+            type = null;
             x = y = w = h = null;
 
             //
             var data = TemplateProcess("DetectDefect", image, out TimeDetectDefect);
             if (data == null) return false;
-            
-            //  
+
+            //
+            type = data["OutType"].ToIArr();
             x = data["OutX"].ToDArr();
             y = data["OutY"].ToDArr();
             w = data["OutW"].ToDArr();
             h = data["OutH"].ToDArr();
 
             //
+            if (type.Length == 0) return false;
             if (x.Length == 0) return false;
             if (y.Length == 0) return false;
             if (w.Length == 0) return false;

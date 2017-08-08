@@ -14,16 +14,16 @@ namespace Detect4K {
         public ViewerChart(EntryGrab grab, EntryDetect detect, ViewerImage viewer) {
 
             //
-            this.grab = grab;
-            this.detect = detect;
-            this.imageViewer = viewer;
+            this.Grab = grab;
+            this.Detect = detect;
+            this.ImageViewer = viewer;
 
         }
 
         //
-        public ViewerImage imageViewer;
-        public EntryGrab grab;
-        public EntryDetect detect;
+        public ViewerImage ImageViewer;
+        public EntryGrab Grab;
+        public EntryDetect Detect;
 
         //
         public static Control parentInit(Control parent, Control obj) {
@@ -134,23 +134,23 @@ namespace Detect4K {
                 );
 
             //
-            gridEvent(grid, imageViewer.MoveToTAB);
+            gridEvent(grid, ImageViewer.MoveToTAB);
 
         }
         public void SyncTabGrid(Control parent) {
 
             var grid = girdParentGet(parent);
 
-            if (detect.Tabs.Count > grid.Rows.Count) {
+            if (Detect.Tabs.Count > grid.Rows.Count) {
 
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
 
-                for (int i = grid.Rows.Count; i < detect.Tabs.Count; i++)
-                    addTabGrid(grid, detect.Tabs[i]);
+                for (int i = grid.Rows.Count; i < Detect.Tabs.Count; i++)
+                    addTabGrid(grid, Detect.Tabs[i]);
             }
 
-            if (detect.Tabs.Count < grid.Rows.Count) {
+            if (Detect.Tabs.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
 
@@ -193,19 +193,19 @@ namespace Detect4K {
                 );
 
             //
-            gridEvent(grid, imageViewer.MoveToEA);
+            gridEvent(grid, ImageViewer.MoveToEA);
 
         }
         public void SyncEAGrid(Control parent) {
 
             var grid = girdParentGet(parent);
-            int eaCount = detect.EACount;
+            int eaCount = Detect.EACount;
 
             if (eaCount > grid.Rows.Count) {
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
 
-                var EAs = detect.EAs;
+                var EAs = Detect.EAs;
                 for (int i = grid.Rows.Count; i < eaCount; i++)
                     addEAGrid(grid, EAs[i]);
 
@@ -245,18 +245,18 @@ namespace Detect4K {
                 );
 
             //
-            gridEvent(grid, imageViewer.MoveToDefect);
+            gridEvent(grid, ImageViewer.MoveToDefect);
 
         }
         public void SyncDefectGrid(Control parent) {
 
             var grid = girdParentGet(parent);
 
-            if (detect.Defects.Count > grid.Rows.Count) {
-                for (int i = grid.Rows.Count; i < detect.Defects.Count; i++)
-                    addDefectGrid(grid, detect.Defects[i]);
+            if (Detect.Defects.Count > grid.Rows.Count) {
+                for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
+                    addDefectGrid(grid, Detect.Defects[i]);
             }
-            if (detect.Defects.Count < grid.Rows.Count) {
+            if (Detect.Defects.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
         }
