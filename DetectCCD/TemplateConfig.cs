@@ -225,7 +225,7 @@ namespace DetectCCD {
                             string value = m_grid.Rows[e.RowIndex].Cells[1].Value.ToString();
                             setValueFromField(field, value);
 
-                            m_grid.Rows[e.RowIndex].Cells[1].Style.BackColor = Color.DarkCyan;
+                            m_grid.Rows[e.RowIndex].Cells[1].Style.BackColor = Color.LightGreen;
 
                             //Fix
                             OnValueChanged?.Invoke();

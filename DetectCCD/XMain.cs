@@ -252,6 +252,7 @@ namespace DetectCCD {
                         rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
 
                     //
+                    record.Dispose();
                     record.Open(rPath);
 
                     //
