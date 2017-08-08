@@ -25,29 +25,7 @@ namespace DetectCCD {
         public EntryGrab Grab;
         public EntryDetect Detect;
 
-        //
-        public static Control parentInit(Control parent, Control obj) {
-            if (parent.HasChildren) {
-                for (int i = parent.Controls.Count - 1; i >= 0; i--) {
-                    var ctrl = parent.Controls[i];
-                    parent.Controls.Remove(ctrl);
-                    ctrl.Dispose();
-                }
-            }
-            parent.Controls.Add(obj);
-            obj.Dock = DockStyle.Fill;
-            obj.ContextMenu = parent.ContextMenu;
-            return obj;
-        }
-        public static DataGridView gridParentInit(Control parent) {
-            var obj= parentInit(parent, new DataGridView()) as DataGridView;
-            gridInit(obj);
-            return obj;
-        }
-        public static DataGridView girdParentGet(Control parent) {
-            return parent.Controls[0] as DataGridView;
-        }
-
+        //表格设置
         static void gridInit(DataGridView grid) {
 
             //
@@ -77,7 +55,7 @@ namespace DetectCCD {
                     row.Cells[i].Style.BackColor = Color.Pink;
             }
         }
-        static void gridEvent(DataGridView grid, Action<int> backcall) {
+        public static void gridEvent(DataGridView grid, Action<int> backcall) {
 
             grid.CurrentCellChanged += (o, e) => {
 
@@ -90,7 +68,132 @@ namespace DetectCCD {
             };
 
         }
+        public static void girdMoveTo(DataGridView grid, int id) {
+
+            //
+            id = id - 1;
+            id = Math.Min(grid.Rows.Count - 1, id);
+            id = Math.Max(0, id);
+            grid.FirstDisplayedScrollingRowIndex = id;
+
+        }
+
+        //曲线图设置
+        static void chartInit(ZedGraphControl chart) {
+
+            //配置
+            chart.ZoomButtons = MouseButtons.None;
+            chart.IsEnableHPan = true;
+            chart.IsEnableHZoom = true;
+            chart.IsEnableVPan = false;
+            chart.IsEnableVZoom = false;
+            chart.IsShowContextMenu = false;
+            chart.IsShowCopyMessage = false;
+            chart.IsShowPointValues = true;
+            chart.IsZoomOnMouseCenter = true;
+            chart.PanButtons2 = MouseButtons.Left;
+
+            //绘制对象
+            var g = chart.GraphPane;
+
+            //标题
+            g.Title.Text = "";
+            g.XAxis.Title.Text = "";
+            g.YAxis.Title.Text = "";
+
+            //图例
+            g.Legend.IsVisible = true;
+            g.Legend.Border.IsVisible = false;
+
+            //坐标轴
+            g.XAxis.MajorGrid.IsVisible = false;
+            g.YAxis.MajorGrid.IsVisible = true;
+
+            //上下限
+            g.YAxis.Scale.Min = 75;
+            g.YAxis.Scale.Max = 79;
+            g.YAxis.Scale.MajorStep = 0.5;
+
+            g.XAxis.Scale.Min = 0;
+            g.XAxis.Scale.Max = 30;
+            g.XAxis.Scale.MajorStep = 2;
+            g.XAxis.Scale.MajorStepAuto = true;
+
+            //数据
+            g.CurveList.Clear();
+
+        }
+        static void chartAdd(ZedGraphControl chart, string title, Color color, bool visible) {
+
+            var curve = new LineItem(title);
+            curve.Color = color;
+            curve.Symbol = new Symbol(SymbolType.Square, color);
+            curve.Symbol.Fill = new Fill(color, Color.White, color);
+            curve.Line.Width = 4;
+            curve.IsVisible = visible;
+            chart.GraphPane.CurveList.Add(curve);
+
+        }
+        public void chartEvent(ZedGraphControl chart, Action<int> backcall) {
+
+            if (chart.Tag == null) {
+                chart.Tag = -1;
+                chart.PointValueEvent += (sender, pane, curve, iPt) => {
+                    chart.Tag = curve.Points[iPt].X;
+                    return string.Format("{0}: {0.000}", curve.Points[iPt].X, curve.Points[iPt].Y);
+                };
+            }
+
+            chart.DoubleClick += (o, e) => {
+                int id = (int)chart.Tag;
+                if (id != -1)
+                    backcall(id);
+            };
+        }
+
+        static void chartMoveTo(ZedGraphControl chart, int id) {
+
+            double min = chart.GraphPane.XAxis.Scale.Min;
+            double max = chart.GraphPane.XAxis.Scale.Max;
+            double range = max - min;
+
+            chart.GraphPane.XAxis.Scale.Max = id;
+            chart.GraphPane.XAxis.Scale.Min = id - range;
+
+        }
+
+        //容器
+        public static Control parentInit(Control parent, Control obj) {
+            if (parent.HasChildren) {
+                for (int i = parent.Controls.Count - 1; i >= 0; i--) {
+                    var ctrl = parent.Controls[i];
+                    parent.Controls.Remove(ctrl);
+                    ctrl.Dispose();
+                }
+            }
+            parent.Controls.Add(obj);
+            obj.Dock = DockStyle.Fill;
+            obj.ContextMenu = parent.ContextMenu;
+            return obj;
+        }
+        public static DataGridView parentInitGrid(Control parent) {
+            var obj= parentInit(parent, new DataGridView()) as DataGridView;
+            gridInit(obj);
+            return obj;
+        }
+        public static DataGridView parentGetGrid(Control parent) {
+            return parent.Controls[0] as DataGridView;
+        }
+        public static ZedGraphControl parentInitChart(Control parent) {
+            var obj = parentInit(parent, new ZedGraphControl()) as ZedGraphControl;
+            chartInit(obj);
+            return obj;
+        }
+        public static ZedGraphControl parentGetChart(Control parent) {
+            return parent.Controls[0] as ZedGraphControl;
+        }
         
+        //极耳表格
         static void addTabGrid(DataGridView grid, DataTab dt) {
 
             //        
@@ -121,7 +224,7 @@ namespace DetectCCD {
         public void InitTabGrid(Control parent) {
 
             //
-            var grid = gridParentInit(parent);
+            var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
@@ -139,9 +242,9 @@ namespace DetectCCD {
         }
         public void SyncTabGrid(Control parent) {
 
-            var grid = girdParentGet(parent);
+            var grid = parentGetGrid(parent);
 
-            if (Detect.Tabs.Count > grid.Rows.Count) {
+            if (grid.Rows.Count < Detect.Tabs.Count) {
 
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
@@ -150,13 +253,14 @@ namespace DetectCCD {
                     addTabGrid(grid, Detect.Tabs[i]);
             }
 
-            if (Detect.Tabs.Count < grid.Rows.Count) {
+            if (grid.Rows.Count > Detect.Tabs.Count) {
                 grid.Rows.Clear();
             }
 
         }
 
-        void addEAGrid(DataGridView grid, DataEA dt) {
+        //EA表格
+        static void addEAGrid(DataGridView grid, DataEA dt) {
 
             //
             var newRow = gridAdd(grid,
@@ -182,7 +286,7 @@ namespace DetectCCD {
         public void InitEAGrid(Control parent) {
 
             //
-            var grid = gridParentInit(parent);
+            var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ID(EA)" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
@@ -198,7 +302,7 @@ namespace DetectCCD {
         }
         public void SyncEAGrid(Control parent) {
 
-            var grid = girdParentGet(parent);
+            var grid = parentGetGrid(parent);
             int eaCount = Detect.EACount;
 
             if (eaCount > grid.Rows.Count) {
@@ -216,7 +320,8 @@ namespace DetectCCD {
 
         }
 
-        void addDefectGrid(DataGridView grid, DataDefect dt) {
+        //缺陷表格
+        static void addDefectGrid(DataGridView grid, DataDefect dt) {
 
             //
             gridAdd(grid,
@@ -233,7 +338,7 @@ namespace DetectCCD {
         public void InitDefectGrid(Control parent) {
 
             //
-            var grid = gridParentInit(parent);
+            var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "X" },
@@ -250,7 +355,7 @@ namespace DetectCCD {
         }
         public void SyncDefectGrid(Control parent) {
 
-            var grid = girdParentGet(parent);
+            var grid = parentGetGrid(parent);
 
             if (Detect.Defects.Count > grid.Rows.Count) {
                 for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
@@ -260,6 +365,78 @@ namespace DetectCCD {
                 grid.Rows.Clear();
             }
         }
+
+
+        //极耳曲线图
+        static void addTabChart(ZedGraphControl chart, DataTab dt) {
+
+            //绘制对象
+            var g = chart.GraphPane;
+
+            //
+            g.CurveList[0].AddPoint(dt.ID, dt.ValWidth);
+            g.CurveList[1].AddPoint(dt.ID, dt.ValHeight);
+            g.CurveList[2].AddPoint(dt.ID, dt.ValDist);
+            g.CurveList[3].AddPoint(dt.ID, dt.ValDistDiff);
+            
+        }
+        public void InitTabChart(Control parent) {
+
+            //
+            var chart = parentInitChart(parent);
+            chartInit(chart);
+            chartAdd(chart, "极片宽度", Color.Blue, false);
+            chartAdd(chart, "极耳长度", Color.Green, false);
+            chartAdd(chart, "极耳间距", Color.SandyBrown, false);
+            chartAdd(chart, "极耳间距差", Color.Pink, false);
+
+        }
+        public void SyncTabChart(Control parent) {
+
+            //
+            var chart = parentInitChart(parent);
+
+            int numShow = chart.GraphPane.CurveList[0].Points.Count;
+            int numExist = Detect.Tabs.Count;
+
+            if (numShow < numExist - 1) {
+                for (int i = numShow; i < numExist - 1; i++)
+                    addTabChart(chart, Detect.Tabs[i]);
+
+                chart.Refresh();
+            }
+
+            if (numShow > numExist) {
+                chart.GraphPane.CurveList[0].Clear();
+                chart.GraphPane.CurveList[1].Clear();
+                chart.GraphPane.CurveList[2].Clear();
+                chart.GraphPane.CurveList[3].Clear();
+
+                chart.Refresh();
+            }
+        }
+        public void setTabChart(Control parent, int select, double min, double max, double step) {
+
+            //绘制对象
+            var chart = parentInitChart(parent);
+            var g = chart.GraphPane;
+
+            //显示对象
+            for (int i = 0; i < g.CurveList.Count; i++) {
+                g.CurveList[i].IsVisible = (i == select);
+            }
+
+            //上下限
+            g.YAxis.Scale.Min = min;
+            g.YAxis.Scale.Max = max;
+            g.YAxis.Scale.MajorStep = step;
+
+            //
+            chart.GraphPane.AxisChange();
+            chart.Refresh();
+
+        }
+
 
         //UnTest
         static void initMergeTabGrid(DataGridView grid) {
@@ -317,117 +494,12 @@ namespace DetectCCD {
 
         }
 
-        static void moveToGrid(DataGridView grid, int id) {
-
-            //
-            id = id - 1;
-            id = Math.Min(grid.Rows.Count - 1, id);
-            id = Math.Max(0, id);
-            grid.FirstDisplayedScrollingRowIndex = id;
-        }
-
-        static void setGraphInit(ZedGraphControl chart) {
-
-            //配置
-            chart.ZoomButtons = MouseButtons.None;
-            chart.IsEnableHPan = true;
-            chart.IsEnableHZoom = true;
-            chart.IsEnableVPan = false;
-            chart.IsEnableVZoom = false;
-            chart.IsShowContextMenu = false;
-            chart.IsShowCopyMessage = false;
-            chart.IsShowPointValues = true;
-            chart.IsZoomOnMouseCenter = true;
-            chart.PanButtons2 = MouseButtons.Left;
-
-            //绘制对象
-            var g = chart.GraphPane;
-
-            //标题
-            g.Title.Text = "";
-            g.XAxis.Title.Text = "";
-            g.YAxis.Title.Text = "";
-
-            //图例
-            g.Legend.IsVisible = true;
-            g.Legend.Border.IsVisible = false;
-
-            //坐标轴
-            g.XAxis.MajorGrid.IsVisible = false;
-            g.YAxis.MajorGrid.IsVisible = true;
-
-            //上下限
-            g.YAxis.Scale.Min = 75;
-            g.YAxis.Scale.Max = 79;
-            g.YAxis.Scale.MajorStep = 0.5;
-
-            g.XAxis.Scale.Min = 0;
-            g.XAxis.Scale.Max = 30;
-            g.XAxis.Scale.MajorStep = 2;
-            g.XAxis.Scale.MajorStepAuto = true;
-
-            //数据
-            g.CurveList.Clear();
-
-        }
-        static void setGraphAdd(ZedGraphControl chart, string title, Color color, bool visible) {
-
-            var curve = new LineItem(title);
-            curve.Color = color;
-            curve.Symbol = new Symbol(SymbolType.Square, color);
-            curve.Symbol.Fill = new Fill(color, Color.White, color);
-            curve.Line.Width = 4;
-            curve.IsVisible = visible;
-            chart.GraphPane.CurveList.Add(curve);
-
-        }
-
-        static void initTabChart(ZedGraphControl chart) {
-
-            //
-            setGraphInit(chart);
-            setGraphAdd(chart, "极片宽度", Color.Blue, false);
-            setGraphAdd(chart, "极耳长度", Color.Green, false);
-            setGraphAdd(chart, "极耳间距", Color.SandyBrown, false);
-            setGraphAdd(chart, "极耳间距差", Color.Pink, false);
-
-        }
-        static void addTabChart(ZedGraphControl chart, DataTab dt) {
-
-            //绘制对象
-            var g = chart.GraphPane;
-
-            //
-            g.CurveList[0].AddPoint(dt.ID, dt.ValWidth);
-            g.CurveList[1].AddPoint(dt.ID, dt.ValHeight);
-            g.CurveList[2].AddPoint(dt.ID, dt.ValDist);
-            g.CurveList[3].AddPoint(dt.ID, dt.ValDistDiff);
-
-            chart.Refresh();
-        }
-        static void setTabChart(ZedGraphControl chart, int select, double min, double max, double step) {
-
-            //绘制对象
-            var g = chart.GraphPane;
-
-            //显示对象
-            for (int i = 0; i < g.CurveList.Count; i++) {
-                g.CurveList[i].IsVisible = (i == select);
-            }
-
-            //上下限
-            g.YAxis.Scale.Min = min;
-            g.YAxis.Scale.Max = max;
-            g.YAxis.Scale.MajorStep = step;
-
-        }
-
         static void initMergeTabChart(ZedGraphControl chart) {
 
             //
-            setGraphInit(chart);
-            setGraphAdd(chart, "内侧极宽", Color.Blue, true);
-            setGraphAdd(chart, "外侧极宽", Color.Green, true);
+            chartInit(chart);
+            chartAdd(chart, "内侧极宽", Color.Blue, true);
+            chartAdd(chart, "外侧极宽", Color.Green, true);
 
         }
         static void addMergeTabChart(ZedGraphControl chart, DataTab dtInside, DataTab dtOutside) {
@@ -449,21 +521,6 @@ namespace DetectCCD {
             g.YAxis.Scale.Min = min;
             g.YAxis.Scale.Max = max;
             g.YAxis.Scale.MajorStep = step;
-
-        }
-
-        static void applyChart(ZedGraphControl chart) {
-            chart.GraphPane.AxisChange();
-            chart.Refresh();
-        }
-        static void moveToChart(ZedGraphControl chart, int id) {
-
-            double min = chart.GraphPane.XAxis.Scale.Min;
-            double max = chart.GraphPane.XAxis.Scale.Max;
-            double range = max - min;
-
-            chart.GraphPane.XAxis.Scale.Max = id;
-            chart.GraphPane.XAxis.Scale.Min = id - range;
 
         }
 

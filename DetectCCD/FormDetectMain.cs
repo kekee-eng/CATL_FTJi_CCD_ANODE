@@ -249,6 +249,11 @@ namespace DetectCCD {
         ModRecord record;
         ModDevice device;
 
+        private void trackSpeed_Scroll(object sender, EventArgs e) {
+            Static.ParamApp.CameraFpsControl = trackSpeed.Value / 10.0;
+            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
+        }
+
         private void btnLoadFile_Click(object sender, EventArgs e) {
 
             OpenFileDialog ofd = new OpenFileDialog();
@@ -294,7 +299,7 @@ namespace DetectCCD {
                     case 1: record.InnerViewerChart.SyncTabGrid(panelForViewer); break;
                     case 2: record.InnerViewerChart.SyncEAGrid(panelForViewer); break;
                     case 3: record.InnerViewerChart.SyncDefectGrid(panelForViewer); break;
-                    case 4: ViewerChart.girdParentGet(panelForViewer).Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;break;
+                    case 4: ViewerChart.parentGetGrid(panelForViewer).Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;break;
                 }
             }
         }
@@ -307,7 +312,7 @@ namespace DetectCCD {
         }
        
         private void rtoolInfo_Click(object sender, EventArgs e) {
-            viewerInit(0, x => UtilTool.AutoInfo.InitGrid(ViewerChart.gridParentInit(x),getMonitor()));
+            viewerInit(0, x => UtilTool.AutoInfo.InitGrid(ViewerChart.parentInitGrid(x),getMonitor()));
         }
         private void rtoolTab_Click(object sender, EventArgs e) {
             viewerInit(1, record.InnerViewerChart.InitTabGrid);
@@ -320,19 +325,19 @@ namespace DetectCCD {
         }
 
         private void rtoolCfgApp_Click(object sender, EventArgs e) {
-            viewerInit(-1, x => Static.ParamApp.BindDataGridView(ViewerChart.gridParentInit(x)));
+            viewerInit(-1, x => Static.ParamApp.BindDataGridView(ViewerChart.parentInitGrid(x)));
         }
         private void rtoolCfgShare_Click(object sender, EventArgs e) {
-            viewerInit(-1, x => Static.ParamShare.BindDataGridView(ViewerChart.gridParentInit(x)));
+            viewerInit(-1, x => Static.ParamShare.BindDataGridView(ViewerChart.parentInitGrid(x)));
         }
         private void rtoolCfgInner_Click(object sender, EventArgs e) {
-            viewerInit(-1, x => Static.ParamInner.BindDataGridView(ViewerChart.gridParentInit(x)));
+            viewerInit(-1, x => Static.ParamInner.BindDataGridView(ViewerChart.parentInitGrid(x)));
         }
 
         private void rtoolDebug_Click(object sender, EventArgs e) {
             viewerInit(4, x => {
 
-                var grid = ViewerChart.gridParentInit(x);
+                var grid = ViewerChart.parentInitGrid(x);
 
                 grid.Columns.Add(new DataGridViewTextBoxColumn() { Width = 500, HeaderText = "" });
                 grid.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
@@ -351,10 +356,21 @@ namespace DetectCCD {
             ImageProcess.ErrorMessage = "";
         }
 
-        private void trackSpeed_Scroll(object sender, EventArgs e) {
-            Static.ParamApp.CameraFpsControl = trackSpeed.Value / 10.0;
-            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
+        private void rtoolTABChart_Click(object sender, EventArgs e) {
+
         }
 
+        private void widthToolStripMenuItem_Click(object sender, EventArgs e) {
+
+        }
+        private void sizeToolStripMenuItem_Click(object sender, EventArgs e) {
+
+        }
+        private void distanceToolStripMenuItem_Click(object sender, EventArgs e) {
+
+        }
+        private void distanceDiffToolStripMenuItem_Click(object sender, EventArgs e) {
+
+        }
     }
 }
