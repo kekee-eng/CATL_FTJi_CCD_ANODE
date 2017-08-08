@@ -40,8 +40,8 @@ namespace DetectCCD {
 
             //
             isQuit = true;
-            Record?.Dispose();
-            Device?.Dispose();
+            record?.Dispose();
+            device?.Dispose();
         }
 
 
@@ -73,8 +73,6 @@ namespace DetectCCD {
         bool isOnline { get { return textMode.SelectedIndex == 0; } }
 
         bool isQuit = false;
-        //bool isRunning = false;
-        //bool isReset = false;
         bool isRollOk = false;
 
         int rollType = -1;
@@ -156,36 +154,36 @@ namespace DetectCCD {
                 groupOffline.Enabled = !isOnline;
                 
                 //
-                _lc_inner_camera.Text = Device.InnerCamera.m_camera_name;
-                _lc_inner_fps.Text = Device.InnerCamera.m_fpsRealtime.ToString("0.000");
-                _lc_inner_frame.Text = Device.InnerCamera.m_frame.ToString();
-                _lc_inner_isgrabbing.Text = Device.InnerCamera.isGrabbing ? "On" : "Off";
-                _lc_inner_isopen.Text = Device.InnerCamera.isOpen ? "On" : "Off";
-                _lc_inner_isgrabbing.ForeColor = Device.InnerCamera.isGrabbing ? Color.Green : Color.Red;
-                _lc_inner_isopen.ForeColor = Device.InnerCamera.isOpen ? Color.Green : Color.Red;
+                _lc_inner_camera.Text = device.InnerCamera.m_camera_name;
+                _lc_inner_fps.Text = device.InnerCamera.m_fpsRealtime.ToString("0.000");
+                _lc_inner_frame.Text = device.InnerCamera.m_frame.ToString();
+                _lc_inner_isgrabbing.Text = device.InnerCamera.isGrabbing ? "On" : "Off";
+                _lc_inner_isopen.Text = device.InnerCamera.isOpen ? "On" : "Off";
+                _lc_inner_isgrabbing.ForeColor = device.InnerCamera.isGrabbing ? Color.Green : Color.Red;
+                _lc_inner_isopen.ForeColor = device.InnerCamera.isOpen ? Color.Green : Color.Red;
 
-                _lc_inner_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamInner.Caption, Device.InnerCamera.m_camera_name, Device.InnerCamera.m_frame);
-                _lc_inner_eaCount.Text = Record.InnerDetect.EACount.ToString();
-                _lc_inner_widthCount.Text = Record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
-                _lc_inner_defectCount.Text = Record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                _lc_inner_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamInner.Caption, device.InnerCamera.m_camera_name, device.InnerCamera.m_frame);
+                _lc_inner_eaCount.Text = record.InnerDetect.EACount.ToString();
+                _lc_inner_widthCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                _lc_inner_defectCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
 
                 //
-                _lc_outer_camera.Text = Device.OuterCamera.m_camera_name;
-                _lc_outer_fps.Text = Device.OuterCamera.m_fpsRealtime.ToString("0.000");
-                _lc_outer_frame.Text = Device.OuterCamera.m_frame.ToString();
-                _lc_outer_isgrabbing.Text = Device.OuterCamera.isGrabbing ? "On" : "Off";
-                _lc_outer_isopen.Text = Device.OuterCamera.isOpen ? "On" : "Off";
-                _lc_outer_isgrabbing.ForeColor = Device.OuterCamera.isGrabbing ? Color.Green : Color.Red;
-                _lc_outer_isopen.ForeColor = Device.OuterCamera.isOpen ? Color.Green : Color.Red;
+                _lc_outer_camera.Text = device.OuterCamera.m_camera_name;
+                _lc_outer_fps.Text = device.OuterCamera.m_fpsRealtime.ToString("0.000");
+                _lc_outer_frame.Text = device.OuterCamera.m_frame.ToString();
+                _lc_outer_isgrabbing.Text = device.OuterCamera.isGrabbing ? "On" : "Off";
+                _lc_outer_isopen.Text = device.OuterCamera.isOpen ? "On" : "Off";
+                _lc_outer_isgrabbing.ForeColor = device.OuterCamera.isGrabbing ? Color.Green : Color.Red;
+                _lc_outer_isopen.ForeColor = device.OuterCamera.isOpen ? Color.Green : Color.Red;
 
-                _lc_outer_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamOuter.Caption, Device.OuterCamera.m_camera_name, Device.OuterCamera.m_frame);
-                _lc_outer_eaCount.Text = Record.OuterDetect.EACount.ToString();
-                _lc_outer_widthCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
-                _lc_outer_defectCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                _lc_outer_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamOuter.Caption, device.OuterCamera.m_camera_name, device.OuterCamera.m_frame);
+                _lc_outer_eaCount.Text = record.OuterDetect.EACount.ToString();
+                _lc_outer_widthCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                _lc_outer_defectCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 
                 //状态栏
                 status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                status_device.ImageIndex = Device.isRun ? 5 : 4;
+                status_device.ImageIndex = device.isRunning ? 5 : 4;
                 status_memory.Caption = string.Format("内存={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
@@ -200,7 +198,7 @@ namespace DetectCCD {
         }
         private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
             runAction("连接设备", () => {
-                Device.Open();
+                device.Open();
             });
         }
         private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
@@ -230,26 +228,41 @@ namespace DetectCCD {
         private void btnRollSet_Click(object sender, EventArgs e) {
             runAction((sender as SimpleButton).Text, () => {
 
+                if (device.isRunning)
+                    throw new Exception("请先停止采集图像！");
+
                 if (!isRollOk) {
+
                     if (textRollType.SelectedIndex == -1)
                         throw new Exception("料号未设定！");
 
                     if (textRollName.Text == "")
                         throw new Exception("膜卷号未设定!");
-
+                    
+                    //
                     rollRepeat++;
                     rollType = textRollType.SelectedIndex;
                     rollName = textRollName.Text;
                     textRollRepeat.Text = rollRepeat.ToString();
 
-                    _init_record();
+                    //
+                    string rPath = Static.FolderRecord + string.Format("[{0}][{1}][{2}].db", rollType, rollName, rollRepeat);
+                    StringBuilder rBuilder = new StringBuilder(rPath);
+                    foreach (char rInvalidChar in Path.GetInvalidPathChars())
+                        rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
 
+                    //
+                    record.Open(rPath);
+
+                    //
                     textRollType.Enabled = false;
                     textRollName.Enabled = false;
                     btnRollSet.Text = "结束膜卷";
                     isRollOk = true;
                 }
                 else {
+                    
+                    //
                     textRollType.Enabled = true;
                     textRollName.Enabled = true;
                     btnRollSet.Text = "设置膜卷";
@@ -257,58 +270,28 @@ namespace DetectCCD {
                 }
             });
         }
-
-        private void btnDeivceQuit_Click(object sender, EventArgs e) {
-            runAction((sender as SimpleButton).Text, () => {
-
-            });
-        }
-        private void btnDeviceStart_Click(object sender, EventArgs e) {
-            runAction((sender as SimpleButton).Text, () => {
-
-                if (!isRollOk)
-                    throw new Exception("膜卷未设置！");
-
-            });
-        }
-        private void btnDeviceStop_Click(object sender, EventArgs e) {
-            runAction((sender as SimpleButton).Text, () => {
-
-            });
-        }
-        private void btnDeviceReset_Click(object sender, EventArgs e) {
-            runAction((sender as SimpleButton).Text, () => {
-
-            });
-        }
-        private void btnDeviceEStop_Click(object sender, EventArgs e) {
-            runAction((sender as SimpleButton).Text, () => {
-
-            });
-        }
-
-
-        public ModRecord Record = new ModRecord();
-        public ModDevice Device = new ModDevice();
+        
+        public ModRecord record = new ModRecord();
+        public ModDevice device = new ModDevice();
 
         void init_device() {
 
-            Record.Init();
+            record.Init();
 
-            Record.InnerViewerImage.Init(hwinInner);
-            Device.EventInnerCamera = obj => {
+            record.InnerViewerImage.Init(hwinInner);
+            device.EventInnerCamera = obj => {
 
-                Record.InnerGrab.Cache[obj.Frame] = obj;
-                Record.InnerDetect.TryDetect(obj.Frame);
-                Record.InnerViewerImage.SetBottomTarget(obj.Frame);
+                record.InnerGrab.Cache[obj.Frame] = obj;
+                record.InnerDetect.TryDetect(obj.Frame);
+                record.InnerViewerImage.SetBottomTarget(obj.Frame);
             };
 
-            Record.OuterViewerImage.Init(hwinOuter);
-            Device.EventOuterCamera = obj => {
+            record.OuterViewerImage.Init(hwinOuter);
+            device.EventOuterCamera = obj => {
 
-                Record.OuterGrab.Cache[obj.Frame] = obj;
-                Record.OuterDetect.TryDetect(obj.Frame);
-                Record.OuterViewerImage.SetBottomTarget(obj.Frame);
+                record.OuterGrab.Cache[obj.Frame] = obj;
+                record.OuterDetect.TryDetect(obj.Frame);
+                record.OuterViewerImage.SetBottomTarget(obj.Frame);
             };
 
 
@@ -323,8 +306,8 @@ namespace DetectCCD {
                         Thread.Sleep(10);
 
                         Static.SafeRun(() => {
-                            double refFps = Device.InnerCamera.isGrabbing ? Device.InnerCamera.m_fpsRealtime : 10;
-                            Record.InnerViewerImage.MoveTargetSync(Device.InnerCamera.m_fpsRealtime);
+                            double refFps = device.InnerCamera.isGrabbing ? device.InnerCamera.m_fpsRealtime : 10;
+                            record.InnerViewerImage.MoveTargetSync(device.InnerCamera.m_fpsRealtime);
                         });
                     };
 
@@ -338,8 +321,8 @@ namespace DetectCCD {
                         Thread.Sleep(10);
 
                         Static.SafeRun(() => {
-                            double refFps = Device.OuterCamera.isGrabbing ? Device.OuterCamera.m_fpsRealtime : 10;
-                            Record.OuterViewerImage.MoveTargetSync(Device.OuterCamera.m_fpsRealtime);
+                            double refFps = device.OuterCamera.isGrabbing ? device.OuterCamera.m_fpsRealtime : 10;
+                            record.OuterViewerImage.MoveTargetSync(device.OuterCamera.m_fpsRealtime);
                         });
                     };
 
@@ -347,18 +330,30 @@ namespace DetectCCD {
 
                 //线程：写数据库
                 var tWriteDB = Task.Run((Action)(() => {
-                    return;
-                    do {
 
-                        Static.SafeRun(() => {
-                            List<DataGrab> ret1 = null;
-                            if (Record.Transaction(() => {
-                                ret1 = Record.InnerGrab.Save();
-                                Record.InnerDetect.Save();
-                            })) {
-                                ret1.AsParallel().ForAll(x => x.IsStore = true);
-                            }
-                        });
+                    do {
+                        if (Static.ParamApp.RecordSaveImageEnable) {
+                            Static.SafeRun(() => {
+
+                                //
+                                List<DataGrab> ret1 = null;
+                                List<DataGrab> ret2 = null;
+
+                                //
+                                if (record.Transaction(() => {
+
+                                    ret1 = record.InnerGrab.Save();
+                                    ret2 = record.OuterGrab.Save();
+
+                                    record.InnerDetect.Save();
+                                    record.OuterDetect.Save();
+                                })) {
+
+                                    ret1.AsParallel().ForAll(x => x.IsStore = true);
+                                    ret2.AsParallel().ForAll(x => x.IsStore = true);
+                                }
+                            });
+                        }
 
                         Thread.Sleep(500);
                     } while (!isQuit);
@@ -367,30 +362,31 @@ namespace DetectCCD {
 
                 //
                 Task.WaitAll(tWriteDB, tView1);
-                
+
             }));
-            
-        }
-        void _init_record() {
-
-            string rPath = Static.FolderRecord + string.Format("[{0}][{1}][{2}].db", rollType, rollName, rollRepeat);
-
-            StringBuilder rBuilder = new StringBuilder(rPath);
-            foreach (char rInvalidChar in Path.GetInvalidPathChars())
-                rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
-
-            Record.Open(rPath);
 
         }
 
         private void btnOpenViewerChart_Click(object sender, EventArgs e) {
-            new XFViewerChart(Device, Record).Show();
+            new XFViewerChart(device, record).Show();
         }
-
         private void btnOfflineControl_Click(object sender, EventArgs e) {
-            new XFCameraControl(Device, Record).Show();
+            new XFCameraControl(device, record).Show();
         }
+        private void btnStartGrab_Click(object sender, EventArgs e) {
+            device.InnerCamera.Grab();
+            device.OuterCamera.Grab();
 
+            record.InnerViewerImage.SetUserEnable(false);
+            record.OuterViewerImage.SetUserEnable(false);
+        }
+        private void btnStopGrab_Click(object sender, EventArgs e) {
+            device.InnerCamera.Freeze();
+            device.OuterCamera.Freeze();
+
+            record.InnerViewerImage.SetUserEnable(true);
+            record.OuterViewerImage.SetUserEnable(true);
+        }
     }
 
 }

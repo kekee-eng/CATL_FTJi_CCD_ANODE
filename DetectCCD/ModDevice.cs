@@ -48,7 +48,7 @@ namespace DetectCCD {
         }
 
         public bool isReady { get { return InnerCamera.isOpen && OuterCamera.isOpen; } }
-        public bool isRun { get { return InnerCamera.isGrabbing && OuterCamera.isGrabbing; } }
+        public bool isRunning { get { return InnerCamera.isGrabbing && OuterCamera.isGrabbing; } }
 
         public TemplateCamera InnerCamera;
         public TemplateCamera OuterCamera;

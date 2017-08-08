@@ -14,7 +14,7 @@ namespace DetectCCD {
 
     public class DataGrab {
 
-        //取相相机
+        //相机
         public string Camera;
 
         //帧数据
@@ -29,6 +29,11 @@ namespace DetectCCD {
         public bool IsCreated = false;
         public bool IsCache = false;
         public bool IsStore = false;
+        
+        //是否存在
+        public bool hasTab = false;
+        public bool hasMark = false;
+        public bool hasDefect = false;
 
         //生成时间戳
         public static string GenTimeStamp(DateTime time) {
@@ -89,7 +94,19 @@ namespace DetectCCD {
                     data.IsStore = true;
                     return false;
                 }
-                
+
+                //是否要保存
+                if (!Static.ParamApp.RecordSaveImageAll) {
+
+                    if (!(
+                        (Static.ParamApp.RecordSaveImageTab && data.hasTab) ||
+                        (Static.ParamApp.RecordSaveImageMark && data.hasMark) ||
+                        (Static.ParamApp.RecordSaveImageDefect && data.hasDefect)
+                        ))
+                        return false;
+
+                }
+
                 //
                 db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", tname), ToDB(data));
 

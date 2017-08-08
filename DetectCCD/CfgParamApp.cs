@@ -11,7 +11,7 @@ namespace DetectCCD {
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
         public int run_mode = 0;
-        
+
         public bool ModeByRecord { get { return run_mode == 1; } }
         public bool ModeByCamera { get { return run_mode != 1; } }
 
@@ -43,17 +43,18 @@ namespace DetectCCD {
 
         //记录参数
         public int RecordCacheSize = 200;
-        public bool RecordIsSaveImageOK = true;
-        public bool RecordIsSaveImageNG = true;
+        public bool RecordSaveImageEnable = false;
+        public bool RecordSaveImageAll = false;
+        public bool RecordSaveImageTab = false;
+        public bool RecordSaveImageMark = false;
+        public bool RecordSaveImageDefect = true;
 
         //显示参数
         public double CameraFpsControl = 10;
         public int CameraFrameStart = 1;
 
         //
-        public bool ImageProcessReload = true;
-        
-
+        public bool ImageProcessReload = false;
 
         //
         public string operator_username = "operator";
@@ -69,7 +70,7 @@ namespace DetectCCD {
         public string expert_viewstyle = "Money Twins";
 
         public int select_userid = 0;
-        
+
         public string[] GetUsernameList() { return new string[] { operator_username, engineer_username, expert_username }; }
         public string[] GetPasswordList() { return new string[] { operator_password, engineer_password, expert_password }; }
         public string[] GetViewstyleList() { return new string[] { operator_viewstyle, engineer_viewstyle, expert_viewstyle }; }

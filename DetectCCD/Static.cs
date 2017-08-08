@@ -35,16 +35,16 @@ namespace DetectCCD {
         public static void Init() {
 
             //
-            if (false) {
-                Action<string> DelFile = x => {
-                    if (System.IO.File.Exists(x))
-                        System.IO.File.Delete(x);
-                };
-                DelFile(PathCfgApp);
-                DelFile(PathCfgParam);
-                DelFile(PathCfgInner);
-                DelFile(PathCfgOuter);
-            }
+            //if (false) {
+            //    Action<string> DelFile = x => {
+            //        if (System.IO.File.Exists(x))
+            //            System.IO.File.Delete(x);
+            //    };
+            //    DelFile(PathCfgApp);
+            //    DelFile(PathCfgParam);
+            //    DelFile(PathCfgInner);
+            //    DelFile(PathCfgOuter);
+            //}
 
             //
             ParamApp = new CfgParamApp(PathCfgApp);

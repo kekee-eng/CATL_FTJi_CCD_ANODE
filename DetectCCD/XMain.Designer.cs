@@ -28,9 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XMain));
-            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
+            this.barManager1 = new DevExpress.XtraBars.BarManager();
             this.bar3 = new DevExpress.XtraBars.Bar();
             this.status_user = new DevExpress.XtraBars.BarButtonItem();
             this.status_device = new DevExpress.XtraBars.BarButtonItem();
@@ -46,9 +45,9 @@
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            this.imageCollectionStatus = new DevExpress.Utils.ImageCollection(this.components);
+            this.imageCollectionStatus = new DevExpress.Utils.ImageCollection();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
-            this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
+            this.imageCollectionTab = new DevExpress.Utils.ImageCollection();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -123,14 +122,16 @@
             this.labelControl39 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl40 = new DevExpress.XtraEditors.LabelControl();
             this._lc_inner_caption = new DevExpress.XtraEditors.LabelControl();
+            this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
+            this.btnStartGrab = new DevExpress.XtraEditors.SimpleButton();
+            this.btnStopGrab = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -377,13 +378,15 @@
             // 
             // groupControl2
             // 
+            this.groupControl2.Controls.Add(this.btnStopGrab);
+            this.groupControl2.Controls.Add(this.btnStartGrab);
             this.groupControl2.Controls.Add(this.tableLayoutPanel5);
             this.groupControl2.Controls.Add(this.labelControl4);
             this.groupControl2.Controls.Add(this.groupStatuOuter);
             this.groupControl2.Controls.Add(this.groupStatuInner);
             this.groupControl2.Location = new System.Drawing.Point(673, 23);
             this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(368, 277);
+            this.groupControl2.Size = new System.Drawing.Size(368, 346);
             this.groupControl2.TabIndex = 1;
             this.groupControl2.Text = "设备状态";
             // 
@@ -402,7 +405,7 @@
             this.tableLayoutPanel5.Controls.Add(this.labelControl32, 0, 1);
             this.tableLayoutPanel5.Controls.Add(this.labelControl33, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.labelControl34, 1, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(23, 318);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(34, 488);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 5;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -538,7 +541,7 @@
             this.labelControl4.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.labelControl4.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this.labelControl4.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this.labelControl4.Location = new System.Drawing.Point(-19, 256);
+            this.labelControl4.Location = new System.Drawing.Point(230, 491);
             this.labelControl4.Name = "labelControl4";
             this.labelControl4.Size = new System.Drawing.Size(126, 21);
             this.labelControl4.TabIndex = 25;
@@ -1170,14 +1173,14 @@
             this.labelControl21.TabIndex = 26;
             this.labelControl21.Text = "检测位置";
             // 
-            // _lc_outer_camera2
+            // _lc_outer_caption
             // 
             this._lc_outer_caption.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this._lc_outer_caption.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_outer_caption.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_outer_caption.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_caption.Location = new System.Drawing.Point(181, 4);
-            this._lc_outer_caption.Name = "_lc_outer_camera2";
+            this._lc_outer_caption.Name = "_lc_outer_caption";
             this._lc_outer_caption.Size = new System.Drawing.Size(170, 19);
             this._lc_outer_caption.TabIndex = 29;
             this._lc_outer_caption.Text = "-";
@@ -1291,17 +1294,26 @@
             this.labelControl40.TabIndex = 26;
             this.labelControl40.Text = "检测位置";
             // 
-            // _lc_inner_camera2
+            // _lc_inner_caption
             // 
             this._lc_inner_caption.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this._lc_inner_caption.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_inner_caption.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_inner_caption.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_inner_caption.Location = new System.Drawing.Point(180, 4);
-            this._lc_inner_caption.Name = "_lc_inner_camera2";
+            this._lc_inner_caption.Name = "_lc_inner_caption";
             this._lc_inner_caption.Size = new System.Drawing.Size(170, 19);
             this._lc_inner_caption.TabIndex = 29;
             this._lc_inner_caption.Text = "-";
+            // 
+            // btnOfflineControl
+            // 
+            this.btnOfflineControl.Location = new System.Drawing.Point(156, 28);
+            this.btnOfflineControl.Name = "btnOfflineControl";
+            this.btnOfflineControl.Size = new System.Drawing.Size(101, 30);
+            this.btnOfflineControl.TabIndex = 19;
+            this.btnOfflineControl.Text = "离线控制台";
+            this.btnOfflineControl.Click += new System.EventHandler(this.btnOfflineControl_Click);
             // 
             // btnOpenViewerChart
             // 
@@ -1358,14 +1370,23 @@
             this.openFileDialog1.Filter = "配置文件|*.cfg|所有文件|*.*";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
-            // btnOfflineControl
+            // btnStartGrab
             // 
-            this.btnOfflineControl.Location = new System.Drawing.Point(156, 28);
-            this.btnOfflineControl.Name = "btnOfflineControl";
-            this.btnOfflineControl.Size = new System.Drawing.Size(101, 30);
-            this.btnOfflineControl.TabIndex = 19;
-            this.btnOfflineControl.Text = "离线控制台";
-            this.btnOfflineControl.Click += new System.EventHandler(this.btnOfflineControl_Click);
+            this.btnStartGrab.Location = new System.Drawing.Point(245, 264);
+            this.btnStartGrab.Name = "btnStartGrab";
+            this.btnStartGrab.Size = new System.Drawing.Size(101, 30);
+            this.btnStartGrab.TabIndex = 26;
+            this.btnStartGrab.Text = "开始采图";
+            this.btnStartGrab.Click += new System.EventHandler(this.btnStartGrab_Click);
+            // 
+            // btnStopGrab
+            // 
+            this.btnStopGrab.Location = new System.Drawing.Point(245, 300);
+            this.btnStopGrab.Name = "btnStopGrab";
+            this.btnStopGrab.Size = new System.Drawing.Size(101, 30);
+            this.btnStopGrab.TabIndex = 27;
+            this.btnStopGrab.Text = "停止";
+            this.btnStopGrab.Click += new System.EventHandler(this.btnStopGrab_Click);
             // 
             // XMain
             // 
@@ -1525,5 +1546,7 @@
         private DevExpress.XtraEditors.LabelControl labelControl34;
         private DevExpress.XtraEditors.SimpleButton btnOpenViewerChart;
         private DevExpress.XtraEditors.SimpleButton btnOfflineControl;
+        private DevExpress.XtraEditors.SimpleButton btnStopGrab;
+        private DevExpress.XtraEditors.SimpleButton btnStartGrab;
     }
 }
