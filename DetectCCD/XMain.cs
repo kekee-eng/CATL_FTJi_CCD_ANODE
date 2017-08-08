@@ -19,8 +19,8 @@ namespace DetectCCD {
             InitializeComponent();
 
             //
-            init_status();
             init_device();
+            init_status();
 
             //
             UtilTool.XFWait.Dispose();
@@ -155,6 +155,7 @@ namespace DetectCCD {
                 groupOnline.Enabled = isOnline;
                 groupOffline.Enabled = !isOnline;
 
+
                 //
                 _lc_inner_camera.Text = Device.InnerCamera.m_camera_name;
                 _lc_inner_fps.Text = Device.InnerCamera.m_fpsRealtime.ToString("0.000");
@@ -164,7 +165,7 @@ namespace DetectCCD {
                 _lc_inner_isgrabbing.ForeColor = Device.InnerCamera.isRun ? Color.Green : Color.Red;
                 _lc_inner_isopen.ForeColor = Device.InnerCamera.isReady ? Color.Green : Color.Red;
 
-                _lc_inner_camera2.Text = Device.InnerCamera.m_camera_name;
+                _lc_inner_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamInner.Caption, Device.InnerCamera.m_camera_name, Device.InnerCamera.m_frame);
                 _lc_inner_eaCount.Text = Record.InnerDetect.EACount.ToString();
                 _lc_inner_widthCount.Text = Record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 _lc_inner_defectCount.Text = Record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
@@ -178,12 +179,12 @@ namespace DetectCCD {
                 _lc_outer_isgrabbing.ForeColor = Device.OuterCamera.isRun ? Color.Green : Color.Red;
                 _lc_outer_isopen.ForeColor = Device.OuterCamera.isReady ? Color.Green : Color.Red;
 
-                _lc_outer_camera2.Text = Device.OuterCamera.m_camera_name;
+                _lc_outer_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamOuter.Caption, Device.OuterCamera.m_camera_name, Device.OuterCamera.m_frame);
                 _lc_outer_eaCount.Text = Record.OuterDetect.EACount.ToString();
                 _lc_outer_widthCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 _lc_outer_defectCount.Text = Record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
-                
-                
+
+
                 //状态栏
                 status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                 status_device.ImageIndex = Device.isRun ? 5 : 4;
@@ -297,7 +298,7 @@ namespace DetectCCD {
             Record.Init();
 
             Record.InnerViewerImage.Init(hwinInner);
-            Device.InnerCamera.OnImageReady += obj => {
+            Device.EventInnerCamera = obj => {
 
                 Record.InnerGrab.Cache[obj.Frame] = obj;
                 Record.InnerDetect.TryDetect(obj.Frame);
@@ -305,7 +306,7 @@ namespace DetectCCD {
             };
 
             Record.OuterViewerImage.Init(hwinOuter);
-            Device.OuterCamera.OnImageReady += obj => {
+            Device.EventOuterCamera = obj => {
 
                 Record.OuterGrab.Cache[obj.Frame] = obj;
                 Record.OuterDetect.TryDetect(obj.Frame);
@@ -384,6 +385,13 @@ namespace DetectCCD {
 
         }
 
+        private void btnOpenViewerChart_Click(object sender, EventArgs e) {
+            new XFViewerChart(Device, Record).Show();
+        }
+
+        private void btnOfflineControl_Click(object sender, EventArgs e) {
+            new XFCameraFileControl(Device, Record).Show();
+        }
 
     }
 

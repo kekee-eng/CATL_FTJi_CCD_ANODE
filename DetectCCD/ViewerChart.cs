@@ -568,7 +568,30 @@ namespace DetectCCD {
             g.YAxis.Scale.MajorStep = step;
 
         }
+        
+        void demoDebug(Control parent) {
 
+            //调试表格
+            var grid = ViewerChart.parentInitGrid(parent);
+
+            grid.Columns.Add(new DataGridViewCheckBoxColumn() { Width = 30, HeaderText = "" });
+            grid.Columns.Add(new DataGridViewTextBoxColumn() { Width = 500, HeaderText = "" });
+
+            grid.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopCenter;
+            grid.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+
+            grid.Rows.Add(true, "");
+            grid.Rows[0].Height = 500;
+
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            grid.RowsDefaultCellStyle.WrapMode = (DataGridViewTriState.True);
+
+
+            //
+            ViewerChart.parentGetGrid(parent).Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;
+
+        }
     }
 }
 

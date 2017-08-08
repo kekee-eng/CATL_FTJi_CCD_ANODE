@@ -24,12 +24,7 @@ namespace DetectCCD {
             Application.SetCompatibleTextRenderingDefault(false);
 
             var mm = new XMain();
-            new XtraForm1(mm).Show();
-
-            new XFViewerChart(mm.Device, mm.Record).Show();
-
             Application.Run(mm);
-            //Application.Run(new FormDetect4K());
 
             Static.Uninit();
         }

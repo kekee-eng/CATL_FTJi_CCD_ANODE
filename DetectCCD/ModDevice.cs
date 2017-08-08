@@ -30,11 +30,14 @@ namespace DetectCCD {
                 //从数据库中取图
             }
 
+            InnerCamera.OnImageReady += EventInnerCamera;
+            OuterCamera.OnImageReady += EventOuterCamera;
         }
         public void Dispose() {
 
             InnerCamera?.Dispose();
             OuterCamera?.Dispose();
+
         }
 
         public bool isRun { get { return InnerCamera.isRun && OuterCamera.isRun; } }
@@ -42,6 +45,7 @@ namespace DetectCCD {
         public ConnectCamera_ZipFile InnerCamera;
         public ConnectCamera_ZipFile OuterCamera;
 
-
+        public Action<DataGrab> EventInnerCamera;
+        public Action<DataGrab> EventOuterCamera;
     }
 }
