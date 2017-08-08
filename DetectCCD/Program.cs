@@ -18,6 +18,7 @@ namespace DetectCCD {
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new XFMain());
             Application.Run(new FormDetect4K());
 
             Static.Uninit();

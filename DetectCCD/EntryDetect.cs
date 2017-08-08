@@ -139,6 +139,7 @@ CfgParamSelf    BLOB
             bool statuCurr = tryDetect(frame);
             if(!statuCurr && statuPrev ) {
                 adjustER();
+                adjustDefect();
             }
             statuPrev = statuCurr;
             return statuCurr;
@@ -324,13 +325,16 @@ CfgParamSelf    BLOB
 
             //去除与Mark点重合的瑕疵
             double ck = 0.5 / Fx;
-            var marks = Tabs.TakeWhile(x => x.IsNewEA).ToArray();
-            foreach (var mark in marks) {
-                Defects.RemoveAll(m =>
-                    (Math.Abs(m.X - mark.MarkX) < ck && Math.Abs(m.Y - mark.MarkY) < ck) ||
-                    (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) < ck && Math.Abs(m.Y - mark.MarkY_P) < ck)
-                );
+            for (int i = 0; i < Tabs.Count; i++) {
+                if (Tabs[i].IsNewEA) {
+                    var mark = Tabs[i];
+                    Defects.RemoveAll(m =>
+                        (Math.Abs(m.X - mark.MarkX) < ck && Math.Abs(m.Y - mark.MarkY) < ck) ||
+                        (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) < ck && Math.Abs(m.Y - mark.MarkY_P) < ck)
+                    );
+                }
             }
+
         }
         void adjustER() {
 
