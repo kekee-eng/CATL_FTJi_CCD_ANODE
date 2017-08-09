@@ -16,6 +16,14 @@ namespace DetectCCD {
 
             this.record = record;
             this.device = device;
+
+            rtInfoApp_Click(null, null);
+        }
+        private void XFViewerChart_FormClosing(object sender, FormClosingEventArgs e) {
+
+            Static.App.Save();
+            Static.Param.Save();
+
         }
 
         ModRecord record;
@@ -25,11 +33,13 @@ namespace DetectCCD {
         Action<Control> bindUpdate;
         void viewerInit(Action<Control> init, Action<Control> update) {
 
-            //
-            bindInit = init;
-            bindUpdate = null;
-            bindInit(this);
-            bindUpdate = update;
+            Static.SafeRun(() => {
+                //
+                bindInit = init;
+                bindUpdate = null;
+                bindInit(this);
+                bindUpdate = update;
+            });
 
         }
         
@@ -333,9 +343,6 @@ namespace DetectCCD {
 
             }
         }
-
-
-
 
     }
 }

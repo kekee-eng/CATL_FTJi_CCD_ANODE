@@ -152,55 +152,65 @@ CfgParam        BLOB
             int w = obj.Width;
             int h = obj.Height;
 
+            //
+            if (!Static.App.DetectEnable)
+                return false;
+
             //极耳检测、并判断是否可能有瑕疵
             var aimage = grab.GetImage(frame);
             double[] ax, ay1, ay2;
-            if (aimage == null || !ImageProcess.DetectTab(aimage, out obj.hasDefect, out obj.hasTab, out ax, out ay1, out ay2)) 
+            if (aimage == null || !ImageProcess.DetectTab(aimage, out obj.hasDefect, out obj.hasTab, out ax, out ay1, out ay2))
                 return false;
 
-            //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
-            if (obj.hasDefect) {
-                defectCount++;
-            }
+            if (Static.App.DetectDefect) {
 
-            if (defectCount >= 10 || (!obj.hasDefect && defectCount > 0)) {
+                //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
+                if (obj.hasDefect) {
+                    defectCount++;
+                }
 
-                //拼成大图进行瑕疵检测
-                int efx1 = frame - defectCount;
-                int efx2 = frame - 1;
-                defectCount = 0;
-                
-                Task.Run(() => {
-                    var eimage = grab.GetImage(efx1, efx2);
-                    int[] etype;
-                    double[] ex, ey, ew, eh, earea;
-                    if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
+                if (defectCount >= 10 || (!obj.hasDefect && defectCount > 0)) {
 
-                        int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
-                        for (int i = 0; i < ecc; i++) {
-                            DataDefect defect = new DataDefect() {
-                                Type = etype[i],
-                                X = ex[i] / w,
-                                Y = efx1 + ey[i] / h,
-                                W = ew[i] / w,
-                                H = eh[i] / h
-                            };
+                    //拼成大图进行瑕疵检测
+                    int efx1 = frame - defectCount;
+                    int efx2 = frame - 1;
+                    defectCount = 0;
 
-                            defect.Width = defect.W * Fx;
-                            defect.Height = defect.H * Fy;
-                            defect.Area = earea[i] * Fx * Fy / w / h;
+                    Task.Run(() => {
+                        var eimage = grab.GetImage(efx1, efx2);
+                        int[] etype;
+                        double[] ex, ey, ew, eh, earea;
+                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
 
-                            Defects.Add(defect);
+                            int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
+                            for (int i = 0; i < ecc; i++) {
+                                DataDefect defect = new DataDefect() {
+                                    Type = etype[i],
+                                    X = ex[i] / w,
+                                    Y = efx1 + ey[i] / h,
+                                    W = ew[i] / w,
+                                    H = eh[i] / h
+                                };
+
+                                defect.Width = defect.W * Fx;
+                                defect.Height = defect.H * Fy;
+                                defect.Area = earea[i] * Fx * Fy / w / h;
+
+                                Defects.Add(defect);
+                            }
                         }
-                    }
-                });
+                    });
 
+                }
             }
 
             //是否有极耳
             if (!obj.hasTab)
                 return false;
-            
+
+            if (!Static.App.DetectTab)
+                return false;
+
             //极耳数据整理
             var data = new DataTab();
             data.TabX = ax[0] / w;
@@ -212,13 +222,13 @@ CfgParam        BLOB
                 data.TabY1_P = frame + ay1[1] / h;
                 data.TabY2_P = frame + ay2[1] / h;
             }
-            
+
             //是否新极耳
             bool isNewData = true;
             if (Tabs.Count > 0) {
                 var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
                 if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Param.TabMergeDistance) {
-                    
+
                     //更新极耳大小
                     double dist = 10 / Fx; //10mm
                     if (data.HasTwoTab || nearTab.HasTwoTab || Math.Abs(data.TabX - nearTab.TabX) >= dist) {
@@ -274,7 +284,7 @@ CfgParam        BLOB
                         nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
                         nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
                     }
-                    
+
                     //
                     isNewData = false;
                 }
@@ -283,47 +293,53 @@ CfgParam        BLOB
             if (!isNewData)
                 return false;
 
-            //宽度检测
-            double[] bx1, bx2;
-            double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
-            double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
+            if (Static.App.DetectWidth) {
+                //宽度检测
+                double[] bx1, bx2;
+                double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
+                double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
 
-            var bimage = grab.GetImage(bfy1, bfy2);
-            if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
-                data.WidthY1 = bfy1;
-                data.WidthY2 = bfy2;
-                data.WidthX1 = bx1[0] / w;
-                data.WidthX2 = bx2[0] / w;
+                var bimage = grab.GetImage(bfy1, bfy2);
+                if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
+                    data.WidthY1 = bfy1;
+                    data.WidthY2 = bfy2;
+                    data.WidthX1 = bx1[0] / w;
+                    data.WidthX2 = bx2[0] / w;
+                }
             }
 
-            //EA头部Mark检测
-            double[] cx, cy;
-            double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
-            double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
+            if (Static.App.DetectMark) {
 
-            //
-            data.MarkY1 = cfy1;
-            data.MarkY2 = cfy2;
+                //EA头部Mark检测
+                double[] cx, cy;
+                double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
+                double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
 
-            var cimage = grab.GetImage(cfy1, cfy2);
-            if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
-                
-                //将最后一个极耳放到下个EA中
-                data.IsNewEA = true;
-                data.MarkX = data.MarkX_P = cx[0] / w;
-                data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+                //
+                data.MarkY1 = cfy1;
+                data.MarkY2 = cfy2;
 
-                if (cx.Length == 2 && cy.Length == 2) {
-                    data.HasTwoMark = true;
-                    data.MarkX_P = cx[1] / w;
-                    data.MarkY_P = cfy1 + cy[1] / h;
+                var cimage = grab.GetImage(cfy1, cfy2);
+                if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+
+                    //将最后一个极耳放到下个EA中
+                    data.IsNewEA = true;
+                    data.MarkX = data.MarkX_P = cx[0] / w;
+                    data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+
+                    if (cx.Length == 2 && cy.Length == 2) {
+                        data.HasTwoMark = true;
+                        data.MarkX_P = cx[1] / w;
+                        data.MarkY_P = cfy1 + cy[1] / h;
+                    }
+
                 }
-
             }
 
             //
             Tabs.Add(data);
             return true;
+
         }
 
         void adjustDefect() {

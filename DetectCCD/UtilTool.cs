@@ -196,6 +196,9 @@ namespace DetectCCD {
 
             public static string ValueToString(object val) {
 
+                if (val == null)
+                    return "-";
+
                 if (val.GetType() == typeof(string) ||
                     val.GetType() == typeof(int)) {
 
@@ -216,19 +219,25 @@ namespace DetectCCD {
 
                 var flag = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
 
-                var d1 = obj.GetType().GetField(name, flag);
-                if (d1 != null) {
+                try {
+                    var d1 = obj.GetType().GetField(name, flag);
+                    if (d1 != null) {
 
-                    return ValueToString(d1.GetValue(obj));
+                        return ValueToString(d1.GetValue(obj));
+                    }
+
+                    var d2 = obj.GetType().GetMethod("get_" + name, flag);
+                    if (d2 != null) {
+
+                        return ValueToString(d2.Invoke(obj, null));
+                    }
+
+                    throw new Exception("UtilTool: AutoInfo: GetPrivateValue: " + name);
+                }
+                catch {
+                    return "-";
                 }
 
-                var d2 = obj.GetType().GetMethod("get_" + name, flag);
-                if (d2 != null) {
-
-                    return ValueToString(d2.Invoke(obj, null));
-                }
-
-                throw new Exception("UtilTool: AutoInfo: GetPrivateValue: " + name);
             }
 
             static DataGridView _grid;

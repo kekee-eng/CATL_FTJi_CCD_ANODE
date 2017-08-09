@@ -52,18 +52,13 @@ namespace DetectCCD {
         private void btnInit_Click(object sender, EventArgs e) {
             device.Dispose();
             device.Open();
-
-            btnReset_Click(null, null);
-        }
-
-        private void btnReset_Click(object sender, EventArgs e) {
-
+            
             device.InnerCamera.Freeze();
             device.OuterCamera.Freeze();
 
             device.InnerCamera.m_frameStart = Static.App.CameraFrameStart;
             device.OuterCamera.m_frameStart = Static.App.CameraFrameStart;
-
+            
             device.InnerCamera.Reset();
             device.OuterCamera.Reset();
 
@@ -101,8 +96,7 @@ namespace DetectCCD {
                 btnLoadFileInner.Enabled = !device.isGrabbing;
                 btnLoadFileOuter.Enabled = !device.isGrabbing;
                 btnInit.Enabled = !device.isGrabbing;
-
-                btnReset.Enabled = !device.isGrabbing;
+                
                 btnStart.Enabled = !device.isGrabbing;
                 btnStop.Enabled = device.isGrabbing;
 

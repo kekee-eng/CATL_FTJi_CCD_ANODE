@@ -21,9 +21,10 @@ namespace DetectCCD {
             //
             init_device();
             init_status();
-            init_save();
+            init_teston();
 
             //
+            UtilTool.AddBuildTag(this);
             UtilTool.XFWait.Close();
         }
         private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
@@ -197,21 +198,26 @@ namespace DetectCCD {
             }));
 
         }
-        void init_save() {
+        void init_teston() {
+            
+            checkSaveOK.Checked = Static.App.RecordSaveImageOK;
+            checkSaveNG.Checked = Static.App.RecordSaveImageNG;
 
-            checkSaveAll.Checked = Static.App.RecordSaveImageAll;
-            checkSaveEnable.Checked = Static.App.RecordSaveImageEnable;
-            checkSaveDefect.Checked = Static.App.RecordSaveImageDefect;
-            checkSaveMark.Checked = Static.App.RecordSaveImageMark;
-            checkSaveTab.Checked = Static.App.RecordSaveImageTab;
+            checkSaveOK.CheckedChanged += (o, e) => Static.App.RecordSaveImageOK = (o as CheckEdit).Checked;
+            checkSaveNG.CheckedChanged += (o, e) => Static.App.RecordSaveImageNG = (o as CheckEdit).Checked;
 
-            checkSaveAll.CheckedChanged += (o, e) => Static.App.RecordSaveImageAll = (o as CheckEdit).Checked;
-            checkSaveEnable.CheckedChanged += (o, e) => Static.App.RecordSaveImageEnable = (o as CheckEdit).Checked;
-            checkSaveDefect.CheckedChanged += (o, e) => Static.App.RecordSaveImageDefect = (o as CheckEdit).Checked;
-            checkSaveMark.CheckedChanged += (o, e) => Static.App.RecordSaveImageMark = (o as CheckEdit).Checked;
-            checkSaveTab.CheckedChanged += (o, e) => Static.App.RecordSaveImageTab = (o as CheckEdit).Checked;
+            checkDetectDefect.Checked = Static.App.DetectDefect;
+            checkDetectMark.Checked = Static.App.DetectMark;
+            checkDetectTab.Checked = Static.App.DetectTab;
+            checkDetectWidth.Checked = Static.App.DetectWidth;
+
+            checkDetectDefect.CheckedChanged += (o, e) => Static.App.RecordSaveImageNG = (o as CheckEdit).Checked;
+            checkDetectMark.CheckedChanged += (o, e) => Static.App.DetectMark = (o as CheckEdit).Checked;
+            checkDetectTab.CheckedChanged += (o, e) => Static.App.DetectTab = (o as CheckEdit).Checked;
+            checkDetectWidth.CheckedChanged += (o, e) => Static.App.DetectWidth = (o as CheckEdit).Checked;
 
         }
+
         void init_status() {
             //选定用户
             changeUser();
@@ -286,6 +292,20 @@ namespace DetectCCD {
                 xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
                 xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
 
+                groupRoll.Enabled = device.isOpen;
+                groupTest.Enabled = device.isOpen;
+
+                btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
+                btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
+
+                checkSaveOK.Enabled = Static.App.RecordSaveImageEnable;
+                checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
+
+                checkDetectDefect.Enabled = Static.App.DetectEnable;
+                checkDetectMark.Enabled = Static.App.DetectEnable;
+                checkDetectTab.Enabled = Static.App.DetectEnable;
+                checkDetectWidth.Enabled = Static.App.DetectEnable;
+
                 if (device.isOpen) {
                     //
                     _lc_inner_camera.Text = device.InnerCamera.Name;
@@ -332,9 +352,9 @@ namespace DetectCCD {
             });
         }
         private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
-            //runAction("连接设备", () => {
-            //    device.Open();
-            //});
+            runAction("连接设备", () => {
+                device.Open();
+            });
         }
         private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
             if (selectFullScreen.Tag == null)

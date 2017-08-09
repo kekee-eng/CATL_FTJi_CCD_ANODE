@@ -107,15 +107,14 @@ namespace DetectCCD {
                 }
 
                 //是否要保存
-                if (!Static.App.RecordSaveImageAll) {
+                if(!Static.App.RecordSaveImageOK || !Static.App.RecordSaveImageNG) {
 
-                    if (!(
-                        (Static.App.RecordSaveImageTab && data.hasTab) ||
-                        (Static.App.RecordSaveImageMark && data.hasMark) ||
-                        (Static.App.RecordSaveImageDefect && data.hasDefect)
-                        ))
+                    if (!Static.App.RecordSaveImageOK && !data.hasDefect)
                         return false;
 
+                    if (!Static.App.RecordSaveImageNG && data.hasDefect)
+                        return false;
+                    
                 }
 
                 //

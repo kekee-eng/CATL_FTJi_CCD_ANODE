@@ -23,9 +23,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.btnLoadFileInner = new DevExpress.XtraEditors.SimpleButton();
             this.btnLoadFileOuter = new DevExpress.XtraEditors.SimpleButton();
-            this.btnReset = new DevExpress.XtraEditors.SimpleButton();
             this.btnStart = new DevExpress.XtraEditors.SimpleButton();
             this.btnStop = new DevExpress.XtraEditors.SimpleButton();
             this.trackFps = new DevExpress.XtraEditors.TrackBarControl();
@@ -33,7 +33,7 @@
             this.textFrameStart = new DevExpress.XtraEditors.TextEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.btnInit = new DevExpress.XtraEditors.SimpleButton();
-            this.timer1 = new System.Windows.Forms.Timer();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.trackFps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackFps.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textFrameStart.Properties)).BeginInit();
@@ -57,22 +57,13 @@
             this.btnLoadFileOuter.Text = "设置外侧相机";
             this.btnLoadFileOuter.Click += new System.EventHandler(this.btnLoadFileOuter_Click);
             // 
-            // btnReset
-            // 
-            this.btnReset.Location = new System.Drawing.Point(44, 187);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(101, 30);
-            this.btnReset.TabIndex = 9;
-            this.btnReset.Text = "复位";
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
-            // 
             // btnStart
             // 
             this.btnStart.Location = new System.Drawing.Point(44, 223);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(101, 30);
             this.btnStart.TabIndex = 10;
-            this.btnStart.Text = "开始";
+            this.btnStart.Text = "开始采图";
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnStop
@@ -151,7 +142,6 @@
             this.Controls.Add(this.trackFps);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
-            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnLoadFileOuter);
             this.Controls.Add(this.btnLoadFileInner);
             this.Name = "XFCameraControl";
@@ -168,7 +158,6 @@
 
         private DevExpress.XtraEditors.SimpleButton btnLoadFileInner;
         private DevExpress.XtraEditors.SimpleButton btnLoadFileOuter;
-        private DevExpress.XtraEditors.SimpleButton btnReset;
         private DevExpress.XtraEditors.SimpleButton btnStart;
         private DevExpress.XtraEditors.SimpleButton btnStop;
         private DevExpress.XtraEditors.TrackBarControl trackFps;

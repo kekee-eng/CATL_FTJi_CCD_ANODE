@@ -70,10 +70,15 @@ namespace DetectCCD {
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordSaveImageEnable = false;
-        public bool RecordSaveImageAll = false;
-        public bool RecordSaveImageTab = false;
-        public bool RecordSaveImageMark = false;
-        public bool RecordSaveImageDefect = false;
+        public bool RecordSaveImageOK = false;
+        public bool RecordSaveImageNG = false;
+
+        //检测内容
+        public bool DetectEnable = true;
+        public bool DetectTab = true;
+        public bool DetectWidth = true;
+        public bool DetectMark = true;
+        public bool DetectDefect = true;
 
         //显示参数
         public double CameraFpsControl = 10;

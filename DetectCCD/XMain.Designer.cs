@@ -107,13 +107,14 @@
             this.labelControl40 = new DevExpress.XtraEditors.LabelControl();
             this._lc_inner_caption = new DevExpress.XtraEditors.LabelControl();
             this.hwinInner = new HalconDotNet.HWindowControl();
-            this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
-            this.checkSaveDefect = new DevExpress.XtraEditors.CheckEdit();
-            this.checkSaveMark = new DevExpress.XtraEditors.CheckEdit();
-            this.checkSaveTab = new DevExpress.XtraEditors.CheckEdit();
-            this.checkSaveAll = new DevExpress.XtraEditors.CheckEdit();
-            this.checkSaveEnable = new DevExpress.XtraEditors.CheckEdit();
-            this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
+            this.groupTest = new DevExpress.XtraEditors.GroupControl();
+            this.checkDetectDefect = new DevExpress.XtraEditors.CheckEdit();
+            this.checkDetectMark = new DevExpress.XtraEditors.CheckEdit();
+            this.checkDetectWidth = new DevExpress.XtraEditors.CheckEdit();
+            this.checkDetectTab = new DevExpress.XtraEditors.CheckEdit();
+            this.checkSaveNG = new DevExpress.XtraEditors.CheckEdit();
+            this.checkSaveOK = new DevExpress.XtraEditors.CheckEdit();
+            this.groupCtrl = new DevExpress.XtraEditors.GroupControl();
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnStopGrab = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
@@ -167,15 +168,16 @@
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).BeginInit();
-            this.groupControl3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveDefect.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveTab.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveAll.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveEnable.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
-            this.groupControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupTest)).BeginInit();
+            this.groupTest.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectDefect.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectMark.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectWidth.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).BeginInit();
+            this.groupCtrl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).BeginInit();
@@ -394,7 +396,7 @@
             this.xtraTabPage1.ImageIndex = 0;
             this.xtraTabPage1.MaxTabPageWidth = 100;
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1113, 620);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1070, 620);
             this.xtraTabPage1.Text = "设备控制";
             // 
             // groupControl1
@@ -481,8 +483,8 @@
             this.splitContainerControl1.Panel1.Controls.Add(this.tableLayoutPanel8);
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
-            this.splitContainerControl1.Panel2.Controls.Add(this.groupControl3);
-            this.splitContainerControl1.Panel2.Controls.Add(this.groupControl2);
+            this.splitContainerControl1.Panel2.Controls.Add(this.groupTest);
+            this.splitContainerControl1.Panel2.Controls.Add(this.groupCtrl);
             this.splitContainerControl1.Panel2.Controls.Add(this.groupRoll);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(1070, 620);
@@ -1159,75 +1161,85 @@
             this.hwinInner.TabIndex = 29;
             this.hwinInner.WindowSize = new System.Drawing.Size(352, 463);
             // 
-            // groupControl3
+            // groupTest
             // 
-            this.groupControl3.Controls.Add(this.checkSaveDefect);
-            this.groupControl3.Controls.Add(this.checkSaveMark);
-            this.groupControl3.Controls.Add(this.checkSaveTab);
-            this.groupControl3.Controls.Add(this.checkSaveAll);
-            this.groupControl3.Controls.Add(this.checkSaveEnable);
-            this.groupControl3.Location = new System.Drawing.Point(14, 403);
-            this.groupControl3.Name = "groupControl3";
-            this.groupControl3.Size = new System.Drawing.Size(281, 138);
-            this.groupControl3.TabIndex = 29;
-            this.groupControl3.Text = "存图开关";
+            this.groupTest.Controls.Add(this.checkDetectDefect);
+            this.groupTest.Controls.Add(this.checkDetectMark);
+            this.groupTest.Controls.Add(this.checkDetectWidth);
+            this.groupTest.Controls.Add(this.checkDetectTab);
+            this.groupTest.Controls.Add(this.checkSaveNG);
+            this.groupTest.Controls.Add(this.checkSaveOK);
+            this.groupTest.Location = new System.Drawing.Point(14, 403);
+            this.groupTest.Name = "groupTest";
+            this.groupTest.Size = new System.Drawing.Size(281, 183);
+            this.groupTest.TabIndex = 29;
+            this.groupTest.Text = "测试开关";
             // 
-            // checkSaveDefect
+            // checkDetectDefect
             // 
-            this.checkSaveDefect.Location = new System.Drawing.Point(154, 94);
-            this.checkSaveDefect.MenuManager = this.barManager1;
-            this.checkSaveDefect.Name = "checkSaveDefect";
-            this.checkSaveDefect.Properties.Caption = "瑕疵";
-            this.checkSaveDefect.Size = new System.Drawing.Size(83, 19);
-            this.checkSaveDefect.TabIndex = 4;
+            this.checkDetectDefect.Location = new System.Drawing.Point(154, 119);
+            this.checkDetectDefect.MenuManager = this.barManager1;
+            this.checkDetectDefect.Name = "checkDetectDefect";
+            this.checkDetectDefect.Properties.Caption = "检测瑕疵";
+            this.checkDetectDefect.Size = new System.Drawing.Size(87, 19);
+            this.checkDetectDefect.TabIndex = 8;
             // 
-            // checkSaveMark
+            // checkDetectMark
             // 
-            this.checkSaveMark.Location = new System.Drawing.Point(154, 69);
-            this.checkSaveMark.MenuManager = this.barManager1;
-            this.checkSaveMark.Name = "checkSaveMark";
-            this.checkSaveMark.Properties.Caption = "EA-Mark";
-            this.checkSaveMark.Size = new System.Drawing.Size(83, 19);
-            this.checkSaveMark.TabIndex = 3;
+            this.checkDetectMark.Location = new System.Drawing.Point(154, 94);
+            this.checkDetectMark.MenuManager = this.barManager1;
+            this.checkDetectMark.Name = "checkDetectMark";
+            this.checkDetectMark.Properties.Caption = "检测Mark孔";
+            this.checkDetectMark.Size = new System.Drawing.Size(87, 19);
+            this.checkDetectMark.TabIndex = 7;
             // 
-            // checkSaveTab
+            // checkDetectWidth
             // 
-            this.checkSaveTab.Location = new System.Drawing.Point(154, 44);
-            this.checkSaveTab.MenuManager = this.barManager1;
-            this.checkSaveTab.Name = "checkSaveTab";
-            this.checkSaveTab.Properties.Caption = "极耳";
-            this.checkSaveTab.Size = new System.Drawing.Size(83, 19);
-            this.checkSaveTab.TabIndex = 2;
+            this.checkDetectWidth.Location = new System.Drawing.Point(154, 69);
+            this.checkDetectWidth.MenuManager = this.barManager1;
+            this.checkDetectWidth.Name = "checkDetectWidth";
+            this.checkDetectWidth.Properties.Caption = "检测宽度";
+            this.checkDetectWidth.Size = new System.Drawing.Size(87, 19);
+            this.checkDetectWidth.TabIndex = 6;
             // 
-            // checkSaveAll
+            // checkDetectTab
             // 
-            this.checkSaveAll.Location = new System.Drawing.Point(22, 69);
-            this.checkSaveAll.MenuManager = this.barManager1;
-            this.checkSaveAll.Name = "checkSaveAll";
-            this.checkSaveAll.Properties.Caption = "保存所有";
-            this.checkSaveAll.Size = new System.Drawing.Size(87, 19);
-            this.checkSaveAll.TabIndex = 1;
+            this.checkDetectTab.Location = new System.Drawing.Point(154, 44);
+            this.checkDetectTab.MenuManager = this.barManager1;
+            this.checkDetectTab.Name = "checkDetectTab";
+            this.checkDetectTab.Properties.Caption = "检测极耳";
+            this.checkDetectTab.Size = new System.Drawing.Size(87, 19);
+            this.checkDetectTab.TabIndex = 5;
             // 
-            // checkSaveEnable
+            // checkSaveNG
             // 
-            this.checkSaveEnable.Location = new System.Drawing.Point(22, 44);
-            this.checkSaveEnable.MenuManager = this.barManager1;
-            this.checkSaveEnable.Name = "checkSaveEnable";
-            this.checkSaveEnable.Properties.Caption = "总开关";
-            this.checkSaveEnable.Size = new System.Drawing.Size(87, 19);
-            this.checkSaveEnable.TabIndex = 0;
+            this.checkSaveNG.Location = new System.Drawing.Point(22, 69);
+            this.checkSaveNG.MenuManager = this.barManager1;
+            this.checkSaveNG.Name = "checkSaveNG";
+            this.checkSaveNG.Properties.Caption = "保存NG图";
+            this.checkSaveNG.Size = new System.Drawing.Size(83, 19);
+            this.checkSaveNG.TabIndex = 4;
             // 
-            // groupControl2
+            // checkSaveOK
             // 
-            this.groupControl2.Controls.Add(this.btnOpenViewerChart);
-            this.groupControl2.Controls.Add(this.btnStopGrab);
-            this.groupControl2.Controls.Add(this.btnOfflineControl);
-            this.groupControl2.Controls.Add(this.btnStartGrab);
-            this.groupControl2.Location = new System.Drawing.Point(14, 237);
-            this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(281, 142);
-            this.groupControl2.TabIndex = 28;
-            this.groupControl2.Text = "控制台";
+            this.checkSaveOK.Location = new System.Drawing.Point(22, 44);
+            this.checkSaveOK.MenuManager = this.barManager1;
+            this.checkSaveOK.Name = "checkSaveOK";
+            this.checkSaveOK.Properties.Caption = "保存OK图";
+            this.checkSaveOK.Size = new System.Drawing.Size(87, 19);
+            this.checkSaveOK.TabIndex = 1;
+            // 
+            // groupCtrl
+            // 
+            this.groupCtrl.Controls.Add(this.btnOpenViewerChart);
+            this.groupCtrl.Controls.Add(this.btnStopGrab);
+            this.groupCtrl.Controls.Add(this.btnOfflineControl);
+            this.groupCtrl.Controls.Add(this.btnStartGrab);
+            this.groupCtrl.Location = new System.Drawing.Point(14, 237);
+            this.groupCtrl.Name = "groupCtrl";
+            this.groupCtrl.Size = new System.Drawing.Size(281, 142);
+            this.groupCtrl.TabIndex = 28;
+            this.groupCtrl.Text = "控制台";
             // 
             // btnOpenViewerChart
             // 
@@ -1388,7 +1400,7 @@
             this.xtraTabPage3.Controls.Add(this.splitContainerControl2);
             this.xtraTabPage3.ImageIndex = 2;
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(1113, 620);
+            this.xtraTabPage3.Size = new System.Drawing.Size(1070, 620);
             this.xtraTabPage3.Text = "参数配置";
             // 
             // splitContainerControl2
@@ -1401,7 +1413,7 @@
             this.splitContainerControl2.Panel1.Text = "Panel1";
             this.splitContainerControl2.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
             this.splitContainerControl2.Panel2.Text = "Panel2";
-            this.splitContainerControl2.Size = new System.Drawing.Size(1113, 620);
+            this.splitContainerControl2.Size = new System.Drawing.Size(1070, 620);
             this.splitContainerControl2.SplitterPosition = 255;
             this.splitContainerControl2.TabIndex = 1;
             this.splitContainerControl2.Text = "splitContainerControl2";
@@ -1410,7 +1422,7 @@
             // 
             this.xtraTabPage4.ImageIndex = 3;
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(1113, 620);
+            this.xtraTabPage4.Size = new System.Drawing.Size(1070, 620);
             this.xtraTabPage4.Text = "测试工具";
             // 
             // timer1
@@ -1475,15 +1487,16 @@
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).EndInit();
-            this.groupControl3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveDefect.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveTab.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveAll.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveEnable.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
-            this.groupControl2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupTest)).EndInit();
+            this.groupTest.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectDefect.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectMark.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectWidth.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).EndInit();
+            this.groupCtrl.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).EndInit();
@@ -1603,12 +1616,13 @@
         private DevExpress.XtraTab.XtraTabControl xtraTabControlRoll;
         private DevExpress.XtraTab.XtraTabPage xtraTabPageRollOnline;
         private DevExpress.XtraTab.XtraTabPage xtraTabPageRollOffline;
-        private DevExpress.XtraEditors.GroupControl groupControl2;
-        private DevExpress.XtraEditors.GroupControl groupControl3;
-        private DevExpress.XtraEditors.CheckEdit checkSaveEnable;
-        private DevExpress.XtraEditors.CheckEdit checkSaveDefect;
-        private DevExpress.XtraEditors.CheckEdit checkSaveMark;
-        private DevExpress.XtraEditors.CheckEdit checkSaveTab;
-        private DevExpress.XtraEditors.CheckEdit checkSaveAll;
+        private DevExpress.XtraEditors.GroupControl groupCtrl;
+        private DevExpress.XtraEditors.GroupControl groupTest;
+        private DevExpress.XtraEditors.CheckEdit checkSaveNG;
+        private DevExpress.XtraEditors.CheckEdit checkSaveOK;
+        private DevExpress.XtraEditors.CheckEdit checkDetectMark;
+        private DevExpress.XtraEditors.CheckEdit checkDetectWidth;
+        private DevExpress.XtraEditors.CheckEdit checkDetectTab;
+        private DevExpress.XtraEditors.CheckEdit checkDetectDefect;
     }
 }

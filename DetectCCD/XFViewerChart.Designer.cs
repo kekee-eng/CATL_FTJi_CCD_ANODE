@@ -71,7 +71,7 @@
             this.toolStripSeparator3,
             this.rtReflush});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 142);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 120);
             // 
             // infoToolStripMenuItem
             // 
@@ -80,27 +80,27 @@
             this.rtInfoInner,
             this.rtInfoOuter});
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.infoToolStripMenuItem.Text = "Info";
             // 
             // rtInfoApp
             // 
             this.rtInfoApp.Name = "rtInfoApp";
-            this.rtInfoApp.Size = new System.Drawing.Size(152, 22);
+            this.rtInfoApp.Size = new System.Drawing.Size(109, 22);
             this.rtInfoApp.Text = "App";
             this.rtInfoApp.Click += new System.EventHandler(this.rtInfoApp_Click);
             // 
             // rtInfoInner
             // 
             this.rtInfoInner.Name = "rtInfoInner";
-            this.rtInfoInner.Size = new System.Drawing.Size(152, 22);
+            this.rtInfoInner.Size = new System.Drawing.Size(109, 22);
             this.rtInfoInner.Text = "Inner";
             this.rtInfoInner.Click += new System.EventHandler(this.rtInfoInner_Click);
             // 
             // rtInfoOuter
             // 
             this.rtInfoOuter.Name = "rtInfoOuter";
-            this.rtInfoOuter.Size = new System.Drawing.Size(152, 22);
+            this.rtInfoOuter.Size = new System.Drawing.Size(109, 22);
             this.rtInfoOuter.Text = "Outer";
             this.rtInfoOuter.Click += new System.EventHandler(this.rtInfoOuter_Click);
             // 
@@ -110,20 +110,20 @@
             this.rtParamApp,
             this.rtParam});
             this.cfgToolStripMenuItem.Name = "cfgToolStripMenuItem";
-            this.cfgToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cfgToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.cfgToolStripMenuItem.Text = "Cfg";
             // 
             // rtParamApp
             // 
             this.rtParamApp.Name = "rtParamApp";
-            this.rtParamApp.Size = new System.Drawing.Size(152, 22);
+            this.rtParamApp.Size = new System.Drawing.Size(113, 22);
             this.rtParamApp.Text = "App";
             this.rtParamApp.Click += new System.EventHandler(this.rtParamApp_Click);
             // 
             // rtParam
             // 
             this.rtParam.Name = "rtParam";
-            this.rtParam.Size = new System.Drawing.Size(152, 22);
+            this.rtParam.Size = new System.Drawing.Size(113, 22);
             this.rtParam.Text = "Param";
             this.rtParam.Click += new System.EventHandler(this.rtParamShare_Click);
             // 
@@ -137,41 +137,41 @@
             this.toolStripSeparator1,
             this.rtInnerTabChart});
             this.innerToolStripMenuItem1.Name = "innerToolStripMenuItem1";
-            this.innerToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.innerToolStripMenuItem1.Size = new System.Drawing.Size(118, 22);
             this.innerToolStripMenuItem1.Text = "Inner";
             // 
             // rtInnerTab
             // 
             this.rtInnerTab.Name = "rtInnerTab";
-            this.rtInnerTab.Size = new System.Drawing.Size(152, 22);
+            this.rtInnerTab.Size = new System.Drawing.Size(138, 22);
             this.rtInnerTab.Text = "TAB";
             this.rtInnerTab.Click += new System.EventHandler(this.rtInnerTab_Click);
             // 
             // rtInnerEa
             // 
             this.rtInnerEa.Name = "rtInnerEa";
-            this.rtInnerEa.Size = new System.Drawing.Size(152, 22);
+            this.rtInnerEa.Size = new System.Drawing.Size(138, 22);
             this.rtInnerEa.Text = "EA";
             this.rtInnerEa.Click += new System.EventHandler(this.rtInnerEa_Click);
             // 
             // rtInnerDefect
             // 
             this.rtInnerDefect.Name = "rtInnerDefect";
-            this.rtInnerDefect.Size = new System.Drawing.Size(152, 22);
+            this.rtInnerDefect.Size = new System.Drawing.Size(138, 22);
             this.rtInnerDefect.Text = "Defect";
             this.rtInnerDefect.Click += new System.EventHandler(this.rtInnerDefect_Click);
             // 
             // rtInnerLabel
             // 
             this.rtInnerLabel.Name = "rtInnerLabel";
-            this.rtInnerLabel.Size = new System.Drawing.Size(152, 22);
+            this.rtInnerLabel.Size = new System.Drawing.Size(138, 22);
             this.rtInnerLabel.Text = "Label";
             this.rtInnerLabel.Click += new System.EventHandler(this.rtInnerLabel_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
             // 
             // rtInnerTabChart
             // 
@@ -181,7 +181,7 @@
             this.rtInnerTabChartDistance,
             this.rtInnerTabChartDistdiff});
             this.rtInnerTabChart.Name = "rtInnerTabChart";
-            this.rtInnerTabChart.Size = new System.Drawing.Size(152, 22);
+            this.rtInnerTabChart.Size = new System.Drawing.Size(138, 22);
             this.rtInnerTabChart.Text = "TAB(Chart)";
             // 
             // rtInnerTabChartWidth
@@ -222,41 +222,41 @@
             this.toolStripSeparator2,
             this.rtOuterTabChart});
             this.outerToolStripMenuItem1.Name = "outerToolStripMenuItem1";
-            this.outerToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.outerToolStripMenuItem1.Size = new System.Drawing.Size(118, 22);
             this.outerToolStripMenuItem1.Text = "Outer";
             // 
             // rtOuterTab
             // 
             this.rtOuterTab.Name = "rtOuterTab";
-            this.rtOuterTab.Size = new System.Drawing.Size(152, 22);
+            this.rtOuterTab.Size = new System.Drawing.Size(138, 22);
             this.rtOuterTab.Text = "TAB";
             this.rtOuterTab.Click += new System.EventHandler(this.rtOuterTab_Click);
             // 
             // rtOuterEa
             // 
             this.rtOuterEa.Name = "rtOuterEa";
-            this.rtOuterEa.Size = new System.Drawing.Size(152, 22);
+            this.rtOuterEa.Size = new System.Drawing.Size(138, 22);
             this.rtOuterEa.Text = "EA";
             this.rtOuterEa.Click += new System.EventHandler(this.rtOuterEa_Click);
             // 
             // rtOuterDefect
             // 
             this.rtOuterDefect.Name = "rtOuterDefect";
-            this.rtOuterDefect.Size = new System.Drawing.Size(152, 22);
+            this.rtOuterDefect.Size = new System.Drawing.Size(138, 22);
             this.rtOuterDefect.Text = "Defect";
             this.rtOuterDefect.Click += new System.EventHandler(this.rtOuterDefect_Click);
             // 
             // rtOuterLabel
             // 
             this.rtOuterLabel.Name = "rtOuterLabel";
-            this.rtOuterLabel.Size = new System.Drawing.Size(152, 22);
+            this.rtOuterLabel.Size = new System.Drawing.Size(138, 22);
             this.rtOuterLabel.Text = "Label";
             this.rtOuterLabel.Click += new System.EventHandler(this.rtOuterLabel_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(135, 6);
             // 
             // rtOuterTabChart
             // 
@@ -266,7 +266,7 @@
             this.rtOuterTabChartDistance,
             this.rtOuterTabChartDistdiff});
             this.rtOuterTabChart.Name = "rtOuterTabChart";
-            this.rtOuterTabChart.Size = new System.Drawing.Size(152, 22);
+            this.rtOuterTabChart.Size = new System.Drawing.Size(138, 22);
             this.rtOuterTabChart.Text = "TAB(Chart)";
             // 
             // rtOuterTabChartWidth
@@ -300,7 +300,7 @@
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(115, 6);
             // 
             // rtReflush
             // 
@@ -309,7 +309,7 @@
             this.rtReflush.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rtReflushTime});
             this.rtReflush.Name = "rtReflush";
-            this.rtReflush.Size = new System.Drawing.Size(152, 22);
+            this.rtReflush.Size = new System.Drawing.Size(118, 22);
             this.rtReflush.Text = "Reflush";
             this.rtReflush.Click += new System.EventHandler(this.rtReflush_Click);
             // 
@@ -334,6 +334,7 @@
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.Name = "XFViewerChart";
             this.Text = "XFViewerChart";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XFViewerChart_FormClosing);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 

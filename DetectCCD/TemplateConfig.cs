@@ -211,7 +211,7 @@ namespace DetectCCD {
                 foreach (var field in fields) {
                     var name = field.Name;
                     var value = getValueFromField(field);
-
+                    
                     m_grid.Rows.Add(name, value);
                 }
             }
