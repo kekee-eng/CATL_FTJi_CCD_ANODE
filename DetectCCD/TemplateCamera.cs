@@ -52,7 +52,9 @@ namespace DetectCCD {
         public bool isOpen = false;
         public bool isGrabbing = false;
 
-        public string m_camera_name = "";
+        public string CameraName = "";
+        public string CameraCaption = "";
+
 
     }
 }

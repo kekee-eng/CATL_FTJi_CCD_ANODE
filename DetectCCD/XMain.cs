@@ -150,7 +150,7 @@ namespace DetectCCD {
                 groupOffline.Enabled = !isOnline;
                 
                 //
-                _lc_inner_camera.Text = device.InnerCamera.m_camera_name;
+                _lc_inner_camera.Text = device.InnerCamera.CameraName;
                 _lc_inner_fps.Text = device.InnerCamera.m_fpsRealtime.ToString("0.000");
                 _lc_inner_frame.Text = device.InnerCamera.m_frame.ToString();
                 _lc_inner_isgrabbing.Text = device.InnerCamera.isGrabbing ? "On" : "Off";
@@ -158,13 +158,13 @@ namespace DetectCCD {
                 _lc_inner_isgrabbing.ForeColor = device.InnerCamera.isGrabbing ? Color.Green : Color.Red;
                 _lc_inner_isopen.ForeColor = device.InnerCamera.isOpen ? Color.Green : Color.Red;
 
-                _lc_inner_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamInner.Caption, device.InnerCamera.m_camera_name, device.InnerCamera.m_frame);
+                _lc_inner_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamInner.Caption, device.InnerCamera.CameraName, device.InnerCamera.m_frame);
                 _lc_inner_eaCount.Text = record.InnerDetect.EACount.ToString();
                 _lc_inner_widthCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 _lc_inner_defectCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
 
                 //
-                _lc_outer_camera.Text = device.OuterCamera.m_camera_name;
+                _lc_outer_camera.Text = device.OuterCamera.CameraName;
                 _lc_outer_fps.Text = device.OuterCamera.m_fpsRealtime.ToString("0.000");
                 _lc_outer_frame.Text = device.OuterCamera.m_frame.ToString();
                 _lc_outer_isgrabbing.Text = device.OuterCamera.isGrabbing ? "On" : "Off";
@@ -172,7 +172,7 @@ namespace DetectCCD {
                 _lc_outer_isgrabbing.ForeColor = device.OuterCamera.isGrabbing ? Color.Green : Color.Red;
                 _lc_outer_isopen.ForeColor = device.OuterCamera.isOpen ? Color.Green : Color.Red;
 
-                _lc_outer_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamOuter.Caption, device.OuterCamera.m_camera_name, device.OuterCamera.m_frame);
+                _lc_outer_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamOuter.Caption, device.OuterCamera.CameraName, device.OuterCamera.m_frame);
                 _lc_outer_eaCount.Text = record.OuterDetect.EACount.ToString();
                 _lc_outer_widthCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 _lc_outer_defectCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();

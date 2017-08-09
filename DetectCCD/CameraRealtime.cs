@@ -14,9 +14,11 @@ namespace DetectCCD {
             this._config2 = configFile2;
 
             this.isCameraLink = false;
-
+            
             //
-            Open();
+            if (!Open()) {
+                throw new Exception("打开GIGE相机失败");
+            }
         }
 
         /// <summary> 连接CameraLink相机 </summary>
@@ -32,7 +34,9 @@ namespace DetectCCD {
             this.isCameraLink = true;
 
             //
-            Open();
+            if (!Open()) {
+                throw new Exception("打开CameraLink相机失败");
+            }
         }
 
         int _server1;
@@ -127,7 +131,7 @@ namespace DetectCCD {
 
             //
             DataGrab dg = new DataGrab() {
-                Camera = m_camera_name,
+                Camera = CameraName,
                 Frame = m_frame,
                 Encoder = m_encoder,
                 Timestamp = DataGrab.GenTimeStamp(DateTime.Now),
@@ -201,7 +205,7 @@ namespace DetectCCD {
             }
 
             //
-            AcqDevice.GetFeatureValue("DeviceUserID", out m_camera_name);
+            AcqDevice.GetFeatureValue("DeviceUserID", out CameraName);
 
             //
             m_frame = m_frameStart;
@@ -229,7 +233,7 @@ namespace DetectCCD {
             isGrabbing = false;
             isOpen = false;
 
-            m_camera_name = "";
+            CameraName = "";
         }
         public void Snap() {
             if (isOpen) {

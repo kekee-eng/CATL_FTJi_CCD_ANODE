@@ -61,7 +61,7 @@ namespace DetectCCD {
 
                 //
                 var data = new DataGrab() {
-                    Camera = m_camera_name,
+                    Camera = CameraName,
                     Frame = v[7],
                     Encoder = 0,
                     Timestamp = DataGrab.GenTimeStamp(new DateTime(v[0], v[1], v[2], v[3], v[4], v[5], v[6] / 10)),
@@ -75,7 +75,7 @@ namespace DetectCCD {
             await Task.Run(() => {
 
                 //
-                m_camera_name = getCameraName(zipfilename);
+                CameraName = getCameraName(zipfilename);
 
                 //
                 m_zipfile = new ZipFile(zipfilename);
@@ -224,7 +224,7 @@ namespace DetectCCD {
         public override void Dispose() {
             isGrabbing = false;
             isQuit = true;
-            m_camera_name = "";
+            CameraName = "";
 
             if (m_zipfile != null)
                 m_zipfile.Dispose();

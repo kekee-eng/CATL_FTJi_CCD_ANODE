@@ -27,21 +27,33 @@ namespace DetectCCD {
 
         public int Camera4KInnerServer2 = 0;
         public int Camera4KInnerResource2 = 0;
-
-        public int Camera8KInnerServer1 = 0;
-        public int Camera8KInnerResource1 = 0;
-        public int Camera8KInnerServer2 = 0;
-        public int Camera8KInnerResource2 = 0;
-        public string Camera8KInnerCardFile = "../config/card.ccf";
+        public string Camera4KInnerCCDFile = "";
+        public string Camera4KInnerCameraName = "2B";
+        public string Camera4KInnerCameraCaption = "内侧";
 
         public int Camera4KOuterServer2 = 0;
         public int Camera4KOuterResource2 = 0;
+        public string Camera4KOuterCCDFile = "";
+        public string Camera4KOuterCameraName = "2A";
+        public string Camera4KOuterCameraCaption = "外侧";
 
-        public int Camera8KOuterServer1 = 0;
+        public int Camera8KInnerServer1 = 1;
+        public int Camera8KInnerResource1 = 0;
+        public int Camera8KInnerServer2 = 3;
+        public int Camera8KInnerResource2 = 0;
+        public string Camera8KInnerBoardFile = "../config/card.ccf";
+        public string Camera8KInnerCCDFile = "";
+        public string Camera8KInnerCameraName = "1B";
+        public string Camera8KInnerCameraCaption = "正面";
+
+        public int Camera8KOuterServer1 = 2;
         public int Camera8KOuterResource1 = 0;
-        public int Camera8KOuterServer2 = 0;
+        public int Camera8KOuterServer2 = 4;
         public int Camera8KOuterResource2 = 0;
-        public string Camera8KOuterCardFile = "../config/card.ccf";
+        public string Camera8KOuterBoardFile = "../config/card.ccf";
+        public string Camera8KOuterCCDFile = "";
+        public string Camera8KOuterCameraName = "1A";
+        public string Camera8KOuterCameraCaption = "反面";
 
         //记录参数
         public int RecordCacheSize = 200;

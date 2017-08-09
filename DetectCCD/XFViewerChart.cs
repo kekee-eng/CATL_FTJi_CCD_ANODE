@@ -62,7 +62,7 @@ namespace DetectCCD {
 
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.InnerCamera, "m_filename");
-            monitor["Inner_Grab_Name"] = () => device.InnerCamera.m_camera_name;
+            monitor["Inner_Grab_Name"] = () => device.InnerCamera.CameraName;
             monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isOpen;
             monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isGrabbing;
             monitor["Inner_Grab_Frame"] = () => device.InnerCamera.m_frame;
@@ -152,7 +152,7 @@ namespace DetectCCD {
 
             monitor["Outer_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Outer_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.OuterCamera, "m_filename");
-            monitor["Outer_Grab_Name"] = () => device.OuterCamera.m_camera_name;
+            monitor["Outer_Grab_Name"] = () => device.OuterCamera.CameraName;
             monitor["Outer_Grab_IsReady"] = () => device.OuterCamera.isOpen;
             monitor["Outer_Grab_IsRun"] = () => device.OuterCamera.isGrabbing;
             monitor["Outer_Grab_Frame"] = () => device.OuterCamera.m_frame;
