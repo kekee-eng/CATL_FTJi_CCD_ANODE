@@ -18,6 +18,9 @@ namespace DetectCCD {
 
                 InnerGrab.Reload();
                 OuterGrab.Reload();
+
+                InnerDetect.Reload();
+                OuterDetect.Reload();
                 return true;
             }
             return false;
