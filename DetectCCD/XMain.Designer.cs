@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XMain));
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar3 = new DevExpress.XtraBars.Bar();
             this.status_user = new DevExpress.XtraBars.BarButtonItem();
             this.status_device = new DevExpress.XtraBars.BarButtonItem();
@@ -45,11 +46,13 @@
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            this.imageCollectionStatus = new DevExpress.Utils.ImageCollection();
+            this.imageCollectionStatus = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
-            this.imageCollectionTab = new DevExpress.Utils.ImageCollection();
+            this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
+            this.btnStopGrab = new DevExpress.XtraEditors.SimpleButton();
+            this.btnStartGrab = new DevExpress.XtraEditors.SimpleButton();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
@@ -127,11 +130,10 @@
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
-            this.timer1 = new System.Windows.Forms.Timer();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnStartGrab = new DevExpress.XtraEditors.SimpleButton();
-            this.btnStopGrab = new DevExpress.XtraEditors.SimpleButton();
+            this.btnQuit = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -368,6 +370,7 @@
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.btnQuit);
             this.xtraTabPage1.Controls.Add(this.groupControl2);
             this.xtraTabPage1.Controls.Add(this.groupControl1);
             this.xtraTabPage1.ImageIndex = 0;
@@ -389,6 +392,24 @@
             this.groupControl2.Size = new System.Drawing.Size(368, 346);
             this.groupControl2.TabIndex = 1;
             this.groupControl2.Text = "设备状态";
+            // 
+            // btnStopGrab
+            // 
+            this.btnStopGrab.Location = new System.Drawing.Point(245, 300);
+            this.btnStopGrab.Name = "btnStopGrab";
+            this.btnStopGrab.Size = new System.Drawing.Size(101, 30);
+            this.btnStopGrab.TabIndex = 27;
+            this.btnStopGrab.Text = "停止";
+            this.btnStopGrab.Click += new System.EventHandler(this.btnStopGrab_Click);
+            // 
+            // btnStartGrab
+            // 
+            this.btnStartGrab.Location = new System.Drawing.Point(245, 264);
+            this.btnStartGrab.Name = "btnStartGrab";
+            this.btnStartGrab.Size = new System.Drawing.Size(101, 30);
+            this.btnStartGrab.TabIndex = 26;
+            this.btnStartGrab.Text = "开始采图";
+            this.btnStartGrab.Click += new System.EventHandler(this.btnStartGrab_Click);
             // 
             // tableLayoutPanel5
             // 
@@ -1370,23 +1391,14 @@
             this.openFileDialog1.Filter = "配置文件|*.cfg|所有文件|*.*";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
-            // btnStartGrab
+            // btnQuit
             // 
-            this.btnStartGrab.Location = new System.Drawing.Point(245, 264);
-            this.btnStartGrab.Name = "btnStartGrab";
-            this.btnStartGrab.Size = new System.Drawing.Size(101, 30);
-            this.btnStartGrab.TabIndex = 26;
-            this.btnStartGrab.Text = "开始采图";
-            this.btnStartGrab.Click += new System.EventHandler(this.btnStartGrab_Click);
-            // 
-            // btnStopGrab
-            // 
-            this.btnStopGrab.Location = new System.Drawing.Point(245, 300);
-            this.btnStopGrab.Name = "btnStopGrab";
-            this.btnStopGrab.Size = new System.Drawing.Size(101, 30);
-            this.btnStopGrab.TabIndex = 27;
-            this.btnStopGrab.Text = "停止";
-            this.btnStopGrab.Click += new System.EventHandler(this.btnStopGrab_Click);
+            this.btnQuit.Location = new System.Drawing.Point(547, 339);
+            this.btnQuit.Name = "btnQuit";
+            this.btnQuit.Size = new System.Drawing.Size(101, 30);
+            this.btnQuit.TabIndex = 27;
+            this.btnQuit.Text = "退出系统";
+            this.btnQuit.Click += new System.EventHandler(this.btnQuit_Click);
             // 
             // XMain
             // 
@@ -1548,5 +1560,6 @@
         private DevExpress.XtraEditors.SimpleButton btnOfflineControl;
         private DevExpress.XtraEditors.SimpleButton btnStopGrab;
         private DevExpress.XtraEditors.SimpleButton btnStartGrab;
+        private DevExpress.XtraEditors.SimpleButton btnQuit;
     }
 }

@@ -43,9 +43,7 @@ namespace DetectCCD {
             record?.Dispose();
             device?.Dispose();
         }
-
-
-
+        
         //操作模板
         void runAction(string actName, Action act) {
             try {
@@ -85,11 +83,9 @@ namespace DetectCCD {
 
             //
             textMode.SelectedIndex = Static.ParamApp.run_mode;
-
-#if !DEBUG
+            
             //全屏显示
-            selectFullScreen_ItemClick(null, null);
-#endif
+            //selectFullScreen_ItemClick(null, null);
 
             //连接设备
             status_plc_ItemClick(null, null);
@@ -387,6 +383,10 @@ namespace DetectCCD {
 
             record.InnerViewerImage.SetUserEnable(true);
             record.OuterViewerImage.SetUserEnable(true);
+        }
+
+        private void btnQuit_Click(object sender, EventArgs e) {
+            this.Close();
         }
     }
 
