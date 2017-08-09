@@ -21,6 +21,7 @@ namespace DetectCCD {
             //
             init_device();
             init_status();
+            init_saveOnOff();
 
             //
             UtilTool.XFWait.Dispose();
@@ -278,16 +279,20 @@ namespace DetectCCD {
             device.EventInnerCamera = obj => {
 
                 record.InnerGrab.Cache[obj.Frame] = obj;
-                record.InnerDetect.TryDetect(obj);
-                record.InnerViewerImage.SetBottomTarget(obj.Frame);
+                //Task.Run(() => {
+                    record.InnerDetect.TryDetect(obj);
+                    record.InnerViewerImage.SetBottomTarget(obj.Frame);
+                //});
             };
 
             record.OuterViewerImage.Init(hwinOuter);
             device.EventOuterCamera = obj => {
 
                 record.OuterGrab.Cache[obj.Frame] = obj;
-                record.OuterDetect.TryDetect(obj);
-                record.OuterViewerImage.SetBottomTarget(obj.Frame);
+                //Task.Run(() => {
+                    record.OuterDetect.TryDetect(obj);
+                    record.OuterViewerImage.SetBottomTarget(obj.Frame);
+                //});
             };
 
 
@@ -364,10 +369,10 @@ namespace DetectCCD {
         }
 
         private void btnOpenViewerChart_Click(object sender, EventArgs e) {
-            new XFViewerChart(device, record) { Parent = this }.Show();
+            new XFViewerChart(device, record).Show();
         }
         private void btnOfflineControl_Click(object sender, EventArgs e) {
-            new XFCameraControl(device, record) { Parent = this }.Show();
+            new XFCameraControl(device, record).Show();
         }
         private void btnStartGrab_Click(object sender, EventArgs e) {
             device.InnerCamera.Grab();
@@ -408,6 +413,21 @@ namespace DetectCCD {
             splitContainerOuter.Panel1Collapsed ^= true;
         }
 
+        void init_saveOnOff() {
+
+            checkSaveAll.Checked = Static.ParamApp.RecordSaveImageAll;
+            checkSaveEnable.Checked = Static.ParamApp.RecordSaveImageEnable;
+            checkSaveDefect.Checked = Static.ParamApp.RecordSaveImageDefect;
+            checkSaveMark.Checked = Static.ParamApp.RecordSaveImageMark;
+            checkSaveTab.Checked = Static.ParamApp.RecordSaveImageTab;
+
+            checkSaveAll.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageAll = (o as CheckEdit).Checked;
+            checkSaveEnable.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageEnable = (o as CheckEdit).Checked;
+            checkSaveDefect.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageDefect = (o as CheckEdit).Checked;
+            checkSaveMark.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageMark = (o as CheckEdit).Checked;
+            checkSaveTab.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageTab = (o as CheckEdit).Checked;
+
+        }
     }
 
 }
