@@ -95,16 +95,16 @@ namespace DetectCCD {
 
         private void timer1_Tick(object sender, EventArgs e) {
 
-            if (device.isReady) {
-                btnLoadFileInner.Enabled = !device.isRunning;
-                btnLoadFileOuter.Enabled = !device.isRunning;
-                btnInit.Enabled = !device.isRunning;
+            if (device.isOpen) {
+                btnLoadFileInner.Enabled = !device.isGrabbing;
+                btnLoadFileOuter.Enabled = !device.isGrabbing;
+                btnInit.Enabled = !device.isGrabbing;
 
-                btnReset.Enabled = !device.isRunning;
-                btnStart.Enabled = !device.isRunning;
-                btnStop.Enabled = device.isRunning;
+                btnReset.Enabled = !device.isGrabbing;
+                btnStart.Enabled = !device.isGrabbing;
+                btnStop.Enabled = device.isGrabbing;
 
-                textFrameStart.Enabled = !device.isRunning;
+                textFrameStart.Enabled = !device.isGrabbing;
             }
 
         }

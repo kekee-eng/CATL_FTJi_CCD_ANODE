@@ -61,12 +61,13 @@ namespace DetectCCD {
             var monitor = new Dictionary<string, Func<object>>();
 
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
-            monitor["Inner_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.InnerCamera, "m_filename");
-            monitor["Inner_Grab_Name"] = () => device.InnerCamera.CameraName;
+            monitor["Inner_Grab_Caption"] = () => device.InnerCamera.Caption;
+            monitor["Inner_Grab_Name"] = () => device.InnerCamera.Name;
             monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isOpen;
             monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isGrabbing;
             monitor["Inner_Grab_Frame"] = () => device.InnerCamera.m_frame;
-            monitor["Inner_Grab_FrameReset"] = () => device.InnerCamera.m_frameStart;
+            monitor["Inner_Grab_FrameStart"] = () => device.InnerCamera.m_frameStart;
+            monitor["Inner_Grab_FrameMin"] = () => device.InnerCamera.Min;
             monitor["Inner_Grab_FrameMax"] = () => device.InnerCamera.Max;
             monitor["Inner_Grab_FpsControl"] = () => device.InnerCamera.m_fpsControl;
             monitor["Inner_Grab_FpsRealtime"] = () => device.InnerCamera.m_fpsRealtime;
@@ -131,16 +132,7 @@ namespace DetectCCD {
             monitor["Inner_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEndRequire");
             monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameStartLimit");
             monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEndLimit");
-
-            //monitor["Inner_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabWidth");
-            //monitor["Inner_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "grabHeight");
-            //monitor["Inner_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxWidth");
-            //monitor["Inner_Viewer_boxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "boxHeight");
-            //monitor["Inner_Viewer_refGrabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabWidth");
-            //monitor["Inner_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refGrabHeight");
-            //monitor["Inner_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxWidth");
-            //monitor["Inner_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "refBoxHeight");
-
+            
             //
             return monitor;
 
@@ -151,12 +143,13 @@ namespace DetectCCD {
             var monitor = new Dictionary<string, Func<object>>();
 
             monitor["Outer_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
-            monitor["Outer_Grab_Path"] = () => UtilTool.AutoInfo.GetPrivateValue(device.OuterCamera, "m_filename");
-            monitor["Outer_Grab_Name"] = () => device.OuterCamera.CameraName;
+            monitor["Outer_Grab_Caption"] = () => device.OuterCamera.Caption;
+            monitor["Outer_Grab_Name"] = () => device.OuterCamera.Name;
             monitor["Outer_Grab_IsReady"] = () => device.OuterCamera.isOpen;
             monitor["Outer_Grab_IsRun"] = () => device.OuterCamera.isGrabbing;
             monitor["Outer_Grab_Frame"] = () => device.OuterCamera.m_frame;
-            monitor["Outer_Grab_FrameReset"] = () => device.OuterCamera.m_frameStart;
+            monitor["Outer_Grab_FrameStart"] = () => device.OuterCamera.m_frameStart;
+            monitor["Outer_Grab_FrameMin"] = () => device.OuterCamera.Min;
             monitor["Outer_Grab_FrameMax"] = () => device.OuterCamera.Max;
             monitor["Outer_Grab_FpsControl"] = () => device.OuterCamera.m_fpsControl;
             monitor["Outer_Grab_FpsRealtime"] = () => device.OuterCamera.m_fpsRealtime;
@@ -221,15 +214,6 @@ namespace DetectCCD {
             monitor["Outer_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "frameEndRequire");
             monitor["Outer_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "frameStartLimit");
             monitor["Outer_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "frameEndLimit");
-
-            //monitor["Outer_Viewer_grabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "grabWidth");
-            //monitor["Outer_Viewer_grabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "grabHeight");
-            //monitor["Outer_Viewer_boxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "boxWidth");
-            //monitor["Outer_Viewer_boxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "boxHeight");
-            //monitor["Outer_Viewer_refGrabWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "refGrabWidth");
-            //monitor["Outer_Viewer_refGrabHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "refGrabHeight");
-            //monitor["Outer_Viewer_refBoxWidth"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "refBoxWidth");
-            //monitor["Outer_Viewer_refBoxHeight"] = () => UtilTool.AutoInfo.GetPrivateValue(record.OuterViewerImage, "refBoxHeight");
 
             //
             return monitor;

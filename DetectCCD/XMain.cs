@@ -27,13 +27,11 @@ namespace DetectCCD {
         }
         private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
 
-#if !DEBUG
-            if(XtraMessageBox.Show("当前操作将退出视觉检测系统，请确认是否退出？", "退出确认", MessageBoxButtons.OKCancel) != DialogResult.OK) {
+            if (XtraMessageBox.Show("当前操作将退出视觉检测系统，请确认是否退出？", "退出确认", MessageBoxButtons.OKCancel) != DialogResult.OK) {
                 e.Cancel = true;
                 return;
             }
 
-#endif
 
             //取消全屏显示
             UtilTool.FullScreen.Set(this, false);
@@ -43,7 +41,7 @@ namespace DetectCCD {
             record?.Dispose();
             device?.Dispose();
         }
-        
+
         //操作模板
         void runAction(string actName, Action act) {
             try {
@@ -55,7 +53,7 @@ namespace DetectCCD {
                 appendLog(String.Format("{0}失败: \r\n{1}", actName, ex.Message), -1, ex);
             }
         }
-        void appendLog(string msg, int msgStatus = 0, Exception ex =null) {
+        void appendLog(string msg, int msgStatus = 0, Exception ex = null) {
             //
             status_info.Caption = msg;
             status_info.ItemAppearance.Normal.ForeColor = msgStatus == 0 ? Color.Black : msgStatus > 0 ? Color.Green : Color.Red;
@@ -83,7 +81,7 @@ namespace DetectCCD {
 
             //
             textMode.SelectedIndex = Static.ParamApp.run_mode;
-            
+
             //全屏显示
             //selectFullScreen_ItemClick(null, null);
 
@@ -146,11 +144,12 @@ namespace DetectCCD {
 
                 //
                 textMode.BackColor = isOnline ? Color.LightGreen : Color.Pink;
-                groupOnline.Enabled = isOnline;
-                groupOffline.Enabled = !isOnline;
-                
+
+                xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
+                xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
+
                 //
-                _lc_inner_camera.Text = device.InnerCamera.CameraName;
+                _lc_inner_camera.Text = device.InnerCamera.Name;
                 _lc_inner_fps.Text = device.InnerCamera.m_fpsRealtime.ToString("0.000");
                 _lc_inner_frame.Text = device.InnerCamera.m_frame.ToString();
                 _lc_inner_isgrabbing.Text = device.InnerCamera.isGrabbing ? "On" : "Off";
@@ -158,13 +157,13 @@ namespace DetectCCD {
                 _lc_inner_isgrabbing.ForeColor = device.InnerCamera.isGrabbing ? Color.Green : Color.Red;
                 _lc_inner_isopen.ForeColor = device.InnerCamera.isOpen ? Color.Green : Color.Red;
 
-                _lc_inner_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamInner.Caption, device.InnerCamera.CameraName, device.InnerCamera.m_frame);
+                _lc_inner_caption.Text = device.InnerCamera.Caption;
                 _lc_inner_eaCount.Text = record.InnerDetect.EACount.ToString();
                 _lc_inner_widthCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 _lc_inner_defectCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
 
                 //
-                _lc_outer_camera.Text = device.OuterCamera.CameraName;
+                _lc_outer_camera.Text = device.OuterCamera.Name;
                 _lc_outer_fps.Text = device.OuterCamera.m_fpsRealtime.ToString("0.000");
                 _lc_outer_frame.Text = device.OuterCamera.m_frame.ToString();
                 _lc_outer_isgrabbing.Text = device.OuterCamera.isGrabbing ? "On" : "Off";
@@ -172,14 +171,14 @@ namespace DetectCCD {
                 _lc_outer_isgrabbing.ForeColor = device.OuterCamera.isGrabbing ? Color.Green : Color.Red;
                 _lc_outer_isopen.ForeColor = device.OuterCamera.isOpen ? Color.Green : Color.Red;
 
-                _lc_outer_caption.Text = string.Format("[{0}] [{1}] [{2}]", Static.ParamOuter.Caption, device.OuterCamera.CameraName, device.OuterCamera.m_frame);
+                _lc_outer_caption.Text = device.OuterCamera.Caption;
                 _lc_outer_eaCount.Text = record.OuterDetect.EACount.ToString();
                 _lc_outer_widthCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
                 _lc_outer_defectCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
-                
+
                 //状态栏
                 status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-                status_device.ImageIndex = device.isRunning ? 5 : 4;
+                status_device.ImageIndex = device.isOpen ? 5 : 4;
                 status_memory.Caption = string.Format("内存={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
@@ -193,9 +192,9 @@ namespace DetectCCD {
             });
         }
         private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
-            runAction("连接设备", () => {
-                device.Open();
-            });
+            //runAction("连接设备", () => {
+            //    device.Open();
+            //});
         }
         private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
             if (selectFullScreen.Tag == null)
@@ -224,7 +223,7 @@ namespace DetectCCD {
         private void btnRollSet_Click(object sender, EventArgs e) {
             runAction((sender as SimpleButton).Text, () => {
 
-                if (device.isRunning)
+                if (device.isGrabbing)
                     throw new Exception("请先停止采集图像！");
 
                 if (!isRollOk) {
@@ -234,7 +233,7 @@ namespace DetectCCD {
 
                     if (textRollName.Text == "")
                         throw new Exception("膜卷号未设定!");
-                    
+
                     //
                     rollRepeat++;
                     rollType = textRollType.SelectedIndex;
@@ -258,7 +257,7 @@ namespace DetectCCD {
                     isRollOk = true;
                 }
                 else {
-                    
+
                     //
                     textRollType.Enabled = true;
                     textRollName.Enabled = true;
@@ -267,7 +266,7 @@ namespace DetectCCD {
                 }
             });
         }
-        
+
         public ModRecord record = new ModRecord();
         public ModDevice device = new ModDevice();
 
@@ -329,7 +328,7 @@ namespace DetectCCD {
                 var tWriteDB = Task.Run((Action)(() => {
 
                     do {
-                        if (Static.ParamApp.RecordSaveImageEnable) {
+                        if (Static.ParamApp.RecordSaveImageEnable && isRollOk) {
                             Static.SafeRun(() => {
 
                                 //
@@ -365,10 +364,10 @@ namespace DetectCCD {
         }
 
         private void btnOpenViewerChart_Click(object sender, EventArgs e) {
-            new XFViewerChart(device, record).Show();
+            new XFViewerChart(device, record) { Parent = this }.Show();
         }
         private void btnOfflineControl_Click(object sender, EventArgs e) {
-            new XFCameraControl(device, record).Show();
+            new XFCameraControl(device, record) { Parent = this }.Show();
         }
         private void btnStartGrab_Click(object sender, EventArgs e) {
             device.InnerCamera.Grab();
@@ -385,9 +384,30 @@ namespace DetectCCD {
             record.OuterViewerImage.SetUserEnable(true);
         }
 
+        private void textMode_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
+        private void btnConnect_Click(object sender, EventArgs e) {
+            device.Open();
+        }
+        private void btnDisconnect_Click(object sender, EventArgs e) {
+            device.Dispose();
+        }
         private void btnQuit_Click(object sender, EventArgs e) {
             this.Close();
         }
+
+        private void groupStatuInner_Paint(object sender, PaintEventArgs e) {
+        }
+        private void groupStatuOuter_Paint(object sender, PaintEventArgs e) {
+        }
+        private void groupStatuInner_DoubleClick(object sender, EventArgs e) {
+            splitContainerInner.Panel1Collapsed ^= true;
+        }
+        private void groupStatuOuter_DoubleClick(object sender, EventArgs e) {
+            splitContainerOuter.Panel1Collapsed ^= true;
+        }
+
     }
 
 }

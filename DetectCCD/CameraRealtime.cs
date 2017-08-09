@@ -61,8 +61,6 @@ namespace DetectCCD {
         public bool isCameraLink = false;
 
         Stopwatch fps_watch = new Stopwatch();
-        double fps_watch_time = 0;
-        double fps_watch_time_prev = 0;
 
         int encoder_base = 0;
         int encoder_current { get { var enc = callGetEncoder(); return enc > 0 ? enc : (int)Buffers.CounterStamp; } }
@@ -109,20 +107,17 @@ namespace DetectCCD {
             if (m_frame == 0) {
 
                 //
-                fps_watch.Stop();
-                fps_watch.Reset();
-                fps_watch.Start();
-                fps_watch_time_prev = fps_watch.ElapsedMilliseconds;
+                fps_watch.Restart();
                 m_fpsRealtime = 1.0;
 
                 encoder_base = encoder_current;
             }
             else {
-
+                
                 //
-                fps_watch_time = fps_watch.ElapsedMilliseconds;
-                m_fpsRealtime = 1000 / (fps_watch_time - fps_watch_time_prev);
-                fps_watch_time_prev = fps_watch_time;
+                m_fpsRealtime = 1000.0 / fps_watch.ElapsedMilliseconds;
+                fps_watch.Restart();
+                
             }
 
             //
@@ -131,7 +126,7 @@ namespace DetectCCD {
 
             //
             DataGrab dg = new DataGrab() {
-                Camera = CameraName,
+                Camera = Name,
                 Frame = m_frame,
                 Encoder = m_encoder,
                 Timestamp = DataGrab.GenTimeStamp(DateTime.Now),
@@ -205,7 +200,7 @@ namespace DetectCCD {
             }
 
             //
-            AcqDevice.GetFeatureValue("DeviceUserID", out CameraName);
+            AcqDevice.GetFeatureValue("DeviceUserID", out Name);
 
             //
             m_frame = m_frameStart;
@@ -233,7 +228,7 @@ namespace DetectCCD {
             isGrabbing = false;
             isOpen = false;
 
-            CameraName = "";
+            Name = "";
         }
         public void Snap() {
             if (isOpen) {

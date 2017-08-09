@@ -6,6 +6,8 @@ namespace DetectCCD {
     class ModDevice :IDisposable {
 
         public void Open() {
+            if (isOpen)
+                return;
 
             //
             Dispose();
@@ -24,10 +26,10 @@ namespace DetectCCD {
                     Static.ParamApp.Camera4KOuterCCDFile);
 
                 //判断反向
-                if ((InnerCamera.CameraName == Static.ParamApp.Camera4KOuterCameraName) &&
-                    (OuterCamera.CameraName == Static.ParamApp.Camera4KInnerCameraName)) {
+                if ((InnerCamera.Name == Static.ParamApp.Camera4KOuterName) &&
+                    (OuterCamera.Name == Static.ParamApp.Camera4KInnerName)) {
 
-                    if (InnerCamera.CameraName == OuterCamera.CameraName)
+                    if (InnerCamera.Name == OuterCamera.Name)
                         throw new Exception("两只相机请勿使用相同的名称");
 
                     //交换参数
@@ -40,13 +42,13 @@ namespace DetectCCD {
                 }
 
                 //确认
-                if ((InnerCamera.CameraName != Static.ParamApp.Camera4KInnerCameraName)
-                    || (OuterCamera.CameraName != Static.ParamApp.Camera4KOuterCameraName))
+                if ((InnerCamera.Name != Static.ParamApp.Camera4KInnerName)
+                    || (OuterCamera.Name != Static.ParamApp.Camera4KOuterName))
                     throw new Exception("相机名称与预设名称不一致");
 
                 //载入标题
-                InnerCamera.CameraCaption = Static.ParamApp.Camera4KInnerCameraCaption;
-                OuterCamera.CameraCaption = Static.ParamApp.Camera4KOuterCameraCaption;
+                InnerCamera.Caption = Static.ParamApp.Camera4KInnerCaption;
+                OuterCamera.Caption = Static.ParamApp.Camera4KOuterCaption;
 
             }
             if (Static.ParamApp.CameraByRealtime8K) {
@@ -68,10 +70,10 @@ namespace DetectCCD {
                     Static.ParamApp.Camera8KOuterCCDFile);
 
                 //判断反向
-                if ((InnerCamera.CameraName == Static.ParamApp.Camera8KOuterCameraName) &&
-                    (OuterCamera.CameraName == Static.ParamApp.Camera8KInnerCameraName)) {
+                if ((InnerCamera.Name == Static.ParamApp.Camera8KOuterName) &&
+                    (OuterCamera.Name == Static.ParamApp.Camera8KInnerName)) {
 
-                    if (InnerCamera.CameraName == OuterCamera.CameraName)
+                    if (InnerCamera.Name == OuterCamera.Name)
                         throw new Exception("两只相机请勿使用相同的名称");
 
                     //交换参数
@@ -87,13 +89,13 @@ namespace DetectCCD {
                 }
 
                 //确认
-                if ((InnerCamera.CameraName != Static.ParamApp.Camera8KInnerCameraName)
-                    || (OuterCamera.CameraName != Static.ParamApp.Camera8KOuterCameraName))
+                if ((InnerCamera.Name != Static.ParamApp.Camera8KInnerName)
+                    || (OuterCamera.Name != Static.ParamApp.Camera8KOuterName))
                     throw new Exception("相机名称与预设名称不一致");
 
                 //载入标题
-                InnerCamera.CameraCaption = Static.ParamApp.Camera4KInnerCameraCaption;
-                OuterCamera.CameraCaption = Static.ParamApp.Camera4KOuterCameraCaption;
+                InnerCamera.Caption = Static.ParamApp.Camera4KInnerCaption;
+                OuterCamera.Caption = Static.ParamApp.Camera4KOuterCaption;
                 
             }
             else if (Static.ParamApp.CameraByZipFile) {
@@ -112,14 +114,14 @@ namespace DetectCCD {
             OuterCamera.OnImageReady += EventOuterCamera;
         }
         public void Dispose() {
-
+            
             InnerCamera?.Dispose();
             OuterCamera?.Dispose();
 
         }
 
-        public bool isReady { get { return InnerCamera.isOpen && OuterCamera.isOpen; } }
-        public bool isRunning { get { return InnerCamera.isGrabbing && OuterCamera.isGrabbing; } }
+        public bool isOpen { get { return InnerCamera!=null && OuterCamera!=null && InnerCamera.isOpen && OuterCamera.isOpen; } }
+        public bool isGrabbing { get { return isOpen && InnerCamera.isGrabbing && OuterCamera.isGrabbing; } }
 
         public TemplateCamera InnerCamera;
         public TemplateCamera OuterCamera;

@@ -13,19 +13,19 @@ namespace DetectCCD {
         public virtual void Grab() { }
         public virtual void Dispose() { }
 
-        public virtual int getMin() { return 0; }
-        public virtual int getMax() { return 0; }
+        public virtual int getMin() { return -1; }
+        public virtual int getMax() { return -1; }
 
         public int Min {
             get {
                 try { return getMin(); }
-                catch { return 0; }
+                catch { return -1; }
             }
         }
         public int Max {
             get {
                 try { return getMax(); }
-                catch { return 0; }
+                catch { return -1; }
             }
         }
 
@@ -52,8 +52,8 @@ namespace DetectCCD {
         public bool isOpen = false;
         public bool isGrabbing = false;
 
-        public string CameraName = "";
-        public string CameraCaption = "";
+        public string Name = "";
+        public string Caption = "";
 
 
     }
