@@ -514,7 +514,6 @@
             this.groupStatuOuter.Size = new System.Drawing.Size(384, 610);
             this.groupStatuOuter.TabIndex = 1;
             this.groupStatuOuter.Text = "Camera2";
-            this.groupStatuOuter.Paint += new System.Windows.Forms.PaintEventHandler(this.groupStatuOuter_Paint);
             this.groupStatuOuter.DoubleClick += new System.EventHandler(this.groupStatuOuter_DoubleClick);
             // 
             // splitContainerOuter
@@ -842,7 +841,6 @@
             this.groupStatuInner.Size = new System.Drawing.Size(383, 610);
             this.groupStatuInner.TabIndex = 0;
             this.groupStatuInner.Text = "Camera1";
-            this.groupStatuInner.Paint += new System.Windows.Forms.PaintEventHandler(this.groupStatuInner_Paint);
             this.groupStatuInner.DoubleClick += new System.EventHandler(this.groupStatuInner_DoubleClick);
             // 
             // splitContainerInner

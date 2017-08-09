@@ -24,7 +24,7 @@ namespace DetectCCD {
             init_saveOnOff();
 
             //
-            UtilTool.XFWait.Dispose();
+            UtilTool.XFWait.Close();
         }
         private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
 
@@ -393,7 +393,15 @@ namespace DetectCCD {
 
         }
         private void btnConnect_Click(object sender, EventArgs e) {
-            device.Open();
+
+            runAction((sender as SimpleButton).Text, async () => {
+
+                UtilTool.XFWait.Open();
+                await Task.Run(() => device.Open());
+                UtilTool.XFWait.Close();
+
+            });
+
         }
         private void btnDisconnect_Click(object sender, EventArgs e) {
             device.Dispose();
@@ -401,11 +409,7 @@ namespace DetectCCD {
         private void btnQuit_Click(object sender, EventArgs e) {
             this.Close();
         }
-
-        private void groupStatuInner_Paint(object sender, PaintEventArgs e) {
-        }
-        private void groupStatuOuter_Paint(object sender, PaintEventArgs e) {
-        }
+        
         private void groupStatuInner_DoubleClick(object sender, EventArgs e) {
             splitContainerInner.Panel1Collapsed ^= true;
         }

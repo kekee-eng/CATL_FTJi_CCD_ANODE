@@ -25,9 +25,11 @@ namespace DetectCCD {
         ModDevice device;
 
         private void trackFps_EditValueChanged(object sender, EventArgs e) {
-            Static.App.CameraFpsControl = trackFps.Value / 10.0;
-            device.InnerCamera.m_fpsControl = Static.App.CameraFpsControl;
-            device.OuterCamera.m_fpsControl = Static.App.CameraFpsControl;
+            if (device.isOpen) {
+                Static.App.CameraFpsControl = trackFps.Value / 10.0;
+                device.InnerCamera.m_fpsControl = Static.App.CameraFpsControl;
+                device.OuterCamera.m_fpsControl = Static.App.CameraFpsControl;
+            }
         }
         private void textFrameStart_EditValueChanged(object sender, EventArgs e) {
             int i;

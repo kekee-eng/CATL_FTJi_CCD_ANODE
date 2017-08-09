@@ -122,19 +122,19 @@ namespace DetectCCD {
         public class XFWait {
             public static bool isShow = false;
             public static void OpenStart() {
-                if (isShow) Dispose();
+                if (isShow) Close();
                 isShow = true;
                 SplashScreenManager.ShowForm(typeof(XFSplashStart));
             }
             public static void Open() {
-                if (isShow) Dispose();
+                if (isShow) Close();
                 isShow = true;
                 SplashScreenManager.ShowForm(typeof(DemoWaitForm));
 
                 SetTitle("请稍候");
                 SetContext("正在运行中...");
             }
-            public static void Dispose() {
+            public static void Close() {
                 if (isShow) {
                     isShow = false;
                     SplashScreenManager.CloseForm();
