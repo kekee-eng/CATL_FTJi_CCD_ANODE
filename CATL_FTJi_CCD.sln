@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZedGraph", "ZedGraph\ZedGra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetectCCD", "DetectCCD\DetectCCD.csproj", "{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CATL_WeldingDetect", "..\..\..\..\..\..\..\Works\proj-01-doing\20160305CATL-模组焊缝检测\CATL_SRC\CATL_WeldingDetect\projApp\CATL_WeldingDetect\CATL_WeldingDetect.csproj", "{890173F1-0D65-43B2-8F77-06B3577FC1F4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,12 +31,6 @@ Global
 		{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}.Release|x64.ActiveCfg = Release|Any CPU
 		{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}.Release|x64.Build.0 = Release|Any CPU
-		{890173F1-0D65-43B2-8F77-06B3577FC1F4}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{890173F1-0D65-43B2-8F77-06B3577FC1F4}.Debug|x64.ActiveCfg = Debug|x64
-		{890173F1-0D65-43B2-8F77-06B3577FC1F4}.Debug|x64.Build.0 = Debug|x64
-		{890173F1-0D65-43B2-8F77-06B3577FC1F4}.Release|Any CPU.ActiveCfg = Release|x64
-		{890173F1-0D65-43B2-8F77-06B3577FC1F4}.Release|x64.ActiveCfg = Release|x64
-		{890173F1-0D65-43B2-8F77-06B3577FC1F4}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
