@@ -42,9 +42,6 @@ namespace DetectCCD {
                 m_conn = null;
             }
         }
-        void IDisposable.Dispose() {
-            Dispose();
-        }
 
         public bool Transaction(Action act) {
             if (!isOpen) return false;

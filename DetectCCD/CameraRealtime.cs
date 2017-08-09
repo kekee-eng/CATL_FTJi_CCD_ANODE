@@ -255,8 +255,7 @@ namespace DetectCCD {
         }
         public override void Freeze() {
             if (isOpen) {
-                Xfer.Freeze();
-                isGrabbing = false;
+                isGrabbing = !Xfer.Freeze();
             }
         }
 

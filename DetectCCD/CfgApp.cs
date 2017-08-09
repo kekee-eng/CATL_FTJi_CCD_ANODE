@@ -16,8 +16,8 @@ namespace DetectCCD {
         public bool ModeByCamera { get { return run_mode != 1; } }
 
         //相机源：真实相机、Zip文件、文件夹、数据库
-        public bool CameraByRealtime = false;
-        public bool CameraByZipFile = true;
+        public bool CameraByRealtime = true;
+        public bool CameraByZipFile = false;
         public bool CameraByFolder = false;
         public bool CameraByDB = false;
 
