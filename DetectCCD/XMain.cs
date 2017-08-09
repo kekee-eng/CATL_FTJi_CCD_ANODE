@@ -278,7 +278,7 @@ namespace DetectCCD {
             record.InnerViewerImage.Init(hwinInner);
             device.EventInnerCamera = obj => {
 
-                record.InnerGrab.Cache[obj.Frame] = obj;
+                record.InnerGrab[obj.Frame] = obj;
                 //Task.Run(() => {
                     //record.InnerDetect.TryDetect(obj);
                     record.InnerViewerImage.SetBottomTarget(obj.Frame);
@@ -288,7 +288,7 @@ namespace DetectCCD {
             record.OuterViewerImage.Init(hwinOuter);
             device.EventOuterCamera = obj => {
 
-                record.OuterGrab.Cache[obj.Frame] = obj;
+                record.OuterGrab[obj.Frame] = obj;
                 //Task.Run(() => {
                     //record.OuterDetect.TryDetect(obj);
                     record.OuterViewerImage.SetBottomTarget(obj.Frame);

@@ -213,6 +213,10 @@ namespace DetectCCD {
                     isStopOk = true;
                 }
             }
+
+            if (m_zipfile != null)
+                m_zipfile.Dispose();
+            
         }
 
         //
@@ -226,9 +230,6 @@ namespace DetectCCD {
             isGrabbing = false;
             isQuit = true;
             Name = "";
-
-            if (m_zipfile != null)
-                m_zipfile.Dispose();
 
         }
         public override void Grab() {
