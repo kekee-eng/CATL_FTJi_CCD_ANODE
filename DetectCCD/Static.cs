@@ -21,42 +21,32 @@ namespace DetectCCD {
 
         public static string PathCfgApp { get { return FolderCfg + "cfg_app.xml"; } }
         public static string PathCfgParam { get { return FolderCfg + "cfg_param.xml"; } }
-        public static string PathCfgInner { get { return FolderCfg + "cfg_inner.xml"; } }
-        public static string PathCfgOuter { get { return FolderCfg + "cfg_outer.xml"; } }
         public static string PathImageProcess { get { return FolderCfg + "image_process.hdev"; } }
 
-        public static CfgParamApp ParamApp;
-        public static CfgParamShare ParamShare;
-        public static CfgParamSelf ParamInner;
-        public static CfgParamSelf ParamOuter;
+        public static CfgApp App;
+        public static CfgParam Param;
 
         public static ILog Log;
 
         public static void Init() {
 
             //
-            //if (false) {
-            //    Action<string> DelFile = x => {
-            //        if (System.IO.File.Exists(x))
-            //            System.IO.File.Delete(x);
-            //    };
-            //    DelFile(PathCfgApp);
-            //    DelFile(PathCfgParam);
-            //    DelFile(PathCfgInner);
-            //    DelFile(PathCfgOuter);
-            //}
+            if (true) {
+                Action<string> DelFile = x => {
+                    if (System.IO.File.Exists(x))
+                        System.IO.File.Delete(x);
+                };
+                DelFile(PathCfgApp);
+                DelFile(PathCfgParam);
+            }
 
             //
-            ParamApp = new CfgParamApp(PathCfgApp);
-            ParamShare = new CfgParamShare(PathCfgParam);
-            ParamInner = new CfgParamSelf(PathCfgInner);
-            ParamOuter = new CfgParamSelf(PathCfgOuter);
-
+            App = new CfgApp(PathCfgApp);
+            Param = new CfgParam(PathCfgParam);
+         
             //
-            ParamApp.Save();
-            ParamShare.Save();
-            ParamInner.Save();
-            ParamOuter.Save();
+            App.Save();
+            Param.Save();
 
             //
             Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);
@@ -64,15 +54,13 @@ namespace DetectCCD {
 
 
             //
-            ParamApp.select_userid = 0;
+            App.select_userid = 0;
 
         }
         public static void Uninit() {
 
-            ParamApp.Save();
-            ParamShare.Save();
-            ParamInner.Save();
-            ParamOuter.Save();
+            App.Save();
+            Param.Save();
 
         }
 

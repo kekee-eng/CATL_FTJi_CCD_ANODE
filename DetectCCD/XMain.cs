@@ -72,7 +72,7 @@ namespace DetectCCD {
         bool isQuit = false;
         bool isRollOk = false;
 
-        int rollType = -1;
+        string rollType = "";
         string rollName = "";
         int rollRepeat = 0;
 
@@ -81,7 +81,7 @@ namespace DetectCCD {
             changeUser();
 
             //
-            textMode.SelectedIndex = Static.ParamApp.run_mode;
+            textMode.SelectedIndex = Static.App.run_mode;
 
             //全屏显示
             //selectFullScreen_ItemClick(null, null);
@@ -105,20 +105,20 @@ namespace DetectCCD {
             xtraTabControl1.TabPages.Remove(xtraTabPage3);
             xtraTabControl1.TabPages.Remove(xtraTabPage4);
 
-            int userselect = Static.ParamApp.select_userid;
+            int userselect = Static.App.select_userid;
             if (userselect == 0) {
                 //左下角图标
                 status_user.ImageIndex = 0;
 
                 //主题样式
-                UtilTool.XFSkin.SetSkinStyle(Static.ParamApp.operator_viewstyle);
+                UtilTool.XFSkin.SetSkinStyle(Static.App.operator_viewstyle);
             }
             else if (userselect == 1) {
                 //左下角图标
                 status_user.ImageIndex = 1;
 
                 //主题样式
-                UtilTool.XFSkin.SetSkinStyle(Static.ParamApp.engineer_viewstyle);
+                UtilTool.XFSkin.SetSkinStyle(Static.App.engineer_viewstyle);
 
                 //附加页面
                 xtraTabControl1.TabPages.Add(xtraTabPage3);
@@ -128,7 +128,7 @@ namespace DetectCCD {
                 status_user.ImageIndex = 2;
 
                 //主题样式
-                UtilTool.XFSkin.SetSkinStyle(Static.ParamApp.expert_viewstyle);
+                UtilTool.XFSkin.SetSkinStyle(Static.App.expert_viewstyle);
 
                 //附加页面
                 xtraTabControl1.TabPages.Add(xtraTabPage3);
@@ -237,12 +237,12 @@ namespace DetectCCD {
 
                     //
                     rollRepeat++;
-                    rollType = textRollType.SelectedIndex;
+                    rollType = textRollType.SelectedText;
                     rollName = textRollName.Text;
                     textRollRepeat.Text = rollRepeat.ToString();
 
                     //
-                    string rPath = Static.FolderRecord + string.Format("[{0}][{1}][{2}].db", rollType, rollName, rollRepeat);
+                    string rPath = Static.FolderRecord + string.Format("[{0}][{1}][{2}][{3}].db", rollType, rollName, rollRepeat);
                     StringBuilder rBuilder = new StringBuilder(rPath);
                     foreach (char rInvalidChar in Path.GetInvalidPathChars())
                         rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
@@ -333,7 +333,7 @@ namespace DetectCCD {
                 var tWriteDB = Task.Run((Action)(() => {
 
                     do {
-                        if (Static.ParamApp.RecordSaveImageEnable && isRollOk) {
+                        if (Static.App.RecordSaveImageEnable && isRollOk) {
                             Static.SafeRun(() => {
 
                                 //
@@ -415,17 +415,17 @@ namespace DetectCCD {
 
         void init_saveOnOff() {
 
-            checkSaveAll.Checked = Static.ParamApp.RecordSaveImageAll;
-            checkSaveEnable.Checked = Static.ParamApp.RecordSaveImageEnable;
-            checkSaveDefect.Checked = Static.ParamApp.RecordSaveImageDefect;
-            checkSaveMark.Checked = Static.ParamApp.RecordSaveImageMark;
-            checkSaveTab.Checked = Static.ParamApp.RecordSaveImageTab;
+            checkSaveAll.Checked = Static.App.RecordSaveImageAll;
+            checkSaveEnable.Checked = Static.App.RecordSaveImageEnable;
+            checkSaveDefect.Checked = Static.App.RecordSaveImageDefect;
+            checkSaveMark.Checked = Static.App.RecordSaveImageMark;
+            checkSaveTab.Checked = Static.App.RecordSaveImageTab;
 
-            checkSaveAll.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageAll = (o as CheckEdit).Checked;
-            checkSaveEnable.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageEnable = (o as CheckEdit).Checked;
-            checkSaveDefect.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageDefect = (o as CheckEdit).Checked;
-            checkSaveMark.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageMark = (o as CheckEdit).Checked;
-            checkSaveTab.CheckedChanged += (o, e) => Static.ParamApp.RecordSaveImageTab = (o as CheckEdit).Checked;
+            checkSaveAll.CheckedChanged += (o, e) => Static.App.RecordSaveImageAll = (o as CheckEdit).Checked;
+            checkSaveEnable.CheckedChanged += (o, e) => Static.App.RecordSaveImageEnable = (o as CheckEdit).Checked;
+            checkSaveDefect.CheckedChanged += (o, e) => Static.App.RecordSaveImageDefect = (o as CheckEdit).Checked;
+            checkSaveMark.CheckedChanged += (o, e) => Static.App.RecordSaveImageMark = (o as CheckEdit).Checked;
+            checkSaveTab.CheckedChanged += (o, e) => Static.App.RecordSaveImageTab = (o as CheckEdit).Checked;
 
         }
     }

@@ -30,6 +30,13 @@ namespace DetectCCD {
         }
 
         protected void callImageReady(DataGrab obj) {
+
+            //附加像素数据
+            obj.ScaleX = ScaleX;
+            obj.ScaleY = ScaleY;
+            obj.Image.GetImageSize(out obj.Width, out obj.Height);
+
+            //
             OnImageReady?.Invoke(obj);
         }
         protected int callGetEncoder() {
@@ -52,9 +59,11 @@ namespace DetectCCD {
         public bool isOpen = false;
         public bool isGrabbing = false;
 
+        public double ScaleX =0;
+        public double ScaleY =0;
+
         public string Name = "";
         public string Caption = "";
-
-
+        
     }
 }

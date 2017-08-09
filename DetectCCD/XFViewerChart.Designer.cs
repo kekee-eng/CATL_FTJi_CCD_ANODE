@@ -136,14 +136,12 @@
             this.rtParamInner.Name = "rtParamInner";
             this.rtParamInner.Size = new System.Drawing.Size(109, 22);
             this.rtParamInner.Text = "Inner";
-            this.rtParamInner.Click += new System.EventHandler(this.rtParamInner_Click);
             // 
             // rtParamOuter
             // 
             this.rtParamOuter.Name = "rtParamOuter";
             this.rtParamOuter.Size = new System.Drawing.Size(109, 22);
             this.rtParamOuter.Text = "Outer";
-            this.rtParamOuter.Click += new System.EventHandler(this.rtParamOuter_Click);
             // 
             // innerToolStripMenuItem1
             // 

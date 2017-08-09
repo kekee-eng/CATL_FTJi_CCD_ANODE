@@ -9,13 +9,11 @@ namespace DetectCCD {
 
     class EntryDetect :IDisposable {
 
-        public EntryDetect(TemplateDB parent, string tableName, CfgParamShare pshare, CfgParamSelf pself, EntryGrab grab) {
+        public EntryDetect(TemplateDB parent, string tableName, EntryGrab grab) {
 
             //
             this.db = parent;
             this.tname = tableName;
-            this.param = pshare;
-            this.param_self = pself;
             this.grab = grab;
 
         }
@@ -36,8 +34,8 @@ ID              INTEGER   PRIMARY KEY,
 Tabs            BLOB,
 Defects         BLOB,
 Labels          BLOB,
-CfgParamShare   BLOB,
-CfgParamSelf    BLOB
+CfgApp          BLOB,
+CfgParam        BLOB
 )", this.tname));
 
         }
@@ -48,13 +46,13 @@ CfgParamSelf    BLOB
 
 
             needSave = false;
-            db.Write(string.Format(@"REPLACE INTO {0} ( ID, Tabs, Defects, Labels, CfgParamShare, CfgParamSelf ) VALUES (?,?,?,?,?,?) ", tname),
+            db.Write(string.Format(@"REPLACE INTO {0} ( ID, Tabs, Defects, Labels, CfgApp, CfgParam ) VALUES (?,?,?,?,?,?,?) ", tname),
                 0,
                 UtilSerialization.obj2bytes(Tabs),
                 UtilSerialization.obj2bytes(Defects),
                 UtilSerialization.obj2bytes(Labels),
-                UtilSerialization.obj2bytes(param),
-                UtilSerialization.obj2bytes(param_self)
+                UtilSerialization.obj2bytes(Static.App),
+                UtilSerialization.obj2bytes(Static.Param)
                 );
 
         }
@@ -69,8 +67,8 @@ CfgParamSelf    BLOB
             Labels = UtilSerialization.bytes2obj((byte[])ret[0][3]) as List<DataLabel>;
 
             if (useParam) {
-                (UtilSerialization.bytes2obj((byte[])ret[0][4]) as CfgParamShare).CopyTo(param);
-                (UtilSerialization.bytes2obj((byte[])ret[0][5]) as CfgParamSelf).CopyTo(param_self);
+                (UtilSerialization.bytes2obj((byte[])ret[0][4]) as CfgParam).CopyTo(Static.App);
+                (UtilSerialization.bytes2obj((byte[])ret[0][5]) as CfgParam).CopyTo(Static.Param);
             }
         }
         
@@ -79,6 +77,11 @@ CfgParamSelf    BLOB
         EntryGrab grab;
         TemplateDB db;
         string tname;
+
+        public double Fx { get { return grab.Fx; } }
+        public double Fy { get { return grab.Fy; } }
+
+        public int m_frame = -1;
 
         public List<DataTab> Tabs = new List<DataTab>();
         public List<DataDefect> Defects = new List<DataDefect>();
@@ -105,10 +108,10 @@ CfgParamSelf    BLOB
                         obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
                         obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
                         obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
-                        obj.IsTabCountFail = obj.TabCount != param.TabCount;
-                        obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > param.TabWidthCount;
-                        obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > param.TabHeightCount;
-                        obj.IsTabDistFailCountFail = obj.TabDistFailCount > param.TabDistCount;
+                        obj.IsTabCountFail = obj.TabCount != Static.Param.TabCount;
+                        obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > Static.Param.TabWidthCount;
+                        obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > Static.Param.TabHeightCount;
+                        obj.IsTabDistFailCountFail = obj.TabDistFailCount > Static.Param.TabDistCount;
 
                         var firstER = Tabs.Find(x => x.EA == id && x.TAB == 1);
                         if (firstER == null)
@@ -124,13 +127,7 @@ CfgParamSelf    BLOB
                 return objs;
             }
         }
-
-        public CfgParamShare param;
-        public CfgParamSelf param_self;
-
-        public double Fx { get { return param_self.ScaleX * grab.Width; } }
-        public double Fy { get { return param_self.ScaleY * grab.Height; } }
-
+        
         int defectCount = 0;
         bool statuPrev = false;
 
@@ -147,16 +144,18 @@ CfgParamSelf    BLOB
         bool tryDetect(DataGrab obj) {
 
             //
+            m_frame = obj.Frame;
             int frame = obj.Frame;
-            
+            obj.IsDetect = true;
+
             //
-            int w = grab.Width;
-            int h = grab.Height;
+            int w = obj.Width;
+            int h = obj.Height;
 
             //极耳检测、并判断是否可能有瑕疵
             var aimage = grab.GetImage(frame);
             double[] ax, ay1, ay2;
-            if (aimage == null || !ImageProcess.DetectTab(aimage, out obj.hasDefect, out obj.hasTab, out ax, out ay1, out ay2))
+            if (aimage == null || !ImageProcess.DetectTab(aimage, out obj.hasDefect, out obj.hasTab, out ax, out ay1, out ay2)) 
                 return false;
 
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
@@ -218,7 +217,7 @@ CfgParamSelf    BLOB
             bool isNewData = true;
             if (Tabs.Count > 0) {
                 var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
-                if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < param.TabMergeDistance) {
+                if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Param.TabMergeDistance) {
                     
                     //更新极耳大小
                     double dist = 10 / Fx; //10mm
@@ -286,8 +285,8 @@ CfgParamSelf    BLOB
 
             //宽度检测
             double[] bx1, bx2;
-            double bfy1 = data.TabY1 + param.TabWidthStart / Fy;
-            double bfy2 = data.TabY1 + param.TabWidthEnd / Fy;
+            double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
+            double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
 
             var bimage = grab.GetImage(bfy1, bfy2);
             if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
@@ -299,8 +298,8 @@ CfgParamSelf    BLOB
 
             //EA头部Mark检测
             double[] cx, cy;
-            double cfy1 = data.TabY1 + param.EAStart / Fy;
-            double cfy2 = data.TabY1 + param.EAEnd / Fy;
+            double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
+            double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
 
             //
             data.MarkY1 = cfy1;
@@ -330,7 +329,7 @@ CfgParamSelf    BLOB
         void adjustDefect() {
 
             //去除与Mark点重合的瑕疵
-            double ck = 0.5 / Fx;
+            double ck = 0.5 / grab.Fx;
             for (int i = 0; i < Tabs.Count; i++) {
                 if (Tabs[i].IsNewEA) {
                     var mark = Tabs[i];
@@ -370,10 +369,10 @@ CfgParamSelf    BLOB
                 Tabs[i].ValHeight = (Tabs[i].TabY2 - Tabs[i].TabY1) * Fy;
                 Tabs[i].ValDist = (i == 0) ? 0 : (Tabs[i].TabY1 - Tabs[i - 1].TabY1) * Fy;
                 Tabs[i].ValDistDiff = (i < 2) ? 0 : Tabs[i].ValDist - Tabs[i - 1].ValDist;
-                Tabs[i].IsWidthFail = Tabs[i].ValWidth < param.TabWidthMin || Tabs[i].ValWidth > param.TabWidthMax;
-                Tabs[i].IsHeightFail = Tabs[i].ValHeight < param.TabHeightMin || Tabs[i].ValHeight > param.TabHeightMax;
-                Tabs[i].IsDistFail = Tabs[i].ValDist < param.TabDistMin || Tabs[i].ValDist > param.TabDistMax;
-                Tabs[i].IsDistDiffFail = Tabs[i].ValDistDiff < param.TabDistDiffMin || Tabs[i].ValDistDiff > param.TabDistDiffMax;
+                Tabs[i].IsWidthFail = Tabs[i].ValWidth < Static.Param.TabWidthMin || Tabs[i].ValWidth > Static.Param.TabWidthMax;
+                Tabs[i].IsHeightFail = Tabs[i].ValHeight < Static.Param.TabHeightMin || Tabs[i].ValHeight > Static.Param.TabHeightMax;
+                Tabs[i].IsDistFail = Tabs[i].ValDist < Static.Param.TabDistMin || Tabs[i].ValDist > Static.Param.TabDistMax;
+                Tabs[i].IsDistDiffFail = Tabs[i].ValDistDiff < Static.Param.TabDistDiffMin || Tabs[i].ValDistDiff > Static.Param.TabDistDiffMax;
 
             }
 

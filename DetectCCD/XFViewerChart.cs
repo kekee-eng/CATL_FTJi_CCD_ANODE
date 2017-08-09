@@ -237,16 +237,10 @@ namespace DetectCCD {
         }
 
         private void rtParamApp_Click(object sender, EventArgs e) {
-            viewerInit(x => Static.ParamApp.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
+            viewerInit(x => Static.App.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
         }
         private void rtParamShare_Click(object sender, EventArgs e) {
-            viewerInit(x => Static.ParamShare.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
-        }
-        private void rtParamInner_Click(object sender, EventArgs e) {
-            viewerInit(x => Static.ParamInner.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
-        }
-        private void rtParamOuter_Click(object sender, EventArgs e) {
-            viewerInit(x => Static.ParamOuter.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
+            viewerInit(x => Static.Param.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
         }
 
         private void rtInnerTab_Click(object sender, EventArgs e) {

@@ -423,24 +423,24 @@ namespace DetectCCD {
 
             double min, max, step;
             if (select == 0) {
-                min = Detect.param.TabWidthMin;
-                max = Detect.param.TabWidthMax;
-                step = Detect.param.TabWidthStep;
+                min = Static.Param.TabWidthMin;
+                max = Static.Param.TabWidthMax;
+                step = Static.Param.TabWidthStep;
             }
             else if (select == 1) {
-                min = Detect.param.TabHeightMin;
-                max = Detect.param.TabHeightMax;
-                step = Detect.param.TabHeightStep;
+                min = Static.Param.TabHeightMin;
+                max = Static.Param.TabHeightMax;
+                step = Static.Param.TabHeightStep;
             }
             else if (select == 2) {
-                min = Detect.param.TabDistMin;
-                max = Detect.param.TabDistMax;
-                step = Detect.param.TabDistStep;
+                min = Static.Param.TabDistMin;
+                max = Static.Param.TabDistMax;
+                step = Static.Param.TabDistStep;
             }
             else if (select == 3) {
-                min = Detect.param.TabDistDiffMin;
-                max = Detect.param.TabDistDiffMax;
-                step = Detect.param.TabDistDiffStep;
+                min = Static.Param.TabDistDiffMin;
+                max = Static.Param.TabDistDiffMax;
+                step = Static.Param.TabDistDiffStep;
             }
             else {
                 return;

@@ -41,25 +41,20 @@
       <HintPath>..\..\build\Bin\DALSA.SaperaLT.SapClassBasic.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.BonusSkins.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DevExpress.Data.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Printing.v15.2.Core, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Sparkline.v15.2.Core, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DevExpress.XtraBars.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="DevExpress.XtraEditors.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraGrid.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraLayout.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraPrinting.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="hasp_net_windows_x64, Version=5.10.1.16273, Culture=neutral, PublicKeyToken=e1285fbb5e846047, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Bin\hasp_net_windows_x64.dll</HintPath>
@@ -101,9 +96,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authority.cs" />
-    <Compile Include="CfgParamApp.cs" />
-    <Compile Include="CfgParamShare.cs" />
-    <Compile Include="CfgParamSelf.cs" />
+    <Compile Include="CfgApp.cs" />
+    <Compile Include="CfgParam.cs" />
     <Compile Include="CameraRealtime.cs" />
     <Compile Include="ZZConnectCamera_Realtime.cs" />
     <Compile Include="CameraZipFile.cs" />
@@ -211,6 +205,18 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(RemoteDebugEnabled)"=="false" goto :eof
+set path1="$(TargetDir)"
+set path2="\\$(RemoteDebugMachine)\D\%25path1:~4%25"
+echo ==========================
+echo %25path1%25
+echo %25path2%25
+echo ==========================
+rd /s /q %25path2%25
+mkdir %25path2%25
+copy /y %25path1%25 %25path2%25</PostBuildEvent>
+  </PropertyGroup>
   <!--
   <PropertyGroup>
     <PostBuildEvent>if "$(RemoteDebugEnabled)"=="false" goto :eof

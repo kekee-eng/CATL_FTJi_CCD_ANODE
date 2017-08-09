@@ -17,34 +17,34 @@ namespace DetectCCD {
             this.record = record;
             this.device = device;
 
-            Static.ParamApp.BindTextBox(textFrameStart, "CameraFrameStart");
-            trackFps.Value = (int)( Static.ParamApp.CameraFpsControl * 10);
+            Static.App.BindTextBox(textFrameStart, "CameraFrameStart");
+            trackFps.Value = (int)( Static.App.CameraFpsControl * 10);
         }
 
         ModRecord record;
         ModDevice device;
 
         private void trackFps_EditValueChanged(object sender, EventArgs e) {
-            Static.ParamApp.CameraFpsControl = trackFps.Value / 10.0;
-            device.InnerCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
-            device.OuterCamera.m_fpsControl = Static.ParamApp.CameraFpsControl;
+            Static.App.CameraFpsControl = trackFps.Value / 10.0;
+            device.InnerCamera.m_fpsControl = Static.App.CameraFpsControl;
+            device.OuterCamera.m_fpsControl = Static.App.CameraFpsControl;
         }
         private void textFrameStart_EditValueChanged(object sender, EventArgs e) {
             int i;
             if(int.TryParse(textFrameStart.Text, out i)) {
-                Static.ParamApp.CameraFrameStart = i;
+                Static.App.CameraFrameStart = i;
             }
         }
         private void btnLoadFileInner_Click(object sender, EventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == DialogResult.OK) {
-                Static.ParamApp.CameraFileInner = ofd.FileName;
+                Static.App.CameraFileInner = ofd.FileName;
             }
         }
         private void btnLoadFileOuter_Click(object sender, EventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == DialogResult.OK) {
-                Static.ParamApp.CameraFileOuter = ofd.FileName;
+                Static.App.CameraFileOuter = ofd.FileName;
             }
         }
         private void btnInit_Click(object sender, EventArgs e) {
@@ -59,8 +59,8 @@ namespace DetectCCD {
             device.InnerCamera.Freeze();
             device.OuterCamera.Freeze();
 
-            device.InnerCamera.m_frameStart = Static.ParamApp.CameraFrameStart;
-            device.OuterCamera.m_frameStart = Static.ParamApp.CameraFrameStart;
+            device.InnerCamera.m_frameStart = Static.App.CameraFrameStart;
+            device.OuterCamera.m_frameStart = Static.App.CameraFrameStart;
 
             device.InnerCamera.Reset();
             device.OuterCamera.Reset();

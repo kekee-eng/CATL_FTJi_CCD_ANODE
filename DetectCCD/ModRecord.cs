@@ -34,14 +34,14 @@ namespace DetectCCD {
         public void Init() {
 
             //
-            InnerGrab = new EntryGrab(this, "InnerGrab", Static.ParamApp.RecordCacheSize);
-            InnerDetect = new EntryDetect(this, "InnerDetect", Static.ParamShare, Static.ParamInner, InnerGrab);
+            InnerGrab = new EntryGrab(this, "InnerGrab", Static.App.RecordCacheSize);
+            InnerDetect = new EntryDetect(this, "InnerDetect", InnerGrab);
             InnerViewerImage = new ViewerImage(InnerGrab, InnerDetect);
             InnerViewerChart = new ViewerChart(InnerGrab, InnerDetect, InnerViewerImage);
 
             //
-            OuterGrab = new EntryGrab(this, "OuterGrab", Static.ParamApp.RecordCacheSize);
-            OuterDetect = new EntryDetect(this, "OuterDetect", Static.ParamShare, Static.ParamOuter, OuterGrab);
+            OuterGrab = new EntryGrab(this, "OuterGrab", Static.App.RecordCacheSize);
+            OuterDetect = new EntryDetect(this, "OuterDetect", OuterGrab);
             OuterViewerImage = new ViewerImage(OuterGrab, OuterDetect);
             OuterViewerChart = new ViewerChart(OuterGrab, OuterDetect, OuterViewerImage);
 

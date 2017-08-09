@@ -25,8 +25,19 @@ namespace DetectCCD {
         //图像
         public HImage Image;
 
+        //附像素数据
+        public double ScaleX;
+        public double ScaleY;
+
+        public int Width;
+        public int Height;
+
+        public double Fx { get { return ScaleX * Width; } }
+        public double Fy { get { return ScaleY * Height; } }
+
         //标记
         public bool IsCreated = false;
+        public bool IsDetect = false;
         public bool IsCache = false;
         public bool IsStore = false;
         
@@ -96,12 +107,12 @@ namespace DetectCCD {
                 }
 
                 //是否要保存
-                if (!Static.ParamApp.RecordSaveImageAll) {
+                if (!Static.App.RecordSaveImageAll) {
 
                     if (!(
-                        (Static.ParamApp.RecordSaveImageTab && data.hasTab) ||
-                        (Static.ParamApp.RecordSaveImageMark && data.hasMark) ||
-                        (Static.ParamApp.RecordSaveImageDefect && data.hasDefect)
+                        (Static.App.RecordSaveImageTab && data.hasTab) ||
+                        (Static.App.RecordSaveImageMark && data.hasMark) ||
+                        (Static.App.RecordSaveImageDefect && data.hasDefect)
                         ))
                         return false;
 

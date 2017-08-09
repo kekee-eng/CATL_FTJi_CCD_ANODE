@@ -19,9 +19,15 @@ namespace DetectCCD {
         public DataGrab.GrabDB DB;
 
         //
-        public int Width { get { return Math.Max(Cache.Width, DB.Width); } }
-        public int Height { get { return Math.Max(Cache.Height, DB.Height); } }
+        public double Fx = -1;
+        public double Fy = -1;
 
+        public double ScaleX = -1;
+        public double ScaleY = -1;
+
+        public int Width = -1;
+        public int Height = -1;
+        
         public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
         public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
 
@@ -30,6 +36,22 @@ namespace DetectCCD {
 
         //
         public DataGrab this[int i] {
+            set {
+                if (value == null)
+                    return;
+
+                if(Cache.Count ==0) {
+                    Width = value.Width;
+                    Height = value.Height;
+                    ScaleX = value.ScaleX;
+                    ScaleY = value.ScaleY;
+                    Fx = value.Fx;
+                    Fy = value.Fy;
+                }
+
+                Cache[i] = value;
+
+            }
             get {
                 var ret1 = Cache[i];
                 if (ret1 != null) {
@@ -42,7 +64,7 @@ namespace DetectCCD {
                 if (ret2 != null) {
                     LastLoadCache = false;
                     LastLoadDB = true;
-                    Cache[i] = ret2;
+                    this[i] = ret2;
                     return ret2;
                 }
 
