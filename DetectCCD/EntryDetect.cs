@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    class EntryDetect :IDisposable {
+    public class EntryDetect :IDisposable {
 
         public EntryDetect(TemplateDB parent, string tableName, EntryGrab grab) {
 

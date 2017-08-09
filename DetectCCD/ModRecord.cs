@@ -2,7 +2,7 @@
 using System;
 
 namespace DetectCCD {
-    class ModRecord : TemplateDB {
+    public class ModRecord : TemplateDB {
 
         public override bool Open(string path) {
             
@@ -16,6 +16,8 @@ namespace DetectCCD {
                 OuterGrab.DB.CreateTable();
                 OuterGrab.Cache.Dispose();
 
+                InnerGrab.Reload();
+                OuterGrab.Reload();
                 return true;
             }
             return false;

@@ -11,7 +11,7 @@ using System.IO;
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace DetectCCD {
 
-    class Static {
+   public class Static {
 
         public static string Root { get { return AppDomain.CurrentDomain.BaseDirectory; } }
 

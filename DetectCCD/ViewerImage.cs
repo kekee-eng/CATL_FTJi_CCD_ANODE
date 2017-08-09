@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DetectCCD {
-    class ViewerImage :IDisposable {
+    public class ViewerImage : IDisposable {
 
         public ViewerImage(EntryGrab grab, EntryDetect detect) {
-            
+
             //
             Grab = grab;
             Detect = detect;
@@ -30,7 +30,7 @@ namespace DetectCCD {
             //
             initEvent(hwindow);
             initRightMenu(hwindow);
-            
+
         }
 
         //
@@ -149,7 +149,7 @@ namespace DetectCCD {
                     double sx = obj.W;
                     double sy = obj.H * grabHeight / refGrabHeight;
 
-                    double s = Math.Max(sx, sy)*1.3;
+                    double s = Math.Max(sx, sy) * 1.3;
                     s = Math.Min(s, 2);
                     s = Math.Max(s, 0.04);
 
@@ -357,8 +357,8 @@ namespace DetectCCD {
                 g.SetDraw("margin");
                 g.SetColor("green");
                 g.SetLineWidth(2);
-                g.DispArrow(y1, x1, y2, x2, dist/20);
-                g.DispArrow(y2, x2, y1, x1, dist/20);
+                g.DispArrow(y1, x1, y2, x2, dist / 20);
+                g.DispArrow(y2, x2, y1, x1, dist / 20);
 
                 g.SetColor("yellow");
                 g.SetTposition((int)((y1 + y2) / 2), (int)((x1 + x2) / 2));
@@ -383,7 +383,7 @@ namespace DetectCCD {
 
                 double dx = (x2 - x1) * Detect.Fx / grabWidth;
                 double dy = (y2 - y1) * Detect.Fy / grabHeight;
-                
+
                 g.SetDraw("margin");
                 g.SetColor("green");
                 g.SetLineWidth(2);
@@ -392,7 +392,7 @@ namespace DetectCCD {
                 g.SetColor("yellow");
                 g.SetTposition((int)y1, (int)x1);
                 g.WriteString(string.Format("{0:0.000}*{1:0.000}mm", dx, dy));
-                
+
                 mouseAllow = true;
             };
             rtMeasurePolygon.Click += (o, e) => {
@@ -660,7 +660,7 @@ namespace DetectCCD {
                         g.DispLine(getPixRow(tab.MarkY2), getPixCol(0), getPixRow(tab.MarkY2), getPixCol(1));
 
                         double dx = (tab.MarkY2 - tab.MarkY1) * grabHeight / grabWidth;
-                        for (double xp = -dx; xp < 1 ; xp += 0.05) {
+                        for (double xp = -dx; xp < 1; xp += 0.05) {
                             g.DispLine(getPixRow(tab.MarkY1), getPixCol(xp), getPixRow(tab.MarkY2), getPixCol(xp + dx));
                         }
                     }
@@ -710,7 +710,7 @@ namespace DetectCCD {
                 g.SetLineWidth(1);
                 g.DispLine(pixRow1, pixCol0, pixRow2, pixCol0);
                 g.DispLine(pixRow0, pixCol1, pixRow0, pixCol2);
-                
+
                 g.SetDraw("margin");
                 g.SetColor("yellow");
                 g.SetLineWidth(1);
@@ -727,7 +727,7 @@ namespace DetectCCD {
                     g.SetColor("violet");
                     g.SetLineWidth(1);
                     g.DispLine(getPixRow(i), pixCol1, getPixRow(i), pixCol2);
-                    
+
                     g.SetLineWidth(1);
                     g.SetTposition((int)getPixRow(i), 0);
                     g.WriteString(string.Format("[{0}]", i));
@@ -854,7 +854,7 @@ namespace DetectCCD {
         int refGrabHeight { get { return grabWidth * boxHeight / boxWidth; } }
         int refBoxWidth { get { return boxWidth; } }
         int refBoxHeight { get { return boxWidth * grabHeight / grabWidth; } }
-        
+
 
     }
 }

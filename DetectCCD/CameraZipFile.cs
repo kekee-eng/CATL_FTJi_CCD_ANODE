@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    class CameraZipFile : TemplateCamera, IDisposable {
+    public class CameraZipFile : TemplateCamera, IDisposable {
 
         public CameraZipFile(string filename) {
             m_filename = filename;

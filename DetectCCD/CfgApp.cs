@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    class CfgApp : TemplateConfig {
+    public class CfgApp : TemplateConfig {
         public CfgApp(string path) : base(path) { }
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）

@@ -6,12 +6,21 @@ using System.Linq;
 
 namespace DetectCCD {
 
-    class EntryGrab {
+    public class EntryGrab {
 
         //
         public EntryGrab(TemplateDB parent, string tableName, int cache) {
             DB = new DataGrab.GrabDB(parent, tableName);
             Cache = new DataGrab.GrabCache() { CountLimit = cache };
+        }
+
+        public void Reload() {
+            DB.Count = DB.QueryCount;
+            if (DB.Count > 0) {
+                DB.Min = DB.QueryMin;
+                DB.Max = DB.QueryMax;
+                this[DB.Min] = DB[DB.Min];
+            }
         }
 
         //
@@ -41,6 +50,9 @@ namespace DetectCCD {
                     return;
 
                 if(Cache.Count ==0) {
+                    if (value.Image != null) {
+                        value.Image.GetImageSize(out value.Width, out value.Height);
+                    }
                     Width = value.Width;
                     Height = value.Height;
                     ScaleX = value.ScaleX;

@@ -3,7 +3,7 @@ using System;
 
 namespace DetectCCD {
 
-    class ModDevice :IDisposable {
+    public class ModDevice :IDisposable {
 
         public void Open() {
             if (isOpen)

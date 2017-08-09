@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace DetectCCD {
 
-    class CameraRealtime : TemplateCamera, IDisposable {
+    public class CameraRealtime : TemplateCamera, IDisposable {
 
         /// <summary> 连接GIGE相机 </summary>
         public CameraRealtime(int serverIndex2, int resourceIndex2, string configFile2 = "", int bufferCount = 2) {

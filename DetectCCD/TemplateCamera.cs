@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DetectCCD {
-    
-    class TemplateCamera : IDisposable{
+
+    public class TemplateCamera : IDisposable{
         
         public virtual void Reset() { }
         public virtual void Freeze() { }

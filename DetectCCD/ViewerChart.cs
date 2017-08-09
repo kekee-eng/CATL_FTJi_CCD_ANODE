@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using ZedGraph;
 
 namespace DetectCCD {
-    class ViewerChart {
+    public class ViewerChart {
 
         public ViewerChart(EntryGrab grab, EntryDetect detect, ViewerImage viewer) {
 
