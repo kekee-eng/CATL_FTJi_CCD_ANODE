@@ -29,11 +29,9 @@
             this.rtInfoApp = new System.Windows.Forms.ToolStripMenuItem();
             this.rtInfoInner = new System.Windows.Forms.ToolStripMenuItem();
             this.rtInfoOuter = new System.Windows.Forms.ToolStripMenuItem();
-            this.paramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cfgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rtParamApp = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtParamShare = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtParamInner = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtParamOuter = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtParam = new System.Windows.Forms.ToolStripMenuItem();
             this.innerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.rtInnerTab = new System.Windows.Forms.ToolStripMenuItem();
             this.rtInnerEa = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +65,7 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.infoToolStripMenuItem,
-            this.paramToolStripMenuItem,
+            this.cfgToolStripMenuItem,
             this.innerToolStripMenuItem1,
             this.outerToolStripMenuItem1,
             this.toolStripSeparator3,
@@ -88,60 +86,46 @@
             // rtInfoApp
             // 
             this.rtInfoApp.Name = "rtInfoApp";
-            this.rtInfoApp.Size = new System.Drawing.Size(109, 22);
+            this.rtInfoApp.Size = new System.Drawing.Size(152, 22);
             this.rtInfoApp.Text = "App";
             this.rtInfoApp.Click += new System.EventHandler(this.rtInfoApp_Click);
             // 
             // rtInfoInner
             // 
             this.rtInfoInner.Name = "rtInfoInner";
-            this.rtInfoInner.Size = new System.Drawing.Size(109, 22);
+            this.rtInfoInner.Size = new System.Drawing.Size(152, 22);
             this.rtInfoInner.Text = "Inner";
             this.rtInfoInner.Click += new System.EventHandler(this.rtInfoInner_Click);
             // 
             // rtInfoOuter
             // 
             this.rtInfoOuter.Name = "rtInfoOuter";
-            this.rtInfoOuter.Size = new System.Drawing.Size(109, 22);
+            this.rtInfoOuter.Size = new System.Drawing.Size(152, 22);
             this.rtInfoOuter.Text = "Outer";
             this.rtInfoOuter.Click += new System.EventHandler(this.rtInfoOuter_Click);
             // 
-            // paramToolStripMenuItem
+            // cfgToolStripMenuItem
             // 
-            this.paramToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cfgToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rtParamApp,
-            this.rtParamShare,
-            this.rtParamInner,
-            this.rtParamOuter});
-            this.paramToolStripMenuItem.Name = "paramToolStripMenuItem";
-            this.paramToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.paramToolStripMenuItem.Text = "Param";
+            this.rtParam});
+            this.cfgToolStripMenuItem.Name = "cfgToolStripMenuItem";
+            this.cfgToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cfgToolStripMenuItem.Text = "Cfg";
             // 
             // rtParamApp
             // 
             this.rtParamApp.Name = "rtParamApp";
-            this.rtParamApp.Size = new System.Drawing.Size(109, 22);
+            this.rtParamApp.Size = new System.Drawing.Size(152, 22);
             this.rtParamApp.Text = "App";
             this.rtParamApp.Click += new System.EventHandler(this.rtParamApp_Click);
             // 
-            // rtParamShare
+            // rtParam
             // 
-            this.rtParamShare.Name = "rtParamShare";
-            this.rtParamShare.Size = new System.Drawing.Size(109, 22);
-            this.rtParamShare.Text = "Share";
-            this.rtParamShare.Click += new System.EventHandler(this.rtParamShare_Click);
-            // 
-            // rtParamInner
-            // 
-            this.rtParamInner.Name = "rtParamInner";
-            this.rtParamInner.Size = new System.Drawing.Size(109, 22);
-            this.rtParamInner.Text = "Inner";
-            // 
-            // rtParamOuter
-            // 
-            this.rtParamOuter.Name = "rtParamOuter";
-            this.rtParamOuter.Size = new System.Drawing.Size(109, 22);
-            this.rtParamOuter.Text = "Outer";
+            this.rtParam.Name = "rtParam";
+            this.rtParam.Size = new System.Drawing.Size(152, 22);
+            this.rtParam.Text = "Param";
+            this.rtParam.Click += new System.EventHandler(this.rtParamShare_Click);
             // 
             // innerToolStripMenuItem1
             // 
@@ -159,35 +143,35 @@
             // rtInnerTab
             // 
             this.rtInnerTab.Name = "rtInnerTab";
-            this.rtInnerTab.Size = new System.Drawing.Size(138, 22);
+            this.rtInnerTab.Size = new System.Drawing.Size(152, 22);
             this.rtInnerTab.Text = "TAB";
             this.rtInnerTab.Click += new System.EventHandler(this.rtInnerTab_Click);
             // 
             // rtInnerEa
             // 
             this.rtInnerEa.Name = "rtInnerEa";
-            this.rtInnerEa.Size = new System.Drawing.Size(138, 22);
+            this.rtInnerEa.Size = new System.Drawing.Size(152, 22);
             this.rtInnerEa.Text = "EA";
             this.rtInnerEa.Click += new System.EventHandler(this.rtInnerEa_Click);
             // 
             // rtInnerDefect
             // 
             this.rtInnerDefect.Name = "rtInnerDefect";
-            this.rtInnerDefect.Size = new System.Drawing.Size(138, 22);
+            this.rtInnerDefect.Size = new System.Drawing.Size(152, 22);
             this.rtInnerDefect.Text = "Defect";
             this.rtInnerDefect.Click += new System.EventHandler(this.rtInnerDefect_Click);
             // 
             // rtInnerLabel
             // 
             this.rtInnerLabel.Name = "rtInnerLabel";
-            this.rtInnerLabel.Size = new System.Drawing.Size(138, 22);
+            this.rtInnerLabel.Size = new System.Drawing.Size(152, 22);
             this.rtInnerLabel.Text = "Label";
             this.rtInnerLabel.Click += new System.EventHandler(this.rtInnerLabel_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // rtInnerTabChart
             // 
@@ -197,7 +181,7 @@
             this.rtInnerTabChartDistance,
             this.rtInnerTabChartDistdiff});
             this.rtInnerTabChart.Name = "rtInnerTabChart";
-            this.rtInnerTabChart.Size = new System.Drawing.Size(138, 22);
+            this.rtInnerTabChart.Size = new System.Drawing.Size(152, 22);
             this.rtInnerTabChart.Text = "TAB(Chart)";
             // 
             // rtInnerTabChartWidth
@@ -244,35 +228,35 @@
             // rtOuterTab
             // 
             this.rtOuterTab.Name = "rtOuterTab";
-            this.rtOuterTab.Size = new System.Drawing.Size(138, 22);
+            this.rtOuterTab.Size = new System.Drawing.Size(152, 22);
             this.rtOuterTab.Text = "TAB";
             this.rtOuterTab.Click += new System.EventHandler(this.rtOuterTab_Click);
             // 
             // rtOuterEa
             // 
             this.rtOuterEa.Name = "rtOuterEa";
-            this.rtOuterEa.Size = new System.Drawing.Size(138, 22);
+            this.rtOuterEa.Size = new System.Drawing.Size(152, 22);
             this.rtOuterEa.Text = "EA";
             this.rtOuterEa.Click += new System.EventHandler(this.rtOuterEa_Click);
             // 
             // rtOuterDefect
             // 
             this.rtOuterDefect.Name = "rtOuterDefect";
-            this.rtOuterDefect.Size = new System.Drawing.Size(138, 22);
+            this.rtOuterDefect.Size = new System.Drawing.Size(152, 22);
             this.rtOuterDefect.Text = "Defect";
             this.rtOuterDefect.Click += new System.EventHandler(this.rtOuterDefect_Click);
             // 
             // rtOuterLabel
             // 
             this.rtOuterLabel.Name = "rtOuterLabel";
-            this.rtOuterLabel.Size = new System.Drawing.Size(138, 22);
+            this.rtOuterLabel.Size = new System.Drawing.Size(152, 22);
             this.rtOuterLabel.Text = "Label";
             this.rtOuterLabel.Click += new System.EventHandler(this.rtOuterLabel_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // rtOuterTabChart
             // 
@@ -282,7 +266,7 @@
             this.rtOuterTabChartDistance,
             this.rtOuterTabChartDistdiff});
             this.rtOuterTabChart.Name = "rtOuterTabChart";
-            this.rtOuterTabChart.Size = new System.Drawing.Size(138, 22);
+            this.rtOuterTabChart.Size = new System.Drawing.Size(152, 22);
             this.rtOuterTabChart.Text = "TAB(Chart)";
             // 
             // rtOuterTabChartWidth
@@ -357,11 +341,9 @@
 
         #endregion
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem paramToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cfgToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rtParamApp;
-        private System.Windows.Forms.ToolStripMenuItem rtParamShare;
-        private System.Windows.Forms.ToolStripMenuItem rtParamInner;
-        private System.Windows.Forms.ToolStripMenuItem rtParamOuter;
+        private System.Windows.Forms.ToolStripMenuItem rtParam;
         private System.Windows.Forms.ToolStripMenuItem innerToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem rtInnerTab;
         private System.Windows.Forms.ToolStripMenuItem rtInnerEa;

@@ -50,8 +50,7 @@ namespace DetectCCD {
 
             //
             Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);
-
-
+            Log.Info("打开应用程序");
 
             //
             App.select_userid = 0;

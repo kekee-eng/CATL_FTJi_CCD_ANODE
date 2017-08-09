@@ -24,6 +24,7 @@ namespace DetectCCD {
         //
         public bool Is4K = false;
         public bool Is8K = true;
+        public string GetPrex() { return Is4K ? "4K" : (Is8K ? "8K" : "Uknow"); } 
         
         public string CameraFileInner = "D:/#DAT/[1B][20170806][102417-104740][245][F1-F245].zip";
         public string CameraFileOuter = "D:/#DAT/[1A][20170806][102417-104740][245][F1-F245].zip";

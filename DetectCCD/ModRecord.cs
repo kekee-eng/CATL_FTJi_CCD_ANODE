@@ -44,7 +44,7 @@ namespace DetectCCD {
             OuterDetect = new EntryDetect(this, "OuterDetect", OuterGrab);
             OuterViewerImage = new ViewerImage(OuterGrab, OuterDetect);
             OuterViewerChart = new ViewerChart(OuterGrab, OuterDetect, OuterViewerImage);
-
+            
         }
 
         public EntryGrab InnerGrab;
@@ -56,6 +56,6 @@ namespace DetectCCD {
         public EntryDetect OuterDetect;
         public ViewerImage OuterViewerImage;
         public ViewerChart OuterViewerChart;
-
+        
     }
 }

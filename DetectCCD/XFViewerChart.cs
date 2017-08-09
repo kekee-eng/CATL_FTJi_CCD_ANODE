@@ -32,7 +32,7 @@ namespace DetectCCD {
             bindUpdate = update;
 
         }
-
+        
         Dictionary<string, Func<object>> getMonitorApp() {
 
             //
@@ -60,6 +60,16 @@ namespace DetectCCD {
             //
             var monitor = new Dictionary<string, Func<object>>();
 
+            Func<int, string> getCountText = i => {
+                return string.Format("{0} [{1}]", i, device.InnerCamera.m_frame - i);
+            };
+
+            monitor["Inner_Frame"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Inner_Frame_Grab"] = () => device.InnerCamera.m_frame;
+            monitor["Inner_Frame_Detect"] = () => getCountText(record.InnerDetect.m_frame);
+            monitor["Inner_Frame_Cache"] = () => getCountText(record.InnerGrab.Cache.Max);
+            monitor["Inner_Frame_DB"] = () => getCountText(record.InnerGrab.DB.Max);
+
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Caption"] = () => device.InnerCamera.Caption;
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.Name;
@@ -80,9 +90,7 @@ namespace DetectCCD {
             monitor["Inner_Record_GrabDBMin"] = () => record.InnerGrab.DB.Min;
             monitor["Inner_Record_GrabDBMax"] = () => record.InnerGrab.DB.Max;
             monitor["Inner_Record_GrabDBCount"] = () => record.InnerGrab.DB.Count;
-
-            monitor["Inner_Record_GrabCacheRemain"] = () => Math.Max(0, record.InnerGrab.Cache.Max - record.InnerGrab.DB.Max);
-
+            
             monitor["Inner_Record_LastLoadCache"] = () => record.InnerGrab.LastLoadCache;
             monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
 
@@ -142,6 +150,16 @@ namespace DetectCCD {
             //
             var monitor = new Dictionary<string, Func<object>>();
 
+            Func<int, string> getCountText = i => {
+                return string.Format("{0} [{1}]", i, device.OuterCamera.m_frame - i);
+            };
+
+            monitor["Outer_Frame"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Outer_Frame_Grab"] = () => device.OuterCamera.m_frame;
+            monitor["Outer_Frame_Detect"] = () => getCountText(record.OuterDetect.m_frame);
+            monitor["Outer_Frame_Cache"] = () => getCountText( record.OuterGrab.Cache.Max);
+            monitor["Outer_Frame_DB"] = () => getCountText(record.OuterGrab.DB.Max);
+
             monitor["Outer_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Outer_Grab_Caption"] = () => device.OuterCamera.Caption;
             monitor["Outer_Grab_Name"] = () => device.OuterCamera.Name;
@@ -162,9 +180,7 @@ namespace DetectCCD {
             monitor["Outer_Record_GrabDBMin"] = () => record.OuterGrab.DB.Min;
             monitor["Outer_Record_GrabDBMax"] = () => record.OuterGrab.DB.Max;
             monitor["Outer_Record_GrabDBCount"] = () => record.OuterGrab.DB.Count;
-
-            monitor["Outer_Record_GrabCacheRemain"] = () => Math.Max(0, record.OuterGrab.Cache.Max - record.OuterGrab.DB.Max);
-
+            
             monitor["Outer_Record_LastLoadCache"] = () => record.OuterGrab.LastLoadCache;
             monitor["Outer_Record_LastLoadDB"] = () => record.OuterGrab.LastLoadDB;
 

@@ -180,9 +180,9 @@ Image           BLOB
 
             }
         }
-        
+
         //缓存接口
-        public class GrabCache:IDisposable {
+        public class GrabCache : IDisposable {
 
             public void Dispose() {
 
@@ -254,7 +254,16 @@ Image           BLOB
                 return saveDatas;
 
             }
-            
+
+            public DataGrab GetFirstUnDetect() {
+
+                for(int i = Min; i < Max; i++) {
+                    var obj = this[i];
+                    if (obj !=null && !obj.IsDetect)
+                        return obj;
+                }
+                return null;
+            }
         }
         
     }

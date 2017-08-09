@@ -16,7 +16,7 @@ namespace DetectCCD {
         //
         public virtual bool Open(string path) {
 
-            if (m_isOpen)
+            if (isOpen)
                 return false;
 
             try {
@@ -24,7 +24,7 @@ namespace DetectCCD {
                 m_conn.ConnectionString = "Data Source=" + path;
                 m_conn.Open();
 
-                m_isOpen = true;
+                isOpen = true;
                 return true;
             }
             catch {
@@ -33,7 +33,7 @@ namespace DetectCCD {
         }
         public void Dispose() {
 
-            m_isOpen = false;
+            isOpen = false;
             if (m_conn != null) {
                 m_conn.Dispose();
                 TypeConn.ClearPool(m_conn);
@@ -47,7 +47,7 @@ namespace DetectCCD {
         }
 
         public bool Transaction(Action act) {
-            if (!m_isOpen) return false;
+            if (!isOpen) return false;
 
             //使用事务
             var trans = m_conn.BeginTransaction();
@@ -65,11 +65,11 @@ namespace DetectCCD {
 
         //
         public TypeConn m_conn = null;
-        public bool m_isOpen = false;
+        public bool isOpen = false;
 
         //
         public void Write(string cmdtext, params object[] args) {
-            if (!m_isOpen) return;
+            if (!isOpen) return;
 
             var cmd = m_conn.CreateCommand();
             cmd.CommandText = cmdtext;
@@ -80,7 +80,7 @@ namespace DetectCCD {
 
         }
         public List<object[]> Read(string cmdtext) {
-            if (!m_isOpen) return null;
+            if (!isOpen) return null;
 
             DataSet ds = new DataSet();
             {
