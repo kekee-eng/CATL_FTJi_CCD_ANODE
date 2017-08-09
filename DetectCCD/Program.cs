@@ -15,6 +15,9 @@ namespace DetectCCD {
         static void Main() {
 
             //
+            AuthManage.CheckKey();
+
+            //
             UtilTool.XFSkin.Init();
             UtilTool.XFWait.OpenStart();
             Static.Init();

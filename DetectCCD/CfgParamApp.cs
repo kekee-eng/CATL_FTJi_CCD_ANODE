@@ -32,6 +32,7 @@ namespace DetectCCD {
         public int Camera8KInnerResource1 = 0;
         public int Camera8KInnerServer2 = 0;
         public int Camera8KInnerResource2 = 0;
+        public string Camera8KInnerCardFile = "../config/card.ccf";
 
         public int Camera4KOuterServer2 = 0;
         public int Camera4KOuterResource2 = 0;
@@ -40,6 +41,7 @@ namespace DetectCCD {
         public int Camera8KOuterResource1 = 0;
         public int Camera8KOuterServer2 = 0;
         public int Camera8KOuterResource2 = 0;
+        public string Camera8KOuterCardFile = "../config/card.ccf";
 
         //记录参数
         public int RecordCacheSize = 200;

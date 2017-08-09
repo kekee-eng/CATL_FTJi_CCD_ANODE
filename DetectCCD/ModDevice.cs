@@ -22,8 +22,8 @@ namespace DetectCCD {
             }
             if (Static.ParamApp.CameraByRealtime8K) {
                 //使用实时相机取图
-                InnerCamera = new CameraRealtime(Static.ParamApp.Camera8KInnerServer1, Static.ParamApp.Camera8KInnerResource1, Static.ParamApp.Camera8KInnerServer2, Static.ParamApp.Camera8KInnerResource2);
-                OuterCamera = new CameraRealtime(Static.ParamApp.Camera8KOuterServer1, Static.ParamApp.Camera8KOuterResource1, Static.ParamApp.Camera8KOuterServer2, Static.ParamApp.Camera8KOuterResource2);
+                InnerCamera = new CameraRealtime(Static.ParamApp.Camera8KInnerServer1, Static.ParamApp.Camera8KInnerResource1, Static.ParamApp.Camera8KInnerServer2, Static.ParamApp.Camera8KInnerResource2, Static.ParamApp.Camera8KInnerCardFile);
+                OuterCamera = new CameraRealtime(Static.ParamApp.Camera8KOuterServer1, Static.ParamApp.Camera8KOuterResource1, Static.ParamApp.Camera8KOuterServer2, Static.ParamApp.Camera8KOuterResource2, Static.ParamApp.Camera8KOuterCardFile);
             }
             else if (Static.ParamApp.CameraByZipFile) {
                 //从Zip文件取图 

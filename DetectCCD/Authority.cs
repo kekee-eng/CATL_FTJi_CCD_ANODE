@@ -2,7 +2,7 @@
 using System;
 using Aladdin.HASP;
 
-namespace Authority
+namespace DetectCCD
 {
     /// <summary> 授权管理 </summary>
     class AuthManage

@@ -7,7 +7,7 @@ namespace DetectCCD {
     class CameraRealtime : TemplateCamera, IDisposable {
 
         /// <summary> 连接GIGE相机 </summary>
-        public CameraRealtime(int serverIndex2, int resourceIndex2, int bufferCount = 2, string configFile2 = "") {
+        public CameraRealtime(int serverIndex2, int resourceIndex2, string configFile2 = "", int bufferCount = 2) {
             this._server2 = serverIndex2;
             this._resource2 = resourceIndex2;
             this._buffer_count = bufferCount;
@@ -20,7 +20,7 @@ namespace DetectCCD {
         }
 
         /// <summary> 连接CameraLink相机 </summary>
-        public CameraRealtime(int serverIndex1, int resourceIndex1, int serverIndex2, int resourceIndex2, int bufferCount = 2, string configFile1 = "", string configFile2 = "") {
+        public CameraRealtime(int serverIndex1, int resourceIndex1, int serverIndex2, int resourceIndex2, string configFile1, string configFile2 = "", int bufferCount = 2) {
             this._server1 = serverIndex1;
             this._resource1 = resourceIndex1;
             this._server2 = serverIndex2;
