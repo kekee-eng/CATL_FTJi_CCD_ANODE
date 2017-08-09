@@ -280,7 +280,7 @@ namespace DetectCCD {
 
                 record.InnerGrab.Cache[obj.Frame] = obj;
                 //Task.Run(() => {
-                    record.InnerDetect.TryDetect(obj);
+                    //record.InnerDetect.TryDetect(obj);
                     record.InnerViewerImage.SetBottomTarget(obj.Frame);
                 //});
             };
@@ -290,7 +290,7 @@ namespace DetectCCD {
 
                 record.OuterGrab.Cache[obj.Frame] = obj;
                 //Task.Run(() => {
-                    record.OuterDetect.TryDetect(obj);
+                    //record.OuterDetect.TryDetect(obj);
                     record.OuterViewerImage.SetBottomTarget(obj.Frame);
                 //});
             };
