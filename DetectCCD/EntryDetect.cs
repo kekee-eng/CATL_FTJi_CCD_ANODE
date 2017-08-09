@@ -23,8 +23,7 @@ namespace DetectCCD {
             Defects.Clear();
             Labels.Clear();
         }
-
-
+        
         public void CreateTable() {
 
             //
@@ -140,6 +139,7 @@ CfgParam        BLOB
             }
             statuPrev = statuCurr;
             return statuCurr;
+
         }
         bool tryDetect(DataGrab obj) {
 

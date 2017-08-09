@@ -13,7 +13,7 @@ namespace DetectCCD {
         /// </summary>
         [STAThread]
         static void Main() {
-
+            
             //
             AuthManage.CheckKey();
 
