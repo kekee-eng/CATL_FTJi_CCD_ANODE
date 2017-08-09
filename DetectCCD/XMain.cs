@@ -223,7 +223,7 @@ namespace DetectCCD {
             changeUser();
 
             //
-            textMode.SelectedIndex = Static.App.run_mode;
+            textMode.SelectedIndex = Static.App.Mode;
 
             //全屏显示
             //selectFullScreen_ItemClick(null, null);

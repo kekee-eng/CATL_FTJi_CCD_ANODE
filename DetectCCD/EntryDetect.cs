@@ -172,7 +172,7 @@ CfgParam        BLOB
                 if (defectCount >= 10 || (!obj.hasDefect && defectCount > 0)) {
 
                     //拼成大图进行瑕疵检测
-                    int efx1 = frame - defectCount;
+                    int efx1 = frame - 1 - defectCount;
                     int efx2 = frame - 1;
                     defectCount = 0;
 

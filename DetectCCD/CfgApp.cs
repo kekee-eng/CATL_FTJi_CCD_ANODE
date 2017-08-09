@@ -9,11 +9,14 @@ namespace DetectCCD {
     public class CfgApp : TemplateConfig {
         public CfgApp(string path) : base(path) { }
 
-        //运行模式：0=在线（实时检测）、1=离线（仿真）
-        public int run_mode = 0;
+        //
+        public bool ImageProcessReload = false;
 
-        public bool ModeByRecord { get { return run_mode == 1; } }
-        public bool ModeByCamera { get { return run_mode != 1; } }
+        //运行模式：0=在线（实时检测）、1=离线（仿真）
+        public int Mode = 0;
+
+        public bool ModeByRecord { get { return Mode == 1; } }
+        public bool ModeByCamera { get { return Mode != 1; } }
 
         //相机源：真实相机、Zip文件、文件夹、数据库
         public bool CameraByRealtime = true;
@@ -83,9 +86,6 @@ namespace DetectCCD {
         //显示参数
         public double CameraFpsControl = 10;
         public int CameraFrameStart = 1;
-
-        //
-        public bool ImageProcessReload = false;
 
         //
         public string operator_username = "operator";

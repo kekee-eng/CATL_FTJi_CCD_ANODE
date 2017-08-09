@@ -41,7 +41,7 @@
             // 
             // btnLoadFileInner
             // 
-            this.btnLoadFileInner.Location = new System.Drawing.Point(44, 39);
+            this.btnLoadFileInner.Location = new System.Drawing.Point(44, 43);
             this.btnLoadFileInner.Name = "btnLoadFileInner";
             this.btnLoadFileInner.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileInner.TabIndex = 7;
@@ -50,7 +50,7 @@
             // 
             // btnLoadFileOuter
             // 
-            this.btnLoadFileOuter.Location = new System.Drawing.Point(44, 75);
+            this.btnLoadFileOuter.Location = new System.Drawing.Point(44, 79);
             this.btnLoadFileOuter.Name = "btnLoadFileOuter";
             this.btnLoadFileOuter.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileOuter.TabIndex = 8;
@@ -117,7 +117,7 @@
             // 
             // btnInit
             // 
-            this.btnInit.Location = new System.Drawing.Point(44, 111);
+            this.btnInit.Location = new System.Drawing.Point(44, 115);
             this.btnInit.Name = "btnInit";
             this.btnInit.Size = new System.Drawing.Size(101, 30);
             this.btnInit.TabIndex = 17;
