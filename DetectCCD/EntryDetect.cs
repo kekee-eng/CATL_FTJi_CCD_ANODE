@@ -146,8 +146,8 @@ CfgParam        BLOB
                 return objs;
             }
         }
-
         public event Action<DataEA> OnNewEA;
+        public event Action<DataLabel> OnNewLabel;
 
         int defectFrameCount = 0;
         public bool TryDetect(DataGrab obj) {

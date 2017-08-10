@@ -9,8 +9,32 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
     public class RemotePLC : MarshalByRefObject {
-        
+
+        public static void InitServer() {
+
+            TcpServerChannel channel = new TcpServerChannel(7777);
+            ChannelServices.RegisterChannel(channel, false);
+            RemotingConfiguration.RegisterWellKnownServiceType(
+                typeof(RemoteDefectCount),
+                "RemotePLC",
+                WellKnownObjectMode.SingleCall);
+
+        }
+        public static void InitClient() {
+            ChannelServices.RegisterChannel(new TcpClientChannel(), false);
+        }
+        public static void ConnectClient() {
+
+            Static.SafeRun(() => {
+                client = (RemoteDefectCount)Activator.GetObject(
+                    typeof(RemoteDefectCount),
+                    "tcp://localhost:7777/RemotePLC");
+            });
+
+        }
         static RemoteDefectCount client;
+
+
         public static int GetExtDefectCountRemote(bool isFront, bool isInner, double start, double end, int ea) {
 
             try {
@@ -23,29 +47,6 @@ namespace DetectCCD {
                 client = null;
             }
             return -2;
-        }
-
-        public static void InitServer() {
-
-            TcpServerChannel channel = new TcpServerChannel(Static.App.RemotePort);
-            ChannelServices.RegisterChannel(channel, false);
-            RemotingConfiguration.RegisterWellKnownServiceType(
-                typeof(RemoteDefectCount),
-                "RemoteObject",
-                WellKnownObjectMode.SingleCall);
-
-        }
-        public static void InitClient() {
-            ChannelServices.RegisterChannel(new TcpClientChannel(), false);
-        }
-        public static void ConnectClient() {
-
-            Static.SafeRun(() => {
-                client = (RemoteDefectCount)Activator.GetObject(
-                    typeof(RemoteDefectCount),
-                    string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
-            });
-
         }
 
         public static event Func<bool, bool, double, double, int, int> DefectCountProvider;

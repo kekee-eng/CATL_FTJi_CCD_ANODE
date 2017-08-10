@@ -44,8 +44,7 @@ namespace DetectCCD {
             record?.Dispose();
             device?.Dispose();
         }
-
-        //操作模板
+        
         void runAction(string actName, Action act) {
             try {
                 appendLog(String.Format("正在{0}...", actName));
@@ -82,7 +81,7 @@ namespace DetectCCD {
         public ModDevice device = new ModDevice();
 
         void init_server() {
-
+            
             if (Static.App.IsRemoteServer) {
 
                 RemoteDefectCount.InitServer();
@@ -111,7 +110,6 @@ namespace DetectCCD {
             }
             else {
                 RemoteDefectCount.InitClient();
-                RemoteDefectCount.ConnectClient();
             }
         }
         void init_device() {
@@ -154,7 +152,7 @@ namespace DetectCCD {
 
                         var obj = record.OuterGrab.Cache.GetFirstUnDetect();
                         if (obj != null) {
-                            if(record.OuterDetect.TryDetect(obj)) {
+                            if (record.OuterDetect.TryDetect(obj)) {
 
                                 //外侧同步到内侧
                                 record.OuterDetect.Sync(record.InnerDetect);
@@ -236,6 +234,20 @@ namespace DetectCCD {
                 } while (!isQuit);
 
             }));
+
+            //PLC操作
+            record.InnerDetect.OnNewEA += obj => {
+
+            };
+            record.OuterDetect.OnNewEA += obj => {
+
+            };
+            record.InnerDetect.OnNewLabel += obj => {
+
+            };
+            record.OuterDetect.OnNewLabel += obj => {
+
+            };
 
         }
         void init_teston() {

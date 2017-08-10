@@ -11,19 +11,6 @@ namespace DetectCCD {
     public class RemoteDefectCount : MarshalByRefObject {
 
         static RemoteDefectCount client;
-        public static int GetExtDefectCountRemote(bool isFront, bool isInner, double start, double end, int ea) {
-            
-            try {
-                if (client == null)
-                    return -1;
-
-                return client._master_defect_count(isFront, isInner, start, end, ea);
-            }
-            catch {
-                client = null;
-            }
-            return -2;
-        }
 
         public static void InitServer() {
 
@@ -36,9 +23,6 @@ namespace DetectCCD {
 
         }
         public static void InitClient() {
-            ChannelServices.RegisterChannel(new TcpClientChannel(), false);
-        }
-        public static void ConnectClient() {
 
             Static.SafeRun(() => {
                 client = (RemoteDefectCount)Activator.GetObject(
@@ -46,6 +30,20 @@ namespace DetectCCD {
                     string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
             });
 
+        }
+
+        public static int GetExtDefectCountRemote(bool isFront, bool isInner, double start, double end, int ea) {
+            
+            try {
+                if (client == null)
+                    return -1;
+
+                return client._master_defect_count(isFront, isInner, start, end, ea);
+            }
+            catch {
+                client = null;
+            }
+            return -2;
         }
 
         public static event Func<bool, bool, double, double, int, int> DefectCountProvider;
