@@ -98,6 +98,7 @@ namespace DetectCCD {
                 //从Zip文件取图 
                 InnerCamera = new CameraZipFile(Static.App.CameraFileInner);
                 OuterCamera = new CameraZipFile(Static.App.CameraFileOuter);
+                
             }
             else if (Static.App.CameraByFolder) {
                 //从文件夹取图

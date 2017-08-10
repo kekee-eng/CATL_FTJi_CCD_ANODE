@@ -110,6 +110,7 @@
     <Compile Include="EntryDetect.cs" />
     <Compile Include="EntryGrab.cs" />
     <Compile Include="ImageProcess.cs" />
+    <Compile Include="RemotePLC.cs" />
     <Compile Include="TemplateCamera.cs" />
     <Compile Include="TemplateConfig.cs" />
     <Compile Include="TemplateDB.cs" />

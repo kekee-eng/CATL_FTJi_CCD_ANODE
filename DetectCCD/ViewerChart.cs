@@ -350,7 +350,7 @@ namespace DetectCCD {
             gridAdd(grid,
                 grid.Rows.Count + 1,
                 dt.EA,
-                dt.Type,
+                dt.GetTypeCaption(),
                 dt.X.ToString("0.000"),
                 dt.Y.ToString("0.000"),
                 dt.W.ToString("0.000"),
@@ -368,7 +368,7 @@ namespace DetectCCD {
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "EA" },
-                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "类型" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "类型" },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },

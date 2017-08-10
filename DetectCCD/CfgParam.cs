@@ -45,5 +45,8 @@ namespace DetectCCD {
         public int CheckTabDistCount = 0;
         public int CheckDefectCount = 0;
 
+        //
+        public double LabelEADistance = -200;
+
     }
 }

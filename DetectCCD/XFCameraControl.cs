@@ -56,9 +56,6 @@ namespace DetectCCD {
             device.InnerCamera.Freeze();
             device.OuterCamera.Freeze();
 
-            device.InnerCamera.m_frameStart = Static.App.CameraFrameStart;
-            device.OuterCamera.m_frameStart = Static.App.CameraFrameStart;
-            
             device.InnerCamera.Reset();
             device.OuterCamera.Reset();
 
@@ -68,10 +65,10 @@ namespace DetectCCD {
             record.InnerDetect.Dispose();
             record.OuterDetect.Dispose();
 
-            record.InnerViewerImage.SetBottomTarget(0);
+            record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
             record.InnerViewerImage.MoveTargetDirect();
 
-            record.OuterViewerImage.SetBottomTarget(0);
+            record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
             record.OuterViewerImage.MoveTargetDirect();
 
         }

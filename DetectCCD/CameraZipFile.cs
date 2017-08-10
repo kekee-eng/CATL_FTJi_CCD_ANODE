@@ -19,6 +19,10 @@ namespace DetectCCD {
             m_filename = filename;
             prepareFile(filename);
             new Thread(new ThreadStart(threadProcess)).Start();
+
+            m_frame = Static.App.CameraFrameStart;
+            m_frameStart = Static.App.CameraFrameStart;
+            m_fpsControl = Static.App.CameraFpsControl;
         }
 
         //

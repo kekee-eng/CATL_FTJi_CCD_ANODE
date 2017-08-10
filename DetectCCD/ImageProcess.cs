@@ -151,6 +151,9 @@ namespace DetectCCD {
             x = y = w = h =area = null;
 
             //
+            image.GetImageSize(out ImageDefectWidth, out ImageDefectHeight);
+
+            //
             var data = TemplateProcess("DetectDefect", image, out TimeDetectDefect);
             if (data == null) return false;
 
@@ -177,7 +180,8 @@ namespace DetectCCD {
         public static int TimeDetectWidth = 0;
         public static int TimeDetectMark = 0;
         public static int TimeDetectDefect = 0;
-
+        public static int ImageDefectWidth = 0;
+        public static int ImageDefectHeight = 0;
 
     }
 }

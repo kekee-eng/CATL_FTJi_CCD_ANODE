@@ -60,6 +60,8 @@ namespace DetectCCD {
             monitor["ImageProcess_DetectWidth"] = () => ImageProcess.TimeDetectWidth;
             monitor["ImageProcess_DetectMark"] = () => ImageProcess.TimeDetectMark;
             monitor["ImageProcess_DetectDefect"] = () => ImageProcess.TimeDetectDefect;
+            monitor["ImageProcess_ImageDefectWidth"] = () => ImageProcess.ImageDefectWidth;
+            monitor["ImageProcess_ImageDefectHeight"] = () => ImageProcess.ImageDefectHeight;
 
             //
             return monitor;

@@ -30,6 +30,21 @@ namespace DetectCCD {
             return max >= start && min <= end;
         }
 
+        //
+        public string GetTypeCaption() {
+            switch(Type) {
+                default:return "UNKNOW";
+                case 0: return "[A]接头";
+                case 1: return "[B]标签";
+                case 10: return "[F]黑斑";
+                case 11: return "[G]白斑";
+                case 20: return "[E]脱碳";
+                case 30: return "[D]划痕";
+                case 40: return "[C]漏金属";
+            }
+            
+        }
+
     }
 
 

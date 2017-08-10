@@ -95,6 +95,43 @@ CfgParam        BLOB
                 return ret;
             }
         }
+        public DataEA GetEA(int id) {
+
+            DataEA obj = new DataEA();
+            obj.EA = id;
+            obj.TabCount = Tabs.Count(x => x.EA == id);
+            obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
+            obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
+            obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
+            obj.IsTabCountFail = obj.TabCount != Static.Param.CheckTabCount;
+            obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > Static.Param.CheckTabWidthCount;
+            obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > Static.Param.CheckTabHeightCount;
+            obj.IsTabDistFailCountFail = obj.TabDistFailCount > Static.Param.CheckTabDistCount;
+
+            var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
+            if (curEaTab == null)
+                throw new Exception("DetectResult: GetEA");
+
+            obj.EAX = curEaTab.MarkX;
+            obj.EAY = curEaTab.MarkY;
+
+            double start = curEaTab.TabY1;
+            double end = 0;
+            var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
+            if (nextEaTab != null) {
+                end = nextEaTab.TabY1;
+            }
+            else {
+                end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
+            }
+
+            obj.DefectCountLocal = AllocAndGetDefectCount(start, end, id);
+            obj.DefectCountFront = RemoteDefectCount.GetExtDefectCountRemote(true, isinner, start, end, id);
+            obj.DefectCountBack = RemoteDefectCount.GetExtDefectCountRemote(false, isinner, start, end, id);
+            obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
+
+            return obj;
+        }
         public List<DataEA> EAs {
             get {
                 List<DataEA> objs = new List<DataEA>();
@@ -102,40 +139,7 @@ CfgParam        BLOB
                 Static.SafeRun(() => {
                     var ids = Tabs.TakeWhile(x => x.TAB != 0).Select(x => x.EA).Distinct().OrderBy(x => x);
                     foreach (var id in ids) {
-
-                        DataEA obj = new DataEA();
-                        obj.EA = id;
-                        obj.TabCount = Tabs.Count(x => x.EA == id);
-                        obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
-                        obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
-                        obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
-                        obj.IsTabCountFail = obj.TabCount != Static.Param.CheckTabCount;
-                        obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > Static.Param.CheckTabWidthCount;
-                        obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > Static.Param.CheckTabHeightCount;
-                        obj.IsTabDistFailCountFail = obj.TabDistFailCount > Static.Param.CheckTabDistCount;
-
-                        var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
-                        if (curEaTab == null)
-                            throw new Exception("DetectResult: GetEA");
-
-                        obj.EAX = curEaTab.MarkX;
-                        obj.EAY = curEaTab.MarkY;
-
-                        double start = curEaTab.TabY1;
-                        double end = 0;
-                        var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
-                        if (nextEaTab != null) {
-                            end = nextEaTab.TabY1;
-                        }
-                        else {
-                            end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
-                        }
-
-                        obj.DefectCountLocal = Defects.Count(x => x.EA == id);
-                        obj.DefectCountFront = RemoteDefectCount.GetExtDefectCountRemote(true, isinner, start, end, id);
-                        obj.DefectCountBack = RemoteDefectCount.GetExtDefectCountRemote(false, isinner, start, end, id);
-                        obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
-                        objs.Add(obj);
+                        objs.Add(GetEA(id));
                     }
                 });
 
@@ -143,19 +147,12 @@ CfgParam        BLOB
             }
         }
 
-        int defectCount = 0;
-        bool statuPrev = false;
+        public event Action<int> OnNewEA;
 
+        int defectFrameCount = 0;
         public bool TryDetect(DataGrab obj) {
 
-            bool statuCurr = tryDetect(obj);
-            if(!statuCurr && statuPrev ) {
-                adjustER();
-                adjustDefect();
-            }
-            statuPrev = statuCurr;
-            return statuCurr;
-
+            return tryDetect(obj);
         }
         bool tryDetect(DataGrab obj) {
 
@@ -182,15 +179,15 @@ CfgParam        BLOB
 
                 //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
                 if (obj.hasDefect) {
-                    defectCount++;
+                    defectFrameCount++;
                 }
 
-                if (defectCount >= 10 || (!obj.hasDefect && defectCount > 0)) {
+                if (defectFrameCount >= 10 || (!obj.hasDefect && defectFrameCount > 0)) {
 
                     //拼成大图进行瑕疵检测
-                    int efx1 = frame - 1 - defectCount;
+                    int efx1 = frame - 1 - defectFrameCount;
                     int efx2 = frame - 1;
-                    defectCount = 0;
+                    defectFrameCount = 0;
 
                     Task.Run(() => {
                         var eimage = grab.GetImage(efx1, efx2);
@@ -350,11 +347,19 @@ CfgParam        BLOB
                         data.MarkY_P = cfy1 + cy[1] / h;
                     }
 
+                    //
+                    adjustER();
+                    OnNewEA?.Invoke(Tabs.Select(x => x.EA).Max() - 1);
+
+                    //添加标签
+
                 }
             }
 
             //
             Tabs.Add(data);
+            adjustER();
+            adjustDefect();
             return true;
 
         }
@@ -362,13 +367,13 @@ CfgParam        BLOB
         void adjustDefect() {
 
             //去除与Mark点重合的瑕疵
-            double ck = 0.5 / grab.Fx;
+            double ck = 1;
             for (int i = 0; i < Tabs.Count; i++) {
                 if (Tabs[i].IsNewEA) {
                     var mark = Tabs[i];
                     Defects.RemoveAll(m =>
-                        (Math.Abs(m.X - mark.MarkX) < ck && Math.Abs(m.Y - mark.MarkY) < ck) ||
-                        (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) < ck && Math.Abs(m.Y - mark.MarkY_P) < ck)
+                        (Math.Abs(m.X - mark.MarkX) * Fx < ck && Math.Abs(m.Y - mark.MarkY) * Fy < ck) ||
+                        (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) * Fx < ck && Math.Abs(m.Y - mark.MarkY_P) * Fy < ck)
                     );
                 }
             }
