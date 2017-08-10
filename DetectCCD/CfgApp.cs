@@ -12,6 +12,9 @@ namespace DetectCCD {
         //
         public bool ImageProcessReload = false;
 
+        //
+        public bool TestLabelAllEA = false;
+
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordSaveImageEnable = false;
@@ -37,10 +40,10 @@ namespace DetectCCD {
         public double FixOuterOrBackOffset = 35;
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
-        public int Mode = 0;
+        public int RunningMode = 0;
 
-        public bool ModeByRecord { get { return Mode == 1; } }
-        public bool ModeByCamera { get { return Mode != 1; } }
+        public bool ModeByRecord { get { return RunningMode == 1; } }
+        public bool ModeByCamera { get { return RunningMode != 1; } }
 
         //相机源：真实相机、Zip文件、文件夹、数据库
         public bool CameraByRealtime = false;

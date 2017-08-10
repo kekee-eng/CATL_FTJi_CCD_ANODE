@@ -540,8 +540,8 @@ CfgParam        BLOB
                         if (Labels.Find(x => x.EA == ea - 1) == null) {
 
                             //添加标签
-                            if (objEA.IsFail) {
-                                var objLab =new DataLabel() {
+                            if (objEA.IsFail || Static.App.TestLabelAllEA) {
+                                var objLab = new DataLabel() {
                                     EA = ea - 1,
                                     X = Tabs[i].MarkX,
                                     Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
