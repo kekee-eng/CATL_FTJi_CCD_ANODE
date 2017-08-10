@@ -7,55 +7,45 @@ using System.Runtime.Remoting.Channels.Tcp;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DetectCCD {
-    public class RemotePLC : MarshalByRefObject {
+public class RemotePLC : MarshalByRefObject {
 
-        static RemoteDefectCount client;
-        public static void InitServer() {
+    static RemotePLC client;
+    public static void InitServer() {
 
-            TcpServerChannel channel = new TcpServerChannel(Static.App.RemotePort);
-            ChannelServices.RegisterChannel(channel, false);
-            RemotingConfiguration.RegisterWellKnownServiceType(
-                typeof(RemoteDefectCount),
-                "RemoteObject",
-                WellKnownObjectMode.SingleCall);
-
-        }
-        public static void InitClient() {
-
-            Static.SafeRun(() => {
-                client = (RemoteDefectCount)Activator.GetObject(
-                    typeof(RemoteDefectCount),
-                    string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
-            });
-
-        }
-
-        public static int GetExtDefectCountRemote(bool isFront, bool isInner, double start, double end, int ea) {
-
-            try {
-                if (client == null)
-                    return -1;
-
-                return client._in_8k_return_4k(isFront, isInner, start, end, ea);
-            }
-            catch {
-                client = null;
-            }
-            return -2;
-        }
-
-        public static event Func<bool, bool, double, double, int, int> DefectCountProvider;
-        public int _master_defect_count(bool isfront, bool isinner, double start, double end, int ea) {
-
-            if (DefectCountProvider == null)
-                return -3; //Master未关联
-
-            try { return DefectCountProvider(isfront, isinner, start, end, ea); }
-            catch { }
-            return -4; //Master函数有问题
-        }
-
+        TcpServerChannel channel = new TcpServerChannel("RemotePLCServer", 777);
+        ChannelServices.RegisterChannel(channel, false);
+        RemotingConfiguration.RegisterWellKnownServiceType(
+            typeof(RemotePLC),
+            "RemotePLC",
+            WellKnownObjectMode.SingleCall);
 
     }
+    public static void InitClient() {
+
+        client = (RemotePLC)Activator.GetObject(
+            typeof(RemotePLC),
+            string.Format("tcp://localhost:777/RemotePLC"));
+    }
+
+    public static void In4KCallPLC_SendLabel(bool isInner, int encoder) {
+        try { client._IN_PLC_Call_reciveLabel(isInner, encoder); }
+        catch { }
+    }
+    public static int In4KCallPLC_GetEncoder(bool isInner) {
+        try { return client._IN_PLC_Call_encoderProvider(isInner); }
+        catch { return 0; }
+    }
+
+    //注册此函数
+    public static event Action<bool, int> ReciveLabelProcess;
+    public void _IN_PLC_Call_reciveLabel(bool isInner, int encoder) {
+        ReciveLabelProcess?.Invoke(isInner, encoder);
+    }
+
+    //注册此函数
+    public static event Func<bool, int> EncoderProvider;
+    public int _IN_PLC_Call_encoderProvider(bool isInner) {
+        return EncoderProvider(isInner);
+    }
+
 }

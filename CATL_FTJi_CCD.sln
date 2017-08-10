@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetectCCD", "DetectCCD\Dete
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDbViewer", "TestDbViewer\TestDbViewer.csproj", "{30C282C6-F336-48C5-8291-6F20AB0745C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPLC", "TestPLC\TestPLC.csproj", "{FDC01A99-6B20-429F-A541-6A17D6B5E70A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,14 @@ Global
 		{30C282C6-F336-48C5-8291-6F20AB0745C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{30C282C6-F336-48C5-8291-6F20AB0745C5}.Release|x64.ActiveCfg = Release|Any CPU
 		{30C282C6-F336-48C5-8291-6F20AB0745C5}.Release|x64.Build.0 = Release|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|x64.Build.0 = Debug|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|x64.ActiveCfg = Release|Any CPU
+		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

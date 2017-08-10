@@ -53,6 +53,7 @@ namespace DetectCCD {
         public bool IsFix = false; //补测
 
         //
+        public bool IsNewTabCallBack = false; //已触发回调
         public bool IsNewEACallBack = false; //已触发回调
 
         //

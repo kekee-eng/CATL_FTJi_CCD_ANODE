@@ -126,8 +126,8 @@ CfgParam        BLOB
             }
 
             obj.DefectCountLocal = AllocAndGetDefectCount(start, end, id);
-            obj.DefectCountFront = RemoteDefectCount.GetIn4KCall8K(true, isinner, start, end, id);
-            obj.DefectCountBack = RemoteDefectCount.GetIn4KCall8K(false, isinner, start, end, id);
+            obj.DefectCountFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
+            obj.DefectCountBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
             obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
 
             return obj;

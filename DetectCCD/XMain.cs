@@ -84,8 +84,8 @@ namespace DetectCCD {
             
             if (Static.App.IsRemoteServer) {
 
-                RemoteDefectCount.InitServer();
-                RemoteDefectCount._func_in_8k += (isFront, isInner, start, end, id) => {
+                RemoteDefect.InitServer();
+                RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) => {
 
                     if (isInner) {
                         start += Static.App.RemoteInnerOffset;
@@ -109,7 +109,8 @@ namespace DetectCCD {
 
             }
             else {
-                RemoteDefectCount.InitClient();
+                RemotePLC.InitClient();
+                RemoteDefect.InitClient();
             }
         }
         void init_device() {
@@ -526,7 +527,15 @@ namespace DetectCCD {
         private void groupStatuOuter_DoubleClick(object sender, EventArgs e) {
             splitContainerOuter.Panel1Collapsed ^= true;
         }
-        
+
+        private void button1_Click(object sender, EventArgs e) {
+            RemotePLC.In4KCallPLC_SendLabel(true, 123464);
+        }
+
+        private void button2_Click(object sender, EventArgs e) {
+            var tt = RemotePLC.In4KCallPLC_GetEncoder(true);
+            MessageBox.Show(tt.ToString());
+        }
     }
 
 }

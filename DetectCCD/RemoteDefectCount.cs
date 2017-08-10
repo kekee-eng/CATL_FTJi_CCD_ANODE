@@ -8,36 +8,34 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DetectCCD {
-    public class RemoteDefectCount : MarshalByRefObject {
+    public class RemoteDefect : MarshalByRefObject {
 
-        static RemoteDefectCount client;
+        static RemoteDefect client;
         public static void InitServer() {
 
-            TcpServerChannel channel = new TcpServerChannel(Static.App.RemotePort);
+            TcpServerChannel channel = new TcpServerChannel("RemoteDefect", Static.App.RemotePort);
             ChannelServices.RegisterChannel(channel, false);
             RemotingConfiguration.RegisterWellKnownServiceType(
-                typeof(RemoteDefectCount),
+                typeof(RemoteDefect),
                 "RemoteObject",
                 WellKnownObjectMode.SingleCall);
 
         }
         public static void InitClient() {
 
-            Static.SafeRun(() => {
-                client = (RemoteDefectCount)Activator.GetObject(
-                    typeof(RemoteDefectCount),
-                    string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
-            });
+            client = (RemoteDefect)Activator.GetObject(
+                typeof(RemoteDefect),
+                string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
 
         }
 
-        public static int GetIn4KCall8K(bool isFront, bool isInner, double start, double end, int ea) {
+        public static int In4KCall8K_GetDefectCount(bool isFront, bool isInner, double start, double end, int ea) {
             
             try {
                 if (client == null)
                     return -1;
 
-                return client._in_8k_return_4k(isFront, isInner, start, end, ea);
+                return client._in_8k_return_4k_getDefectCount(isFront, isInner, start, end, ea);
             }
             catch {
                 client = null;
@@ -45,13 +43,13 @@ namespace DetectCCD {
             return -2;
         }
 
-        public static event Func<bool, bool, double, double, int, int> _func_in_8k;
-        public int _in_8k_return_4k(bool isfront, bool isinner, double start, double end, int ea) {
+        public static event Func<bool, bool, double, double, int, int> _func_in_8k_getDefectCount;
+        public int _in_8k_return_4k_getDefectCount(bool isfront, bool isinner, double start, double end, int ea) {
 
-            if (_func_in_8k == null)
+            if (_func_in_8k_getDefectCount == null)
                 return -3; //Master未关联
 
-            try { return _func_in_8k(isfront, isinner, start, end, ea); }
+            try { return _func_in_8k_getDefectCount(isfront, isinner, start, end, ea); }
             catch { }
             return -4; //Master函数有问题
         }
