@@ -330,6 +330,12 @@ namespace DetectCCD {
             });
         }
         private void rtMergeTabChart_Click(object sender, EventArgs e) {
+            viewerInit(x => {
+                ViewerChart.InitMergeTabChart(this, record.InnerViewerImage, record.OuterViewerImage);
+            },
+            x => {
+                ViewerChart.SyncMergeTabChart(this, record.InnerDetect, record.OuterDetect, 0);
+            });
         }
 
         private void timer1_Tick(object sender, EventArgs e) {

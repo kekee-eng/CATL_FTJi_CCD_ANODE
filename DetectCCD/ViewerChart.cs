@@ -179,7 +179,7 @@ namespace DetectCCD {
             chart.GraphPane.CurveList.Add(curve);
 
         }
-        public void chartEvent(ZedGraphControl chart, Action<int> backcall) {
+        static void chartEvent(ZedGraphControl chart, Action<int> backcall) {
 
             if (chart.Tag == null) {
                 chart.Tag = -1;
@@ -204,6 +204,60 @@ namespace DetectCCD {
             chart.GraphPane.XAxis.Scale.Max = id;
             chart.GraphPane.XAxis.Scale.Min = id - range;
 
+        }
+        static void chartSelect(Control parent, int select) {
+
+            //绘制对象
+            var chart = parentGetChart(parent);
+            var g = chart.GraphPane;
+
+            //显示对象
+            for (int i = 0; i < g.CurveList.Count; i++) {
+                g.CurveList[i].IsVisible = (i == select);
+            }
+
+            double min, max, step;
+            if (select == 0) {
+                min = Static.Param.TabWidthMin;
+                max = Static.Param.TabWidthMax;
+                step = Static.Param.TabWidthStep;
+            }
+            else if (select == 1) {
+                min = Static.Param.TabHeightMin;
+                max = Static.Param.TabHeightMax;
+                step = Static.Param.TabHeightStep;
+            }
+            else if (select == 2) {
+                min = Static.Param.TabDistMin;
+                max = Static.Param.TabDistMax;
+                step = Static.Param.TabDistStep;
+            }
+            else if (select == 3) {
+                min = Static.Param.TabDistDiffMin;
+                max = Static.Param.TabDistDiffMax;
+                step = Static.Param.TabDistDiffStep;
+            }
+            else {
+                return;
+            }
+
+            //上下限
+            g.YAxis.Scale.Min = min;
+            g.YAxis.Scale.Max = max;
+            g.YAxis.Scale.MajorStep = step;
+
+            //
+            chart.GraphPane.AxisChange();
+            chart.Refresh();
+
+        }
+        static double chartInRange(ZedGraphControl chart, double pos) {
+
+            var g = chart.GraphPane;
+            pos = Math.Max(pos, g.YAxis.Scale.Min);
+            pos = Math.Min(pos, g.YAxis.Scale.Max);
+
+            return pos;
         }
 
         //极耳表格
@@ -447,10 +501,10 @@ namespace DetectCCD {
             var g = chart.GraphPane;
 
             //
-            g.CurveList[0].AddPoint(dt.ID, dt.ValWidth);
-            g.CurveList[1].AddPoint(dt.ID, dt.ValHeight);
-            g.CurveList[2].AddPoint(dt.ID, dt.ValDist);
-            g.CurveList[3].AddPoint(dt.ID, dt.ValDistDiff);
+            g.CurveList[0].AddPoint(dt.ID, chartInRange(chart, dt.ValWidth));
+            g.CurveList[1].AddPoint(dt.ID, chartInRange(chart, dt.ValHeight));
+            g.CurveList[2].AddPoint(dt.ID, chartInRange(chart, dt.ValDist));
+            g.CurveList[3].AddPoint(dt.ID, chartInRange(chart, dt.ValDistDiff));
 
         }
         public void InitTabChart(Control parent) {
@@ -464,52 +518,6 @@ namespace DetectCCD {
 
             //
             chartEvent(chart, ImageViewer.MoveToTAB);
-        }
-        public void SelectTabChart(Control parent, int select) {
-
-            //绘制对象
-            var chart = parentGetChart(parent);
-            var g = chart.GraphPane;
-
-            //显示对象
-            for (int i = 0; i < g.CurveList.Count; i++) {
-                g.CurveList[i].IsVisible = (i == select);
-            }
-
-            double min, max, step;
-            if (select == 0) {
-                min = Static.Param.TabWidthMin;
-                max = Static.Param.TabWidthMax;
-                step = Static.Param.TabWidthStep;
-            }
-            else if (select == 1) {
-                min = Static.Param.TabHeightMin;
-                max = Static.Param.TabHeightMax;
-                step = Static.Param.TabHeightStep;
-            }
-            else if (select == 2) {
-                min = Static.Param.TabDistMin;
-                max = Static.Param.TabDistMax;
-                step = Static.Param.TabDistStep;
-            }
-            else if (select == 3) {
-                min = Static.Param.TabDistDiffMin;
-                max = Static.Param.TabDistDiffMax;
-                step = Static.Param.TabDistDiffStep;
-            }
-            else {
-                return;
-            }
-
-            //上下限
-            g.YAxis.Scale.Min = min;
-            g.YAxis.Scale.Max = max;
-            g.YAxis.Scale.MajorStep = step;
-
-            //
-            chart.GraphPane.AxisChange();
-            chart.Refresh();
-
         }
         public void SyncTabChart(Control parent) {
 
@@ -536,11 +544,11 @@ namespace DetectCCD {
             }
         }
         public void SyncTabChart(Control parent, int select) {
+            chartSelect(parent, select);
             SyncTabChart(parent);
-            SelectTabChart(parent, select);
         }
 
-        //UnTest
+        //两边同步宽度表格
         static void addMergeTabGrid(DataGridView grid, DataTab dtInner, DataTab dtOuter) {
 
             //
@@ -616,33 +624,94 @@ namespace DetectCCD {
 
         }
 
-        static void initMergeTabChart(ZedGraphControl chart) {
-
-            //
-            //chartInit(chart);
-            chartAdd(chart, "内侧极宽", Color.Blue, true);
-            chartAdd(chart, "外侧极宽", Color.Green, true);
-
-        }
+        //两边同步宽度曲线图
         static void addMergeTabChart(ZedGraphControl chart, DataTab dtInside, DataTab dtOutside) {
 
             //绘制对象
             var g = chart.GraphPane;
 
             //
-            g.CurveList[0].AddPoint(dtInside.ID, dtInside.ValWidth);
-            g.CurveList[1].AddPoint(dtInside.ID, dtOutside.ValWidth);
+            double val1 = dtInside.ValWidth;
+            double val2 = dtOutside.ValWidth;
+
+            //显示修正
+            if (val1 == 0 || val2 == 0) {
+                val1 = g.YAxis.Scale.Min;
+                val2 = g.YAxis.Scale.Max;
+            }
+
+            //
+            g.CurveList[0].AddPoint(dtInside.ID, chartInRange(chart, val1));
+            g.CurveList[1].AddPoint(dtInside.ID, chartInRange(chart, val2));
 
         }
-        static void setMergeTabChart(ZedGraphControl chart, double min, double max, double step) {
+        public static void InitMergeTabChart(Control parent, ViewerImage viewInner, ViewerImage viewOuter) {
+
+            //
+            var chart = parentInitChart(parent);
+            chartAdd(chart, "内侧极宽", Color.Blue, true);
+            chartAdd(chart, "外侧极宽", Color.Green, true);
+
+            //
+            chartEvent(chart, viewInner.MoveToTAB);
+            chartEvent(chart, viewOuter.MoveToTAB);
+        }
+        public static void SelectMergeTabChart(Control parent, double min, double max, double step) {
 
             //绘制对象
+            var chart = parentInitChart(parent);
             var g = chart.GraphPane;
 
             //上下限
             g.YAxis.Scale.Min = min;
             g.YAxis.Scale.Max = max;
             g.YAxis.Scale.MajorStep = step;
+
+            //
+            chart.GraphPane.AxisChange();
+            chart.Refresh();
+
+        }
+        public static void SyncMergeTabChart(Control parent, EntryDetect detInner, EntryDetect detOuter) {
+
+            //
+            var chart = parentGetChart(parent);
+
+            int numShow = chart.GraphPane.CurveList[0].Points.Count;
+            int numExist = Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count);
+
+            if (numShow < numExist - 1) {
+                for (int i = numShow; i < numExist - 1; i++)
+                    addMergeTabChart(chart, detInner.Tabs[i], detOuter.Tabs[i]);
+
+                chartMoveTo(chart, numExist - 1);
+            }
+
+            if (numShow > numExist) {
+                chart.GraphPane.CurveList[0].Clear();
+                chart.GraphPane.CurveList[1].Clear();
+
+                chart.Refresh();
+            }
+
+        }
+        public static void SyncMergeTabChart(Control parent, EntryDetect detInner, EntryDetect detOuter, int select) {
+
+            //绘制对象
+            var chart = parentGetChart(parent);
+            var g = chart.GraphPane;
+            
+            //上下限
+            g.YAxis.Scale.Min = Static.Param.TabWidthMin;
+            g.YAxis.Scale.Max = Static.Param.TabWidthMax;
+            g.YAxis.Scale.MajorStep = Static.Param.TabWidthStep;
+
+            //
+            chart.GraphPane.AxisChange();
+            chart.Refresh();
+
+            //
+            SyncMergeTabChart(parent, detInner, detOuter);
 
         }
 
