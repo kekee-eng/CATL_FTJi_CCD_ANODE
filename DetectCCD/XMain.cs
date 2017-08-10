@@ -499,8 +499,19 @@ namespace DetectCCD {
                 }
             };
             RemoteDefectCount.InitServer();
+
         }
 
+        private void simpleButton2_Click(object sender, EventArgs e) {
+            RemoteDefectCount.InitClient();
+        }
+
+        private void simpleButton3_Click(object sender, EventArgs e) {
+            
+            var s = RemoteDefectCount.GetExtDefectCountRemote(true,true, 0, 10, 3);
+
+            MessageBox.Show(s.ToString());
+        }
     }
 
 }

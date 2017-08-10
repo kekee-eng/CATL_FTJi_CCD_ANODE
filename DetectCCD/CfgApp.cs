@@ -15,7 +15,7 @@ namespace DetectCCD {
         //
         public bool IsRemoteServer = true;
         public string RemoteHost = "localhost";
-        public int RemotePort = 6600;
+        public int RemotePort = 6500;
         public double RemoteInnerOffset = 0;
         public double RemoteOuterOffset = 0;
         public double FixOuterOffset = 34;
@@ -27,8 +27,8 @@ namespace DetectCCD {
         public bool ModeByCamera { get { return Mode != 1; } }
 
         //相机源：真实相机、Zip文件、文件夹、数据库
-        public bool CameraByRealtime = true;
-        public bool CameraByZipFile = false;
+        public bool CameraByRealtime = false;
+        public bool CameraByZipFile = true;
         public bool CameraByFolder = false;
         public bool CameraByDB = false;
 

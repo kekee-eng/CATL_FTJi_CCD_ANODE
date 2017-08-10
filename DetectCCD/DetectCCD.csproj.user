@@ -5,7 +5,7 @@
     <RemoteDebugMachine>192.168.1.12</RemoteDebugMachine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <RemoteDebugEnabled>true</RemoteDebugEnabled>
+    <RemoteDebugEnabled>false</RemoteDebugEnabled>
     <RemoteDebugMachine>192.168.1.11</RemoteDebugMachine>
   </PropertyGroup>
 </Project>

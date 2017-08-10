@@ -15,9 +15,8 @@ namespace DetectCCD {
             this.db = parent;
             this.tname = tableName;
             this.grab = grab;
-
-            //
-            this.extDefects = new RemoteDefectCount(isInner);
+            this.isinner = isInner;
+            
         }
 
         public void Dispose() {
@@ -78,10 +77,8 @@ CfgParam        BLOB
         EntryGrab grab;
         TemplateDB db;
         string tname;
-
-        RemoteDefectCount extDefects;
-
-
+        bool isinner;
+        
         public double Fx { get { return grab.Fx; } }
         public double Fy { get { return grab.Fy; } }
 
@@ -135,8 +132,8 @@ CfgParam        BLOB
                         }
 
                         obj.DefectCountLocal = Defects.Count(x => x.EA == id);
-                        obj.DefectCountFront = extDefects.GetExtDefectCount(true, start, end, id);
-                        obj.DefectCountBack = extDefects.GetExtDefectCount(false, start, end, id);
+                        obj.DefectCountFront = RemoteDefectCount.GetExtDefectCountRemote(true, isinner, start, end, id);
+                        obj.DefectCountBack = RemoteDefectCount.GetExtDefectCountRemote(false,isinner, start, end, id);
                         obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
                         objs.Add(obj);
                     }

@@ -10,32 +10,13 @@ using System.Threading.Tasks;
 namespace DetectCCD {
     public class RemoteDefectCount : MarshalByRefObject {
 
-        public RemoteDefectCount(bool isInner) {
+        static RemoteDefectCount client;
+        public static int GetExtDefectCountRemote(bool isFront, bool isInner, double start, double end, int ea) {
 
-            this.callFromInner = isInner;
-        }
+            int count = -1;
+            Static.SafeRun(() => count= client._master_defect_count(isFront, isInner, start, end, ea));
+            return count;
 
-        RemoteDefectCount client;
-        bool callFromInner;
-
-        public int GetExtDefectCount(bool isFront, double start, double end, int ea) {
-
-            try {
-                if (client == null)
-                    ChannelServices.RegisterChannel(new TcpClientChannel(), false);
-                client = (RemoteDefectCount)Activator.GetObject(
-                    typeof(RemoteDefectCount),
-                    string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
-
-            }
-            catch {
-                client = null;
-                return -1; //无连接
-            }
-
-            try { return client.GetMasterDefectCounr(isFront, callFromInner, start, end, ea); }
-            catch {  }
-            return -2; //掉线
         }
 
         public static void InitServer() {
@@ -48,17 +29,29 @@ namespace DetectCCD {
                 WellKnownObjectMode.SingleCall);
 
         }
-        public static event Func<bool, bool, double, double, int, int> DefectCountProvider;
-        int GetMasterDefectCounr(bool isfront, bool isinner, double start, double end, int ea) {
+        public static void InitClient() {
+            ChannelServices.RegisterChannel(new TcpClientChannel(), false);
+        }
+        public static void ConnectClient() {
 
-            if (DefectCountProvider == null)
-                return -3; //Master未关联
+            Static.SafeRun(() => {
+                client = (RemoteDefectCount)Activator.GetObject(
+                    typeof(RemoteDefectCount),
+                    string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
+            });
 
-            try { return DefectCountProvider(isfront, isinner, start, end, ea); }
-            catch {}
-            return -4; //Master函数有问题
         }
 
+        public static event Func<bool, bool, double, double, int, int> DefectCountProvider;
+        public int _master_defect_count(bool isfront, bool isinner, double start, double end, int ea) {
+
+            if (DefectCountProvider == null)
+                return -2; //Master未关联
+
+            try { return DefectCountProvider(isfront, isinner, start, end, ea); }
+            catch { }
+            return -3; //Master函数有问题
+        }
 
     }
 }

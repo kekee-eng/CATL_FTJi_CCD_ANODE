@@ -101,7 +101,6 @@
     <Compile Include="CfgParam.cs" />
     <Compile Include="CameraRealtime.cs" />
     <Compile Include="RemoteDefectCount.cs" />
-    <Compile Include="ZZConnectCamera_Realtime.cs" />
     <Compile Include="CameraZipFile.cs" />
     <Compile Include="DataDefect.cs" />
     <Compile Include="DataEA.cs" />
