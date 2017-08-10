@@ -32,12 +32,10 @@ namespace DetectCCD {
             initRightMenu(hwindow);
 
         }
-
-        //
+        
         public EntryGrab Grab;
         public EntryDetect Detect;
-
-        //
+        
         public HImage Image;
         public HWindowControl Box;
         public HWindow g;
@@ -158,8 +156,7 @@ namespace DetectCCD {
                 }
             });
         }
-
-        //
+        
         void initRightMenu(HWindowControl hwindow) {
 
             //
@@ -697,6 +694,23 @@ namespace DetectCCD {
                     var lab = Detect.Labels[i];
                     if (lab.InRange(frameStart, frameEnd)) {
                         countLabel++;
+                        
+                        //EA头部显示
+                        g.SetDraw("margin");
+                        g.SetColor("orange");
+                        g.SetLineWidth(1);
+                        g.SetLineStyle(new HTuple(new int[] { 5, 3 }));
+                        
+                        g.DispRectangle1(
+                            getPixRow(lab.Y - lab.H / 2),
+                            getPixCol(lab.X - lab.W / 2),
+                            getPixRow(lab.Y + lab.H / 2),
+                            getPixCol(lab.X + lab.W / 2));
+                        
+                        g.SetLineStyle(new HTuple());
+
+                        g.SetTposition((int)getPixRow(lab.Y - lab.H / 2), (int)getPixCol(lab.X - lab.W / 2));
+                        g.WriteString(string.Format("LAB[{0}]", i));
 
                     }
                 }
@@ -758,11 +772,9 @@ namespace DetectCCD {
             if (y2 < bh) g.ClearRectangle(y2, 0, bh, bw);
 
         }
-
-        //
+        
         ToolStripMenuItem rtEnableUser;
-
-        //
+        
         bool showImageStatic = false;
         bool showImageDynamic = false;
 

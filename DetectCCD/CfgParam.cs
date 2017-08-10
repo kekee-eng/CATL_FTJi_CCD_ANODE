@@ -46,7 +46,10 @@ namespace DetectCCD {
         public int CheckDefectCount = 0;
 
         //
-        public double LabelEADistance = -200;
+        public double LabelY_EA = -200;
+        public double LabelX_EA = 50;
+        public double LabelShowW = 20;
+        public double LabelShowH = 20;
 
     }
 }

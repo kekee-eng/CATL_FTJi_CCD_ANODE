@@ -97,6 +97,10 @@ CfgParam        BLOB
         }
         public DataEA GetEA(int id) {
 
+            var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
+            if (curEaTab == null)
+                return null;
+
             DataEA obj = new DataEA();
             obj.EA = id;
             obj.TabCount = Tabs.Count(x => x.EA == id);
@@ -107,10 +111,6 @@ CfgParam        BLOB
             obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > Static.Param.CheckTabWidthCount;
             obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > Static.Param.CheckTabHeightCount;
             obj.IsTabDistFailCountFail = obj.TabDistFailCount > Static.Param.CheckTabDistCount;
-
-            var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
-            if (curEaTab == null)
-                throw new Exception("DetectResult: GetEA");
 
             obj.EAX = curEaTab.MarkX;
             obj.EAY = curEaTab.MarkY;
@@ -147,7 +147,7 @@ CfgParam        BLOB
             }
         }
 
-        public event Action<int> OnNewEA;
+        public event Action<DataEA> OnNewEA;
 
         int defectFrameCount = 0;
         public bool TryDetect(DataGrab obj) {
@@ -346,13 +346,7 @@ CfgParam        BLOB
                         data.MarkX_P = cx[1] / w;
                         data.MarkY_P = cfy1 + cy[1] / h;
                     }
-
-                    //
-                    adjustER();
-                    OnNewEA?.Invoke(Tabs.Select(x => x.EA).Max() - 1);
-
-                    //添加标签
-
+                    
                 }
             }
 
@@ -360,6 +354,28 @@ CfgParam        BLOB
             Tabs.Add(data);
             adjustER();
             adjustDefect();
+
+            //
+            if (data.IsNewEA) {
+                //
+                int id = data.EA - 1;
+                var objea = GetEA(id);
+
+                if (objea != null) {
+                    OnNewEA?.Invoke(objea);
+
+                    //添加标签
+                    if (objea.IsFail) {
+                        Labels.Add(new DataLabel() {
+                            X = Static.Param.LabelX_EA / Fx,
+                            Y = objea.EAY + Static.Param.LabelY_EA / Fy,
+                            W = Static.Param.LabelShowW / Fx,
+                            H = Static.Param.LabelShowH / Fy
+                        });
+                    }
+                }
+            }
+
             return true;
 
         }

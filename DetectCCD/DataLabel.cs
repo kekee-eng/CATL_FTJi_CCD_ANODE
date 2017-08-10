@@ -11,10 +11,15 @@ namespace DetectCCD {
 
         public double X;
         public double Y;
+        public double W;
+        public double H;
 
         //
         public bool InRange(double start, double end) {
             var list = new double[] { Y - 0.5, Y + 0.5 }.TakeWhile(x => x > 0);
+            if (list.Count() == 0)
+                return false;
+
             double min = list.Min();
             double max = list.Max();
 

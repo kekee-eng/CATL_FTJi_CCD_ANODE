@@ -62,6 +62,9 @@ namespace DetectCCD {
                 return false;
 
             var list = new double[] { TabY1, TabY2, TabY1_P, TabY2_P, WidthY1, WidthY2, MarkY, MarkY_P }.TakeWhile(x => x > 0);
+            if (list.Count() == 0)
+                return false;
+            
             double min = list.Min();
             double max = list.Max();
 
