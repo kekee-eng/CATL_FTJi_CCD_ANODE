@@ -158,7 +158,7 @@ namespace DetectCCD {
                         try {
                             setValueFromField(field, tb.Text);
                             m_provider.SetError(tb, "");
-                            tb.BackColor = Color.DarkCyan;
+                            tb.BackColor = Color.LightGreen;
 
                             //Fix
                             OnValueChanged?.Invoke();

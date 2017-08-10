@@ -531,18 +531,23 @@ CfgParam        BLOB
 
                         var objea = GetEA(ea - 1);
                         if (objea != null) {
-                            OnNewEA?.Invoke(objea);
 
                             //添加标签
                             if (objea.IsFail) {
-                                Labels.Add(new DataLabel() {
+                                var lab =new DataLabel() {
                                     EA = ea - 1,
                                     X = Tabs[i].MarkX,
                                     Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
                                     W = Static.Param.LabelShowW / Fx,
                                     H = Static.Param.LabelShowH / Fy
-                                });
+                                };
+                                lab.Encoder = grab.GetEncoder(lab.Y);
+
+                                Labels.Add(lab);
                             }
+
+                            //
+                            OnNewEA?.Invoke(objea);
                         }
                     }
                 }

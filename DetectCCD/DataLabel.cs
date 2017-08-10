@@ -16,6 +16,8 @@ namespace DetectCCD {
         public double W;
         public double H;
 
+        public bool IsSend = false;
+
         //
         public bool InRange(double start, double end) {
             var list = new double[] { Y - 0.5, Y + 0.5 }.TakeWhile(x => x > 0);

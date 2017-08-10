@@ -95,10 +95,11 @@ namespace DetectCCD {
                         m_datas[data.Frame] = data;
                     }
                 }
-                
-                //
-                isOpen = true;
 
+                if (m_datas.Count == 0)
+                    throw new Exception("当前离线压缩包中无数据！");
+
+                isOpen = true;
             });
         }
         DataGrab prepareImage() {
@@ -145,9 +146,14 @@ namespace DetectCCD {
 
                 //
                 UtilTool.Image.CopyMemory(dst, src, w * h);
+
+                //
+                m_encoder += bmp.Height;
             }
 
+
             //
+            outdata.Encoder = m_encoder;
             outdata.IsCreated = true;
             return outdata;
         }
@@ -227,6 +233,7 @@ namespace DetectCCD {
         public override void Reset() {
             if (!isGrabbing) {
                 m_frame = m_frameStart;
+                m_encoder = 0;
             }
         }
         public override void Dispose() {

@@ -256,13 +256,16 @@ Image           BLOB
 
             public DataGrab GetFirstUnDetect() {
 
-                for(int i = Min; i < Max; i++) {
+                int min = Min;
+                int max = Max;
+                for(int i = min; i < max; i++) {
                     var obj = this[i];
                     if (obj !=null && !obj.IsDetect)
                         return obj;
                 }
                 return null;
             }
+
         }
         
     }
