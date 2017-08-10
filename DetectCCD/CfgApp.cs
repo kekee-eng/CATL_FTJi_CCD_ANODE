@@ -30,7 +30,6 @@ namespace DetectCCD {
         public int CameraFrameStart = 1;
 
         //
-        public bool IsRemoteServer = true;
         public string RemoteHost = "localhost";
         public int RemotePort = 6500;
         public double RemoteInnerOffset = 0;

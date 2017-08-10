@@ -100,7 +100,7 @@
     <Compile Include="CfgApp.cs" />
     <Compile Include="CfgParam.cs" />
     <Compile Include="CameraRealtime.cs" />
-    <Compile Include="RemoteDefectCount.cs" />
+    <Compile Include="RemoteDefect.cs" />
     <Compile Include="CameraZipFile.cs" />
     <Compile Include="DataDefect.cs" />
     <Compile Include="DataEA.cs" />

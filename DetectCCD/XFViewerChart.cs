@@ -85,8 +85,9 @@ namespace DetectCCD {
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Caption"] = () => device.InnerCamera.Caption;
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.Name;
-            monitor["Inner_Grab_IsReady"] = () => device.InnerCamera.isOpen;
+            monitor["Inner_Grab_IsOpen"] = () => device.InnerCamera.isOpen;
             monitor["Inner_Grab_IsRun"] = () => device.InnerCamera.isGrabbing;
+            monitor["Inner_Grab_Encoder"] = () => device.InnerCamera.callGetEncoder();
             monitor["Inner_Grab_Frame"] = () => device.InnerCamera.m_frame;
             monitor["Inner_Grab_FrameStart"] = () => device.InnerCamera.m_frameStart;
             monitor["Inner_Grab_FrameMin"] = () => device.InnerCamera.Min;
@@ -175,8 +176,9 @@ namespace DetectCCD {
             monitor["Outer_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Outer_Grab_Caption"] = () => device.OuterCamera.Caption;
             monitor["Outer_Grab_Name"] = () => device.OuterCamera.Name;
-            monitor["Outer_Grab_IsReady"] = () => device.OuterCamera.isOpen;
+            monitor["Outer_Grab_IsOpen"] = () => device.OuterCamera.isOpen;
             monitor["Outer_Grab_IsRun"] = () => device.OuterCamera.isGrabbing;
+            monitor["Outer_Grab_Encoder"] = () => device.OuterCamera.callGetEncoder();
             monitor["Outer_Grab_Frame"] = () => device.OuterCamera.m_frame;
             monitor["Outer_Grab_FrameStart"] = () => device.OuterCamera.m_frameStart;
             monitor["Outer_Grab_FrameMin"] = () => device.OuterCamera.Min;

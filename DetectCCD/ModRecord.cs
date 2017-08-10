@@ -49,12 +49,7 @@ namespace DetectCCD {
             OuterDetect = new EntryDetect(this, "OuterDetect", OuterGrab, false);
             OuterViewerImage = new ViewerImage(OuterGrab, OuterDetect);
             OuterViewerChart = new ViewerChart(OuterGrab, OuterDetect, OuterViewerImage);
-
-            //
-            if (Static.App.IsRemoteServer) {
-
-            }
-
+            
         }
 
         public EntryGrab InnerGrab;

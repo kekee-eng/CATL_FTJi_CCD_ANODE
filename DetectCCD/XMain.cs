@@ -82,7 +82,7 @@ namespace DetectCCD {
 
         void init_server() {
             
-            if (Static.App.IsRemoteServer) {
+            if (Static.App.Is8K) {
 
                 RemoteDefect.InitServer();
                 RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) => {
@@ -109,8 +109,14 @@ namespace DetectCCD {
 
             }
             else {
+
+                //4K
                 RemotePLC.InitClient();
                 RemoteDefect.InitClient();
+
+                //
+
+
             }
         }
         void init_device() {
@@ -244,10 +250,10 @@ namespace DetectCCD {
 
             };
             record.InnerDetect.OnNewLabel += obj => {
-
+                RemotePLC.In4KCallPLC_SendLabel(true, obj.Encoder);
             };
             record.OuterDetect.OnNewLabel += obj => {
-
+                RemotePLC.In4KCallPLC_SendLabel(false, obj.Encoder);
             };
 
         }

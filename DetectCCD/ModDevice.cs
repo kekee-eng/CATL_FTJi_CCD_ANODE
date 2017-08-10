@@ -140,6 +140,14 @@ namespace DetectCCD {
             //
             InnerCamera.OnImageReady += EventInnerCamera;
             OuterCamera.OnImageReady += EventOuterCamera;
+
+
+            //
+            if (Static.App.Is4K) {
+                InnerCamera.GetEncoder += () => RemotePLC.In4KCallPLC_GetEncoder(true);
+                OuterCamera.GetEncoder += () => RemotePLC.In4KCallPLC_GetEncoder(false);
+            }
+
         }
         public void Dispose() {
             
