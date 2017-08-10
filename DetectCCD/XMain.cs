@@ -85,7 +85,7 @@ namespace DetectCCD {
             if (Static.App.IsRemoteServer) {
 
                 RemoteDefectCount.InitServer();
-                RemoteDefectCount.DefectCountProvider += (isFront, isInner, start, end, id) => {
+                RemoteDefectCount._func_in_8k += (isFront, isInner, start, end, id) => {
 
                     if (isInner) {
                         start += Static.App.RemoteInnerOffset;

@@ -126,8 +126,8 @@ CfgParam        BLOB
             }
 
             obj.DefectCountLocal = AllocAndGetDefectCount(start, end, id);
-            obj.DefectCountFront = RemoteDefectCount.GetExtDefectCountRemote(true, isinner, start, end, id);
-            obj.DefectCountBack = RemoteDefectCount.GetExtDefectCountRemote(false, isinner, start, end, id);
+            obj.DefectCountFront = RemoteDefectCount.GetIn4KCall8K(true, isinner, start, end, id);
+            obj.DefectCountBack = RemoteDefectCount.GetIn4KCall8K(false, isinner, start, end, id);
             obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
 
             return obj;
@@ -526,28 +526,32 @@ CfgParam        BLOB
                     ea++;
                     er = 1;
 
-                    //贴标签
-                    if (Labels.Find(x => x.EA == ea - 1) == null) {
+                    var objEA = GetEA(ea - 1);
+                    if (objEA != null) {
 
-                        var objea = GetEA(ea - 1);
-                        if (objea != null) {
+                        //贴标签
+                        if (Labels.Find(x => x.EA == ea - 1) == null) {
 
                             //添加标签
-                            if (objea.IsFail) {
-                                var lab =new DataLabel() {
+                            if (objEA.IsFail) {
+                                var objLab =new DataLabel() {
                                     EA = ea - 1,
                                     X = Tabs[i].MarkX,
                                     Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
                                     W = Static.Param.LabelShowW / Fx,
                                     H = Static.Param.LabelShowH / Fy
                                 };
-                                lab.Encoder = grab.GetEncoder(lab.Y);
+                                objLab.Encoder = grab.GetEncoder(objLab.Y);
 
-                                Labels.Add(lab);
+                                Labels.Add(objLab);
+                                OnNewLabel?.Invoke(objLab);
                             }
+                        }
 
-                            //
-                            OnNewEA?.Invoke(objea);
+                        //
+                        if (!Tabs[i].IsNewEACallBack) {
+                            Tabs[i].IsNewEACallBack = true;
+                            OnNewEA?.Invoke(objEA);
                         }
                     }
                 }

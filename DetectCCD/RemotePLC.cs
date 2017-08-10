@@ -37,7 +37,7 @@ namespace DetectCCD {
                 if (client == null)
                     return -1;
 
-                return client._master_defect_count(isFront, isInner, start, end, ea);
+                return client._in_8k_return_4k(isFront, isInner, start, end, ea);
             }
             catch {
                 client = null;

@@ -51,7 +51,10 @@ namespace DetectCCD {
         public bool IsNewEA = false; //EA起始
         public bool IsSync = false; //已同步
         public bool IsFix = false; //补测
-        
+
+        //
+        public bool IsNewEACallBack = false; //已触发回调
+
         //
         public bool IsFail { get { return IsWidthFail || IsDistFail || IsDistDiffFail || IsHeightFail; } }
         
