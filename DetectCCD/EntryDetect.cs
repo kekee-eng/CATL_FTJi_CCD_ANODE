@@ -154,6 +154,82 @@ CfgParam        BLOB
 
             return tryDetect(obj);
         }
+        public void Sync(EntryDetect partner) {
+
+            // diff = this - partner
+            // this = partner + diff
+            // partner = this - diff
+            var diffFrame = Static.App.FixOuterOrBackOffset;
+
+            //需要同步的对象
+            var myER = Tabs.Last();
+            if (myER.IsSync)
+                return;
+
+            //尝试找到对应项
+            var bindER = partner.findBind(myER.TabY1 - diffFrame);
+            if (bindER == null) {
+
+                //未找到：对方补测一个宽度
+                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
+            }
+
+            //找到：标记已同步
+            myER.IsSync = true;
+            bindER.IsSync = true;
+
+            //同步EA头
+            if (myER.IsNewEA || bindER.IsNewEA) {
+                myER.IsNewEA = true;
+                bindER.IsNewEA = true;
+
+                if (myER.MarkX == 0 && bindER.MarkX != 0) {
+                    myER.MarkX = bindER.MarkX;
+                    myER.MarkY = bindER.MarkY + diffFrame;
+                }
+
+                if (myER.MarkX != 0 && bindER.MarkX == 0) {
+                    bindER.MarkX = myER.MarkX;
+                    bindER.MarkY = myER.MarkY - diffFrame;
+                }
+            }
+
+            //查看我方是否有漏测
+            do {
+                var missER = partner.Tabs.Find(x => !x.IsSync && x.TabY1 < bindER.TabY1);
+                if (missER == null)
+                    break;
+
+                //补测宽度
+                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
+
+                //标记同步
+                missER.IsSync = true;
+
+                //同步EA头
+                if (missER.IsNewEA || myMissER.IsNewEA) {
+                    missER.IsNewEA = true;
+                    myMissER.IsNewEA = true;
+
+                    if (missER.MarkX == 0 && myMissER.MarkX != 0) {
+                        missER.MarkX = myMissER.MarkX;
+                        missER.MarkY = myMissER.MarkY - diffFrame;
+                    }
+
+                    if (missER.MarkX != 0 && bindER.MarkX == 0) {
+                        myMissER.MarkX = missER.MarkX;
+                        myMissER.MarkY = missER.MarkY + diffFrame;
+                    }
+                }
+
+            } while (true);
+
+            //重置序号
+            adjustER();
+            partner.adjustER();
+
+        }
+        
         bool tryDetect(DataGrab obj) {
 
             //
@@ -355,32 +431,72 @@ CfgParam        BLOB
             adjustER();
             adjustDefect();
 
-            //
-            if (data.IsNewEA) {
-                //
-                int id = data.EA - 1;
-                var objea = GetEA(id);
-
-                if (objea != null) {
-                    OnNewEA?.Invoke(objea);
-
-                    //添加标签
-                    if (objea.IsFail) {
-                        Labels.Add(new DataLabel() {
-                            EA = id,
-                            X = data.MarkX_P,
-                            Y = data.MarkY + Static.Param.LabelY_EA / Fy,
-                            W = Static.Param.LabelShowW / Fx,
-                            H = Static.Param.LabelShowH / Fy
-                        });
-                    }
-                }
-            }
-
             return true;
 
         }
+        DataTab findBind(double frame) {
+            return Tabs.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Param.TabMergeDistance);
+        }
+        DataTab fixER(double x, double y1, double y2) {
 
+            int w = grab.Width;
+            int h = grab.Height;
+
+            DataTab data = new DataTab();
+            data.TabX = x;
+            data.TabY1 = y1;
+            data.TabY2 = y1;
+            data.HasTwoMark = false;
+
+            if (Static.App.DetectWidth) {
+                //宽度检测
+                double[] bx1, bx2;
+                double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
+                double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
+
+                var bimage = grab.GetImage(bfy1, bfy2);
+                if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
+                    data.WidthY1 = bfy1;
+                    data.WidthY2 = bfy2;
+                    data.WidthX1 = bx1[0] / w;
+                    data.WidthX2 = bx2[0] / w;
+                }
+            }
+
+            if (Static.App.DetectMark) {
+
+                //EA头部Mark检测
+                double[] cx, cy;
+                double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
+                double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
+
+                //
+                data.MarkImageStart = cfy1;
+                data.MarkImageEnd = cfy2;
+
+                var cimage = grab.GetImage(cfy1, cfy2);
+                if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+
+                    //将最后一个极耳放到下个EA中
+                    data.IsNewEA = true;
+                    data.MarkX = data.MarkX_P = cx[0] / w;
+                    data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+
+                    if (cx.Length == 2 && cy.Length == 2) {
+                        data.HasTwoMark = true;
+                        data.MarkX_P = cx[1] / w;
+                        data.MarkY_P = cfy1 + cy[1] / h;
+                    }
+
+                }
+            }
+            
+            data.IsFix = true;
+            data.IsSync = true;
+
+            Tabs.Add(data);
+            return data;
+        }
         void adjustDefect() {
 
             //去除与Mark点重合的瑕疵
@@ -409,6 +525,26 @@ CfgParam        BLOB
                 if (Tabs[i].IsNewEA) {
                     ea++;
                     er = 1;
+
+                    //贴标签
+                    if (Labels.Find(x => x.EA == ea - 1) == null) {
+
+                        var objea = GetEA(ea - 1);
+                        if (objea != null) {
+                            OnNewEA?.Invoke(objea);
+
+                            //添加标签
+                            if (objea.IsFail) {
+                                Labels.Add(new DataLabel() {
+                                    EA = ea - 1,
+                                    X = Tabs[i].MarkX,
+                                    Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
+                                    W = Static.Param.LabelShowW / Fx,
+                                    H = Static.Param.LabelShowH / Fy
+                                });
+                            }
+                        }
+                    }
                 }
                 else {
                     er++;

@@ -19,7 +19,7 @@ namespace DetectCCD {
         public double TabWidthEnd = -135;
 
         //极耳距离小于此值的，合并成一个极耳
-        public double TabMergeDistance = 50;
+        public double TabMergeDistance = 60;
 
         //上下限及步距
         public double TabWidthMin = 75;

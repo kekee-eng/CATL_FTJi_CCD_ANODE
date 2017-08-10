@@ -166,7 +166,7 @@ namespace DetectCCD {
 
             //数据
             g.CurveList.Clear();
-            
+
         }
         static void chartAdd(ZedGraphControl chart, string title, Color color, bool visible) {
 
@@ -242,7 +242,7 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "TAB" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" ,Visible =false},
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极片宽度" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳长度" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳间距" },
@@ -440,7 +440,6 @@ namespace DetectCCD {
             }
         }
 
-
         //极耳曲线图
         static void addTabChart(ZedGraphControl chart, DataTab dt) {
 
@@ -452,7 +451,7 @@ namespace DetectCCD {
             g.CurveList[1].AddPoint(dt.ID, dt.ValHeight);
             g.CurveList[2].AddPoint(dt.ID, dt.ValDist);
             g.CurveList[3].AddPoint(dt.ID, dt.ValDistDiff);
-            
+
         }
         public void InitTabChart(Control parent) {
 
@@ -542,10 +541,49 @@ namespace DetectCCD {
         }
 
         //UnTest
-        static void initMergeTabGrid(DataGridView grid) {
+        static void addMergeTabGrid(DataGridView grid, DataTab dtInner, DataTab dtOuter) {
 
             //
-            gridInit(grid);
+            if (dtInner.ID != dtOuter.ID)
+                throw new Exception("AddSyncER: ID sync error.");
+
+            if (dtInner.EA != dtOuter.EA)
+                throw new Exception("AddSyncER: EA sync error.");
+
+            if (dtInner.TAB != dtOuter.TAB)
+                throw new Exception("AddSyncER: ER sync error.");
+
+            //        
+            var newRow = gridAdd(grid,
+                dtInner.ID,
+                dtInner.EA,
+                dtInner.TAB,
+                dtInner.TabY1.ToString("0.000"),
+                dtOuter.TabY1.ToString("0.000"),
+                dtInner.ValWidth.ToString("0.000"),
+                dtOuter.ValWidth.ToString("0.000"),
+                (dtInner.ValWidth + dtOuter.ValWidth).ToString("0.000")
+                );
+            grid.Rows[0].Tag = new object[] { dtInner, dtOuter
+    };
+
+            //
+            gridStyle(newRow,
+                false,
+                false,
+                false,
+                false,
+                false,
+                dtInner.IsWidthFail,
+                dtOuter.IsWidthFail,
+                false
+                );
+
+        }
+        public static void InitMergeTabGrid(Control parent, ViewerImage viewInner, ViewerImage viewOuter) {
+
+            //
+            var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "序号" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
@@ -556,44 +594,25 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "外侧极宽" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "总宽度" }
                 );
-
+            gridEvent(grid, viewInner.MoveToTAB);
+            gridEvent(grid, viewOuter.MoveToTAB);
         }
-        static void addMergeTabGrid(DataGridView grid, DataTab dtInside, DataTab dtOutside) {
+        public static void SyncMergeTabGrid(Control parent, EntryDetect detInner, EntryDetect detOuter) {
 
-            //
-            if (dtInside.ID != dtOutside.ID)
-                throw new Exception("AddSyncER: ID sync error.");
+            var grid = parentGetGrid(parent);
 
-            if (dtInside.EA != dtOutside.EA)
-                throw new Exception("AddSyncER: EA sync error.");
+            if (grid.Rows.Count < Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count)) {
 
-            if (dtInside.TAB != dtOutside.TAB)
-                throw new Exception("AddSyncER: ER sync error.");
+                if (grid.Rows.Count != 0)
+                    grid.Rows.RemoveAt(0);
 
-            //        
-            var newRow = gridAdd(grid,
-                dtInside.ID,
-                dtInside.EA,
-                dtInside.TAB,
-                dtInside.TabY1.ToString("0.000"),
-                dtOutside.TabY1.ToString("0.000"),
-                dtInside.ValWidth.ToString("0.000"),
-                dtOutside.ValWidth.ToString("0.000"),
-                (dtInside.ValWidth + dtOutside.ValWidth).ToString("0.000")
-                );
-            grid.Rows[0].Tag = new object[] { dtInside, dtOutside };
+                for (int i = grid.Rows.Count; i < Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count); i++)
+                    addMergeTabGrid(grid, detInner.Tabs[i], detOuter.Tabs[i]);
+            }
 
-            //
-            gridStyle(newRow,
-                false,
-                false,
-                false,
-                false,
-                false,
-                dtInside.IsWidthFail,
-                dtOutside.IsWidthFail,
-                false
-                );
+            if (grid.Rows.Count > Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count)) {
+                grid.Rows.Clear();
+            }
 
         }
 
@@ -626,7 +645,7 @@ namespace DetectCCD {
             g.YAxis.Scale.MajorStep = step;
 
         }
-        
+
         void demoDebug(Control parent) {
 
             //调试表格

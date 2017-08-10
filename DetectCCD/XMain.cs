@@ -114,7 +114,6 @@ namespace DetectCCD {
                 RemoteDefectCount.ConnectClient();
             }
         }
-
         void init_device() {
 
             record.Init();
@@ -140,7 +139,7 @@ namespace DetectCCD {
                         var obj = record.InnerGrab.Cache.GetFirstUnDetect();
                         if (obj != null) {
                             record.InnerDetect.TryDetect(obj);
-                            record.InnerViewerImage.SetBottomTarget(obj.Frame);
+                            //record.InnerViewerImage.SetBottomTarget(obj.Frame);
                         }
                     });
                 };
@@ -155,8 +154,14 @@ namespace DetectCCD {
 
                         var obj = record.OuterGrab.Cache.GetFirstUnDetect();
                         if (obj != null) {
-                            record.OuterDetect.TryDetect(obj);
+                            if(record.OuterDetect.TryDetect(obj)) {
+
+                                //外侧同步到内侧
+                                record.OuterDetect.Sync(record.InnerDetect);
+
+                            }
                             record.OuterViewerImage.SetBottomTarget(obj.Frame);
+                            record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixOuterOrBackOffset);
                         }
                     });
                 };

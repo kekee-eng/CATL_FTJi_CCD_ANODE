@@ -321,6 +321,17 @@ namespace DetectCCD {
             viewerInit(x => record.OuterViewerChart.InitTabChart(x), x => record.OuterViewerChart.SyncTabChart(x, 3));
         }
 
+        private void rtMergeTab_Click(object sender, EventArgs e) {
+            viewerInit(x => {
+                ViewerChart.InitMergeTabGrid(this, record.InnerViewerImage, record.OuterViewerImage);
+            },
+            x=> {
+                ViewerChart.SyncMergeTabGrid(this, record.InnerDetect, record.OuterDetect);
+            });
+        }
+        private void rtMergeTabChart_Click(object sender, EventArgs e) {
+        }
+
         private void timer1_Tick(object sender, EventArgs e) {
             if (rtReflush.Checked) {
                 bindUpdate?.Invoke(this);

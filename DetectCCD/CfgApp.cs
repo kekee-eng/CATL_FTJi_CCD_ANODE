@@ -35,7 +35,7 @@ namespace DetectCCD {
         public int RemotePort = 6500;
         public double RemoteInnerOffset = 0;
         public double RemoteOuterOffset = 0;
-        public double FixOuterOrBackOffset = 0;
+        public double FixOuterOrBackOffset = 35;
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
         public int Mode = 0;
