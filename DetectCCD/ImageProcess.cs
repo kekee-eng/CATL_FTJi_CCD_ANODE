@@ -32,14 +32,17 @@ namespace DetectCCD {
                 if (m_program == null)
                     m_program = new HDevProgram(Static.PathImageProcess);
 
-                if(Static.App.ImageProcessReload) {
-                    m_program.Dispose();
-                    m_program = new HDevProgram(Static.PathImageProcess);
+                HDevProcedure procedure = new HDevProcedure();
+                if (Static.App.ImageProcessReload) {
+                    lock (m_program) {
+                        m_program.Dispose();
+                        m_program = new HDevProgram(Static.PathImageProcess);
+                        procedure.LoadProcedure(m_program, process);
+                    }
                 }
-                
-                //
-                var procedure = new HDevProcedure();
-                procedure.LoadProcedure(m_program, process);
+                else {
+                    procedure.LoadProcedure(m_program, process);
+                }
 
                 //
                 var call = procedure.CreateCall();

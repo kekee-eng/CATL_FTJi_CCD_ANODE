@@ -137,6 +137,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -392,6 +393,7 @@
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.simpleButton1);
             this.xtraTabPage1.Controls.Add(this.groupControl1);
             this.xtraTabPage1.ImageIndex = 0;
             this.xtraTabPage1.MaxTabPageWidth = 100;
@@ -1173,7 +1175,7 @@
             this.groupTest.Name = "groupTest";
             this.groupTest.Size = new System.Drawing.Size(281, 183);
             this.groupTest.TabIndex = 29;
-            this.groupTest.Text = "测试开关";
+            this.groupTest.Text = "检测开关";
             // 
             // checkDetectDefect
             // 
@@ -1441,6 +1443,15 @@
             this.openFileDialog1.Filter = "配置文件|*.cfg|所有文件|*.*";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
+            // simpleButton1
+            // 
+            this.simpleButton1.Location = new System.Drawing.Point(184, 395);
+            this.simpleButton1.Name = "simpleButton1";
+            this.simpleButton1.Size = new System.Drawing.Size(101, 30);
+            this.simpleButton1.TabIndex = 30;
+            this.simpleButton1.Text = "开Server";
+            this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
+            // 
             // XMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1624,5 +1635,6 @@
         private DevExpress.XtraEditors.CheckEdit checkDetectWidth;
         private DevExpress.XtraEditors.CheckEdit checkDetectTab;
         private DevExpress.XtraEditors.CheckEdit checkDetectDefect;
+        private DevExpress.XtraEditors.SimpleButton simpleButton1;
     }
 }

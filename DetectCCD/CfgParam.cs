@@ -39,10 +39,11 @@ namespace DetectCCD {
         public double TabDistDiffStep = 10;
 
         //计数
-        public int TabCount = 33;
-        public int TabWidthCount = 10;
-        public int TabHeightCount = 0;
-        public int TabDistCount = 0;
+        public int CheckTabCount = 33;
+        public int CheckTabWidthCount = 10;
+        public int CheckTabHeightCount = 0;
+        public int CheckTabDistCount = 0;
+        public int CheckDefectCount = 0;
 
     }
 }

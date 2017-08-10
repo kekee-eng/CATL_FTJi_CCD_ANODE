@@ -10,6 +10,7 @@ namespace DetectCCD {
     public class DataDefect {
 
         public int Type;
+        public int EA;
 
         public double X;
         public double Y;

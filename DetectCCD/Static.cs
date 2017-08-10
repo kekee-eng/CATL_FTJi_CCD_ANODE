@@ -53,7 +53,7 @@ namespace DetectCCD {
             Log.Info("打开应用程序");
 
             //
-            App.select_userid = 0;
+            App.SelectUserId = 0;
 
         }
         public static void Uninit() {

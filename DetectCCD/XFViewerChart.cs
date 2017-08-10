@@ -21,8 +21,8 @@ namespace DetectCCD {
         }
         private void XFViewerChart_FormClosing(object sender, FormClosingEventArgs e) {
 
-            Static.App.Save();
-            Static.Param.Save();
+            //Static.App.Save();
+            //Static.Param.Save();
 
         }
 

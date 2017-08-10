@@ -283,7 +283,10 @@ namespace DetectCCD {
                 dt.TabCount,
                 dt.TabWidthFailCount,
                 dt.TabHeightFailCount,
-                dt.TabDistFailCount
+                dt.TabDistFailCount,
+                dt.DefectCountLocal,
+                dt.DefectCountFront,
+                dt.DefectCountBack
                 );
 
             //
@@ -293,7 +296,10 @@ namespace DetectCCD {
                 dt.IsTabCountFail,
                 dt.IsTabWidthFailCountFail,
                 dt.IsTabHeightFailCountFail,
-                dt.IsTabDistFailCountFail
+                dt.IsTabDistFailCountFail,
+                dt.IsDefectCountFail,
+                dt.IsDefectCountFail,
+                dt.IsDefectCountFail
                 );
 
         }
@@ -309,7 +315,8 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "模切不良", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "间距不良", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(Local)" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(Ext)" }
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(正面)" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(背面)" }
                 );
 
             //
@@ -326,7 +333,7 @@ namespace DetectCCD {
                     grid.Rows.RemoveAt(0);
 
                 var EAs = Detect.EAs;
-                for (int i = grid.Rows.Count; i < eaCount; i++)
+                for (int i = grid.Rows.Count; i < EAs.Count; i++)
                     addEAGrid(grid, EAs[i]);
 
             }
@@ -342,6 +349,7 @@ namespace DetectCCD {
             //
             gridAdd(grid,
                 grid.Rows.Count + 1,
+                dt.EA,
                 dt.Type,
                 dt.X.ToString("0.000"),
                 dt.Y.ToString("0.000"),
@@ -359,8 +367,8 @@ namespace DetectCCD {
             var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "EA" },
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "类型" },
-                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "所在EA" },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },

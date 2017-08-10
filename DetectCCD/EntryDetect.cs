@@ -9,13 +9,15 @@ namespace DetectCCD {
 
     public class EntryDetect :IDisposable {
 
-        public EntryDetect(TemplateDB parent, string tableName, EntryGrab grab) {
+        public EntryDetect(TemplateDB parent, string tableName, EntryGrab grab, bool isInner) {
 
             //
             this.db = parent;
             this.tname = tableName;
             this.grab = grab;
 
+            //
+            this.extDefects = new RemoteDefectCount(isInner);
         }
 
         public void Dispose() {
@@ -77,6 +79,9 @@ CfgParam        BLOB
         TemplateDB db;
         string tname;
 
+        RemoteDefectCount extDefects;
+
+
         public double Fx { get { return grab.Fx; } }
         public double Fy { get { return grab.Fy; } }
 
@@ -107,18 +112,32 @@ CfgParam        BLOB
                         obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
                         obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
                         obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
-                        obj.IsTabCountFail = obj.TabCount != Static.Param.TabCount;
-                        obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > Static.Param.TabWidthCount;
-                        obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > Static.Param.TabHeightCount;
-                        obj.IsTabDistFailCountFail = obj.TabDistFailCount > Static.Param.TabDistCount;
+                        obj.IsTabCountFail = obj.TabCount != Static.Param.CheckTabCount;
+                        obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > Static.Param.CheckTabWidthCount;
+                        obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > Static.Param.CheckTabHeightCount;
+                        obj.IsTabDistFailCountFail = obj.TabDistFailCount > Static.Param.CheckTabDistCount;
 
-                        var firstER = Tabs.Find(x => x.EA == id && x.TAB == 1);
-                        if (firstER == null)
+                        var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
+                        if (curEaTab == null)
                             throw new Exception("DetectResult: GetEA");
 
-                        obj.EAX = firstER.MarkX;
-                        obj.EAY = firstER.MarkY;
+                        obj.EAX = curEaTab.MarkX;
+                        obj.EAY = curEaTab.MarkY;
 
+                        double start = obj.EAY + 0.5;
+                        double end = 0;
+                        var nextEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
+                        if (nextEaTab != null) {
+                            end = nextEaTab.MarkY - 0.5;
+                        }
+                        else {
+                            end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
+                        }
+
+                        obj.DefectCountLocal = Defects.Count(x => x.EA == id);
+                        obj.DefectCountFront = extDefects.GetExtDefectCount(true, start, end, id);
+                        obj.DefectCountBack = extDefects.GetExtDefectCount(false, start, end, id);
+                        obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
                         objs.Add(obj);
                     }
                 });
@@ -126,7 +145,7 @@ CfgParam        BLOB
                 return objs;
             }
         }
-        
+
         int defectCount = 0;
         bool statuPrev = false;
 
@@ -394,6 +413,12 @@ CfgParam        BLOB
 
             //
             needSave = true;
+        }
+
+        public int AllocAndGetDefectCount(double start, double end, int ea) {
+            var collect = Defects.TakeWhile(x => x.Y + x.H / 2 > start && x.Y - x.H / 2 < end);
+            collect.AsParallel().ForAll(x => x.EA = ea);
+            return collect.Count();
         }
 
     }

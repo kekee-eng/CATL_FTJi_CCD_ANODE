@@ -40,16 +40,21 @@ namespace DetectCCD {
 
             //
             InnerGrab = new EntryGrab(this, "InnerGrab", Static.App.RecordCacheSize);
-            InnerDetect = new EntryDetect(this, "InnerDetect", InnerGrab);
+            InnerDetect = new EntryDetect(this, "InnerDetect", InnerGrab, true);
             InnerViewerImage = new ViewerImage(InnerGrab, InnerDetect);
             InnerViewerChart = new ViewerChart(InnerGrab, InnerDetect, InnerViewerImage);
 
             //
             OuterGrab = new EntryGrab(this, "OuterGrab", Static.App.RecordCacheSize);
-            OuterDetect = new EntryDetect(this, "OuterDetect", OuterGrab);
+            OuterDetect = new EntryDetect(this, "OuterDetect", OuterGrab, false);
             OuterViewerImage = new ViewerImage(OuterGrab, OuterDetect);
             OuterViewerChart = new ViewerChart(OuterGrab, OuterDetect, OuterViewerImage);
-            
+
+            //
+            if (Static.App.IsRemoteServer) {
+
+            }
+
         }
 
         public EntryGrab InnerGrab;

@@ -74,6 +74,7 @@
       <HintPath>..\..\build\Bin\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -99,6 +100,7 @@
     <Compile Include="CfgApp.cs" />
     <Compile Include="CfgParam.cs" />
     <Compile Include="CameraRealtime.cs" />
+    <Compile Include="RemoteDefectCount.cs" />
     <Compile Include="ZZConnectCamera_Realtime.cs" />
     <Compile Include="CameraZipFile.cs" />
     <Compile Include="DataDefect.cs" />

@@ -12,6 +12,14 @@ namespace DetectCCD {
         //
         public bool ImageProcessReload = false;
 
+        //
+        public bool IsRemoteServer = true;
+        public string RemoteHost = "localhost";
+        public int RemotePort = 6600;
+        public double RemoteInnerOffset = 0;
+        public double RemoteOuterOffset = 0;
+        public double FixOuterOffset = 34;
+
         //运行模式：0=在线（实时检测）、1=离线（仿真）
         public int Mode = 0;
 
@@ -88,25 +96,25 @@ namespace DetectCCD {
         public int CameraFrameStart = 1;
 
         //
-        public string operator_username = "operator";
-        public string operator_password = "";
-        public string operator_viewstyle = "DevExpress Style";
+        public string OperatorUsername = "operator";
+        public string OperatorPassword = "";
+        public string OperatorViewstyle = "DevExpress Style";
 
-        public string engineer_username = "engineer";
-        public string engineer_password = "catl";
-        public string engineer_viewstyle = "McSkin";
+        public string EngineerUsername = "engineer";
+        public string EngineerPassword = "catl";
+        public string EngineerViewstyle = "McSkin";
 
-        public string expert_username = "expert";
-        public string expert_password = "via";
-        public string expert_viewstyle = "Money Twins";
+        public string ExpertUsername = "expert";
+        public string ExpertPassword = "via";
+        public string ExpertViewstyle = "Money Twins";
 
-        public int select_userid = 0;
+        public int SelectUserId = 0;
 
-        public string[] GetUsernameList() { return new string[] { operator_username, engineer_username, expert_username }; }
-        public string[] GetPasswordList() { return new string[] { operator_password, engineer_password, expert_password }; }
-        public string[] GetViewstyleList() { return new string[] { operator_viewstyle, engineer_viewstyle, expert_viewstyle }; }
+        public string[] GetUsernameList() { return new string[] { OperatorUsername, EngineerUsername, ExpertUsername }; }
+        public string[] GetPasswordList() { return new string[] { OperatorPassword, EngineerPassword, ExpertPassword }; }
+        public string[] GetViewstyleList() { return new string[] { OperatorViewstyle, EngineerViewstyle, ExpertViewstyle }; }
 
-        public string GetUserName() { return GetUsernameList()[select_userid]; }
+        public string GetUserName() { return GetUsernameList()[SelectUserId]; }
 
     }
 

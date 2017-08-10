@@ -199,7 +199,7 @@ namespace DetectCCD {
 
         }
         void init_teston() {
-            
+
             checkSaveOK.Checked = Static.App.RecordSaveImageOK;
             checkSaveNG.Checked = Static.App.RecordSaveImageNG;
 
@@ -211,7 +211,7 @@ namespace DetectCCD {
             checkDetectTab.Checked = Static.App.DetectTab;
             checkDetectWidth.Checked = Static.App.DetectWidth;
 
-            checkDetectDefect.CheckedChanged += (o, e) => Static.App.RecordSaveImageNG = (o as CheckEdit).Checked;
+            checkDetectDefect.CheckedChanged += (o, e) => Static.App.DetectDefect = (o as CheckEdit).Checked;
             checkDetectMark.CheckedChanged += (o, e) => Static.App.DetectMark = (o as CheckEdit).Checked;
             checkDetectTab.CheckedChanged += (o, e) => Static.App.DetectTab = (o as CheckEdit).Checked;
             checkDetectWidth.CheckedChanged += (o, e) => Static.App.DetectWidth = (o as CheckEdit).Checked;
@@ -247,20 +247,20 @@ namespace DetectCCD {
             xtraTabControl1.TabPages.Remove(xtraTabPage3);
             xtraTabControl1.TabPages.Remove(xtraTabPage4);
 
-            int userselect = Static.App.select_userid;
+            int userselect = Static.App.SelectUserId;
             if (userselect == 0) {
                 //左下角图标
                 status_user.ImageIndex = 0;
 
                 //主题样式
-                UtilTool.XFSkin.SetSkinStyle(Static.App.operator_viewstyle);
+                UtilTool.XFSkin.SetSkinStyle(Static.App.OperatorViewstyle);
             }
             else if (userselect == 1) {
                 //左下角图标
                 status_user.ImageIndex = 1;
 
                 //主题样式
-                UtilTool.XFSkin.SetSkinStyle(Static.App.engineer_viewstyle);
+                UtilTool.XFSkin.SetSkinStyle(Static.App.EngineerViewstyle);
 
                 //附加页面
                 xtraTabControl1.TabPages.Add(xtraTabPage3);
@@ -270,7 +270,7 @@ namespace DetectCCD {
                 status_user.ImageIndex = 2;
 
                 //主题样式
-                UtilTool.XFSkin.SetSkinStyle(Static.App.expert_viewstyle);
+                UtilTool.XFSkin.SetSkinStyle(Static.App.ExpertViewstyle);
 
                 //附加页面
                 xtraTabControl1.TabPages.Add(xtraTabPage3);
@@ -467,12 +467,38 @@ namespace DetectCCD {
         private void btnQuit_Click(object sender, EventArgs e) {
             this.Close();
         }
-        
+
         private void groupStatuInner_DoubleClick(object sender, EventArgs e) {
             splitContainerInner.Panel1Collapsed ^= true;
         }
         private void groupStatuOuter_DoubleClick(object sender, EventArgs e) {
             splitContainerOuter.Panel1Collapsed ^= true;
+        }
+
+        private void simpleButton1_Click(object sender, EventArgs e) {
+
+            RemoteDefectCount.DefectCountProvider += (isFront, isInner, start, end, id) => {
+
+                if (isInner) {
+                    start += Static.App.RemoteInnerOffset;
+                    end += Static.App.RemoteInnerOffset;
+                }
+                else {
+                    start += Static.App.RemoteOuterOffset;
+                    end += Static.App.RemoteOuterOffset;
+                }
+
+                if (isFront) {
+
+                    return record.InnerDetect.AllocAndGetDefectCount(start, end, id);
+                }
+                else {
+                    start += Static.App.FixOuterOffset;
+                    end += Static.App.FixOuterOffset;
+                    return record.OuterDetect.AllocAndGetDefectCount(start, end, id);
+                }
+            };
+            RemoteDefectCount.InitServer();
         }
 
     }

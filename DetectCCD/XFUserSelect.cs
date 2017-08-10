@@ -19,7 +19,7 @@ namespace DetectCCD
             for (int i = 0; i < listCount; i++)
             {
                 //初始化显示
-                listLabel[i].ForeColor = (i == Static.App.select_userid ? Color.Red : Color.Silver);
+                listLabel[i].ForeColor = (i == Static.App.SelectUserId ? Color.Red : Color.Silver);
                 
                 //初始化控件参数与事件
                 listPicEdit[i].Tag = i;
@@ -46,7 +46,7 @@ namespace DetectCCD
         void picEdit_Click(object o1, EventArgs e1)
         {
             int i = (int)((PictureEdit)o1).Tag;
-            if (i != Static.App.select_userid)
+            if (i != Static.App.SelectUserId)
             {
                 string username = Static.App.GetUsernameList()[i];
                 string password = Static.App.GetPasswordList()[i];
@@ -55,7 +55,7 @@ namespace DetectCCD
                     login.ShowDialog(this);
                     if (login.Pass)
                     {
-                        Static.App.select_userid = i;
+                        Static.App.SelectUserId = i;
                         this.Dispose();
                     }
                 }
