@@ -146,8 +146,10 @@ CfgParam        BLOB
                 return objs;
             }
         }
+
         public event Action<DataEA> OnNewEA;
         public event Action<DataLabel> OnNewLabel;
+        public event Action<DataTab, DataTab> OnSyncTab;
 
         int defectFrameCount = 0;
         public bool TryDetect(DataGrab obj) {
@@ -222,14 +224,19 @@ CfgParam        BLOB
                     }
                 }
 
+                //重置序号
+                //adjustER();
+                //partner.adjustER();
+                //OnSyncTab?.Invoke(myMissER, missER);
+
             } while (true);
 
             //重置序号
             adjustER();
             partner.adjustER();
-
+            OnSyncTab?.Invoke(myER, bindER);
         }
-        
+
         bool tryDetect(DataGrab obj) {
 
             //
