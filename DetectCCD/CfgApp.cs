@@ -12,6 +12,23 @@ namespace DetectCCD {
         //
         public bool ImageProcessReload = false;
 
+        //记录参数
+        public int RecordCacheSize = 200;
+        public bool RecordSaveImageEnable = false;
+        public bool RecordSaveImageOK = false;
+        public bool RecordSaveImageNG = false;
+
+        //检测内容
+        public bool DetectEnable = true;
+        public bool DetectTab = true;
+        public bool DetectWidth = true;
+        public bool DetectMark = true;
+        public bool DetectDefect = true;
+
+        //显示参数
+        public double CameraFpsControl = 10;
+        public int CameraFrameStart = 1;
+
         //
         public bool IsRemoteServer = true;
         public string RemoteHost = "localhost";
@@ -77,23 +94,6 @@ namespace DetectCCD {
         public string Camera8KOuterCaption = "反面";
         public double Camera8KOuterScaleX = 0.0514019;
         public double Camera8KOuterScaleY = 0.0514019;
-
-        //记录参数
-        public int RecordCacheSize = 200;
-        public bool RecordSaveImageEnable = false;
-        public bool RecordSaveImageOK = false;
-        public bool RecordSaveImageNG = false;
-
-        //检测内容
-        public bool DetectEnable = true;
-        public bool DetectTab = true;
-        public bool DetectWidth = true;
-        public bool DetectMark = true;
-        public bool DetectDefect = true;
-
-        //显示参数
-        public double CameraFpsControl = 10;
-        public int CameraFrameStart = 1;
 
         //
         public string OperatorUsername = "operator";

@@ -55,7 +55,6 @@ namespace DetectCCD {
         public static ZedGraphControl parentGetChart(Control parent) {
             return parent.Controls[0] as ZedGraphControl;
         }
-
         public static void parentMoveTo(Control parent, int id) {
 
             var obj = parent.Controls[0];
@@ -391,6 +390,52 @@ namespace DetectCCD {
                     addDefectGrid(grid, Detect.Defects[i]);
             }
             if (Detect.Defects.Count < grid.Rows.Count) {
+                grid.Rows.Clear();
+            }
+        }
+
+        //标签表格
+        static void addLabelGrid(DataGridView grid, DataLabel dt) {
+
+            //
+            gridAdd(grid,
+                grid.Rows.Count + 1,
+                dt.EA,
+                dt.Encoder,
+                dt.X.ToString("0.000"),
+                dt.Y.ToString("0.000"),
+                dt.W.ToString("0.000"),
+                dt.H.ToString("0.000")
+                );
+
+        }
+        public void InitLabelGrid(Control parent) {
+
+            //
+            var grid = parentInitGrid(parent);
+            grid.Columns.AddRange(
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "EA" },
+                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "ENCODER" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false }
+                );
+
+            //
+            gridEvent(grid, ImageViewer.MoveToLabel);
+
+        }
+        public void SyncLabelGrid(Control parent) {
+
+            var grid = parentGetGrid(parent);
+
+            if (Detect.Labels.Count > grid.Rows.Count) {
+                for (int i = grid.Rows.Count; i < Detect.Labels.Count; i++)
+                    addLabelGrid(grid, Detect.Labels[i]);
+            }
+            if (Detect.Labels.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
         }

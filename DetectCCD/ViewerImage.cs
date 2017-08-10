@@ -110,6 +110,19 @@ namespace DetectCCD {
                 targetVy = -10;
         }
 
+        public void MoveToTarget(double y, double x, double w, double h) {
+
+            double sx = w;
+            double sy = h * grabHeight / refGrabHeight;
+
+            double s = Math.Max(sx, sy) * 1.3;
+            s = Math.Min(s, 2);
+            s = Math.Max(s, 0.04);
+
+            SetCenterTarget(y, x, s);
+            MoveTargetDirect();
+
+        }
         public void MoveToFrame(double frame) {
             if (!mouseAllow) return;
 
@@ -144,15 +157,19 @@ namespace DetectCCD {
                 if (id >= 0 && id <= Detect.Defects.Count - 1) {
                     var obj = Detect.Defects[id];
 
-                    double sx = obj.W;
-                    double sy = obj.H * grabHeight / refGrabHeight;
+                    MoveToTarget(obj.Y, obj.X, obj.W, obj.H);
+                }
+            });
+        }
+        public void MoveToLabel(int id) {
+            if (!mouseAllow) return;
 
-                    double s = Math.Max(sx, sy) * 1.3;
-                    s = Math.Min(s, 2);
-                    s = Math.Max(s, 0.04);
+            Static.SafeRun(() => {
+                id = id - 1;
+                if (id >= 0 && id <= Detect.Labels.Count - 1) {
+                    var obj = Detect.Labels[id];
 
-                    SetCenterTarget(obj.Y, obj.X, s);
-                    MoveTargetDirect();
+                    MoveToTarget(obj.Y, obj.X, obj.W, obj.H);
                 }
             });
         }
@@ -653,12 +670,12 @@ namespace DetectCCD {
                         g.SetDraw("margin");
                         g.SetColor("light blue");
                         g.SetLineWidth(1);
-                        g.DispLine(getPixRow(tab.MarkY1), getPixCol(0), getPixRow(tab.MarkY1), getPixCol(1));
-                        g.DispLine(getPixRow(tab.MarkY2), getPixCol(0), getPixRow(tab.MarkY2), getPixCol(1));
+                        g.DispLine(getPixRow(tab.MarkImageStart), getPixCol(0), getPixRow(tab.MarkImageStart), getPixCol(1));
+                        g.DispLine(getPixRow(tab.MarkImageEnd), getPixCol(0), getPixRow(tab.MarkImageEnd), getPixCol(1));
 
-                        double dx = (tab.MarkY2 - tab.MarkY1) * grabHeight / grabWidth;
+                        double dx = (tab.MarkImageEnd - tab.MarkImageStart) * grabHeight / grabWidth;
                         for (double xp = -dx; xp < 1; xp += 0.05) {
-                            g.DispLine(getPixRow(tab.MarkY1), getPixCol(xp), getPixRow(tab.MarkY2), getPixCol(xp + dx));
+                            g.DispLine(getPixRow(tab.MarkImageStart), getPixCol(xp), getPixRow(tab.MarkImageEnd), getPixCol(xp + dx));
                         }
                     }
 
@@ -695,11 +712,10 @@ namespace DetectCCD {
                     if (lab.InRange(frameStart, frameEnd)) {
                         countLabel++;
                         
-                        //EA头部显示
                         g.SetDraw("margin");
-                        g.SetColor("orange");
-                        g.SetLineWidth(1);
-                        g.SetLineStyle(new HTuple(new int[] { 5, 3 }));
+                        g.SetColor("yellow");
+                        g.SetLineWidth(3);
+                        g.SetLineStyle(new HTuple(new int[] { 3, 1 }));
                         
                         g.DispRectangle1(
                             getPixRow(lab.Y - lab.H / 2),
@@ -710,7 +726,7 @@ namespace DetectCCD {
                         g.SetLineStyle(new HTuple());
 
                         g.SetTposition((int)getPixRow(lab.Y - lab.H / 2), (int)getPixCol(lab.X - lab.W / 2));
-                        g.WriteString(string.Format("LAB[{0}]", i));
+                        g.WriteString(string.Format("{0}", i));
 
                     }
                 }

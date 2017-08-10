@@ -9,6 +9,8 @@ namespace DetectCCD {
     [System.Serializable]
     public class DataLabel {
 
+        public int EA;
+        public int Encoder;
         public double X;
         public double Y;
         public double W;

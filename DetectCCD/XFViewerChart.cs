@@ -281,7 +281,7 @@ namespace DetectCCD {
             viewerInit(x => record.InnerViewerChart.InitDefectGrid(x), x => record.InnerViewerChart.SyncDefectGrid(x));
         }
         private void rtInnerLabel_Click(object sender, EventArgs e) {
-
+            viewerInit(x => record.InnerViewerChart.InitLabelGrid(x), x => record.InnerViewerChart.SyncLabelGrid(x));
         }
         private void rtInnerTabChartWidth_Click(object sender, EventArgs e) {
             viewerInit(x => record.InnerViewerChart.InitTabChart(x), x => record.InnerViewerChart.SyncTabChart(x, 0));
@@ -306,7 +306,7 @@ namespace DetectCCD {
             viewerInit(x => record.OuterViewerChart.InitDefectGrid(x), x => record.OuterViewerChart.SyncDefectGrid(x));
         }
         private void rtOuterLabel_Click(object sender, EventArgs e) {
-
+            viewerInit(x => record.OuterViewerChart.InitLabelGrid(x), x => record.OuterViewerChart.SyncLabelGrid(x));
         }
         private void rtOuterTabChartWidth_Click(object sender, EventArgs e) {
             viewerInit(x => record.OuterViewerChart.InitTabChart(x), x => record.OuterViewerChart.SyncTabChart(x, 0));

@@ -31,8 +31,8 @@ namespace DetectCCD {
         public bool IsDistDiffFail;
         public bool IsHeightFail;
 
-        public double MarkY1;
-        public double MarkY2;
+        public double MarkImageStart;
+        public double MarkImageEnd;
 
         public double MarkX; //EA起始处
         public double MarkY; 

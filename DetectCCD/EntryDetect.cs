@@ -330,8 +330,8 @@ CfgParam        BLOB
                 double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
 
                 //
-                data.MarkY1 = cfy1;
-                data.MarkY2 = cfy2;
+                data.MarkImageStart = cfy1;
+                data.MarkImageEnd = cfy2;
 
                 var cimage = grab.GetImage(cfy1, cfy2);
                 if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
@@ -367,8 +367,9 @@ CfgParam        BLOB
                     //添加标签
                     if (objea.IsFail) {
                         Labels.Add(new DataLabel() {
-                            X = Static.Param.LabelX_EA / Fx,
-                            Y = objea.EAY + Static.Param.LabelY_EA / Fy,
+                            EA = id,
+                            X = data.MarkX_P,
+                            Y = data.MarkY + Static.Param.LabelY_EA / Fy,
                             W = Static.Param.LabelShowW / Fx,
                             H = Static.Param.LabelShowH / Fy
                         });
