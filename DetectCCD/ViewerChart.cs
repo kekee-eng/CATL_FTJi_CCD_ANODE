@@ -243,7 +243,7 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "EA" },
                 new DataGridViewTextBoxColumn() { Width = 60, HeaderText = "TAB" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" ,Visible =false},
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极片宽度" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳长度" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳间距" },
@@ -303,11 +303,13 @@ namespace DetectCCD {
             var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ID(EA)" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳数" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度不良" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "模切不良" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "间距不良" }
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "模切不良", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "间距不良", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(Local)" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(Ext)" }
                 );
 
             //
@@ -357,11 +359,12 @@ namespace DetectCCD {
             var grid = parentInitGrid(parent);
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
-                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "Type" },
-                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X" },
-                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y" },
-                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W" },
-                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "类型" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "所在EA" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)" }
