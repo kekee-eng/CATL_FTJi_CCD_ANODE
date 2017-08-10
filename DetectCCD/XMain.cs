@@ -19,6 +19,7 @@ namespace DetectCCD {
             InitializeComponent();
 
             //
+            init_server();
             init_device();
             init_status();
             init_teston();
@@ -79,6 +80,40 @@ namespace DetectCCD {
 
         public ModRecord record = new ModRecord();
         public ModDevice device = new ModDevice();
+
+        void init_server() {
+
+            if (Static.App.IsRemoteServer) {
+
+                RemoteDefectCount.InitServer();
+                RemoteDefectCount.DefectCountProvider += (isFront, isInner, start, end, id) => {
+
+                    if (isInner) {
+                        start += Static.App.RemoteInnerOffset;
+                        end += Static.App.RemoteInnerOffset;
+                    }
+                    else {
+                        start += Static.App.RemoteOuterOffset;
+                        end += Static.App.RemoteOuterOffset;
+                    }
+
+                    if (isFront) {
+
+                        return record.InnerDetect.AllocAndGetDefectCount(start, end, id);
+                    }
+                    else {
+                        start += Static.App.FixOuterOrBackOffset;
+                        end += Static.App.FixOuterOrBackOffset;
+                        return record.OuterDetect.AllocAndGetDefectCount(start, end, id);
+                    }
+                };
+
+            }
+            else {
+                RemoteDefectCount.InitClient();
+                RemoteDefectCount.ConnectClient();
+            }
+        }
 
         void init_device() {
 
@@ -474,44 +509,7 @@ namespace DetectCCD {
         private void groupStatuOuter_DoubleClick(object sender, EventArgs e) {
             splitContainerOuter.Panel1Collapsed ^= true;
         }
-
-        private void simpleButton1_Click(object sender, EventArgs e) {
-
-            RemoteDefectCount.DefectCountProvider += (isFront, isInner, start, end, id) => {
-
-                if (isInner) {
-                    start += Static.App.RemoteInnerOffset;
-                    end += Static.App.RemoteInnerOffset;
-                }
-                else {
-                    start += Static.App.RemoteOuterOffset;
-                    end += Static.App.RemoteOuterOffset;
-                }
-
-                if (isFront) {
-
-                    return record.InnerDetect.AllocAndGetDefectCount(start, end, id);
-                }
-                else {
-                    start += Static.App.FixOuterOffset;
-                    end += Static.App.FixOuterOffset;
-                    return record.OuterDetect.AllocAndGetDefectCount(start, end, id);
-                }
-            };
-            RemoteDefectCount.InitServer();
-
-        }
-
-        private void simpleButton2_Click(object sender, EventArgs e) {
-            RemoteDefectCount.InitClient();
-        }
-
-        private void simpleButton3_Click(object sender, EventArgs e) {
-            
-            var s = RemoteDefectCount.GetExtDefectCountRemote(true,true, 0, 10, 3);
-
-            MessageBox.Show(s.ToString());
-        }
+        
     }
 
 }

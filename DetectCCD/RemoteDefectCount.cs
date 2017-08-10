@@ -12,11 +12,17 @@ namespace DetectCCD {
 
         static RemoteDefectCount client;
         public static int GetExtDefectCountRemote(bool isFront, bool isInner, double start, double end, int ea) {
+            
+            try {
+                if (client == null)
+                    return -1;
 
-            int count = -1;
-            Static.SafeRun(() => count= client._master_defect_count(isFront, isInner, start, end, ea));
-            return count;
-
+                return client._master_defect_count(isFront, isInner, start, end, ea);
+            }
+            catch {
+                client = null;
+            }
+            return -2;
         }
 
         public static void InitServer() {
@@ -46,11 +52,11 @@ namespace DetectCCD {
         public int _master_defect_count(bool isfront, bool isinner, double start, double end, int ea) {
 
             if (DefectCountProvider == null)
-                return -2; //Master未关联
+                return -3; //Master未关联
 
             try { return DefectCountProvider(isfront, isinner, start, end, ea); }
             catch { }
-            return -3; //Master函数有问题
+            return -4; //Master函数有问题
         }
 
     }

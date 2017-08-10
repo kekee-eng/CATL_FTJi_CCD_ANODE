@@ -121,11 +121,11 @@ CfgParam        BLOB
                         obj.EAX = curEaTab.MarkX;
                         obj.EAY = curEaTab.MarkY;
 
-                        double start = obj.EAY + 0.5;
+                        double start = curEaTab.TabY1;
                         double end = 0;
-                        var nextEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
+                        var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
                         if (nextEaTab != null) {
-                            end = nextEaTab.MarkY - 0.5;
+                            end = nextEaTab.TabY1;
                         }
                         else {
                             end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
@@ -133,7 +133,7 @@ CfgParam        BLOB
 
                         obj.DefectCountLocal = Defects.Count(x => x.EA == id);
                         obj.DefectCountFront = RemoteDefectCount.GetExtDefectCountRemote(true, isinner, start, end, id);
-                        obj.DefectCountBack = RemoteDefectCount.GetExtDefectCountRemote(false,isinner, start, end, id);
+                        obj.DefectCountBack = RemoteDefectCount.GetExtDefectCountRemote(false, isinner, start, end, id);
                         obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
                         objs.Add(obj);
                     }
@@ -201,6 +201,7 @@ CfgParam        BLOB
                             int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
                             for (int i = 0; i < ecc; i++) {
                                 DataDefect defect = new DataDefect() {
+                                    EA= -1,
                                     Type = etype[i],
                                     X = ex[i] / w,
                                     Y = efx1 + ey[i] / h,
@@ -413,9 +414,15 @@ CfgParam        BLOB
         }
 
         public int AllocAndGetDefectCount(double start, double end, int ea) {
-            var collect = Defects.TakeWhile(x => x.Y + x.H / 2 > start && x.Y - x.H / 2 < end);
-            collect.AsParallel().ForAll(x => x.EA = ea);
-            return collect.Count();
+            int count = 0;
+            for (int i = 0; i < Defects.Count; i++) {
+                var x = Defects[i];
+                if (x.Y + x.H / 2 > start && x.Y - x.H / 2 < end) {
+                    x.EA = ea;
+                    count++;
+                }
+            }
+            return count;
         }
 
     }

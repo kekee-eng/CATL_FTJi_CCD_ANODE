@@ -31,7 +31,7 @@ namespace DetectCCD {
         public static void Init() {
 
             //
-            if (true) {
+            if (false) {
                 Action<string> DelFile = x => {
                     if (System.IO.File.Exists(x))
                         System.IO.File.Delete(x);
