@@ -9,12 +9,12 @@ namespace DetectCCD {
     [System.Serializable]
     public class DataLabel {
 
-        public int EA;
+        public int EA = -100;
         public int Encoder;
-        public double X;
+        public double X { get { return Static.Param.LabelShowX; } }
         public double Y;
-        public double W;
-        public double H;
+        public double W { get { return Static.Param.LabelShowW; } }
+        public double H { get { return Static.Param.LabelShowH;}}
 
         public bool IsSend = false;
 

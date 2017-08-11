@@ -47,8 +47,9 @@ namespace DetectCCD {
 
         //
         public double LabelY_EA = -100;
-        public double LabelShowW = 20;
-        public double LabelShowH = 20;
+        public double LabelShowX = 0.5;
+        public double LabelShowW = 0.05;
+        public double LabelShowH = 0.05;
 
     }
 }

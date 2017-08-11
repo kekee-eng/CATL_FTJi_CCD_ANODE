@@ -147,8 +147,9 @@ CfgParam        BLOB
             }
         }
 
+        public event Action<DataTab> OnNewTab;
         public event Action<DataEA> OnNewEA;
-        public event Action<DataLabel> OnNewLabel;
+        public event Action<int> OnNewLabel;
         public event Action<DataTab, DataTab> OnSyncTab;
 
         int defectFrameCount = 0;
@@ -235,6 +236,7 @@ CfgParam        BLOB
             adjustER();
             partner.adjustER();
             OnSyncTab?.Invoke(myER, bindER);
+
         }
 
         bool tryDetect(DataGrab obj) {
@@ -438,6 +440,14 @@ CfgParam        BLOB
             adjustER();
             adjustDefect();
 
+            //
+            OnNewTab?.Invoke(data);
+            
+            if (Static.App.TestLabelTab) {
+                OnNewLabel(grab.GetEncoder(data.TabY1));
+                OnNewLabel(grab.GetEncoder(data.TabY2));
+            }
+
             return true;
 
         }
@@ -543,15 +553,12 @@ CfgParam        BLOB
                             if (objEA.IsFail || Static.App.TestLabelEA) {
                                 var objLab = new DataLabel() {
                                     EA = ea - 1,
-                                    X = Tabs[i].MarkX,
                                     Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
-                                    W = Static.Param.LabelShowW / Fx,
-                                    H = Static.Param.LabelShowH / Fy
                                 };
                                 objLab.Encoder = grab.GetEncoder(objLab.Y);
 
                                 Labels.Add(objLab);
-                                OnNewLabel?.Invoke(objLab);
+                                OnNewLabel?.Invoke(objLab.Encoder);
                             }
                         }
 
@@ -561,11 +568,12 @@ CfgParam        BLOB
                             OnNewEA?.Invoke(objEA);
 
                             //TODO: 测试贴所有标签
-                            if(Static.App.TestLabelDefectAB) {
+                            if (Static.App.TestLabelDefectAB) {
                                 var remoteLables = RemoteDefect.In4K_Call8K_GetDefectList(true, isinner, ea - 1);
-                                
-                                foreach(var rl in remoteLables) {
-                                    OnNewLabel?.Invoke(new DataLabel() { Encoder = grab.GetEncoder(rl.Y) });
+
+                                foreach (var rl in remoteLables) {
+                                    Labels.Add(new DataLabel() { Y= rl.Y, Encoder = grab.GetEncoder(rl.Y) });
+                                    OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
                                 }
                             }
                         }

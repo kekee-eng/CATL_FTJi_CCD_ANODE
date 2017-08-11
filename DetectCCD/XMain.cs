@@ -258,10 +258,10 @@ namespace DetectCCD {
 
             };
             record.InnerDetect.OnNewLabel += obj => {
-                RemotePLC.In4KCallPLC_SendLabel(true, obj.Encoder);
+                RemotePLC.In4KCallPLC_SendLabel(true, obj);
             };
             record.OuterDetect.OnNewLabel += obj => {
-                RemotePLC.In4KCallPLC_SendLabel(false, obj.Encoder);
+                RemotePLC.In4KCallPLC_SendLabel(false, obj);
             };
             record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => {
                 RemotePLC.In4KCallPLC_ForWidth(
@@ -271,6 +271,8 @@ namespace DetectCCD {
                     tabInner.ValWidth,
                     tabOuter.ValWidth
                     );
+
+
             };
         }
         void init_teston() {
