@@ -40,6 +40,8 @@ namespace DetectCCD {
         public HWindowControl Box;
         public HWindow g;
 
+        public event Action<double, double, double> OnViewUpdate;
+
         public void SetUserEnable(bool allow) {
             rtEnableUser.Checked = allow;
         }
@@ -80,7 +82,7 @@ namespace DetectCCD {
                     frameVs += targetDs * precent;
                 }
 
-                Static.SafeRun(updateView);
+                Static.SafeRun(() => updateView());
             }
         }
         public void MoveTargetDirect() {
@@ -109,8 +111,21 @@ namespace DetectCCD {
             if (frameDy == 0)
                 targetVy = -10;
         }
+        
+        public void MoveToView(double y, double x, double s) {
 
+            if (!mouseAllow) return;
+
+            //
+            frameVx = x;
+            frameVy = y;
+            frameVs = s;
+
+            //
+            updateView(false);
+        }
         public void MoveToTarget(double y, double x, double w, double h) {
+            if (!mouseAllow) return;
 
             double sx = w;
             double sy = h * grabHeight / refGrabHeight;
@@ -450,7 +465,7 @@ namespace DetectCCD {
             g.ClearWindow();
 
             //
-            hwindow.SizeChanged += (o, e) => Static.SafeRun(updateView);
+            hwindow.SizeChanged += (o, e) => Static.SafeRun(()=>updateView());
 
             //
             hwindow.PreviewKeyDown += (o, e) => {
@@ -520,7 +535,10 @@ namespace DetectCCD {
 
 
         }
-        void updateView() {
+        void updateView(bool forceEvent =true) {
+
+            if (forceEvent)
+                OnViewUpdate?.Invoke(frameVy, frameVx, frameVs);
 
             if (!Box.IsHandleCreated)
                 return;

@@ -141,6 +141,13 @@ namespace DetectCCD {
                 record.OuterGrab[obj.Frame] = obj;
             };
 
+            record.InnerViewerImage.OnViewUpdate += (y, x, s) => {
+                record.OuterViewerImage.MoveToView(y + Static.App.FixOuterOrBackOffset, x, s);
+            };
+            record.OuterViewerImage.OnViewUpdate += (y, x, s) => {
+                record.InnerViewerImage.MoveToView(y - Static.App.FixOuterOrBackOffset, x, s);
+            };
+
             //线程：图像处理
             var tProcess1 = Task.Run((Action)(() => {
 
@@ -252,12 +259,6 @@ namespace DetectCCD {
             }));
 
             //PLC操作
-            record.InnerDetect.OnNewEA += obj => {
-
-            };
-            record.OuterDetect.OnNewEA += obj => {
-
-            };
             record.InnerDetect.OnNewLabel += obj => {
                 RemotePLC.In4KCallPLC_SendLabel(true, obj);
             };
@@ -272,8 +273,7 @@ namespace DetectCCD {
                     tabInner.ValWidth,
                     tabOuter.ValWidth
                     );
-
-
+                
             };
         }
         void init_teston() {
