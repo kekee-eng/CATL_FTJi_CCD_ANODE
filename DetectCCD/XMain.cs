@@ -26,6 +26,7 @@ namespace DetectCCD {
 
             //
             UtilTool.AddBuildTag(this);
+            this.Text += ((Static.App.Is4K) ? "~[4K]" : "~[8K]");
             UtilTool.XFWait.Close();
         }
         private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
@@ -86,7 +87,6 @@ namespace DetectCCD {
 
                 RemoteDefect.InitServer();
                 RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) => {
-
                     if (isInner) {
                         start += Static.App.RemoteInnerOffset;
                         end += Static.App.RemoteInnerOffset;
@@ -105,6 +105,17 @@ namespace DetectCCD {
                         end += Static.App.FixOuterOrBackOffset;
                         return record.OuterDetect.AllocAndGetDefectCount(start, end, id);
                     }
+                };
+                RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, id) => {
+
+                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects.TakeWhile(x => x.EA == id).ToArray();
+                    var offs = (isInner ? Static.App.RemoteInnerOffset : Static.App.RemoteOuterOffset);
+                    offs += (isFront ? 0 : Static.App.FixOuterOrBackOffset);
+
+                    for (int i = 0; i < defs.Length; i++)
+                        defs[i].Y -= offs;
+
+                    return defs;
                 };
 
             }

@@ -47,16 +47,32 @@ namespace DetectCCD {
             }
             return -2;
         }
-
         public static event Func<bool, bool, double, double, int, int> _func_in_8k_getDefectCount;
-        public int _in_8k_return_4k_getDefectCount(bool isfront, bool isinner, double start, double end, int ea) {
+        public int _in_8k_return_4k_getDefectCount(bool isFront, bool isInner, double start, double end, int ea) {
 
             if (_func_in_8k_getDefectCount == null)
                 return -3; //Master未关联
 
-            try { return _func_in_8k_getDefectCount(isfront, isinner, start, end, ea); }
+            try { return _func_in_8k_getDefectCount(isFront, isInner, start, end, ea); }
             catch { }
             return -4; //Master函数有问题
+        }
+        
+        public static DataDefect[] In4K_Call8K_GetDefectList(bool isFront, bool isInner, int ea) {
+
+            try {
+                if (client == null) return null;
+                return client._in_8k_return_4k_getDefectList(isFront, isInner,ea);
+            }
+            catch {
+                client = null;
+            }
+            return null;
+        }
+        public static event Func<bool, bool, int, DataDefect[]> _func_in_8k_getDefectList;
+        public DataDefect[] _in_8k_return_4k_getDefectList(bool isFront, bool isInner, int ea) {
+            try { return _func_in_8k_getDefectList(isFront, isInner, ea); }
+            catch { return null; }
         }
 
     }

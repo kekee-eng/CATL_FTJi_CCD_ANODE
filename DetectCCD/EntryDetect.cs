@@ -540,7 +540,7 @@ CfgParam        BLOB
                         if (Labels.Find(x => x.EA == ea - 1) == null) {
 
                             //添加标签
-                            if (objEA.IsFail || Static.App.TestLabelAllEA) {
+                            if (objEA.IsFail || Static.App.TestLabelEA) {
                                 var objLab = new DataLabel() {
                                     EA = ea - 1,
                                     X = Tabs[i].MarkX,
@@ -559,6 +559,15 @@ CfgParam        BLOB
                         if (!Tabs[i].IsNewEACallBack) {
                             Tabs[i].IsNewEACallBack = true;
                             OnNewEA?.Invoke(objEA);
+
+                            //TODO: 测试贴所有标签
+                            if(Static.App.TestLabelDefectAB) {
+                                var remoteLables = RemoteDefect.In4K_Call8K_GetDefectList(true, isinner, ea - 1);
+                                
+                                foreach(var rl in remoteLables) {
+                                    OnNewLabel?.Invoke(new DataLabel() { Encoder = grab.GetEncoder(rl.Y) });
+                                }
+                            }
                         }
                     }
                 }

@@ -13,7 +13,8 @@ namespace DetectCCD {
         public bool ImageProcessReload = false;
 
         //
-        public bool TestLabelAllEA = false;
+        public bool TestLabelEA = false;
+        public bool TestLabelDefectAB = false;
 
         //记录参数
         public int RecordCacheSize = 200;
