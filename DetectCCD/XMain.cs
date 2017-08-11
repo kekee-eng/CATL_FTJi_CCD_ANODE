@@ -108,7 +108,7 @@ namespace DetectCCD {
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, id) => {
 
-                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects.TakeWhile(x => x.EA == id).ToArray();
+                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects.TakeWhile(x => x.EA == id && x.Type < 2).ToArray();
                     var offs = (isInner ? Static.App.RemoteInnerOffset : Static.App.RemoteOuterOffset);
                     offs += (isFront ? 0 : Static.App.FixOuterOrBackOffset);
 

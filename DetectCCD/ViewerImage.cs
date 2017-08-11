@@ -704,6 +704,27 @@ namespace DetectCCD {
                 }
             }
 
+            if (showContextMark && Static.App.Is8K) {
+
+                for (int i = 0; i < Detect._IN_8K_FROM_4K.Count; i++) {
+                    var extEa = Detect._IN_8K_FROM_4K[i];
+                    if (extEa.InRange(frameStart, frameEnd)) {
+
+                        g.SetDraw("margin");
+                        g.SetColor("yellow");
+                        g.SetLineWidth(1);
+                        g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
+                        g.DispLine(getPixRow(extEa.Start), getPixCol(0), getPixRow(extEa.Start), getPixCol(1));
+                        g.DispLine(getPixRow(extEa.End), getPixCol(0), getPixRow(extEa.End), getPixCol(1));
+                        g.SetLineStyle(new HTuple());
+
+                        g.SetTposition((int)getPixRow(extEa.Start), (int)getPixCol(0));
+                        g.WriteString(string.Format("EA=#{0}", extEa.EA));
+
+                    }
+                }
+            }
+
             //打标
             if (showContextLabel) {
                 for (int i = 0; i < Detect.Labels.Count; i++) {

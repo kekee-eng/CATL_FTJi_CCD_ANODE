@@ -39,6 +39,8 @@ namespace DetectCCD {
         public int RemotePort = 6500;
         public double RemoteInnerOffset = 0;
         public double RemoteOuterOffset = 0;
+        public double RemoteFrontOffset = 0;
+        public double RemoteBackOffset = 0;
         public double FixOuterOrBackOffset = 35;
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
@@ -120,6 +122,26 @@ namespace DetectCCD {
 
         public string GetUserName() { return GetUsernameList()[SelectUserId]; }
 
+
+        public void SetTransform(bool isFront, bool isInner, ref double start, ref double end) {
+
+            if (isFront) {
+                if (isInner) {
+
+                }
+                else {
+
+                }
+            }
+            else {
+                if (isInner) {
+
+                }
+                else {
+
+                }
+            }
+        }
     }
 
 }

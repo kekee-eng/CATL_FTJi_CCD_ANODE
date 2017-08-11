@@ -607,6 +607,7 @@ CfgParam        BLOB
             needSave = true;
         }
 
+        public List<DataEA_SyncFrom4K> _IN_8K_FROM_4K = new List<DataEA_SyncFrom4K>();
         public int AllocAndGetDefectCount(double start, double end, int ea) {
             int count = 0;
             for (int i = 0; i < Defects.Count; i++) {
@@ -616,6 +617,21 @@ CfgParam        BLOB
                     count++;
                 }
             }
+
+            var extEA = _IN_8K_FROM_4K.Find(x => x.EA == ea);
+            if (extEA == null) {
+                extEA = new DataEA_SyncFrom4K() {
+                    Start = start,
+                    End = end,
+                    EA = ea,
+                };
+                _IN_8K_FROM_4K.Add(extEA);
+            }
+            else {
+                extEA.Start = Math.Min(extEA.Start, start);
+                extEA.End = Math.Max(extEA.End, end);
+            }
+
             return count;
         }
 
