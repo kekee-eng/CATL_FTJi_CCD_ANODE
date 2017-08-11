@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Channels.Tcp;
 public class RemotePLC : MarshalByRefObject {
 
     static RemotePLC client;
+    public static bool isConnect { get { return client != null; } }
     public static void InitServer() {
 
         TcpServerChannel channel = new TcpServerChannel("RemotePLCServer", 777);
@@ -21,19 +22,37 @@ public class RemotePLC : MarshalByRefObject {
         client = (RemotePLC)Activator.GetObject(
             typeof(RemotePLC),
             string.Format("tcp://localhost:777/RemotePLC"));
+
+        //测试连接
+        try { client._IN_PLC_Call_encoderProvider(true); }
+        catch {
+            client = null;
+            throw;
+        }
     }
 
     public static void In4KCallPLC_ForWidth(int idEA, int idTab, bool isOK, double widthInner, double widthOuter) {
-        try { client._IN_PLC_Call_widthProcess(idEA, idTab, isOK, widthInner, widthOuter); }
-        catch { }
+        try {
+            if (client == null) return;
+            client._IN_PLC_Call_widthProcess(idEA, idTab, isOK, widthInner, widthOuter);
+        }
+        catch { client = null; }
     }
     public static void In4KCallPLC_SendLabel(bool isInner, int encoder) {
-        try { client._IN_PLC_Call_reciveLabelProcess(isInner, encoder); }
-        catch { }
+        try {
+            if (client == null) return;
+            client._IN_PLC_Call_reciveLabelProcess(isInner, encoder);
+        }
+        catch { client = null; }
     }
     public static int In4KCallPLC_GetEncoder(bool isInner) {
-        try { return client._IN_PLC_Call_encoderProvider(isInner); }
-        catch { return 0; }
+
+        try {
+            if (client != null)
+                return client._IN_PLC_Call_encoderProvider(isInner);
+        }
+        catch { client = null; }
+        return 0;
     }
 
     //注册事件
@@ -50,5 +69,5 @@ public class RemotePLC : MarshalByRefObject {
     public int _IN_PLC_Call_encoderProvider(bool isInner) {
         return EncoderProvider(isInner);
     }
-   
+
 }

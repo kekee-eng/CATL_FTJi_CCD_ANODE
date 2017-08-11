@@ -81,7 +81,7 @@ namespace DetectCCD {
         public ModDevice device = new ModDevice();
 
         void init_server() {
-            
+
             if (Static.App.Is8K) {
 
                 RemoteDefect.InitServer();
@@ -111,11 +111,8 @@ namespace DetectCCD {
             else {
 
                 //4K
-                RemotePLC.InitClient();
-                RemoteDefect.InitClient();
-
-                //
-
+                Static.SafeRun(RemotePLC.InitClient);
+                Static.SafeRun(RemoteDefect.InitClient);
 
             }
         }
@@ -259,7 +256,7 @@ namespace DetectCCD {
                 RemotePLC.In4KCallPLC_ForWidth(
                     tabOuter.EA,
                     tabOuter.TAB,
-                    !tabOuter.IsFail && !tabInner.IsFail,
+                    !tabOuter.IsWidthFail && !tabInner.IsWidthFail,
                     tabInner.ValWidth,
                     tabOuter.ValWidth
                     );
@@ -352,6 +349,15 @@ namespace DetectCCD {
         private void timer1_Tick(object sender, EventArgs e) {
 
             Static.SafeRun(() => {
+
+                groupRemoteClient.Visible = Static.App.Is4K;
+                if (Static.App.Is4K) {
+                    _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";
+                    _lc_remote_8k.ForeColor = RemoteDefect.isConnect ? Color.Green : Color.Red;
+
+                    _lc_remote_plc.Text = RemotePLC.isConnect ? "On" : "Off";
+                    _lc_remote_plc.ForeColor = RemotePLC.isConnect ? Color.Green : Color.Red;
+                }
 
                 //
                 textMode.BackColor = isOnline ? Color.LightGreen : Color.Pink;
@@ -542,13 +548,18 @@ namespace DetectCCD {
             splitContainerOuter.Panel1Collapsed ^= true;
         }
 
-        private void button1_Click(object sender, EventArgs e) {
-            RemotePLC.In4KCallPLC_SendLabel(true, 123464);
+        private void btnConnectRemote8K_Click(object sender, EventArgs e) {
+
+            runAction((sender as SimpleButton).Text, () => {
+                RemoteDefect.InitClient();
+            });
         }
 
-        private void button2_Click(object sender, EventArgs e) {
-            var tt = RemotePLC.In4KCallPLC_GetEncoder(true);
-            MessageBox.Show(tt.ToString());
+        private void btnConnectRemotePLC_Click(object sender, EventArgs e) {
+
+            runAction((sender as SimpleButton).Text, () => {
+                RemotePLC.InitClient();
+            });
         }
     }
 

@@ -11,6 +11,7 @@ namespace DetectCCD {
     public class RemoteDefect : MarshalByRefObject {
 
         static RemoteDefect client;
+        public static bool isConnect { get { return client != null; } }
         public static void InitServer() {
 
             TcpServerChannel channel = new TcpServerChannel("RemoteDefect", Static.App.RemotePort);
@@ -27,14 +28,18 @@ namespace DetectCCD {
                 typeof(RemoteDefect),
                 string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
 
+            //测试连接
+            try { client._in_8k_return_4k_getDefectCount(true, true, 0, 0, 0); }
+            catch {
+                client = null;
+                throw;
+            }
         }
 
         public static int In4KCall8K_GetDefectCount(bool isFront, bool isInner, double start, double end, int ea) {
             
             try {
-                if (client == null)
-                    return -1;
-
+                if (client == null) return -1;
                 return client._in_8k_return_4k_getDefectCount(isFront, isInner, start, end, ea);
             }
             catch {

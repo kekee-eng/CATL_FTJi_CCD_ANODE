@@ -50,6 +50,11 @@
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.groupRemoteClient = new DevExpress.XtraEditors.GroupControl();
+            this._lc_remote_plc = new DevExpress.XtraEditors.LabelControl();
+            this._lc_remote_8k = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.btnDisconnect = new DevExpress.XtraEditors.SimpleButton();
             this.btnConnect = new DevExpress.XtraEditors.SimpleButton();
@@ -137,14 +142,16 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnConnectRemote8K = new DevExpress.XtraEditors.SimpleButton();
+            this.btnConnectRemotePLC = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).BeginInit();
             this.xtraTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).BeginInit();
+            this.groupRemoteClient.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textMode.Properties)).BeginInit();
@@ -394,14 +401,59 @@
             // 
             // xtraTabPage1
             // 
-            this.xtraTabPage1.Controls.Add(this.button2);
-            this.xtraTabPage1.Controls.Add(this.button1);
+            this.xtraTabPage1.Controls.Add(this.groupRemoteClient);
             this.xtraTabPage1.Controls.Add(this.groupControl1);
             this.xtraTabPage1.ImageIndex = 0;
             this.xtraTabPage1.MaxTabPageWidth = 100;
             this.xtraTabPage1.Name = "xtraTabPage1";
             this.xtraTabPage1.Size = new System.Drawing.Size(1070, 620);
             this.xtraTabPage1.Text = "设备控制";
+            // 
+            // groupRemoteClient
+            // 
+            this.groupRemoteClient.Controls.Add(this.btnConnectRemotePLC);
+            this.groupRemoteClient.Controls.Add(this.btnConnectRemote8K);
+            this.groupRemoteClient.Controls.Add(this._lc_remote_plc);
+            this.groupRemoteClient.Controls.Add(this._lc_remote_8k);
+            this.groupRemoteClient.Controls.Add(this.labelControl6);
+            this.groupRemoteClient.Controls.Add(this.labelControl4);
+            this.groupRemoteClient.Location = new System.Drawing.Point(364, 26);
+            this.groupRemoteClient.Name = "groupRemoteClient";
+            this.groupRemoteClient.Size = new System.Drawing.Size(289, 213);
+            this.groupRemoteClient.TabIndex = 1;
+            this.groupRemoteClient.Text = "联机设备状态";
+            // 
+            // _lc_remote_plc
+            // 
+            this._lc_remote_plc.Location = new System.Drawing.Point(91, 81);
+            this._lc_remote_plc.Name = "_lc_remote_plc";
+            this._lc_remote_plc.Size = new System.Drawing.Size(4, 14);
+            this._lc_remote_plc.TabIndex = 3;
+            this._lc_remote_plc.Text = "-";
+            // 
+            // _lc_remote_8k
+            // 
+            this._lc_remote_8k.Location = new System.Drawing.Point(91, 45);
+            this._lc_remote_8k.Name = "_lc_remote_8k";
+            this._lc_remote_8k.Size = new System.Drawing.Size(4, 14);
+            this._lc_remote_8k.TabIndex = 2;
+            this._lc_remote_8k.Text = "-";
+            // 
+            // labelControl6
+            // 
+            this.labelControl6.Location = new System.Drawing.Point(33, 81);
+            this.labelControl6.Name = "labelControl6";
+            this.labelControl6.Size = new System.Drawing.Size(20, 14);
+            this.labelControl6.TabIndex = 1;
+            this.labelControl6.Text = "PLC";
+            // 
+            // labelControl4
+            // 
+            this.labelControl4.Location = new System.Drawing.Point(33, 44);
+            this.labelControl4.Name = "labelControl4";
+            this.labelControl4.Size = new System.Drawing.Size(15, 14);
+            this.labelControl4.TabIndex = 0;
+            this.labelControl4.Text = "8K";
             // 
             // groupControl1
             // 
@@ -1445,25 +1497,23 @@
             this.openFileDialog1.Filter = "配置文件|*.cfg|所有文件|*.*";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
-            // button1
+            // btnConnectRemote8K
             // 
-            this.button1.Location = new System.Drawing.Point(270, 408);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnConnectRemote8K.Location = new System.Drawing.Point(168, 37);
+            this.btnConnectRemote8K.Name = "btnConnectRemote8K";
+            this.btnConnectRemote8K.Size = new System.Drawing.Size(101, 30);
+            this.btnConnectRemote8K.TabIndex = 28;
+            this.btnConnectRemote8K.Text = "连接";
+            this.btnConnectRemote8K.Click += new System.EventHandler(this.btnConnectRemote8K_Click);
             // 
-            // button2
+            // btnConnectRemotePLC
             // 
-            this.button2.Location = new System.Drawing.Point(270, 437);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnConnectRemotePLC.Location = new System.Drawing.Point(168, 73);
+            this.btnConnectRemotePLC.Name = "btnConnectRemotePLC";
+            this.btnConnectRemotePLC.Size = new System.Drawing.Size(101, 30);
+            this.btnConnectRemotePLC.TabIndex = 29;
+            this.btnConnectRemotePLC.Text = "连接";
+            this.btnConnectRemotePLC.Click += new System.EventHandler(this.btnConnectRemotePLC_Click);
             // 
             // XMain
             // 
@@ -1485,6 +1535,9 @@
             this.xtraTabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).EndInit();
             this.xtraTabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).EndInit();
+            this.groupRemoteClient.ResumeLayout(false);
+            this.groupRemoteClient.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
             this.groupControl1.PerformLayout();
@@ -1648,7 +1701,12 @@
         private DevExpress.XtraEditors.CheckEdit checkDetectWidth;
         private DevExpress.XtraEditors.CheckEdit checkDetectTab;
         private DevExpress.XtraEditors.CheckEdit checkDetectDefect;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private DevExpress.XtraEditors.GroupControl groupRemoteClient;
+        private DevExpress.XtraEditors.LabelControl _lc_remote_plc;
+        private DevExpress.XtraEditors.LabelControl _lc_remote_8k;
+        private DevExpress.XtraEditors.LabelControl labelControl6;
+        private DevExpress.XtraEditors.LabelControl labelControl4;
+        private DevExpress.XtraEditors.SimpleButton btnConnectRemotePLC;
+        private DevExpress.XtraEditors.SimpleButton btnConnectRemote8K;
     }
 }
