@@ -82,7 +82,7 @@ namespace DetectCCD {
                     frameVs += targetDs * precent;
                 }
 
-                Static.SafeRun(() => updateView());
+                Static.SafeRun(() => updateView(false));
             }
         }
         public void MoveTargetDirect() {
@@ -184,7 +184,7 @@ namespace DetectCCD {
                 if (id >= 0 && id <= Detect.Labels.Count - 1) {
                     var obj = Detect.Labels[id];
 
-                    MoveToTarget(obj.Y, obj.X, obj.W, obj.H);
+                    MoveToFrame(obj.Y);
                 }
             });
         }

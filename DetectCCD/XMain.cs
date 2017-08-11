@@ -295,7 +295,6 @@ namespace DetectCCD {
             checkDetectWidth.CheckedChanged += (o, e) => Static.App.DetectWidth = (o as CheckEdit).Checked;
 
         }
-
         void init_status() {
             //选定用户
             changeUser();
