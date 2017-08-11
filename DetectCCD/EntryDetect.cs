@@ -444,6 +444,9 @@ CfgParam        BLOB
             OnNewTab?.Invoke(data);
             
             if (Static.App.TestLabelTab) {
+                Labels.Add(new DataLabel() { Encoder = grab.GetEncoder(data.TabY1) });
+                Labels.Add(new DataLabel() { Encoder = grab.GetEncoder(data.TabY2) });
+
                 OnNewLabel(grab.GetEncoder(data.TabY1));
                 OnNewLabel(grab.GetEncoder(data.TabY2));
             }
@@ -572,7 +575,7 @@ CfgParam        BLOB
                                 var remoteLables = RemoteDefect.In4K_Call8K_GetDefectList(true, isinner, ea - 1);
 
                                 foreach (var rl in remoteLables) {
-                                    Labels.Add(new DataLabel() { Y= rl.Y, Encoder = grab.GetEncoder(rl.Y) });
+                                    Labels.Add(new DataLabel() { EA = -50, Y = rl.Y, Encoder = grab.GetEncoder(rl.Y) });
                                     OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
                                 }
                             }

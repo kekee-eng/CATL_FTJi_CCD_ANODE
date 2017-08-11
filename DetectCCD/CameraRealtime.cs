@@ -61,9 +61,7 @@ namespace DetectCCD {
         public bool isCameraLink = false;
 
         Stopwatch fps_watch = new Stopwatch();
-
-        int encoder_base = 0;
-        int encoder_current { get { var enc = callGetEncoder(); return enc > 0 ? enc : (int)Buffers.CounterStamp; } }
+        int encoder_current { get { return Static.App.Is4K ? callGetEncoder() : (int)Buffers.CounterStamp; } }
 
         bool create_objects() {
 
@@ -110,7 +108,6 @@ namespace DetectCCD {
                 fps_watch.Restart();
                 m_fpsRealtime = 1.0;
 
-                encoder_base = encoder_current;
             }
             else {
                 
@@ -122,7 +119,7 @@ namespace DetectCCD {
 
             //
             m_frame++;
-            m_encoder = encoder_current - encoder_base;
+            m_encoder = encoder_current;
 
             //
             DataGrab dg = new DataGrab() {

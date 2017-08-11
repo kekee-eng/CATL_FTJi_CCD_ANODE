@@ -123,7 +123,7 @@ namespace DetectCCD {
 
                 //4K
                 Static.SafeRun(RemotePLC.InitClient);
-                Static.SafeRun(RemoteDefect.InitClient);
+                //Static.SafeRun(RemoteDefect.InitClient);
 
             }
         }
@@ -151,6 +151,7 @@ namespace DetectCCD {
 
                         var obj = record.InnerGrab.Cache.GetFirstUnDetect();
                         if (obj != null) {
+                            Static.Log.Debug("内侧相机编码器：" + obj.Encoder.ToString());
                             record.InnerDetect.TryDetect(obj);
                             //record.InnerViewerImage.SetBottomTarget(obj.Frame);
                         }
