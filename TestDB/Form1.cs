@@ -27,6 +27,7 @@ namespace TestDbViewer {
             Record.InnerViewerImage.MoveTargetDirect();
             Record.OuterViewerImage.MoveTargetDirect();
 
+            splitContainer1.Panel1Collapsed = true;
         }
 
         ModRecord Record = new ModRecord();
