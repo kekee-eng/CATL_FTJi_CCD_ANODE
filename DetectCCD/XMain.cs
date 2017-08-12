@@ -70,7 +70,7 @@ namespace DetectCCD {
         }
 
         public bool isOnline { get { return textMode.SelectedIndex == 0; } }
-
+        public bool isClear = false;
         bool isQuit = false;
         bool isRollOk = false;
 
@@ -258,6 +258,7 @@ namespace DetectCCD {
 
                             record.InnerDetect.Save();
                             record.OuterDetect.Save();
+
                         })) {
 
                             ret1.AsParallel().ForAll(x => x.IsStore = true);
@@ -316,6 +317,7 @@ namespace DetectCCD {
 
             //全屏显示
             //selectFullScreen_ItemClick(null, null);
+            status_plc_ItemClick(null, null);
 
             //定时器
             timer1.Tag = true;
@@ -392,7 +394,7 @@ namespace DetectCCD {
             });
 
         }
-        public void DeviceInit() {
+        public void DeviceInit(bool isClear =false) {
 
             runAction("初始化设备", () => {
                 device.Dispose();
@@ -404,17 +406,26 @@ namespace DetectCCD {
                 device.InnerCamera.Reset();
                 device.OuterCamera.Reset();
 
-                record.InnerGrab.Cache.Dispose();
-                record.OuterGrab.Cache.Dispose();
+                this.isClear = isClear;
+                if (isClear) {
+                    record.InnerGrab.Cache.Dispose();
+                    record.OuterGrab.Cache.Dispose();
 
-                record.InnerDetect.Dispose();
-                record.OuterDetect.Dispose();
-
-                record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                    record.InnerDetect.Dispose();
+                    record.OuterDetect.Dispose();
+                    
+                    record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                    record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                }
+                else {
+                    record.OuterViewerImage.SetBottomTarget(record.OuterGrab.Max);
+                }
+                
                 record.InnerViewerImage.MoveTargetDirect();
-
-                record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
                 record.OuterViewerImage.MoveTargetDirect();
+
+                record.InnerViewerImage.SetUserEnable(true);
+                record.OuterViewerImage.SetUserEnable(true);
             });
 
         }
@@ -475,8 +486,17 @@ namespace DetectCCD {
                 groupRoll.Enabled = device.isOpen;
                 groupTest.Enabled = device.isOpen;
 
-                btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
-                btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
+                btnConnect.Enabled = isOnline;
+                btnDisconnect.Enabled = isOnline;
+
+                if (isOnline) {
+                    btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
+                    btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
+                }
+                else {
+                    btnStartGrab.Enabled = isClear && device.isOpen && !device.isGrabbing;
+                    btnStopGrab.Enabled = isClear && device.isOpen && device.isGrabbing;
+                }
 
                 checkSaveOK.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
@@ -624,20 +644,14 @@ namespace DetectCCD {
 
         private void textMode_SelectedIndexChanged(object sender, EventArgs e) {
 
+            device.Dispose();
             if (isOnline) {
                 Static.App.RunningMode = 0;
-                Static.App.CameraByRealtime = true;
-                Static.App.CameraByZipFile = false;
-                Static.App.CameraByDB = false;
             }
             else {
                 Static.App.RunningMode = 1;
-                Static.App.CameraByRealtime = false;
-                Static.App.CameraByZipFile = false;
-                Static.App.CameraByDB = true;
-
-                DeviceLoad();
             }
+
         }
         private void btnConnect_Click(object sender, EventArgs e) {
             DeviceOpen();

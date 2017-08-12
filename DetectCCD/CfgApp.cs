@@ -78,7 +78,6 @@ namespace DetectCCD {
         //相机源：真实相机、Zip文件、文件夹、数据库
         public bool CameraByRealtime = false;
         public bool CameraByZipFile = true;
-        public bool CameraByDB = false;
 
         //
         public bool Is4K = false;

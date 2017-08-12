@@ -44,7 +44,7 @@ namespace DetectCCD {
 
             //
             App.SelectUserId = 0;
-            
+            App.RunningMode = 0;
         }
         public static void Uninit() {
 

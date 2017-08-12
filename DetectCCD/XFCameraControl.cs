@@ -21,8 +21,7 @@ namespace DetectCCD {
         }
 
         XMain main;
-
-
+        
         private void trackFps_EditValueChanged(object sender, EventArgs e) {
             if (main.device.isOpen) {
                 Static.App.CameraFpsControl = trackFps.Value / 10.0;
@@ -41,15 +40,25 @@ namespace DetectCCD {
             if (ofd.ShowDialog() == DialogResult.OK) {
                 Static.App.CameraFileInner = ofd.FileName;
             }
+
+            main.textMode.SelectedIndex = 0;
+            Static.App.RunningMode = 0;
+            Static.App.CameraByRealtime = false;
+            Static.App.CameraByZipFile = true;
         }
         private void btnLoadFileOuter_Click(object sender, EventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == DialogResult.OK) {
                 Static.App.CameraFileOuter = ofd.FileName;
             }
+
+            main.textMode.SelectedIndex = 0;
+            Static.App.RunningMode = 0;
+            Static.App.CameraByRealtime = false;
+            Static.App.CameraByZipFile = true;
         }
         private void btnInit_Click(object sender, EventArgs e) {
-            main.DeviceInit();
+            main.DeviceInit(true);
         }
         private void btnStart_Click(object sender, EventArgs e) {
             main.DeviceStartGrab();
@@ -58,6 +67,9 @@ namespace DetectCCD {
             main.DeviceStopGrab();
         }
         private void btnLoadDb_Click(object sender, EventArgs e) {
+            main.textMode.SelectedIndex = 1;
+            Static.App.CameraByRealtime = false;
+            Static.App.CameraByZipFile = true;
             main.DeviceLoad();
         }
 
@@ -66,11 +78,18 @@ namespace DetectCCD {
             if (main.device.isOpen) {
                 btnLoadFileInner.Enabled = !main.device.isGrabbing;
                 btnLoadFileOuter.Enabled = !main.device.isGrabbing;
+                btnLoadDb.Enabled = !main.isOnline && !main.device.isGrabbing;
+
                 btnInit.Enabled = !main.device.isGrabbing;
 
-                btnStart.Enabled = !main.device.isGrabbing;
-                btnStop.Enabled = main.device.isGrabbing;
-
+                if (main.isOnline) {
+                    btnStart.Enabled = !main.device.isGrabbing;
+                    btnStop.Enabled = main.device.isGrabbing;
+                }
+                else {
+                    btnStart.Enabled = main.isClear && !main.device.isGrabbing;
+                    btnStop.Enabled = main.isClear && main.device.isGrabbing;
+                }
                 textFrameStart.Enabled = !main.device.isGrabbing;
             }
 

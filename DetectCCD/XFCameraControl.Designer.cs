@@ -42,7 +42,7 @@
             // 
             // btnLoadFileInner
             // 
-            this.btnLoadFileInner.Location = new System.Drawing.Point(399, 44);
+            this.btnLoadFileInner.Location = new System.Drawing.Point(305, 80);
             this.btnLoadFileInner.Name = "btnLoadFileInner";
             this.btnLoadFileInner.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileInner.TabIndex = 7;
@@ -51,7 +51,7 @@
             // 
             // btnLoadFileOuter
             // 
-            this.btnLoadFileOuter.Location = new System.Drawing.Point(399, 80);
+            this.btnLoadFileOuter.Location = new System.Drawing.Point(305, 116);
             this.btnLoadFileOuter.Name = "btnLoadFileOuter";
             this.btnLoadFileOuter.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileOuter.TabIndex = 8;
@@ -60,7 +60,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(44, 223);
+            this.btnStart.Location = new System.Drawing.Point(44, 171);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(101, 30);
             this.btnStart.TabIndex = 10;
@@ -69,7 +69,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(44, 259);
+            this.btnStop.Location = new System.Drawing.Point(44, 207);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(101, 30);
             this.btnStop.TabIndex = 11;
@@ -79,7 +79,7 @@
             // trackFps
             // 
             this.trackFps.EditValue = 10;
-            this.trackFps.Location = new System.Drawing.Point(85, 331);
+            this.trackFps.Location = new System.Drawing.Point(85, 279);
             this.trackFps.Name = "trackFps";
             this.trackFps.Properties.LabelAppearance.Options.UseTextOptions = true;
             this.trackFps.Properties.LabelAppearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
@@ -93,7 +93,7 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(31, 336);
+            this.labelControl1.Location = new System.Drawing.Point(31, 284);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(48, 14);
             this.labelControl1.TabIndex = 13;
@@ -101,7 +101,7 @@
             // 
             // textFrameStart
             // 
-            this.textFrameStart.Location = new System.Drawing.Point(85, 363);
+            this.textFrameStart.Location = new System.Drawing.Point(85, 311);
             this.textFrameStart.Name = "textFrameStart";
             this.textFrameStart.Properties.AutoHeight = false;
             this.textFrameStart.Size = new System.Drawing.Size(186, 25);
@@ -110,7 +110,7 @@
             // 
             // labelControl2
             // 
-            this.labelControl2.Location = new System.Drawing.Point(31, 368);
+            this.labelControl2.Location = new System.Drawing.Point(31, 316);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(48, 14);
             this.labelControl2.TabIndex = 16;
@@ -118,7 +118,7 @@
             // 
             // btnInit
             // 
-            this.btnInit.Location = new System.Drawing.Point(44, 115);
+            this.btnInit.Location = new System.Drawing.Point(44, 63);
             this.btnInit.Name = "btnInit";
             this.btnInit.Size = new System.Drawing.Size(101, 30);
             this.btnInit.TabIndex = 17;
@@ -133,7 +133,7 @@
             // 
             // btnLoadDb
             // 
-            this.btnLoadDb.Location = new System.Drawing.Point(44, 80);
+            this.btnLoadDb.Location = new System.Drawing.Point(44, 28);
             this.btnLoadDb.Name = "btnLoadDb";
             this.btnLoadDb.Size = new System.Drawing.Size(101, 30);
             this.btnLoadDb.TabIndex = 18;
@@ -144,7 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(301, 433);
+            this.ClientSize = new System.Drawing.Size(294, 361);
             this.Controls.Add(this.btnLoadDb);
             this.Controls.Add(this.btnInit);
             this.Controls.Add(this.labelControl2);

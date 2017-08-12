@@ -27,7 +27,7 @@ namespace TestDbViewer {
             Record.InnerViewerImage.MoveTargetDirect();
             Record.OuterViewerImage.MoveTargetDirect();
 
-            splitContainer1.Panel1Collapsed = true;
+            //splitContainer1.Panel1Collapsed = true;
         }
 
         ModRecord Record = new ModRecord();
@@ -72,7 +72,7 @@ namespace TestDbViewer {
                 for (int i = Record.InnerGrab.Min; i <= Record.InnerGrab.Max; i++) {
 
                     await Task.Run(() => {
-                        Record.InnerGrab.GetImage(i)?.WriteImage("bmp", 0, path + i);
+                        Record.InnerGrab.GetImage(i)?.WriteImage("bmp", 0, path + string.Format("{0:D8}", i));
                     });
 
                     this.Text = string.Format("Save Inner: {0}/{1}", i, Record.InnerGrab.Max);
@@ -83,7 +83,7 @@ namespace TestDbViewer {
                 for (int i = Record.OuterGrab.Min; i <= Record.OuterGrab.Max; i++) {
 
                     await Task.Run(() => {
-                        Record.OuterGrab.GetImage(i)?.WriteImage("bmp", 0, path + i);
+                        Record.OuterGrab.GetImage(i)?.WriteImage("bmp", 0, path + string.Format("{0:D8}", i));
                     });
 
                     this.Text = string.Format("Save Outer: {0}/{1}", i, Record.OuterGrab.Max);
