@@ -42,7 +42,7 @@ namespace DetectCCD {
         public double DiffFrameFrontBack = 4.42;
 
         public double FixFrameInnerFrontScale {
-            get { return Camera8KInnerScaleY / Camera4KInnerScaleY; }
+            get { return Camera4KInnerScaleY / Camera8KInnerScaleY; }
         }
         public double FixFrameOuterOrBackOffset {
             get {
