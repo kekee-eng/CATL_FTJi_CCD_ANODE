@@ -87,35 +87,23 @@ namespace DetectCCD {
 
                 RemoteDefect.InitServer();
                 RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) => {
-                    if (isInner) {
-                        start += Static.App.RemoteInnerOffset;
-                        end += Static.App.RemoteInnerOffset;
-                    }
-                    else {
-                        start += Static.App.RemoteOuterOffset;
-                        end += Static.App.RemoteOuterOffset;
-                    }
 
-                    if (isFront) {
+                    start = Static.App.FrameInnerToFront(isFront, isInner, start);
+                    end = Static.App.FrameInnerToFront(isFront, isInner, end);
+                    return (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
 
-                        return record.InnerDetect.AllocAndGetDefectCount(start, end, id);
-                    }
-                    else {
-                        start += Static.App.FixOuterOrBackOffset;
-                        end += Static.App.FixOuterOrBackOffset;
-                        return record.OuterDetect.AllocAndGetDefectCount(start, end, id);
-                    }
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, id) => {
 
                     var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects.TakeWhile(x => x.EA == id && x.Type < 2).ToArray();
-                    var offs = (isInner ? Static.App.RemoteInnerOffset : Static.App.RemoteOuterOffset);
-                    offs += (isFront ? 0 : Static.App.FixOuterOrBackOffset);
-
                     for (int i = 0; i < defs.Length; i++)
-                        defs[i].Y -= offs;
+                        defs[i].Y = Static.App.FrameFrontToInner(isFront, isInner, defs[i].Y);
 
                     return defs;
+                };
+                RemoteDefect._func_in_8k_viewer += (isFront, isInner, y) => {
+                    (isFront ? record.InnerViewerImage : record.OuterViewerImage).MoveToFrame(
+                        Static.App.FrameInnerToFront(isFront, isInner, y));
                 };
 
             }
@@ -142,10 +130,22 @@ namespace DetectCCD {
             };
 
             record.InnerViewerImage.OnViewUpdate += (y, x, s) => {
-                record.OuterViewerImage.MoveToView(y + Static.App.FixOuterOrBackOffset, x, s);
+                if(ckViewLocal.Checked)
+                record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
+
+                if(Static.App.Is4K) {
+                    if (ckViewInnerFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, true, y);
+                    if (ckViewInnerBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, true, y);
+                }
             };
             record.OuterViewerImage.OnViewUpdate += (y, x, s) => {
-                record.InnerViewerImage.MoveToView(y - Static.App.FixOuterOrBackOffset, x, s);
+                if (ckViewLocal.Checked)
+                    record.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
+
+                if (Static.App.Is4K) {
+                    if (ckViewOuterFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, false, y);
+                    if (ckViewOuterBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, false, y);
+                }
             };
 
             //线程：图像处理
@@ -158,7 +158,6 @@ namespace DetectCCD {
 
                         var obj = record.InnerGrab.Cache.GetFirstUnDetect();
                         if (obj != null) {
-                            Static.Log.Debug("内侧相机编码器：" + obj.Encoder.ToString());
                             record.InnerDetect.TryDetect(obj);
                             //record.InnerViewerImage.SetBottomTarget(obj.Frame);
                         }
@@ -182,7 +181,7 @@ namespace DetectCCD {
 
                             }
                             record.OuterViewerImage.SetBottomTarget(obj.Frame);
-                            record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixOuterOrBackOffset);
+                            record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixFrameOuterOrBackOffset);
                         }
                     });
                 };
@@ -567,13 +566,13 @@ namespace DetectCCD {
                 RemoteDefect.InitClient();
             });
         }
-
         private void btnConnectRemotePLC_Click(object sender, EventArgs e) {
 
             runAction((sender as SimpleButton).Text, () => {
                 RemotePLC.InitClient();
             });
         }
+
     }
 
 }

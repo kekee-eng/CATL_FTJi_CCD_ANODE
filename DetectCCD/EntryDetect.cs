@@ -162,7 +162,7 @@ CfgParam        BLOB
             // diff = this - partner
             // this = partner + diff
             // partner = this - diff
-            var diffFrame = Static.App.FixOuterOrBackOffset;
+            var diffFrame = Static.App.FixFrameOuterOrBackOffset;
 
             //需要同步的对象
             var myER = Tabs.Last();
@@ -572,7 +572,7 @@ CfgParam        BLOB
 
                             //TODO: 测试贴所有标签
                             if (Static.App.Is4K && Static.App.TestLabelDefectAB) {
-                                var remoteLables = RemoteDefect.In4K_Call8K_GetDefectList(true, isinner, ea - 1);
+                                var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, ea - 1);
 
                                 foreach (var rl in remoteLables) {
                                     Labels.Add(new DataLabel() { EA = -50, Y = rl.Y, Encoder = grab.GetEncoder(rl.Y) });

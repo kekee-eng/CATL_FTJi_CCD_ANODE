@@ -37,7 +37,9 @@ namespace DetectCCD {
         }
 
         public static int In4KCall8K_GetDefectCount(bool isFront, bool isInner, double start, double end, int ea) {
-            
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
             try {
                 if (client == null) return -1;
                 return client._in_8k_return_4k_getDefectCount(isFront, isInner, start, end, ea);
@@ -57,12 +59,14 @@ namespace DetectCCD {
             catch { }
             return -4; //Master函数有问题
         }
-        
-        public static DataDefect[] In4K_Call8K_GetDefectList(bool isFront, bool isInner, int ea) {
+
+        public static DataDefect[] In4KCall8K_GetDefectList(bool isFront, bool isInner, int ea) {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
 
             try {
                 if (client == null) return null;
-                return client._in_8k_return_4k_getDefectList(isFront, isInner,ea);
+                return client._in_8k_return_4k_getDefectList(isFront, isInner, ea);
             }
             catch {
                 client = null;
@@ -75,5 +79,22 @@ namespace DetectCCD {
             catch { return null; }
         }
 
+        public static void In4KCall8K_Viewer(bool isFront, bool isInner, double y) {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            try {
+                if (client == null) return;
+                client._in_8k_viewer(isFront, isInner, y);
+            }
+            catch {
+                client = null;
+            }
+        }
+        public static event Action<bool, bool, double> _func_in_8k_viewer;
+        public void _in_8k_viewer(bool isFront, bool isInner, double y) {
+            try { _func_in_8k_viewer(isFront, isInner, y); }
+            catch { }
+        }
     }
 }

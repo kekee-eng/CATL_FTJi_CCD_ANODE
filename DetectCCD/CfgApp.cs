@@ -37,17 +37,38 @@ namespace DetectCCD {
         //
         public string RemoteHost = "localhost";
         public int RemotePort = 6500;
-        public double RemoteInnerOffset = 0;
-        public double RemoteOuterOffset = 0;
-        public double RemoteFrontOffset = 0;
+        public double DiffFrameInnerFront = 10;
         public double DiffFrameInnerOuter = 36;
         public double DiffFrameFrontBack = 4.42;
-        public double FixOuterOrBackOffset {
+
+        public double FixFrameInnerFrontScale {
+            get { return Camera8KInnerScaleY / Camera4KInnerScaleY; }
+        }
+        public double FixFrameOuterOrBackOffset {
             get {
                 if (Is4K) return DiffFrameInnerOuter;
                 return DiffFrameFrontBack;
             }
         }
+        public double FrameInnerToFront(bool isFront, bool isInner, double i) {
+
+            var eInner = i - (isInner ? 0 : DiffFrameInnerOuter);
+            var eFrontScale = eInner * FixFrameInnerFrontScale;
+            var eFront = eFrontScale + DiffFrameInnerFront;
+            var eOutput = eFront + (isFront ? 0 : DiffFrameFrontBack);
+
+            return (eOutput);
+        }
+        public double FrameFrontToInner(bool isFront, bool isInner, double i) {
+
+            var eInput = i - (isFront ? 0 : DiffFrameFrontBack);
+            var eInnerScale = eInput - DiffFrameInnerFront;
+            var eInner = eInnerScale / FixFrameInnerFrontScale;
+            var eOutput = eInner + (isInner ? 0 : DiffFrameInnerOuter);
+
+            return (eOutput);
+        }
+
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
         public int RunningMode = 0;
@@ -64,8 +85,8 @@ namespace DetectCCD {
         //
         public bool Is4K = false;
         public bool Is8K = true;
-        public string GetPrex() { return Is4K ? "4K" : (Is8K ? "8K" : "Uknow"); } 
-        
+        public string GetPrex() { return Is4K ? "4K" : (Is8K ? "8K" : "Uknow"); }
+
         public string CameraFileInner = "D:/#DAT/[1B][20170806][102417-104740][245][F1-F245].zip";
         public string CameraFileOuter = "D:/#DAT/[1A][20170806][102417-104740][245][F1-F245].zip";
 
@@ -125,29 +146,8 @@ namespace DetectCCD {
         public string[] GetUsernameList() { return new string[] { OperatorUsername, EngineerUsername, ExpertUsername }; }
         public string[] GetPasswordList() { return new string[] { OperatorPassword, EngineerPassword, ExpertPassword }; }
         public string[] GetViewstyleList() { return new string[] { OperatorViewstyle, EngineerViewstyle, ExpertViewstyle }; }
-
         public string GetUserName() { return GetUsernameList()[SelectUserId]; }
-
-
-        public void SetTransform(bool isFront, bool isInner, ref double start, ref double end) {
-
-            if (isFront) {
-                if (isInner) {
-
-                }
-                else {
-
-                }
-            }
-            else {
-                if (isInner) {
-
-                }
-                else {
-
-                }
-            }
-        }
+        
     }
 
 }
