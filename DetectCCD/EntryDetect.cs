@@ -43,8 +43,7 @@ CfgParam        BLOB
 
             if (!needSave)
                 return;
-
-
+            
             needSave = false;
             db.Write(string.Format(@"REPLACE INTO {0} ( ID, Tabs, Defects, Labels, CfgApp, CfgParam ) VALUES (?,?,?,?,?,?,?) ", tname),
                 0,
@@ -58,7 +57,7 @@ CfgParam        BLOB
         }
         public void Reload(bool useParam = false) {
 
-            var ret = db.Read(string.Format("SELECT * FROM {0} WHERE ID=0", tname));
+            var ret = db.Read(string.Format("SELECT * FROM {0} WHERE ID=\"0\"", tname));
             if (ret.Count == 0)
                 return;
 

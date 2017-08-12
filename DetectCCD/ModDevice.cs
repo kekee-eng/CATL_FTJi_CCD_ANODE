@@ -100,11 +100,10 @@ namespace DetectCCD {
                 OuterCamera = new CameraZipFile(Static.App.CameraFileOuter);
                 
             }
-            else if (Static.App.CameraByFolder) {
-                //从文件夹取图
-            }
             else if (Static.App.CameraByDB) {
                 //从数据库中取图
+                InnerCamera = new CameraDB(GetInnerDb());
+                OuterCamera = new CameraDB(GetOuterDb());
             }
 
             //设置信息
@@ -164,5 +163,10 @@ namespace DetectCCD {
 
         public Action<DataGrab> EventInnerCamera;
         public Action<DataGrab> EventOuterCamera;
+
+        public event Func<DataGrab.GrabDB> GetInnerDb;
+        public event Func<DataGrab.GrabDB> GetOuterDb;
+
+
     }
 }

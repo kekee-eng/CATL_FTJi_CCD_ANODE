@@ -78,16 +78,16 @@ namespace DetectCCD {
         //相机源：真实相机、Zip文件、文件夹、数据库
         public bool CameraByRealtime = false;
         public bool CameraByZipFile = true;
-        public bool CameraByFolder = false;
         public bool CameraByDB = false;
 
         //
         public bool Is4K = false;
         public bool Is8K = true;
-        public string GetPrex() { return Is4K ? "4K" : (Is8K ? "8K" : "Uknow"); }
+        public string GetPrex() { return Is4K ? "4K" : (Is8K ? "8K" : "Unknow"); }
 
         public string CameraFileInner = "D:/#DAT/[1B][20170806][102417-104740][245][F1-F245].zip";
         public string CameraFileOuter = "D:/#DAT/[1A][20170806][102417-104740][245][F1-F245].zip";
+        public string CameraFileDb = "";
 
         public int Camera4KInnerServer2 = 1;
         public int Camera4KInnerResource2 = 0;

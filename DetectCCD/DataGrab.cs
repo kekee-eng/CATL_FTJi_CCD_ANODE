@@ -88,7 +88,7 @@ namespace DetectCCD {
             public DataGrab this[int i] {
                 get {
                     var ret = db.Read(string.Format(@"SELECT * FROM {0} WHERE Frame=""{1}""", tname, i));
-                    if (ret.Count == 0)
+                    if (ret == null || ret.Count == 0)
                         return null;
                     return FromDB(ret[0]);
                 }

@@ -90,13 +90,10 @@
     <Reference Include="log4net">
       <HintPath>..\..\build\Bin\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="ZedGraph, Version=5.1.5.15371, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\ZedGraph.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authority.cs" />
+    <Compile Include="CameraDB.cs" />
     <Compile Include="CfgApp.cs" />
     <Compile Include="CfgParam.cs" />
     <Compile Include="CameraRealtime.cs" />
@@ -206,6 +203,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZedGraph\ZedGraph.csproj">
+      <Project>{2541686b-1673-43bf-af89-3163945db009}</Project>
+      <Name>ZedGraph</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

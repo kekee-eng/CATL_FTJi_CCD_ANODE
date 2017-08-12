@@ -45,7 +45,7 @@ namespace DetectCCD {
             record?.Dispose();
             device?.Dispose();
         }
-        
+
         void runAction(string actName, Action act) {
             try {
                 appendLog(String.Format("正在{0}...", actName));
@@ -69,7 +69,7 @@ namespace DetectCCD {
 
         }
 
-        bool isOnline { get { return textMode.SelectedIndex == 0; } }
+        public bool isOnline { get { return textMode.SelectedIndex == 0; } }
 
         bool isQuit = false;
         bool isRollOk = false;
@@ -125,6 +125,11 @@ namespace DetectCCD {
         }
         void init_device() {
 
+            //
+            device.GetInnerDb += () => record.InnerGrab.DB;
+            device.GetOuterDb += () => record.OuterGrab.DB;
+
+            //
             record.Init();
 
             //线程：采图
@@ -138,10 +143,10 @@ namespace DetectCCD {
             };
 
             record.InnerViewerImage.OnViewUpdate += (y, x, s) => {
-                if(ckViewLocal.Checked)
-                record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
+                if (ckViewLocal.Checked)
+                    record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
 
-                if(Static.App.Is4K) {
+                if (Static.App.Is4K) {
                     if (ckViewInnerFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, true, y);
                     if (ckViewInnerBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, true, y);
                 }
@@ -280,7 +285,7 @@ namespace DetectCCD {
                     tabInner.ValWidth,
                     tabOuter.ValWidth
                     );
-                
+
             };
         }
         void init_teston() {
@@ -311,9 +316,6 @@ namespace DetectCCD {
 
             //全屏显示
             //selectFullScreen_ItemClick(null, null);
-
-            //连接设备
-            status_plc_ItemClick(null, null);
 
             //定时器
             timer1.Tag = true;
@@ -364,6 +366,91 @@ namespace DetectCCD {
                 selectSkin.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
                 selectFullScreen.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             }
+        }
+
+        public void DeviceLoad() {
+
+            runAction("打开离线数据包", async () => {
+                if (openFileDialog1.ShowDialog() == DialogResult.OK) {
+
+                    UtilTool.XFWait.Open();
+                    await Task.Run(() => {
+
+                        record.Dispose();
+                        record.Open(openFileDialog1.FileName);
+
+                    });
+                    UtilTool.XFWait.Close();
+                    richTextBox1.Text = openFileDialog1.FileName;
+
+                    //初始化
+                    DeviceInit();
+
+                    //打开设备
+                    DeviceOpen();
+                }
+            });
+
+        }
+        public void DeviceInit() {
+
+            runAction("初始化设备", () => {
+                device.Dispose();
+                device.Open();
+
+                device.InnerCamera.Freeze();
+                device.OuterCamera.Freeze();
+
+                device.InnerCamera.Reset();
+                device.OuterCamera.Reset();
+
+                record.InnerGrab.Cache.Dispose();
+                record.OuterGrab.Cache.Dispose();
+
+                record.InnerDetect.Dispose();
+                record.OuterDetect.Dispose();
+
+                record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                record.InnerViewerImage.MoveTargetDirect();
+
+                record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                record.OuterViewerImage.MoveTargetDirect();
+            });
+
+        }
+        public void DeviceStartGrab() {
+
+            runAction("开启采图", () => {
+                device.InnerCamera.Grab();
+                device.OuterCamera.Grab();
+
+                record.InnerViewerImage.SetUserEnable(false);
+                record.OuterViewerImage.SetUserEnable(false);
+            });
+        }
+        public void DeviceStopGrab() {
+            runAction("停止采图", () => {
+                device.InnerCamera.Freeze();
+                device.OuterCamera.Freeze();
+
+                record.InnerViewerImage.SetUserEnable(true);
+                record.OuterViewerImage.SetUserEnable(true);
+            });
+        }
+        public void DeviceOpen() {
+
+            runAction("开启设备", async () => {
+
+                UtilTool.XFWait.Open();
+                await Task.Run(() => device.Open());
+                UtilTool.XFWait.Close();
+
+            });
+        }
+        public void DeviceClose() {
+            runAction("停止设备", () => {
+                device.Dispose();
+            });
         }
 
         private void timer1_Tick(object sender, EventArgs e) {
@@ -526,39 +613,37 @@ namespace DetectCCD {
             new XFViewerChart(device, record).Show();
         }
         private void btnOfflineControl_Click(object sender, EventArgs e) {
-            new XFCameraControl(device, record).Show();
+            new XFCameraControl(this).Show();
         }
         private void btnStartGrab_Click(object sender, EventArgs e) {
-            device.InnerCamera.Grab();
-            device.OuterCamera.Grab();
-
-            record.InnerViewerImage.SetUserEnable(false);
-            record.OuterViewerImage.SetUserEnable(false);
+            DeviceStartGrab();
         }
         private void btnStopGrab_Click(object sender, EventArgs e) {
-            device.InnerCamera.Freeze();
-            device.OuterCamera.Freeze();
-
-            record.InnerViewerImage.SetUserEnable(true);
-            record.OuterViewerImage.SetUserEnable(true);
+            DeviceStopGrab();
         }
 
         private void textMode_SelectedIndexChanged(object sender, EventArgs e) {
 
+            if (isOnline) {
+                Static.App.RunningMode = 0;
+                Static.App.CameraByRealtime = true;
+                Static.App.CameraByZipFile = false;
+                Static.App.CameraByDB = false;
+            }
+            else {
+                Static.App.RunningMode = 1;
+                Static.App.CameraByRealtime = false;
+                Static.App.CameraByZipFile = false;
+                Static.App.CameraByDB = true;
+
+                DeviceLoad();
+            }
         }
         private void btnConnect_Click(object sender, EventArgs e) {
-
-            runAction((sender as SimpleButton).Text, async () => {
-
-                UtilTool.XFWait.Open();
-                await Task.Run(() => device.Open());
-                UtilTool.XFWait.Close();
-
-            });
-
+            DeviceOpen();
         }
         private void btnDisconnect_Click(object sender, EventArgs e) {
-            device.Dispose();
+            DeviceClose();
         }
         private void btnQuit_Click(object sender, EventArgs e) {
             this.Close();

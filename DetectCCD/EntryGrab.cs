@@ -49,7 +49,7 @@ namespace DetectCCD {
                 if (value == null)
                     return;
 
-                if(Cache.Count ==0) {
+                if (Cache.Count == 0 || Fx == 0 || Fy == 0 || ScaleX == 0 || ScaleY == 0) {
                     if (value.Image != null) {
                         value.Image.GetImageSize(out value.Width, out value.Height);
                     }

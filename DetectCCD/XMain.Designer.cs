@@ -143,7 +143,6 @@
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabPageRollOffline = new DevExpress.XtraTab.XtraTabPage();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.btnLoadRecord = new DevExpress.XtraEditors.SimpleButton();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl2 = new DevExpress.XtraEditors.SplitContainerControl();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
@@ -419,7 +418,7 @@
             this.xtraTabPage1.ImageIndex = 0;
             this.xtraTabPage1.MaxTabPageWidth = 100;
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1169, 620);
+            this.xtraTabPage1.Size = new System.Drawing.Size(970, 620);
             this.xtraTabPage1.Text = "设备控制";
             // 
             // groupRemoteClient
@@ -1519,34 +1518,26 @@
             // xtraTabPageRollOffline
             // 
             this.xtraTabPageRollOffline.Controls.Add(this.richTextBox1);
-            this.xtraTabPageRollOffline.Controls.Add(this.btnLoadRecord);
             this.xtraTabPageRollOffline.Name = "xtraTabPageRollOffline";
             this.xtraTabPageRollOffline.Size = new System.Drawing.Size(274, 147);
             this.xtraTabPageRollOffline.Text = "离线";
             // 
             // richTextBox1
             // 
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.Enabled = false;
-            this.richTextBox1.Location = new System.Drawing.Point(16, 19);
+            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(232, 86);
+            this.richTextBox1.Size = new System.Drawing.Size(274, 147);
             this.richTextBox1.TabIndex = 7;
             this.richTextBox1.Text = "";
-            // 
-            // btnLoadRecord
-            // 
-            this.btnLoadRecord.Location = new System.Drawing.Point(147, 111);
-            this.btnLoadRecord.Name = "btnLoadRecord";
-            this.btnLoadRecord.Size = new System.Drawing.Size(101, 30);
-            this.btnLoadRecord.TabIndex = 6;
-            this.btnLoadRecord.Text = "载入记录";
             // 
             // xtraTabPage3
             // 
             this.xtraTabPage3.Controls.Add(this.splitContainerControl2);
             this.xtraTabPage3.ImageIndex = 2;
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(1169, 620);
+            this.xtraTabPage3.Size = new System.Drawing.Size(970, 620);
             this.xtraTabPage3.Text = "参数配置";
             // 
             // splitContainerControl2
@@ -1559,7 +1550,7 @@
             this.splitContainerControl2.Panel1.Text = "Panel1";
             this.splitContainerControl2.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
             this.splitContainerControl2.Panel2.Text = "Panel2";
-            this.splitContainerControl2.Size = new System.Drawing.Size(1169, 620);
+            this.splitContainerControl2.Size = new System.Drawing.Size(970, 620);
             this.splitContainerControl2.SplitterPosition = 255;
             this.splitContainerControl2.TabIndex = 1;
             this.splitContainerControl2.Text = "splitContainerControl2";
@@ -1568,7 +1559,7 @@
             // 
             this.xtraTabPage4.ImageIndex = 3;
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(1169, 620);
+            this.xtraTabPage4.Size = new System.Drawing.Size(970, 620);
             this.xtraTabPage4.Text = "测试工具";
             // 
             // timer1
@@ -1583,8 +1574,7 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "配置文件|*.cfg|所有文件|*.*";
+            this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
             // XMain
@@ -1711,7 +1701,6 @@
         private DevExpress.XtraEditors.GroupControl groupRoll;
         private DevExpress.XtraEditors.SimpleButton btnRollSet;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private DevExpress.XtraEditors.SimpleButton btnLoadRecord;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private DevExpress.XtraEditors.LabelControl _lc_outer_defectCount;

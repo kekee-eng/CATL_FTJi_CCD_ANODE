@@ -34,6 +34,7 @@
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.btnInit = new DevExpress.XtraEditors.SimpleButton();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.btnLoadDb = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.trackFps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackFps.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textFrameStart.Properties)).BeginInit();
@@ -41,7 +42,7 @@
             // 
             // btnLoadFileInner
             // 
-            this.btnLoadFileInner.Location = new System.Drawing.Point(44, 43);
+            this.btnLoadFileInner.Location = new System.Drawing.Point(399, 44);
             this.btnLoadFileInner.Name = "btnLoadFileInner";
             this.btnLoadFileInner.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileInner.TabIndex = 7;
@@ -50,7 +51,7 @@
             // 
             // btnLoadFileOuter
             // 
-            this.btnLoadFileOuter.Location = new System.Drawing.Point(44, 79);
+            this.btnLoadFileOuter.Location = new System.Drawing.Point(399, 80);
             this.btnLoadFileOuter.Name = "btnLoadFileOuter";
             this.btnLoadFileOuter.Size = new System.Drawing.Size(101, 30);
             this.btnLoadFileOuter.TabIndex = 8;
@@ -130,11 +131,21 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // btnLoadDb
+            // 
+            this.btnLoadDb.Location = new System.Drawing.Point(44, 80);
+            this.btnLoadDb.Name = "btnLoadDb";
+            this.btnLoadDb.Size = new System.Drawing.Size(101, 30);
+            this.btnLoadDb.TabIndex = 18;
+            this.btnLoadDb.Text = "设置膜卷数据";
+            this.btnLoadDb.Click += new System.EventHandler(this.btnLoadDb_Click);
+            // 
             // XFCameraControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 433);
+            this.ClientSize = new System.Drawing.Size(301, 433);
+            this.Controls.Add(this.btnLoadDb);
             this.Controls.Add(this.btnInit);
             this.Controls.Add(this.labelControl2);
             this.Controls.Add(this.textFrameStart);
@@ -166,5 +177,6 @@
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.SimpleButton btnInit;
         private System.Windows.Forms.Timer timer1;
+        private DevExpress.XtraEditors.SimpleButton btnLoadDb;
     }
 }
