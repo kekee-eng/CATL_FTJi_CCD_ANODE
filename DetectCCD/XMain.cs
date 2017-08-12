@@ -93,13 +93,21 @@ namespace DetectCCD {
                     return (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
 
                 };
-                RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, id) => {
+                RemoteDefect._func_in_8k_getDefectList += (isFront, isInner) => {
 
-                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects.TakeWhile(x => x.EA == id && x.Type < 2).ToArray();
-                    for (int i = 0; i < defs.Length; i++)
-                        defs[i].Y = Static.App.FrameFrontToInner(isFront, isInner, defs[i].Y);
+                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
+                    var outdefs = new List<DataDefect>();
+                    foreach (var def in defs) {
+                        if (def.Type < 2) {
+                            outdefs.Add(new DataDefect() { Y = def.Y });
+                        }
+                    }
 
-                    return defs;
+                    var arr = outdefs.ToArray();
+                    for (int i = 0; i < arr.Length; i++)
+                        arr[i].Y = Static.App.FrameFrontToInner(isFront, isInner, arr[i].Y);
+                    arr = arr.OrderBy(x => x.Y).ToArray();
+                    return arr;
                 };
                 RemoteDefect._func_in_8k_viewer += (isFront, isInner, y) => {
                     (isFront ? record.InnerViewerImage : record.OuterViewerImage).MoveToFrame(

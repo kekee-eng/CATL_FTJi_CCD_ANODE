@@ -752,7 +752,7 @@ namespace DetectCCD {
                         countLabel++;
                         
                         g.SetDraw("margin");
-                        g.SetColor("yellow");
+                        g.SetColor("red");
                         g.SetLineWidth(3);
                         g.SetLineStyle(new HTuple(new int[] { 3, 1 }));
                         

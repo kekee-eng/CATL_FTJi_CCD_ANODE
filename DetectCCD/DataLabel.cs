@@ -15,6 +15,7 @@ namespace DetectCCD {
         public double Y;
         public double W { get { return Static.Param.LabelShowW; } }
         public double H { get { return Static.Param.LabelShowH;}}
+        public string Comment;
 
         public bool IsSend = false;
 

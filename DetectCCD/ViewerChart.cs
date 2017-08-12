@@ -459,7 +459,8 @@ namespace DetectCCD {
                 dt.X.ToString("0.000"),
                 dt.Y.ToString("0.000"),
                 dt.W.ToString("0.000"),
-                dt.H.ToString("0.000")
+                dt.H.ToString("0.000"),
+                dt.Comment
                 );
 
         }
@@ -470,11 +471,12 @@ namespace DetectCCD {
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "EA" },
-                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "ENCODER" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ENCODER" },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },
-                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false }
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Comment" }
                 );
 
             //

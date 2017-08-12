@@ -14,8 +14,7 @@ namespace DetectCCD {
 
         //
         public bool TestLabelEA = false;
-        public bool TestLabelDefectAB = false;
-        public bool TestLabelTab = false;
+        public bool TestLabelDefectJoin = false;
 
         //记录参数
         public int RecordCacheSize = 200;

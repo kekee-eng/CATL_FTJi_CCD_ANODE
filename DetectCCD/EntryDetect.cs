@@ -115,20 +115,24 @@ CfgParam        BLOB
             obj.EAX = curEaTab.MarkX;
             obj.EAY = curEaTab.MarkY;
 
-            double start = curEaTab.TabY1;
+            double start = curEaTab.MarkY;
             double end = 0;
             var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
             if (nextEaTab != null) {
-                end = nextEaTab.TabY1;
+                end = nextEaTab.MarkY;
             }
             else {
                 end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
             }
-
+            
             obj.DefectCountLocal = AllocAndGetDefectCount(start, end, id);
-            obj.DefectCountFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
-            obj.DefectCountBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
-            obj.IsDefectCountFail = (obj.DefectCountLocal + obj.DefectCountFront + obj.DefectCountBack > Static.Param.CheckDefectCount);
+
+            if (Static.App.Is4K) {
+                obj.DefectCountFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
+                obj.DefectCountBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
+            }
+
+            obj.IsDefectCountFail = (obj.DefectCountLocal + Math.Max(0, obj.DefectCountFront) + Math.Max(0, obj.DefectCountBack) > Static.Param.CheckDefectCount);
 
             return obj;
         }
@@ -154,6 +158,24 @@ CfgParam        BLOB
 
         int defectFrameCount = 0;
         public bool TryDetect(DataGrab obj) {
+            
+            //TODO: 测试转标签
+            if (Static.App.Is4K && Static.App.TestLabelDefectJoin) {
+                var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
+                if (remoteLables != null) {
+                    foreach (var rl in remoteLables) {
+                        var repeat = Labels.Find(x => Math.Abs(x.Encoder - grab.GetEncoder(rl.Y)) < 1000);
+                        if (repeat == null) {
+                            Labels.Add(new DataLabel() {
+                                Y = rl.Y,
+                                Encoder = grab.GetEncoder(rl.Y),
+                                Comment = "[测试]接头转标"
+                            });
+                            OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
+                        }
+                    }
+                }
+            }
 
             return tryDetect(obj);
         }
@@ -443,14 +465,6 @@ CfgParam        BLOB
             //
             OnNewTab?.Invoke(data);
             
-            if (Static.App.Is4K && Static.App.TestLabelTab) {
-                Labels.Add(new DataLabel() { Encoder = grab.GetEncoder(data.TabY1) });
-                Labels.Add(new DataLabel() { Encoder = grab.GetEncoder(data.TabY2) });
-
-                OnNewLabel(grab.GetEncoder(data.TabY1));
-                OnNewLabel(grab.GetEncoder(data.TabY2));
-            }
-
             return true;
 
         }
@@ -549,17 +563,16 @@ CfgParam        BLOB
                     var objEA = GetEA(ea - 1);
                     if (objEA != null) {
 
-                        //贴标签
-                        if (Labels.Find(x => x.EA == ea - 1) == null) {
+                        //添加标签
+                        if (objEA.IsFail || (Static.App.Is4K && Static.App.TestLabelEA)) {
+                            var objLab = new DataLabel() {
+                                EA = ea - 1,
+                                Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
+                                Comment = "EA未端贴标"
+                            };
+                            objLab.Encoder = grab.GetEncoder(objLab.Y);
 
-                            //添加标签
-                            if (objEA.IsFail ||(Static.App.Is4K && Static.App.TestLabelEA) ){
-                                var objLab = new DataLabel() {
-                                    EA = ea - 1,
-                                    Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
-                                };
-                                objLab.Encoder = grab.GetEncoder(objLab.Y);
-
+                            if (Labels.Find(x => x.EA == objLab.EA && x.Encoder == objLab.Encoder) == null) {
                                 Labels.Add(objLab);
                                 OnNewLabel?.Invoke(objLab.Encoder);
                             }
@@ -569,16 +582,6 @@ CfgParam        BLOB
                         if (!Tabs[i].IsNewEACallBack) {
                             Tabs[i].IsNewEACallBack = true;
                             OnNewEA?.Invoke(objEA);
-
-                            //TODO: 测试贴所有标签
-                            if (Static.App.Is4K && Static.App.TestLabelDefectAB) {
-                                var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, ea - 1);
-
-                                foreach (var rl in remoteLables) {
-                                    Labels.Add(new DataLabel() { EA = -50, Y = rl.Y, Encoder = grab.GetEncoder(rl.Y) });
-                                    OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
-                                }
-                            }
                         }
                     }
                 }
