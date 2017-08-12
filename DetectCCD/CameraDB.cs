@@ -96,7 +96,7 @@ namespace DetectCCD {
                     DataGrab dg = null;
                     while (isGrabbing && dg == null) {
                         Thread.Sleep(10);
-                        dg = prepareImage();
+                        Static.SafeRun(() =>  dg = prepareImage());
                     }
 
                     //计算达到指定帧率，所需要的时间
