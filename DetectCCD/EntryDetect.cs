@@ -443,7 +443,7 @@ CfgParam        BLOB
             //
             OnNewTab?.Invoke(data);
             
-            if (Static.App.TestLabelTab) {
+            if (Static.App.Is4K && Static.App.TestLabelTab) {
                 Labels.Add(new DataLabel() { Encoder = grab.GetEncoder(data.TabY1) });
                 Labels.Add(new DataLabel() { Encoder = grab.GetEncoder(data.TabY2) });
 
@@ -553,7 +553,7 @@ CfgParam        BLOB
                         if (Labels.Find(x => x.EA == ea - 1) == null) {
 
                             //添加标签
-                            if (objEA.IsFail || Static.App.TestLabelEA) {
+                            if (objEA.IsFail ||(Static.App.Is4K && Static.App.TestLabelEA) ){
                                 var objLab = new DataLabel() {
                                     EA = ea - 1,
                                     Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
@@ -571,7 +571,7 @@ CfgParam        BLOB
                             OnNewEA?.Invoke(objEA);
 
                             //TODO: 测试贴所有标签
-                            if (Static.App.TestLabelDefectAB) {
+                            if (Static.App.Is4K && Static.App.TestLabelDefectAB) {
                                 var remoteLables = RemoteDefect.In4K_Call8K_GetDefectList(true, isinner, ea - 1);
 
                                 foreach (var rl in remoteLables) {

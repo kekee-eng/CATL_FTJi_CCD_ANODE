@@ -40,8 +40,14 @@ namespace DetectCCD {
         public double RemoteInnerOffset = 0;
         public double RemoteOuterOffset = 0;
         public double RemoteFrontOffset = 0;
-        public double RemoteBackOffset = 0;
-        public double FixOuterOrBackOffset = 35;
+        public double DiffFrameInnerOuter = 36;
+        public double DiffFrameFrontBack = 4.42;
+        public double FixOuterOrBackOffset {
+            get {
+                if (Is4K) return DiffFrameInnerOuter;
+                return DiffFrameFrontBack;
+            }
+        }
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
         public int RunningMode = 0;
