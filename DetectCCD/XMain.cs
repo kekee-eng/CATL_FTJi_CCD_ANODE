@@ -512,6 +512,9 @@ namespace DetectCCD {
                 else {
 
                     //
+                    record.Dispose();
+
+                    //
                     textRollType.Enabled = true;
                     textRollName.Enabled = true;
                     btnRollSet.Text = "设置膜卷";
