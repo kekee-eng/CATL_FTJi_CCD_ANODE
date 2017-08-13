@@ -406,6 +406,9 @@ namespace DetectCCD {
                 device.InnerCamera.Reset();
                 device.OuterCamera.Reset();
 
+                record.InnerViewerImage.SetUserEnable(true);
+                record.OuterViewerImage.SetUserEnable(true);
+
                 this.isClear = isClear;
                 if (isClear) {
                     record.InnerGrab.Cache.Dispose();
@@ -418,14 +421,13 @@ namespace DetectCCD {
                     record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
                 }
                 else {
+                    record.InnerViewerImage.SetBottomTarget(record.InnerGrab.Max);
                     record.OuterViewerImage.SetBottomTarget(record.OuterGrab.Max);
                 }
                 
                 record.InnerViewerImage.MoveTargetDirect();
                 record.OuterViewerImage.MoveTargetDirect();
 
-                record.InnerViewerImage.SetUserEnable(true);
-                record.OuterViewerImage.SetUserEnable(true);
             });
 
         }
@@ -552,9 +554,12 @@ namespace DetectCCD {
             });
         }
         private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
-            runAction("连接设备", () => {
-                device.Open();
-            });
+
+            if(!device.isGrabbing) {
+                if(!device.isOpen) {
+                    DeviceOpen();
+                }
+            }
         }
         private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
             if (selectFullScreen.Tag == null)
