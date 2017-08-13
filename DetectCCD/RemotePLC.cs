@@ -36,14 +36,20 @@ public class RemotePLC : MarshalByRefObject {
             if (client == null) return;
             client._IN_PLC_Call_widthProcess(idEA, idTab, isOK, widthInner, widthOuter);
         }
-        catch { client = null; }
+        catch (Exception ex) {
+            DetectCCD.Static.Log.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
+            client = null;
+        }
     }
     public static void In4KCallPLC_SendLabel(bool isInner, int encoder) {
         try {
             if (client == null) return;
             client._IN_PLC_Call_reciveLabelProcess(isInner, encoder);
         }
-        catch { client = null; }
+        catch (Exception ex) {
+            DetectCCD.Static.Log.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
+            client = null;
+        }
     }
     public static int In4KCallPLC_GetEncoder(bool isInner) {
 
@@ -51,7 +57,10 @@ public class RemotePLC : MarshalByRefObject {
             if (client != null)
                 return client._IN_PLC_Call_encoderProvider(isInner);
         }
-        catch { client = null; }
+        catch (Exception ex) {
+            DetectCCD.Static.Log.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
+            client = null;
+        }
         return 0;
     }
 

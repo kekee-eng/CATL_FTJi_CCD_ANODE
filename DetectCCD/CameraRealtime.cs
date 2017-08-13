@@ -101,8 +101,10 @@ namespace DetectCCD {
         }
         private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
 
-            if (e.Trash)
+            if (e.Trash) {
+                m_trash++;
                 return;
+            }
 
             //
             if (m_frame == 0) {
@@ -204,6 +206,7 @@ namespace DetectCCD {
 
             //
             m_frame = m_frameStart;
+            m_trash = 0;
             isOpen = true;
             return true;
         }
