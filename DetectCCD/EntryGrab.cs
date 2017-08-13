@@ -36,7 +36,7 @@ namespace DetectCCD {
 
         public int Width = -1;
         public int Height = -1;
-        
+
         public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
         public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
 
@@ -191,7 +191,7 @@ namespace DetectCCD {
             int encoder = 0;
             Static.SafeRun(() => {
 
-                int p1 = (int)Math.Floor(frame);
+                int p1 = (int)Math.Floor(frame) -1;
                 int p2 = p1 + 1;
 
                 var obj1 = this[p1];
@@ -203,7 +203,7 @@ namespace DetectCCD {
                 }
 
                 if (obj1 != null && obj2 != null) {
-                    encoder = (int)(obj1.Encoder + (frame - p1) * (obj2.Encoder - obj1.Encoder));
+                    encoder = (int)(obj1.Encoder + (frame - 1 - p1) * (obj2.Encoder - obj1.Encoder));
                 }
             });
             return encoder;
