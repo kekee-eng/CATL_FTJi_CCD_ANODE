@@ -44,6 +44,7 @@ namespace DetectCCD {
             isQuit = true;
             record?.Dispose();
             device?.Dispose();
+            csvWriter?.Dispose();
         }
 
         void runAction(string actName, Action act) {
@@ -57,6 +58,7 @@ namespace DetectCCD {
             }
         }
         void appendLog(string msg, int msgStatus = 0, Exception ex = null) {
+
             //
             status_info.Caption = msg;
             status_info.ItemAppearance.Normal.ForeColor = msgStatus == 0 ? Color.Black : msgStatus > 0 ? Color.Green : Color.Red;
@@ -292,6 +294,11 @@ namespace DetectCCD {
                     RemotePLC.In4KCallPLC_SendLabel(false, obj);
             };
             record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => {
+
+                if (tabOuter.ValWidth == 0 || tabInner.ValWidth == 0)
+                    return;
+
+                saveWidthCSV(tabInner, tabOuter);
                 RemotePLC.In4KCallPLC_ForWidth(
                     tabOuter.EA,
                     tabOuter.TAB,
@@ -482,6 +489,49 @@ namespace DetectCCD {
             });
         }
 
+        StreamWriter csvWriter;
+        void closeWidthCSV() {
+            if(csvWriter!=null) {
+                csvWriter.Dispose();
+                csvWriter = null;
+            }
+        }
+        void saveWidthCSV(DataTab inner, DataTab outer) {
+            Static.SafeRun(() => {
+                if (csvWriter == null) {
+                    var folder = Static.FolderTemp + "csv";
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
+                    var path = string.Format("{0}\\极耳对应后数据-{1:D2}-{2:D2}_{3:D2}-{4:D2}-{5:D2}.csv",
+                        folder,
+                        DateTime.Now.Month,
+                        DateTime.Now.Day,
+                        DateTime.Now.Hour,
+                        DateTime.Now.Minute,
+                        DateTime.Now.Second
+                        );
+                    csvWriter = new StreamWriter(path);
+
+                    csvWriter.WriteLine("时间,EA数,内膜宽,外膜宽,内外膜宽差,总膜宽,内膜宽-TARGET,外膜宽-TARGET,内极宽,外极宽,");
+                }
+
+                Action<double> appendItem = val => csvWriter.Write(val.ToString("0.000") + ",");
+
+                csvWriter.Write(DateTime.Now.ToString() + ",");
+                csvWriter.Write(inner.EA + ",");
+                appendItem(inner.ValWidth);
+                appendItem(outer.ValWidth);
+                appendItem(inner.ValWidth - outer.ValWidth);
+                appendItem(inner.ValWidth + outer.ValWidth);
+                appendItem(inner.ValWidth - Static.Param.TabWidthTarget);
+                appendItem(outer.ValWidth - Static.Param.TabWidthTarget);
+                appendItem(inner.ValWidth);
+                appendItem(outer.ValWidth);
+                csvWriter.WriteLine();
+                csvWriter.Flush();
+            });
+        }
+
         private void timer1_Tick(object sender, EventArgs e) {
 
             Static.SafeRun(() => {
@@ -641,6 +691,7 @@ namespace DetectCCD {
 
                     //
                     record.Dispose();
+                    closeWidthCSV();
 
                     //
                     textRollType.Enabled = true;

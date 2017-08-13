@@ -25,6 +25,7 @@ namespace DetectCCD {
         public double TabWidthMin = 75;
         public double TabWidthMax = 80;
         public double TabWidthStep = 0.5;
+        public double TabWidthTarget { get { return (TabWidthMin + TabWidthMax) / 2; } }
 
         public double TabHeightMin = 30;
         public double TabHeightMax = 40;
