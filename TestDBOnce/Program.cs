@@ -8,6 +8,15 @@ namespace TestDBOnce {
     class Program {
         static void Main(string[] args) {
 
+            Console.WriteLine();
+            Console.WriteLine("--useage----------------");
+            Console.WriteLine("TestDBOnce [DB] [InnerGrab/OuterGrab] [path] [frame]");
+            Console.WriteLine("TestDBOnce [DB] [InnerGrab/OuterGrab] [path] [frame1] [frame2]");
+            Console.WriteLine();
+
+            if (args.Length ==0 )
+                return;
+
             string dbpath = args[0];
             string dbtable = args[1];
 
