@@ -187,21 +187,27 @@ namespace DetectCCD {
 
         //
         public int GetEncoder(double frame) {
-            try {
+
+            int encoder = 0;
+            Static.SafeRun(() => {
+
                 int p1 = (int)Math.Floor(frame);
                 int p2 = p1 + 1;
 
                 var obj1 = this[p1];
                 var obj2 = this[p2];
 
-                if (obj1 != null && obj2 != null) {
-                    return (int)(obj1.Encoder + (frame - p1) * (obj2.Encoder - obj1.Encoder));
+                if (obj1 == null || obj2 == null) {
+                    obj1 = this[Min];
+                    obj2 = this[Max];
                 }
-                return 0;
-            }
-            catch {
-                return 0;
-            }
+
+                if (obj1 != null && obj2 != null) {
+                    encoder = (int)(obj1.Encoder + (frame - p1) * (obj2.Encoder - obj1.Encoder));
+                }
+            });
+            return encoder;
+
         }
     }
 }

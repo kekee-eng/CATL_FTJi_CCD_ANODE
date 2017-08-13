@@ -135,30 +135,40 @@ namespace DetectCCD {
             //线程：采图
             record.InnerViewerImage.Init(hwinInner);
             device.EventInnerCamera = obj => {
-                record.InnerGrab[obj.Frame] = obj;
+                Static.SafeRun(() => {
+                    record.InnerGrab[obj.Frame] = obj;
+                });
             };
             record.OuterViewerImage.Init(hwinOuter);
             device.EventOuterCamera = obj => {
-                record.OuterGrab[obj.Frame] = obj;
+                Static.SafeRun(() => {
+                    record.OuterGrab[obj.Frame] = obj;
+                });
             };
 
             record.InnerViewerImage.OnViewUpdate += (y, x, s) => {
-                if (ckViewLocal.Checked)
-                    record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
 
-                if (Static.App.Is4K) {
-                    if (ckViewInnerFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, true, y);
-                    if (ckViewInnerBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, true, y);
-                }
+                Static.SafeRun(() => {
+                    if (ckViewLocal.Checked)
+                        record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
+
+                    if (Static.App.Is4K) {
+                        if (ckViewInnerFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, true, y);
+                        if (ckViewInnerBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, true, y);
+                    }
+                });
             };
             record.OuterViewerImage.OnViewUpdate += (y, x, s) => {
-                if (ckViewLocal.Checked)
-                    record.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
 
-                if (Static.App.Is4K) {
-                    if (ckViewOuterFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, false, y);
-                    if (ckViewOuterBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, false, y);
-                }
+                Static.SafeRun(() => {
+                    if (ckViewLocal.Checked)
+                        record.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
+
+                    if (Static.App.Is4K) {
+                        if (ckViewOuterFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, false, y);
+                        if (ckViewOuterBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, false, y);
+                    }
+                });
             };
 
             //线程：图像处理
@@ -172,7 +182,6 @@ namespace DetectCCD {
                         var obj = record.InnerGrab.Cache.GetFirstUnDetect();
                         if (obj != null) {
                             record.InnerDetect.TryDetect(obj);
-                            //record.InnerViewerImage.SetBottomTarget(obj.Frame);
                         }
                     });
                 };
@@ -206,6 +215,7 @@ namespace DetectCCD {
 
                 while (!isQuit) {
                     Thread.Sleep(10);
+                    if (checkDisableView.Checked) continue;
 
                     Static.SafeRun(() => {
                         double refFps = 10.0;
@@ -221,6 +231,7 @@ namespace DetectCCD {
 
                 while (!isQuit) {
                     Thread.Sleep(10);
+                    if (checkDisableView.Checked) continue;
 
                     Static.SafeRun(() => {
                         double refFps = 10.0;
@@ -455,9 +466,12 @@ namespace DetectCCD {
             runAction("开启设备", async () => {
 
                 UtilTool.XFWait.Open();
-                await Task.Run(() => device.Open());
-                UtilTool.XFWait.Close();
+                await Task.Run(() => {
 
+                    device.Open();
+                    UtilTool.XFWait.Close();
+
+                });
             });
         }
         public void DeviceClose() {
