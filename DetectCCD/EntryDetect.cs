@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DetectCCD {
 
-    public class EntryDetect :IDisposable {
+    public class EntryDetect : IDisposable {
 
         public EntryDetect(TemplateDB parent, string tableName, EntryGrab grab, bool isInner) {
 
@@ -16,7 +16,7 @@ namespace DetectCCD {
             this.tname = tableName;
             this.grab = grab;
             this.isinner = isInner;
-            
+
         }
 
         public void Dispose() {
@@ -24,7 +24,7 @@ namespace DetectCCD {
             Defects.Clear();
             Labels.Clear();
         }
-        
+
         public void CreateTable() {
 
             //
@@ -43,7 +43,7 @@ CfgParam        BLOB
 
             if (!needSave)
                 return;
-            
+
             needSave = false;
             db.Write(string.Format(@"REPLACE INTO {0} ( ID, Tabs, Defects, Labels, CfgApp, CfgParam ) VALUES (?,?,?,?,?,?,?) ", tname),
                 0,
@@ -70,14 +70,14 @@ CfgParam        BLOB
                 (UtilSerialization.bytes2obj((byte[])ret[0][5]) as CfgParam).CopyTo(Static.Param);
             }
         }
-        
+
         bool needSave = false;
 
         EntryGrab grab;
         TemplateDB db;
         string tname;
         bool isinner;
-        
+
         public double Fx { get { return grab.Fx; } }
         public double Fy { get { return grab.Fy; } }
 
@@ -89,18 +89,18 @@ CfgParam        BLOB
 
         public List<DataLabel> LabelsCache = new List<DataLabel>();
         void addLabel(DataLabel lab) {
-            lock (LabelsCache) {
+            Static.SafeRun(() => {
                 LabelsCache.Add(lab);
-            }
+            });
         }
         void checkLabel() {
-            lock (LabelsCache) {
+            Static.SafeRun(() => {
                 if (LabelsCache.Count == 0)
                     return;
 
                 var minLab = LabelsCache.OrderBy(x => x.Y).First();
                 if (minLab != null) {
-                    if(minLab.Y < grab.Max) {
+                    if (minLab.Y < grab.Max) {
                         LabelsCache.Remove(minLab);
                         minLab.Encoder = grab.GetEncoder(minLab.Y);
 
@@ -109,8 +109,9 @@ CfgParam        BLOB
                             OnNewLabel?.Invoke(minLab.Encoder);
                         }
                     }
-                }
-            }
+                } 
+            });
+            
         }
 
         public int EACount {

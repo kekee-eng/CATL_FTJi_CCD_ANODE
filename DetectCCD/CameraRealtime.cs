@@ -101,6 +101,9 @@ namespace DetectCCD {
         }
         private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
 
+            if (e.Trash)
+                return;
+
             //
             if (m_frame == 0) {
 
