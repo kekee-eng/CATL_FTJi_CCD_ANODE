@@ -87,6 +87,29 @@ CfgParam        BLOB
         public List<DataDefect> Defects = new List<DataDefect>();
         public List<DataLabel> Labels = new List<DataLabel>();
 
+        public List<DataLabel> LabelsCache = new List<DataLabel>();
+        void addLabel(DataLabel lab) {
+            lock (LabelsCache) {
+                LabelsCache.Add(lab);
+            }
+        }
+        void checkLabel() {
+            lock (LabelsCache) {
+                if (LabelsCache.Count == 0)
+                    return;
+
+                var minLab = LabelsCache.OrderBy(x => x.Y).First();
+                if (minLab != null) {
+                    if(minLab.Y < grab.Max) {
+                        LabelsCache.Remove(minLab);
+                        minLab.Encoder = grab.GetEncoder(minLab.Y);
+                        Labels.Add(minLab);
+                        OnNewLabel?.Invoke(minLab.Encoder);
+                    }
+                }
+            }
+        }
+
         public int EACount {
             get {
                 int ret = 0;
@@ -158,6 +181,9 @@ CfgParam        BLOB
         int defectFrameCount = 0;
         public bool TryDetect(DataGrab obj) {
 
+            //
+            checkLabel();
+
             //TODO: 测试转标签
             if (Static.App.Is4K && Static.App.TestLabelDefectJoin) {
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
@@ -165,12 +191,10 @@ CfgParam        BLOB
                     foreach (var rl in remoteLables) {
                         var repeat = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
                         if (repeat == null) {
-                            Labels.Add(new DataLabel() {
+                            addLabel(new DataLabel() {
                                 Y = rl.Y,
-                                Encoder = grab.GetEncoder(rl.Y),
                                 Comment = "[测试]正面接头转标"
                             });
-                            OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
                         }
                     }
                 }
@@ -181,14 +205,14 @@ CfgParam        BLOB
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
                 if (remoteLables != null) {
                     foreach (var rl in remoteLables) {
-                        var repeat = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
-                        if (repeat == null) {
-                            Labels.Add(new DataLabel() {
+                        
+                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
+                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
+                        if (repeat1 == null && repeat2 == null) {
+                            addLabel(new DataLabel() {
                                 Y = rl.Y,
-                                Encoder = grab.GetEncoder(rl.Y),
                                 Comment = "[测试]背面接头转标"
                             });
-                            OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
                         }
                     }
                 }
@@ -590,8 +614,7 @@ CfgParam        BLOB
                             objLab.Encoder = grab.GetEncoder(objLab.Y);
 
                             if (Labels.Find(x => x.EA == objLab.EA && x.Encoder == objLab.Encoder) == null) {
-                                Labels.Add(objLab);
-                                OnNewLabel?.Invoke(objLab.Encoder);
+                                addLabel(objLab);
                             }
                         }
 

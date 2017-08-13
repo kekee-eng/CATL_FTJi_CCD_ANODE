@@ -36,11 +36,11 @@ namespace DetectCCD {
         //
         public string RemoteHost = "localhost";
         public int RemotePort = 6500;
-        public double DiffFrameInnerFront = -55;
+        public double DiffFrameInnerFront = -33.51;
         public double DiffFrameInnerOuter = 18.15;
         public double DiffFrameFrontBack = 2.225;
 
-        public double FixFrameInnerFrontScale = 0.8863913337846987;
+        public double FixFrameInnerFrontScale = 1.12816987473266;
         public double FixFrameOuterOrBackOffset {
             get {
                 if (Is4K) return DiffFrameInnerOuter;

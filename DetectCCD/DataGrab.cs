@@ -258,7 +258,7 @@ Image           BLOB
 
                 int min = Min;
                 int max = Max;
-                for(int i = min; i < max; i++) {
+                for(int i = min; i <= max; i++) {
                     var obj = this[i];
                     if (obj !=null && !obj.IsDetect)
                         return obj;
