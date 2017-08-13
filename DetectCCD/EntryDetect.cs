@@ -103,8 +103,11 @@ CfgParam        BLOB
                     if(minLab.Y < grab.Max) {
                         LabelsCache.Remove(minLab);
                         minLab.Encoder = grab.GetEncoder(minLab.Y);
-                        Labels.Add(minLab);
-                        OnNewLabel?.Invoke(minLab.Encoder);
+
+                        if (null == Labels.Find(x => Math.Abs(x.Y - minLab.Y) < 0.5)) {
+                            Labels.Add(minLab);
+                            OnNewLabel?.Invoke(minLab.Encoder);
+                        }
                     }
                 }
             }
@@ -189,8 +192,10 @@ CfgParam        BLOB
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
                 if (remoteLables != null) {
                     foreach (var rl in remoteLables) {
-                        var repeat = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
-                        if (repeat == null) {
+
+                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
+                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
+                        if (repeat1 == null && repeat2 == null) {
                             addLabel(new DataLabel() {
                                 Y = rl.Y,
                                 Comment = "[测试]正面接头转标"
