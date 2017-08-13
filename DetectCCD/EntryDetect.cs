@@ -157,18 +157,36 @@ CfgParam        BLOB
 
         int defectFrameCount = 0;
         public bool TryDetect(DataGrab obj) {
-            
+
             //TODO: 测试转标签
             if (Static.App.Is4K && Static.App.TestLabelDefectJoin) {
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
                 if (remoteLables != null) {
                     foreach (var rl in remoteLables) {
-                        var repeat = Labels.Find(x => Math.Abs(x.Encoder - grab.GetEncoder(rl.Y)) < 1000);
+                        var repeat = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
                         if (repeat == null) {
                             Labels.Add(new DataLabel() {
                                 Y = rl.Y,
                                 Encoder = grab.GetEncoder(rl.Y),
-                                Comment = "[测试]接头转标"
+                                Comment = "[测试]正面接头转标"
+                            });
+                            OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
+                        }
+                    }
+                }
+            }
+
+            //TODO: 测试转标签
+            if (Static.App.Is4K && Static.App.TestLabelDefectJoin) {
+                var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+                if (remoteLables != null) {
+                    foreach (var rl in remoteLables) {
+                        var repeat = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
+                        if (repeat == null) {
+                            Labels.Add(new DataLabel() {
+                                Y = rl.Y,
+                                Encoder = grab.GetEncoder(rl.Y),
+                                Comment = "[测试]背面接头转标"
                             });
                             OnNewLabel?.Invoke(grab.GetEncoder(rl.Y));
                         }

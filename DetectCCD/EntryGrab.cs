@@ -135,7 +135,7 @@ namespace DetectCCD {
 
             //分配内存
             int nh = p1len + p2len + (p2 - p1 - 2) * h;
-            if (nh < 0)
+            if (nh <= 0)
                 return null;
             var newImage = new HImage("byte", w, nh);
 
