@@ -325,13 +325,16 @@ namespace DetectCCD {
 
             checkEnableLabelEA.Checked = Static.App.EnableLabelEA;
             checkEnableLabelEAEveryOne.Checked = Static.App.EnableLabelEA_EveryOne;
+            checkEnableLabelEAForce.Checked = Static.App.EnableLabelEA_Force;
             checkEnableLabelDefect.Checked = Static.App.EnableLabelDefect;
 
             checkEnableLabelEA.CheckedChanged += (o, e) => Static.App.EnableLabelEA = (o as CheckEdit).Checked;
             checkEnableLabelEAEveryOne.CheckedChanged += (o, e) => Static.App.EnableLabelEA_EveryOne = (o as CheckEdit).Checked;
+            checkEnableLabelEAForce.CheckedChanged += (o, e) => Static.App.EnableLabelEA_Force = (o as CheckEdit).Checked;
             checkEnableLabelDefect.CheckedChanged += (o, e) => Static.App.EnableLabelDefect = (o as CheckEdit).Checked;
 
             Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
+            Static.Param.BindTextBox(textLabelEAForce, "LabelY_EA_Force");
             Static.Param.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
         }
         void init_status() {
@@ -570,7 +573,9 @@ namespace DetectCCD {
 
                 textLabelDefectOffset.Enabled = checkEnableLabelDefect.Checked;
                 textLabelEAOffset.Enabled = checkEnableLabelEA.Checked;
+                textLabelEAForce.Enabled = checkEnableLabelEA.Checked && checkEnableLabelEAForce.Checked;
                 checkEnableLabelEAEveryOne.Enabled = checkEnableLabelEA.Checked;
+                checkEnableLabelEAForce.Enabled = checkEnableLabelEA.Checked;
 
                 xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
                 xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
