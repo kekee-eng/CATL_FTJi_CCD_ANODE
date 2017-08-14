@@ -14,6 +14,7 @@ namespace DetectCCD {
 
         //
         public bool EnableLabelEA = false;
+        public bool EnableLabelEA_Force = false;
         public bool EnableLabelEA_EveryOne = false;
         public bool EnableLabelDefect = false;
 

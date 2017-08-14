@@ -168,6 +168,10 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkEnableLabelEAForce = new DevExpress.XtraEditors.CheckEdit();
+            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
+            this.textLabelEAForce = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -245,6 +249,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -1498,6 +1504,10 @@
             // 
             // groupLabel
             // 
+            this.groupLabel.Controls.Add(this.labelControl17);
+            this.groupLabel.Controls.Add(this.textLabelEAForce);
+            this.groupLabel.Controls.Add(this.labelControl24);
+            this.groupLabel.Controls.Add(this.checkEnableLabelEAForce);
             this.groupLabel.Controls.Add(this.labelControl14);
             this.groupLabel.Controls.Add(this.textLabelEAOffset);
             this.groupLabel.Controls.Add(this.labelControl16);
@@ -1779,6 +1789,39 @@
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
+            // checkEnableLabelEAForce
+            // 
+            this.checkEnableLabelEAForce.Location = new System.Drawing.Point(49, 120);
+            this.checkEnableLabelEAForce.MenuManager = this.barManager1;
+            this.checkEnableLabelEAForce.Name = "checkEnableLabelEAForce";
+            this.checkEnableLabelEAForce.Properties.Caption = "EA超长强制打标";
+            this.checkEnableLabelEAForce.Size = new System.Drawing.Size(147, 19);
+            this.checkEnableLabelEAForce.TabIndex = 15;
+            // 
+            // labelControl17
+            // 
+            this.labelControl17.Location = new System.Drawing.Point(374, 123);
+            this.labelControl17.Name = "labelControl17";
+            this.labelControl17.Size = new System.Drawing.Size(20, 14);
+            this.labelControl17.TabIndex = 18;
+            this.labelControl17.Text = "mm";
+            // 
+            // textLabelEAForce
+            // 
+            this.textLabelEAForce.Location = new System.Drawing.Point(268, 120);
+            this.textLabelEAForce.MenuManager = this.barManager1;
+            this.textLabelEAForce.Name = "textLabelEAForce";
+            this.textLabelEAForce.Size = new System.Drawing.Size(100, 20);
+            this.textLabelEAForce.TabIndex = 17;
+            // 
+            // labelControl24
+            // 
+            this.labelControl24.Location = new System.Drawing.Point(223, 123);
+            this.labelControl24.Name = "labelControl24";
+            this.labelControl24.Size = new System.Drawing.Size(39, 14);
+            this.labelControl24.TabIndex = 16;
+            this.labelControl24.Text = "EA长度";
+            // 
             // XMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1874,6 +1917,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2019,5 +2064,9 @@
         private DevExpress.XtraEditors.LabelControl labelControl13;
         private DevExpress.XtraEditors.TextEdit textLabelDefectOffset;
         private DevExpress.XtraEditors.LabelControl labelControl9;
+        private DevExpress.XtraEditors.LabelControl labelControl17;
+        private DevExpress.XtraEditors.TextEdit textLabelEAForce;
+        private DevExpress.XtraEditors.LabelControl labelControl24;
+        private DevExpress.XtraEditors.CheckEdit checkEnableLabelEAForce;
     }
 }

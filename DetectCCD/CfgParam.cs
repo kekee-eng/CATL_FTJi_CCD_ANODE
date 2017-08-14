@@ -49,6 +49,7 @@ namespace DetectCCD {
         //
         public double LabelY_Defect = 0;
         public double LabelY_EA = 0;
+        public double LabelY_EA_Force = 0;
         public double LabelShowX = 0.5;
         public double LabelShowW = 0.05;
         public double LabelShowH = 0.05;

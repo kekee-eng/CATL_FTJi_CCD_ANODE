@@ -765,7 +765,7 @@ namespace DetectCCD {
                         g.SetLineStyle(new HTuple());
 
                         g.SetTposition((int)getPixRow(lab.Y - lab.H / 2), (int)getPixCol(lab.X - lab.W / 2));
-                        g.WriteString(string.Format("{0}", i));
+                        g.WriteString(string.Format("{0}", i + 1));
 
                     }
                 }

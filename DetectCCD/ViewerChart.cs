@@ -308,6 +308,7 @@ namespace DetectCCD {
 
         }
         public void SyncTabGrid(Control parent) {
+            if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
 
@@ -377,6 +378,7 @@ namespace DetectCCD {
 
         }
         public void SyncEAGrid(Control parent) {
+            if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
             int eaCount = Detect.EACount;
@@ -436,6 +438,7 @@ namespace DetectCCD {
 
         }
         public void SyncDefectGrid(Control parent) {
+            if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
 
@@ -484,6 +487,7 @@ namespace DetectCCD {
 
         }
         public void SyncLabelGrid(Control parent) {
+            if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
 
@@ -522,6 +526,7 @@ namespace DetectCCD {
             chartEvent(chart, ImageViewer.MoveToTAB);
         }
         public void SyncTabChart(Control parent) {
+            if (!parent.Visible) return;
 
             //
             var chart = parentGetChart(parent);
@@ -546,6 +551,7 @@ namespace DetectCCD {
             }
         }
         public void SyncTabChart(Control parent, int select) {
+            if (!parent.Visible) return;
             chartSelect(parent, select);
             SyncTabChart(parent);
         }
@@ -608,6 +614,7 @@ namespace DetectCCD {
             gridEvent(grid, viewOuter.MoveToTAB);
         }
         public static void SyncMergeTabGrid(Control parent, EntryDetect detInner, EntryDetect detOuter) {
+            if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
 
@@ -676,29 +683,8 @@ namespace DetectCCD {
                     SymbolType.None));
 
         }
-        public static void SelectMergeTabChart(Control parent, double min, double max, double step) {
-
-            //绘制对象
-            var chart = parentInitChart(parent);
-            var g = chart.GraphPane;
-
-            //上下限
-            g.YAxis.Scale.Min = min - 1;
-            g.YAxis.Scale.Max = max + 1;
-            g.YAxis.Scale.MajorStep = step;
-
-            //
-            chart.GraphPane.CurveList[2].Points[0].Y = min;
-            chart.GraphPane.CurveList[2].Points[1].Y = min;
-            chart.GraphPane.CurveList[3].Points[0].Y = max;
-            chart.GraphPane.CurveList[3].Points[1].Y = max;
-
-            //
-            chart.GraphPane.AxisChange();
-            chart.Refresh();
-
-        }
         public static void SyncMergeTabChart(Control parent, EntryDetect detInner, EntryDetect detOuter) {
+            if (!parent.Visible) return;
 
             //
             var chart = parentGetChart(parent);
@@ -722,6 +708,7 @@ namespace DetectCCD {
 
         }
         public static void SyncMergeTabChart(Control parent, EntryDetect detInner, EntryDetect detOuter, int select) {
+            if (!parent.Visible) return;
 
             //绘制对象
             var chart = parentGetChart(parent);
