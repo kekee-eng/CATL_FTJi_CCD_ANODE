@@ -554,14 +554,14 @@ namespace DetectCCD {
         static void addMergeTabGrid(DataGridView grid, DataTab dtInner, DataTab dtOuter) {
 
             //
-            if (dtInner.ID != dtOuter.ID)
-                throw new Exception("AddSyncER: ID sync error.");
+            //if (dtInner.ID != dtOuter.ID)
+            //    throw new Exception("AddSyncER: ID sync error.");
 
-            if (dtInner.EA != dtOuter.EA)
-                throw new Exception("AddSyncER: EA sync error.");
+            //if (dtInner.EA != dtOuter.EA)
+            //    throw new Exception("AddSyncER: EA sync error.");
 
-            if (dtInner.TAB != dtOuter.TAB)
-                throw new Exception("AddSyncER: ER sync error.");
+            //if (dtInner.TAB != dtOuter.TAB)
+            //    throw new Exception("AddSyncER: ER sync error.");
 
             //        
             var newRow = gridAdd(grid,
@@ -662,18 +662,18 @@ namespace DetectCCD {
             double p = 30000;
             chart.GraphPane.CurveList.Add(
                 new LineItem(
-                    "MIN",
+                    "控制下限",
+                    new double[] { -p, p },
+                    new double[] { 0, 0 },
+                    Color.Orange,
+                    SymbolType.None));
+            chart.GraphPane.CurveList.Add(
+                new LineItem(
+                    "控制上限",
                     new double[] { -p, p },
                     new double[] { 0, 0 },
                     Color.Red,
                     SymbolType.None));
-            chart.GraphPane.CurveList.Add(
-                    new LineItem(
-                        "MAX",
-                        new double[] { -p, p },
-                        new double[] { 0, 0 },
-                        Color.Red,
-                        SymbolType.None));
 
         }
         public static void SelectMergeTabChart(Control parent, double min, double max, double step) {

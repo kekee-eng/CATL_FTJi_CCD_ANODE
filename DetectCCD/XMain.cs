@@ -626,6 +626,10 @@ namespace DetectCCD {
                 //更新表格
                 ViewerChart.SyncMergeTabChart(panelTabMergeChart, record.InnerDetect, record.OuterDetect, 0);
                 ViewerChart.SyncMergeTabGrid(panelTabMergeGrid, record.InnerDetect, record.OuterDetect);
+                record.InnerViewerChart.SyncLabelGrid(panelLabel1);
+                record.OuterViewerChart.SyncLabelGrid(panelLabel2);
+                record.InnerViewerChart.SyncDefectGrid(panelDefect1);
+                record.OuterViewerChart.SyncDefectGrid(panelDefect2);
 
             });
         }
