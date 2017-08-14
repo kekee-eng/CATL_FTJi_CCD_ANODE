@@ -22,7 +22,7 @@ namespace DetectCCD {
             return bytes;
         }
         public static object bytes2obj(byte[] bytes) {
-            if (bytes == null)
+            if (bytes == null || bytes.Length ==0)
                 return null;
 
             object ret = null;

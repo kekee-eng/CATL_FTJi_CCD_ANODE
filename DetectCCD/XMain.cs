@@ -35,8 +35,7 @@ namespace DetectCCD {
                 e.Cancel = true;
                 return;
             }
-
-
+            
             //取消全屏显示
             UtilTool.FullScreen.Set(this, false);
 
@@ -254,9 +253,6 @@ namespace DetectCCD {
                     if (!isRollOk)
                         continue;
 
-                    if (!Static.App.RecordSaveImageEnable)
-                        continue;
-
                     Static.SafeRun(() => {
 
                         //
@@ -327,8 +323,19 @@ namespace DetectCCD {
             checkDetectTab.CheckedChanged += (o, e) => Static.App.DetectTab = (o as CheckEdit).Checked;
             checkDetectWidth.CheckedChanged += (o, e) => Static.App.DetectWidth = (o as CheckEdit).Checked;
 
+            checkEnableLabelEA.Checked = Static.App.EnableLabelEA;
+            checkEnableLabelEAEveryOne.Checked = Static.App.EnableLabelEA_EveryOne;
+            checkEnableLabelDefect.Checked = Static.App.EnableLabelDefect;
+
+            checkEnableLabelEA.CheckedChanged += (o, e) => Static.App.EnableLabelEA = (o as CheckEdit).Checked;
+            checkEnableLabelEAEveryOne.CheckedChanged += (o, e) => Static.App.EnableLabelEA_EveryOne = (o as CheckEdit).Checked;
+            checkEnableLabelDefect.CheckedChanged += (o, e) => Static.App.EnableLabelDefect = (o as CheckEdit).Checked;
+
+            Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
+            Static.Param.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
         }
         void init_status() {
+
             //选定用户
             changeUser();
 
@@ -337,7 +344,15 @@ namespace DetectCCD {
 
             //全屏显示
             //selectFullScreen_ItemClick(null, null);
-            status_plc_ItemClick(null, null);
+            //status_plc_ItemClick(null, null);
+
+            //
+            ViewerChart.InitMergeTabChart(panelTabMergeChart, record.InnerViewerImage, record.OuterViewerImage);
+            ViewerChart.InitMergeTabGrid(panelTabMergeGrid, record.InnerViewerImage, record.OuterViewerImage);
+            record.InnerViewerChart.InitLabelGrid(panelLabel1);
+            record.OuterViewerChart.InitLabelGrid(panelLabel2);
+            record.InnerViewerChart.InitDefectGrid(panelDefect1);
+            record.OuterViewerChart.InitDefectGrid(panelDefect2);
 
             //定时器
             timer1.Tag = true;
@@ -552,8 +567,6 @@ namespace DetectCCD {
                 xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
 
                 groupRoll.Enabled = device.isOpen;
-                groupTest.Enabled = device.isOpen;
-
                 btnConnect.Enabled = isOnline;
                 btnDisconnect.Enabled = isOnline;
 
@@ -577,7 +590,7 @@ namespace DetectCCD {
                 if (device.isOpen) {
                     //
                     _lc_inner_camera.Text = device.InnerCamera.Name;
-                    _lc_inner_fps.Text = device.InnerCamera.m_fpsRealtime.ToString("0.000");
+                    //_lc_inner_fps.Text = device.InnerCamera.m_fpsRealtime.ToString("0.000");
                     _lc_inner_frame.Text = device.InnerCamera.m_frame.ToString();
                     _lc_inner_isgrabbing.Text = device.InnerCamera.isGrabbing ? "On" : "Off";
                     _lc_inner_isopen.Text = device.InnerCamera.isOpen ? "On" : "Off";
@@ -591,7 +604,7 @@ namespace DetectCCD {
 
                     //
                     _lc_outer_camera.Text = device.OuterCamera.Name;
-                    _lc_outer_fps.Text = device.OuterCamera.m_fpsRealtime.ToString("0.000");
+                    //_lc_outer_fps.Text = device.OuterCamera.m_fpsRealtime.ToString("0.000");
                     _lc_outer_frame.Text = device.OuterCamera.m_frame.ToString();
                     _lc_outer_isgrabbing.Text = device.OuterCamera.isGrabbing ? "On" : "Off";
                     _lc_outer_isopen.Text = device.OuterCamera.isOpen ? "On" : "Off";
@@ -610,6 +623,10 @@ namespace DetectCCD {
                 status_memory.Caption = string.Format("内存={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
+                //更新表格
+                ViewerChart.SyncMergeTabChart(panelTabMergeChart, record.InnerDetect, record.OuterDetect, 0);
+                ViewerChart.SyncMergeTabGrid(panelTabMergeGrid, record.InnerDetect, record.OuterDetect);
+
             });
         }
 
@@ -623,7 +640,7 @@ namespace DetectCCD {
 
             if(!device.isGrabbing) {
                 if(!device.isOpen) {
-                    DeviceOpen();
+                    //DeviceOpen();
                 }
             }
         }

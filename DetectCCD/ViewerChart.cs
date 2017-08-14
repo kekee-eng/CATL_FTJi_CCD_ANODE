@@ -657,6 +657,24 @@ namespace DetectCCD {
             //
             chartEvent(chart, viewInner.MoveToTAB);
             chartEvent(chart, viewOuter.MoveToTAB);
+
+            //
+            double p = 30000;
+            chart.GraphPane.CurveList.Add(
+                new LineItem(
+                    "MIN",
+                    new double[] { -p, p },
+                    new double[] { 0, 0 },
+                    Color.Red,
+                    SymbolType.None));
+            chart.GraphPane.CurveList.Add(
+                    new LineItem(
+                        "MAX",
+                        new double[] { -p, p },
+                        new double[] { 0, 0 },
+                        Color.Red,
+                        SymbolType.None));
+
         }
         public static void SelectMergeTabChart(Control parent, double min, double max, double step) {
 
@@ -665,9 +683,15 @@ namespace DetectCCD {
             var g = chart.GraphPane;
 
             //上下限
-            g.YAxis.Scale.Min = min;
-            g.YAxis.Scale.Max = max;
+            g.YAxis.Scale.Min = min - 1;
+            g.YAxis.Scale.Max = max + 1;
             g.YAxis.Scale.MajorStep = step;
+
+            //
+            chart.GraphPane.CurveList[2].Points[0].Y = min;
+            chart.GraphPane.CurveList[2].Points[1].Y = min;
+            chart.GraphPane.CurveList[3].Points[0].Y = max;
+            chart.GraphPane.CurveList[3].Points[1].Y = max;
 
             //
             chart.GraphPane.AxisChange();
@@ -702,12 +726,19 @@ namespace DetectCCD {
             //绘制对象
             var chart = parentGetChart(parent);
             var g = chart.GraphPane;
-            
+
             //上下限
-            g.YAxis.Scale.Min = Static.Param.TabWidthMin;
-            g.YAxis.Scale.Max = Static.Param.TabWidthMax;
+            var diff = (Static.Param.TabWidthMax - Static.Param.TabWidthMin);
+            g.YAxis.Scale.Min = Static.Param.TabWidthMin - Math.Ceiling(diff * 0.1);
+            g.YAxis.Scale.Max = Static.Param.TabWidthMax + Math.Ceiling(diff * 0.1);
             g.YAxis.Scale.MajorStep = Static.Param.TabWidthStep;
 
+            //
+            chart.GraphPane.CurveList[2].Points[0].Y = Static.Param.TabWidthMin;
+            chart.GraphPane.CurveList[2].Points[1].Y = Static.Param.TabWidthMin;
+            chart.GraphPane.CurveList[3].Points[0].Y = Static.Param.TabWidthMax;
+            chart.GraphPane.CurveList[3].Points[1].Y = Static.Param.TabWidthMax;
+ 
             //
             chart.GraphPane.AxisChange();
             chart.Refresh();

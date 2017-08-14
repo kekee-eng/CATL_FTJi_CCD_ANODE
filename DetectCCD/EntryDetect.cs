@@ -189,7 +189,7 @@ CfgParam        BLOB
             checkLabel();
 
             //TODO: 测试转标签
-            if (Static.App.Is4K && Static.App.TestLabelDefectJoin) {
+            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
                 if (remoteLables != null) {
                     foreach (var rl in remoteLables) {
@@ -207,7 +207,7 @@ CfgParam        BLOB
             }
 
             //TODO: 测试转标签
-            if (Static.App.Is4K && Static.App.TestLabelDefectJoin) {
+            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
                 if (remoteLables != null) {
                     foreach (var rl in remoteLables) {
@@ -611,7 +611,7 @@ CfgParam        BLOB
                     if (objEA != null) {
 
                         //添加标签
-                        if (objEA.IsFail || (Static.App.Is4K && Static.App.TestLabelEA)) {
+                        if (objEA.IsFail || (Static.App.Is4K && Static.App.EnableLabelEA)) {
                             var objLab = new DataLabel() {
                                 EA = ea - 1,
                                 Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,

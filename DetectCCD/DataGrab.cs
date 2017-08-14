@@ -106,33 +106,23 @@ namespace DetectCCD {
                     return false;
                 }
 
-                //是否要保存
-                if(!Static.App.RecordSaveImageOK || !Static.App.RecordSaveImageNG) {
-
-                    if (!Static.App.RecordSaveImageOK && !data.hasDefect)
-                        return false;
-
-                    if (!Static.App.RecordSaveImageNG && data.hasDefect)
-                        return false;
-                    
-                }
+                //
+                bool isSaveImage = (data.hasDefect && Static.App.RecordSaveImageNG) || (!data.hasDefect && Static.App.RecordSaveImageOK);
+                
+                //
+                db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", tname), ToDB(data, isSaveImage));
 
                 //
-                db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", tname), ToDB(data));
-
-                //
-                int w, h;
-                data.Image.GetImageSize(out w, out h);
                 if (Count == 0) {
+
+                    int w, h;
+                    data.Image.GetImageSize(out w, out h);
+
                     Width = w;
                     Height = h;
 
                     Min = data.Frame;
                     Max = data.Frame;
-                }
-                else {
-                    if (Width != w || Height != h)
-                        throw new Exception("DataGrab: DBTableGrab: Save: Image Size Error.");
                 }
 
                 //
@@ -157,8 +147,8 @@ Image           BLOB
 
             }
 
-            static object[] ToDB(DataGrab data) {
-                return new object[] { data.Camera, data.Frame, data.Encoder, data.Timestamp, UtilSerialization.obj2bytes(data.Image) };
+            static object[] ToDB(DataGrab data, bool saveImage) {
+                return new object[] { data.Camera, data.Frame, data.Encoder, data.Timestamp, saveImage ? UtilSerialization.obj2bytes(data.Image) : new byte[0] };
             }
             static DataGrab FromDB(object[] objs) {
 
