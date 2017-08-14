@@ -555,6 +555,7 @@ namespace DetectCCD {
 
             Static.SafeRun(() => {
 
+                groupLabel.Visible = Static.App.Is4K;
                 groupRemoteClient.Visible = Static.App.Is4K;
                 if (Static.App.Is4K) {
                     _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";

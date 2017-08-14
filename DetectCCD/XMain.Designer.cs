@@ -137,7 +137,7 @@
             this.panelDefect2 = new System.Windows.Forms.Panel();
             this.panelDefect1 = new System.Windows.Forms.Panel();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
-            this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
+            this.groupLabel = new DevExpress.XtraEditors.GroupControl();
             this.labelControl14 = new DevExpress.XtraEditors.LabelControl();
             this.textLabelEAOffset = new DevExpress.XtraEditors.TextEdit();
             this.labelControl16 = new DevExpress.XtraEditors.LabelControl();
@@ -220,8 +220,8 @@
             this.xtraTabPage7.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.xtraTabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).BeginInit();
-            this.groupControl3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).BeginInit();
+            this.groupLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAEveryOne.Properties)).BeginInit();
@@ -1487,7 +1487,7 @@
             // 
             // xtraTabPage3
             // 
-            this.xtraTabPage3.Controls.Add(this.groupControl3);
+            this.xtraTabPage3.Controls.Add(this.groupLabel);
             this.xtraTabPage3.Controls.Add(this.groupCtrl);
             this.xtraTabPage3.Controls.Add(this.groupControl2);
             this.xtraTabPage3.Controls.Add(this.groupTest);
@@ -1496,22 +1496,22 @@
             this.xtraTabPage3.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage3.Text = "参数配置";
             // 
-            // groupControl3
+            // groupLabel
             // 
-            this.groupControl3.Controls.Add(this.labelControl14);
-            this.groupControl3.Controls.Add(this.textLabelEAOffset);
-            this.groupControl3.Controls.Add(this.labelControl16);
-            this.groupControl3.Controls.Add(this.labelControl13);
-            this.groupControl3.Controls.Add(this.textLabelDefectOffset);
-            this.groupControl3.Controls.Add(this.labelControl9);
-            this.groupControl3.Controls.Add(this.checkEnableLabelEAEveryOne);
-            this.groupControl3.Controls.Add(this.checkEnableLabelEA);
-            this.groupControl3.Controls.Add(this.checkEnableLabelDefect);
-            this.groupControl3.Location = new System.Drawing.Point(33, 233);
-            this.groupControl3.Name = "groupControl3";
-            this.groupControl3.Size = new System.Drawing.Size(446, 171);
-            this.groupControl3.TabIndex = 29;
-            this.groupControl3.Text = "贴标设置";
+            this.groupLabel.Controls.Add(this.labelControl14);
+            this.groupLabel.Controls.Add(this.textLabelEAOffset);
+            this.groupLabel.Controls.Add(this.labelControl16);
+            this.groupLabel.Controls.Add(this.labelControl13);
+            this.groupLabel.Controls.Add(this.textLabelDefectOffset);
+            this.groupLabel.Controls.Add(this.labelControl9);
+            this.groupLabel.Controls.Add(this.checkEnableLabelEAEveryOne);
+            this.groupLabel.Controls.Add(this.checkEnableLabelEA);
+            this.groupLabel.Controls.Add(this.checkEnableLabelDefect);
+            this.groupLabel.Location = new System.Drawing.Point(33, 233);
+            this.groupLabel.Name = "groupLabel";
+            this.groupLabel.Size = new System.Drawing.Size(446, 171);
+            this.groupLabel.TabIndex = 29;
+            this.groupLabel.Text = "贴标设置";
             // 
             // labelControl14
             // 
@@ -1848,9 +1848,9 @@
             this.xtraTabPage7.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
             this.xtraTabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).EndInit();
-            this.groupControl3.ResumeLayout(false);
-            this.groupControl3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).EndInit();
+            this.groupLabel.ResumeLayout(false);
+            this.groupLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAEveryOne.Properties)).EndInit();
@@ -2009,7 +2009,7 @@
         private System.Windows.Forms.Panel panelLabel1;
         private System.Windows.Forms.Panel panelDefect2;
         private System.Windows.Forms.Panel panelDefect1;
-        private DevExpress.XtraEditors.GroupControl groupControl3;
+        private DevExpress.XtraEditors.GroupControl groupLabel;
         private DevExpress.XtraEditors.CheckEdit checkEnableLabelEA;
         private DevExpress.XtraEditors.CheckEdit checkEnableLabelDefect;
         private DevExpress.XtraEditors.CheckEdit checkEnableLabelEAEveryOne;
