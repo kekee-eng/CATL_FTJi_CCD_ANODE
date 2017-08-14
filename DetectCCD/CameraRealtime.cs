@@ -101,7 +101,7 @@ namespace DetectCCD {
         }
         private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
 
-            if (e.Trash) {
+            if (Buffers.State == SapBuffer.DataState.Overflow) {
                 m_trash++;
                 return;
             }

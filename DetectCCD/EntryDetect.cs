@@ -615,7 +615,7 @@ CfgParam        BLOB
                             var objLab = new DataLabel() {
                                 EA = ea - 1,
                                 Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
-                                Comment = "EA未端贴标"
+                                Comment = "EA末端贴标"
                             };
                             objLab.Encoder = grab.GetEncoder(objLab.Y);
 
