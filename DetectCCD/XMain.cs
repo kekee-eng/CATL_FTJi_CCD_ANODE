@@ -686,6 +686,7 @@ namespace DetectCCD {
                 if (device.isGrabbing)
                     throw new Exception("请先停止采集图像！");
 
+                closeWidthCSV();
                 if (!isRollOk) {
 
                     if (textRollType.SelectedIndex == -1)
@@ -720,7 +721,6 @@ namespace DetectCCD {
 
                     //
                     record.Dispose();
-                    closeWidthCSV();
 
                     //
                     textRollType.Enabled = true;
