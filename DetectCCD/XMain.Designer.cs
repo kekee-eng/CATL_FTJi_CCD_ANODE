@@ -115,6 +115,7 @@
             this._lc_inner_caption = new DevExpress.XtraEditors.LabelControl();
             this.hwinInner = new HalconDotNet.HWindowControl();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
+            this.checkDisableView = new DevExpress.XtraEditors.CheckEdit();
             this.ckViewOuterBack = new DevExpress.XtraEditors.CheckEdit();
             this.ckViewOuterFront = new DevExpress.XtraEditors.CheckEdit();
             this.ckViewInnerBack = new DevExpress.XtraEditors.CheckEdit();
@@ -149,7 +150,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.checkDisableView = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -185,6 +185,7 @@
             this.tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
             this.groupControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterBack.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterFront.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewInnerBack.Properties)).BeginInit();
@@ -212,7 +213,6 @@
             this.xtraTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl2)).BeginInit();
             this.splitContainerControl2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -420,7 +420,7 @@
             this.xtraTabPage1.ImageIndex = 0;
             this.xtraTabPage1.MaxTabPageWidth = 100;
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(970, 620);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage1.Text = "设备控制";
             // 
             // groupRemoteClient
@@ -577,7 +577,7 @@
             this.splitContainerControl1.Panel2.Controls.Add(this.groupRoll);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(1142, 620);
-            this.splitContainerControl1.SplitterPosition = 316;
+            this.splitContainerControl1.SplitterPosition = 318;
             this.splitContainerControl1.TabIndex = 0;
             this.splitContainerControl1.Text = "splitContainerControl1";
             // 
@@ -593,16 +593,16 @@
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(816, 616);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(814, 616);
             this.tableLayoutPanel8.TabIndex = 29;
             // 
             // groupStatuOuter
             // 
             this.groupStatuOuter.Controls.Add(this.splitContainerOuter);
             this.groupStatuOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupStatuOuter.Location = new System.Drawing.Point(411, 3);
+            this.groupStatuOuter.Location = new System.Drawing.Point(410, 3);
             this.groupStatuOuter.Name = "groupStatuOuter";
-            this.groupStatuOuter.Size = new System.Drawing.Size(402, 610);
+            this.groupStatuOuter.Size = new System.Drawing.Size(401, 610);
             this.groupStatuOuter.TabIndex = 1;
             this.groupStatuOuter.Text = "Camera2";
             this.groupStatuOuter.DoubleClick += new System.EventHandler(this.groupStatuOuter_DoubleClick);
@@ -623,7 +623,7 @@
             // splitContainerOuter.Panel2
             // 
             this.splitContainerOuter.Panel2.Controls.Add(this.hwinOuter);
-            this.splitContainerOuter.Size = new System.Drawing.Size(398, 587);
+            this.splitContainerOuter.Size = new System.Drawing.Size(397, 587);
             this.splitContainerOuter.SplitterDistance = 120;
             this.splitContainerOuter.TabIndex = 0;
             // 
@@ -639,7 +639,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(398, 120);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(397, 120);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -667,7 +667,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(193, 114);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(192, 114);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // _lc_outer_fps
@@ -676,7 +676,7 @@
             this._lc_outer_fps.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_outer_fps.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_outer_fps.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_outer_fps.Location = new System.Drawing.Point(100, 92);
+            this._lc_outer_fps.Location = new System.Drawing.Point(99, 92);
             this._lc_outer_fps.Name = "_lc_outer_fps";
             this._lc_outer_fps.Size = new System.Drawing.Size(89, 18);
             this._lc_outer_fps.TabIndex = 36;
@@ -690,7 +690,7 @@
             this.labelControl16.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl16.Location = new System.Drawing.Point(4, 92);
             this.labelControl16.Name = "labelControl16";
-            this.labelControl16.Size = new System.Drawing.Size(89, 18);
+            this.labelControl16.Size = new System.Drawing.Size(88, 18);
             this.labelControl16.TabIndex = 35;
             this.labelControl16.Text = "Fps";
             // 
@@ -700,7 +700,7 @@
             this._lc_outer_frame.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_outer_frame.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_outer_frame.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_outer_frame.Location = new System.Drawing.Point(100, 70);
+            this._lc_outer_frame.Location = new System.Drawing.Point(99, 70);
             this._lc_outer_frame.Name = "_lc_outer_frame";
             this._lc_outer_frame.Size = new System.Drawing.Size(89, 15);
             this._lc_outer_frame.TabIndex = 34;
@@ -714,7 +714,7 @@
             this.labelControl18.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl18.Location = new System.Drawing.Point(4, 70);
             this.labelControl18.Name = "labelControl18";
-            this.labelControl18.Size = new System.Drawing.Size(89, 15);
+            this.labelControl18.Size = new System.Drawing.Size(88, 15);
             this.labelControl18.TabIndex = 33;
             this.labelControl18.Text = "Frame";
             // 
@@ -724,7 +724,7 @@
             this._lc_outer_isgrabbing.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_outer_isgrabbing.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_outer_isgrabbing.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_outer_isgrabbing.Location = new System.Drawing.Point(100, 48);
+            this._lc_outer_isgrabbing.Location = new System.Drawing.Point(99, 48);
             this._lc_outer_isgrabbing.Name = "_lc_outer_isgrabbing";
             this._lc_outer_isgrabbing.Size = new System.Drawing.Size(89, 15);
             this._lc_outer_isgrabbing.TabIndex = 32;
@@ -738,7 +738,7 @@
             this.labelControl20.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl20.Location = new System.Drawing.Point(4, 48);
             this.labelControl20.Name = "labelControl20";
-            this.labelControl20.Size = new System.Drawing.Size(89, 15);
+            this.labelControl20.Size = new System.Drawing.Size(88, 15);
             this.labelControl20.TabIndex = 31;
             this.labelControl20.Text = "IsGrabbing";
             // 
@@ -748,7 +748,7 @@
             this._lc_outer_isopen.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_outer_isopen.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_outer_isopen.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_outer_isopen.Location = new System.Drawing.Point(100, 26);
+            this._lc_outer_isopen.Location = new System.Drawing.Point(99, 26);
             this._lc_outer_isopen.Name = "_lc_outer_isopen";
             this._lc_outer_isopen.Size = new System.Drawing.Size(89, 15);
             this._lc_outer_isopen.TabIndex = 30;
@@ -762,7 +762,7 @@
             this.labelControl22.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl22.Location = new System.Drawing.Point(4, 26);
             this.labelControl22.Name = "labelControl22";
-            this.labelControl22.Size = new System.Drawing.Size(89, 15);
+            this.labelControl22.Size = new System.Drawing.Size(88, 15);
             this.labelControl22.TabIndex = 28;
             this.labelControl22.Text = "IsOpen";
             // 
@@ -774,7 +774,7 @@
             this.labelControl23.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl23.Location = new System.Drawing.Point(4, 4);
             this.labelControl23.Name = "labelControl23";
-            this.labelControl23.Size = new System.Drawing.Size(89, 15);
+            this.labelControl23.Size = new System.Drawing.Size(88, 15);
             this.labelControl23.TabIndex = 26;
             this.labelControl23.Text = "Camera";
             // 
@@ -784,7 +784,7 @@
             this._lc_outer_camera.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_outer_camera.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_outer_camera.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_outer_camera.Location = new System.Drawing.Point(100, 4);
+            this._lc_outer_camera.Location = new System.Drawing.Point(99, 4);
             this._lc_outer_camera.Name = "_lc_outer_camera";
             this._lc_outer_camera.Size = new System.Drawing.Size(89, 15);
             this._lc_outer_camera.TabIndex = 29;
@@ -805,7 +805,7 @@
             this.tableLayoutPanel4.Controls.Add(this.labelControl21, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this._lc_outer_caption, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(202, 3);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(201, 3);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 4;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -919,9 +919,9 @@
             this.hwinOuter.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwinOuter.Location = new System.Drawing.Point(0, 0);
             this.hwinOuter.Name = "hwinOuter";
-            this.hwinOuter.Size = new System.Drawing.Size(398, 463);
+            this.hwinOuter.Size = new System.Drawing.Size(397, 463);
             this.hwinOuter.TabIndex = 30;
-            this.hwinOuter.WindowSize = new System.Drawing.Size(398, 463);
+            this.hwinOuter.WindowSize = new System.Drawing.Size(397, 463);
             // 
             // groupStatuInner
             // 
@@ -929,7 +929,7 @@
             this.groupStatuInner.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupStatuInner.Location = new System.Drawing.Point(3, 3);
             this.groupStatuInner.Name = "groupStatuInner";
-            this.groupStatuInner.Size = new System.Drawing.Size(402, 610);
+            this.groupStatuInner.Size = new System.Drawing.Size(401, 610);
             this.groupStatuInner.TabIndex = 0;
             this.groupStatuInner.Text = "Camera1";
             this.groupStatuInner.DoubleClick += new System.EventHandler(this.groupStatuInner_DoubleClick);
@@ -950,7 +950,7 @@
             // splitContainerInner.Panel2
             // 
             this.splitContainerInner.Panel2.Controls.Add(this.hwinInner);
-            this.splitContainerInner.Size = new System.Drawing.Size(398, 587);
+            this.splitContainerInner.Size = new System.Drawing.Size(397, 587);
             this.splitContainerInner.SplitterDistance = 120;
             this.splitContainerInner.TabIndex = 0;
             // 
@@ -966,7 +966,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(398, 120);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(397, 120);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -994,7 +994,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(193, 114);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(192, 114);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // _lc_inner_fps
@@ -1003,7 +1003,7 @@
             this._lc_inner_fps.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_inner_fps.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_inner_fps.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_inner_fps.Location = new System.Drawing.Point(100, 92);
+            this._lc_inner_fps.Location = new System.Drawing.Point(99, 92);
             this._lc_inner_fps.Name = "_lc_inner_fps";
             this._lc_inner_fps.Size = new System.Drawing.Size(89, 18);
             this._lc_inner_fps.TabIndex = 36;
@@ -1017,7 +1017,7 @@
             this.labelControl14.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl14.Location = new System.Drawing.Point(4, 92);
             this.labelControl14.Name = "labelControl14";
-            this.labelControl14.Size = new System.Drawing.Size(89, 18);
+            this.labelControl14.Size = new System.Drawing.Size(88, 18);
             this.labelControl14.TabIndex = 35;
             this.labelControl14.Text = "Fps";
             // 
@@ -1027,7 +1027,7 @@
             this._lc_inner_frame.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_inner_frame.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_inner_frame.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_inner_frame.Location = new System.Drawing.Point(100, 70);
+            this._lc_inner_frame.Location = new System.Drawing.Point(99, 70);
             this._lc_inner_frame.Name = "_lc_inner_frame";
             this._lc_inner_frame.Size = new System.Drawing.Size(89, 15);
             this._lc_inner_frame.TabIndex = 34;
@@ -1041,7 +1041,7 @@
             this.labelControl12.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl12.Location = new System.Drawing.Point(4, 70);
             this.labelControl12.Name = "labelControl12";
-            this.labelControl12.Size = new System.Drawing.Size(89, 15);
+            this.labelControl12.Size = new System.Drawing.Size(88, 15);
             this.labelControl12.TabIndex = 33;
             this.labelControl12.Text = "Frame";
             // 
@@ -1051,7 +1051,7 @@
             this._lc_inner_isgrabbing.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_inner_isgrabbing.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_inner_isgrabbing.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_inner_isgrabbing.Location = new System.Drawing.Point(100, 48);
+            this._lc_inner_isgrabbing.Location = new System.Drawing.Point(99, 48);
             this._lc_inner_isgrabbing.Name = "_lc_inner_isgrabbing";
             this._lc_inner_isgrabbing.Size = new System.Drawing.Size(89, 15);
             this._lc_inner_isgrabbing.TabIndex = 32;
@@ -1065,7 +1065,7 @@
             this.labelControl10.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl10.Location = new System.Drawing.Point(4, 48);
             this.labelControl10.Name = "labelControl10";
-            this.labelControl10.Size = new System.Drawing.Size(89, 15);
+            this.labelControl10.Size = new System.Drawing.Size(88, 15);
             this.labelControl10.TabIndex = 31;
             this.labelControl10.Text = "IsGrabbing";
             // 
@@ -1075,7 +1075,7 @@
             this._lc_inner_isopen.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_inner_isopen.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_inner_isopen.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_inner_isopen.Location = new System.Drawing.Point(100, 26);
+            this._lc_inner_isopen.Location = new System.Drawing.Point(99, 26);
             this._lc_inner_isopen.Name = "_lc_inner_isopen";
             this._lc_inner_isopen.Size = new System.Drawing.Size(89, 15);
             this._lc_inner_isopen.TabIndex = 30;
@@ -1089,7 +1089,7 @@
             this.labelControl7.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl7.Location = new System.Drawing.Point(4, 26);
             this.labelControl7.Name = "labelControl7";
-            this.labelControl7.Size = new System.Drawing.Size(89, 15);
+            this.labelControl7.Size = new System.Drawing.Size(88, 15);
             this.labelControl7.TabIndex = 28;
             this.labelControl7.Text = "IsOpen";
             // 
@@ -1099,7 +1099,7 @@
             this._lc_inner_camera.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
             this._lc_inner_camera.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lc_inner_camera.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
-            this._lc_inner_camera.Location = new System.Drawing.Point(100, 4);
+            this._lc_inner_camera.Location = new System.Drawing.Point(99, 4);
             this._lc_inner_camera.Name = "_lc_inner_camera";
             this._lc_inner_camera.Size = new System.Drawing.Size(89, 15);
             this._lc_inner_camera.TabIndex = 29;
@@ -1113,7 +1113,7 @@
             this.labelControl5.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this.labelControl5.Location = new System.Drawing.Point(4, 4);
             this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(89, 15);
+            this.labelControl5.Size = new System.Drawing.Size(88, 15);
             this.labelControl5.TabIndex = 26;
             this.labelControl5.Text = "Camera";
             // 
@@ -1132,7 +1132,7 @@
             this.tableLayoutPanel6.Controls.Add(this.labelControl40, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this._lc_inner_caption, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(202, 3);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(201, 3);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 4;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -1246,9 +1246,9 @@
             this.hwinInner.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwinInner.Location = new System.Drawing.Point(0, 0);
             this.hwinInner.Name = "hwinInner";
-            this.hwinInner.Size = new System.Drawing.Size(398, 463);
+            this.hwinInner.Size = new System.Drawing.Size(397, 463);
             this.hwinInner.TabIndex = 29;
-            this.hwinInner.WindowSize = new System.Drawing.Size(398, 463);
+            this.hwinInner.WindowSize = new System.Drawing.Size(397, 463);
             // 
             // groupControl2
             // 
@@ -1264,8 +1264,18 @@
             this.groupControl2.TabIndex = 30;
             this.groupControl2.Text = "同步视图";
             // 
+            // checkDisableView
+            // 
+            this.checkDisableView.Location = new System.Drawing.Point(136, 44);
+            this.checkDisableView.MenuManager = this.barManager1;
+            this.checkDisableView.Name = "checkDisableView";
+            this.checkDisableView.Properties.Caption = "禁用显示";
+            this.checkDisableView.Size = new System.Drawing.Size(87, 19);
+            this.checkDisableView.TabIndex = 11;
+            // 
             // ckViewOuterBack
             // 
+            this.ckViewOuterBack.EditValue = true;
             this.ckViewOuterBack.Location = new System.Drawing.Point(15, 144);
             this.ckViewOuterBack.MenuManager = this.barManager1;
             this.ckViewOuterBack.Name = "ckViewOuterBack";
@@ -1275,6 +1285,7 @@
             // 
             // ckViewOuterFront
             // 
+            this.ckViewOuterFront.EditValue = true;
             this.ckViewOuterFront.Location = new System.Drawing.Point(15, 119);
             this.ckViewOuterFront.MenuManager = this.barManager1;
             this.ckViewOuterFront.Name = "ckViewOuterFront";
@@ -1284,6 +1295,7 @@
             // 
             // ckViewInnerBack
             // 
+            this.ckViewInnerBack.EditValue = true;
             this.ckViewInnerBack.Location = new System.Drawing.Point(15, 94);
             this.ckViewInnerBack.MenuManager = this.barManager1;
             this.ckViewInnerBack.Name = "ckViewInnerBack";
@@ -1293,6 +1305,7 @@
             // 
             // ckViewInnerFront
             // 
+            this.ckViewInnerFront.EditValue = true;
             this.ckViewInnerFront.Location = new System.Drawing.Point(15, 69);
             this.ckViewInnerFront.MenuManager = this.barManager1;
             this.ckViewInnerFront.Name = "ckViewInnerFront";
@@ -1541,7 +1554,7 @@
             this.xtraTabPage3.Controls.Add(this.splitContainerControl2);
             this.xtraTabPage3.ImageIndex = 2;
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(970, 620);
+            this.xtraTabPage3.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage3.Text = "参数配置";
             // 
             // splitContainerControl2
@@ -1554,7 +1567,7 @@
             this.splitContainerControl2.Panel1.Text = "Panel1";
             this.splitContainerControl2.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
             this.splitContainerControl2.Panel2.Text = "Panel2";
-            this.splitContainerControl2.Size = new System.Drawing.Size(970, 620);
+            this.splitContainerControl2.Size = new System.Drawing.Size(1142, 620);
             this.splitContainerControl2.SplitterPosition = 255;
             this.splitContainerControl2.TabIndex = 1;
             this.splitContainerControl2.Text = "splitContainerControl2";
@@ -1563,7 +1576,7 @@
             // 
             this.xtraTabPage4.ImageIndex = 3;
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(970, 620);
+            this.xtraTabPage4.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage4.Text = "测试工具";
             // 
             // timer1
@@ -1580,15 +1593,6 @@
             // 
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
-            // 
-            // checkDisableView
-            // 
-            this.checkDisableView.Location = new System.Drawing.Point(136, 44);
-            this.checkDisableView.MenuManager = this.barManager1;
-            this.checkDisableView.Name = "checkDisableView";
-            this.checkDisableView.Properties.Caption = "禁用显示";
-            this.checkDisableView.Size = new System.Drawing.Size(87, 19);
-            this.checkDisableView.TabIndex = 11;
             // 
             // XMain
             // 
@@ -1641,6 +1645,7 @@
             this.tableLayoutPanel6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
             this.groupControl2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterBack.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterFront.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewInnerBack.Properties)).EndInit();
@@ -1669,7 +1674,6 @@
             this.xtraTabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl2)).EndInit();
             this.splitContainerControl2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
