@@ -360,6 +360,10 @@ namespace DetectCCD {
             timer1.Enabled = true;
             timer1_Tick(null, null);
 
+            //
+            xtraTabPage7.PageVisible = Static.App.Is8K;
+            xtraTabPage6.PageVisible = Static.App.Is4K;
+            xtraTabPage5.PageVisible = Static.App.Is4K;
         }
         void changeUser() {
             //隐藏按钮

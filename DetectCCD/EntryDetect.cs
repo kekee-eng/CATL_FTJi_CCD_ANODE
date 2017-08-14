@@ -23,6 +23,7 @@ namespace DetectCCD {
             Tabs.Clear();
             Defects.Clear();
             Labels.Clear();
+            LabelsCache.Clear();
         }
 
         public void CreateTable() {
@@ -193,12 +194,12 @@ CfgParam        BLOB
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
                 if (remoteLables != null) {
                     foreach (var rl in remoteLables) {
-
-                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
-                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
+                        var y0 = rl.Y + Static.Param.LabelY_Defect / Fy;
+                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - y0) < 0.5);
+                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - y0) < 0.5);
                         if (repeat1 == null && repeat2 == null) {
                             addLabel(new DataLabel() {
-                                Y = rl.Y,
+                                Y = y0,
                                 Comment = "[测试]正面接头转标"
                             });
                         }
@@ -211,12 +212,12 @@ CfgParam        BLOB
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
                 if (remoteLables != null) {
                     foreach (var rl in remoteLables) {
-                        
-                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
-                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - rl.Y) < 0.5);
+                        var y0 = rl.Y + Static.Param.LabelY_Defect / Fy;
+                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - y0) < 0.5);
+                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - y0) < 0.5);
                         if (repeat1 == null && repeat2 == null) {
                             addLabel(new DataLabel() {
-                                Y = rl.Y,
+                                Y = y0,
                                 Comment = "[测试]背面接头转标"
                             });
                         }

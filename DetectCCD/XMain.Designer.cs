@@ -1413,7 +1413,7 @@
             // 
             this.xtraTabPage6.Controls.Add(this.tableLayoutPanel3);
             this.xtraTabPage6.Name = "xtraTabPage6";
-            this.xtraTabPage6.Size = new System.Drawing.Size(316, 587);
+            this.xtraTabPage6.Size = new System.Drawing.Size(578, 587);
             this.xtraTabPage6.Text = "贴标数据";
             // 
             // tableLayoutPanel3
@@ -1428,7 +1428,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(316, 587);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(578, 587);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // panelLabel2
@@ -1436,7 +1436,7 @@
             this.panelLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLabel2.Location = new System.Drawing.Point(3, 296);
             this.panelLabel2.Name = "panelLabel2";
-            this.panelLabel2.Size = new System.Drawing.Size(310, 288);
+            this.panelLabel2.Size = new System.Drawing.Size(572, 288);
             this.panelLabel2.TabIndex = 1;
             // 
             // panelLabel1
@@ -1444,14 +1444,14 @@
             this.panelLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLabel1.Location = new System.Drawing.Point(3, 3);
             this.panelLabel1.Name = "panelLabel1";
-            this.panelLabel1.Size = new System.Drawing.Size(310, 287);
+            this.panelLabel1.Size = new System.Drawing.Size(572, 287);
             this.panelLabel1.TabIndex = 0;
             // 
             // xtraTabPage7
             // 
             this.xtraTabPage7.Controls.Add(this.tableLayoutPanel9);
             this.xtraTabPage7.Name = "xtraTabPage7";
-            this.xtraTabPage7.Size = new System.Drawing.Size(316, 587);
+            this.xtraTabPage7.Size = new System.Drawing.Size(578, 587);
             this.xtraTabPage7.Text = "瑕疵数据";
             // 
             // tableLayoutPanel9
@@ -1466,7 +1466,7 @@
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(316, 587);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(578, 587);
             this.tableLayoutPanel9.TabIndex = 1;
             // 
             // panelDefect2
@@ -1474,7 +1474,7 @@
             this.panelDefect2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDefect2.Location = new System.Drawing.Point(3, 296);
             this.panelDefect2.Name = "panelDefect2";
-            this.panelDefect2.Size = new System.Drawing.Size(310, 288);
+            this.panelDefect2.Size = new System.Drawing.Size(572, 288);
             this.panelDefect2.TabIndex = 1;
             // 
             // panelDefect1
@@ -1482,7 +1482,7 @@
             this.panelDefect1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDefect1.Location = new System.Drawing.Point(3, 3);
             this.panelDefect1.Name = "panelDefect1";
-            this.panelDefect1.Size = new System.Drawing.Size(310, 287);
+            this.panelDefect1.Size = new System.Drawing.Size(572, 287);
             this.panelDefect1.TabIndex = 1;
             // 
             // xtraTabPage3
