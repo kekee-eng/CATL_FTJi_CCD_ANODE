@@ -612,16 +612,18 @@ CfgParam        BLOB
                     if (objEA != null) {
 
                         //添加标签
-                        if (objEA.IsFail || (Static.App.Is4K && Static.App.EnableLabelEA)) {
-                            var objLab = new DataLabel() {
-                                EA = ea - 1,
-                                Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
-                                Comment = "EA末端贴标"
-                            };
-                            objLab.Encoder = grab.GetEncoder(objLab.Y);
+                        if (Static.App.Is4K && Static.App.EnableLabelEA) {
+                            if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
+                                var objLab = new DataLabel() {
+                                    EA = ea - 1,
+                                    Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
+                                    Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标"
+                                };
+                                objLab.Encoder = grab.GetEncoder(objLab.Y);
 
-                            if (Labels.Find(x => x.EA == objLab.EA && x.Encoder == objLab.Encoder) == null) {
-                                addLabel(objLab);
+                                if (Labels.Find(x => x.EA == objLab.EA && x.Encoder == objLab.Encoder) == null) {
+                                    addLabel(objLab);
+                                }
                             }
                         }
 

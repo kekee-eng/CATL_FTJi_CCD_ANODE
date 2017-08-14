@@ -665,7 +665,7 @@ namespace DetectCCD {
                     "控制下限",
                     new double[] { -p, p },
                     new double[] { 0, 0 },
-                    Color.Orange,
+                    Color.Red,
                     SymbolType.None));
             chart.GraphPane.CurveList.Add(
                 new LineItem(

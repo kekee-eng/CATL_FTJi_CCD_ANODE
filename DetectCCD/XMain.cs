@@ -567,6 +567,10 @@ namespace DetectCCD {
                 //
                 textMode.BackColor = isOnline ? Color.LightGreen : Color.Pink;
 
+                textLabelDefectOffset.Enabled = checkEnableLabelDefect.Checked;
+                textLabelEAOffset.Enabled = checkEnableLabelEA.Checked;
+                checkEnableLabelEAEveryOne.Enabled = checkEnableLabelEA.Checked;
+
                 xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
                 xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
 
