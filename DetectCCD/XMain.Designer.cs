@@ -138,6 +138,10 @@
             this.panelDefect1 = new System.Windows.Forms.Panel();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.groupLabel = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
+            this.textLabelEAForce = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
+            this.checkEnableLabelEAForce = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl14 = new DevExpress.XtraEditors.LabelControl();
             this.textLabelEAOffset = new DevExpress.XtraEditors.TextEdit();
             this.labelControl16 = new DevExpress.XtraEditors.LabelControl();
@@ -168,10 +172,16 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.checkEnableLabelEAForce = new DevExpress.XtraEditors.CheckEdit();
-            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
-            this.textLabelEAForce = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
+            this.groupWidth = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
+            this.textWidthMax = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl27 = new DevExpress.XtraEditors.LabelControl();
+            this.textWidthMin = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl28 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl31 = new DevExpress.XtraEditors.LabelControl();
+            this.textWidthStep = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl32 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -226,6 +236,8 @@
             this.xtraTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).BeginInit();
             this.groupLabel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAEveryOne.Properties)).BeginInit();
@@ -249,8 +261,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).BeginInit();
+            this.groupWidth.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -1493,6 +1508,7 @@
             // 
             // xtraTabPage3
             // 
+            this.xtraTabPage3.Controls.Add(this.groupWidth);
             this.xtraTabPage3.Controls.Add(this.groupLabel);
             this.xtraTabPage3.Controls.Add(this.groupCtrl);
             this.xtraTabPage3.Controls.Add(this.groupControl2);
@@ -1517,11 +1533,44 @@
             this.groupLabel.Controls.Add(this.checkEnableLabelEAEveryOne);
             this.groupLabel.Controls.Add(this.checkEnableLabelEA);
             this.groupLabel.Controls.Add(this.checkEnableLabelDefect);
-            this.groupLabel.Location = new System.Drawing.Point(33, 233);
+            this.groupLabel.Location = new System.Drawing.Point(337, 234);
             this.groupLabel.Name = "groupLabel";
             this.groupLabel.Size = new System.Drawing.Size(446, 171);
             this.groupLabel.TabIndex = 29;
             this.groupLabel.Text = "贴标设置";
+            // 
+            // labelControl17
+            // 
+            this.labelControl17.Location = new System.Drawing.Point(374, 123);
+            this.labelControl17.Name = "labelControl17";
+            this.labelControl17.Size = new System.Drawing.Size(20, 14);
+            this.labelControl17.TabIndex = 18;
+            this.labelControl17.Text = "mm";
+            // 
+            // textLabelEAForce
+            // 
+            this.textLabelEAForce.Location = new System.Drawing.Point(268, 120);
+            this.textLabelEAForce.MenuManager = this.barManager1;
+            this.textLabelEAForce.Name = "textLabelEAForce";
+            this.textLabelEAForce.Size = new System.Drawing.Size(100, 20);
+            this.textLabelEAForce.TabIndex = 17;
+            // 
+            // labelControl24
+            // 
+            this.labelControl24.Location = new System.Drawing.Point(223, 123);
+            this.labelControl24.Name = "labelControl24";
+            this.labelControl24.Size = new System.Drawing.Size(39, 14);
+            this.labelControl24.TabIndex = 16;
+            this.labelControl24.Text = "EA长度";
+            // 
+            // checkEnableLabelEAForce
+            // 
+            this.checkEnableLabelEAForce.Location = new System.Drawing.Point(49, 120);
+            this.checkEnableLabelEAForce.MenuManager = this.barManager1;
+            this.checkEnableLabelEAForce.Name = "checkEnableLabelEAForce";
+            this.checkEnableLabelEAForce.Properties.Caption = "EA超长强制打标";
+            this.checkEnableLabelEAForce.Size = new System.Drawing.Size(147, 19);
+            this.checkEnableLabelEAForce.TabIndex = 15;
             // 
             // labelControl14
             // 
@@ -1604,7 +1653,7 @@
             this.groupCtrl.Controls.Add(this.btnOfflineControl);
             this.groupCtrl.Location = new System.Drawing.Point(655, 26);
             this.groupCtrl.Name = "groupCtrl";
-            this.groupCtrl.Size = new System.Drawing.Size(281, 142);
+            this.groupCtrl.Size = new System.Drawing.Size(281, 183);
             this.groupCtrl.TabIndex = 28;
             this.groupCtrl.Text = "控制台";
             // 
@@ -1789,38 +1838,94 @@
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
-            // checkEnableLabelEAForce
+            // groupWidth
             // 
-            this.checkEnableLabelEAForce.Location = new System.Drawing.Point(49, 120);
-            this.checkEnableLabelEAForce.MenuManager = this.barManager1;
-            this.checkEnableLabelEAForce.Name = "checkEnableLabelEAForce";
-            this.checkEnableLabelEAForce.Properties.Caption = "EA超长强制打标";
-            this.checkEnableLabelEAForce.Size = new System.Drawing.Size(147, 19);
-            this.checkEnableLabelEAForce.TabIndex = 15;
+            this.groupWidth.Controls.Add(this.labelControl31);
+            this.groupWidth.Controls.Add(this.textWidthStep);
+            this.groupWidth.Controls.Add(this.labelControl32);
+            this.groupWidth.Controls.Add(this.labelControl25);
+            this.groupWidth.Controls.Add(this.textWidthMax);
+            this.groupWidth.Controls.Add(this.labelControl26);
+            this.groupWidth.Controls.Add(this.labelControl27);
+            this.groupWidth.Controls.Add(this.textWidthMin);
+            this.groupWidth.Controls.Add(this.labelControl28);
+            this.groupWidth.Location = new System.Drawing.Point(33, 234);
+            this.groupWidth.Name = "groupWidth";
+            this.groupWidth.Size = new System.Drawing.Size(281, 171);
+            this.groupWidth.TabIndex = 29;
+            this.groupWidth.Text = "测宽设置";
             // 
-            // labelControl17
+            // labelControl25
             // 
-            this.labelControl17.Location = new System.Drawing.Point(374, 123);
-            this.labelControl17.Name = "labelControl17";
-            this.labelControl17.Size = new System.Drawing.Size(20, 14);
-            this.labelControl17.TabIndex = 18;
-            this.labelControl17.Text = "mm";
+            this.labelControl25.Location = new System.Drawing.Point(173, 72);
+            this.labelControl25.Name = "labelControl25";
+            this.labelControl25.Size = new System.Drawing.Size(20, 14);
+            this.labelControl25.TabIndex = 20;
+            this.labelControl25.Text = "mm";
             // 
-            // textLabelEAForce
+            // textWidthMax
             // 
-            this.textLabelEAForce.Location = new System.Drawing.Point(268, 120);
-            this.textLabelEAForce.MenuManager = this.barManager1;
-            this.textLabelEAForce.Name = "textLabelEAForce";
-            this.textLabelEAForce.Size = new System.Drawing.Size(100, 20);
-            this.textLabelEAForce.TabIndex = 17;
+            this.textWidthMax.Location = new System.Drawing.Point(67, 69);
+            this.textWidthMax.MenuManager = this.barManager1;
+            this.textWidthMax.Name = "textWidthMax";
+            this.textWidthMax.Size = new System.Drawing.Size(100, 20);
+            this.textWidthMax.TabIndex = 19;
             // 
-            // labelControl24
+            // labelControl26
             // 
-            this.labelControl24.Location = new System.Drawing.Point(223, 123);
-            this.labelControl24.Name = "labelControl24";
-            this.labelControl24.Size = new System.Drawing.Size(39, 14);
-            this.labelControl24.TabIndex = 16;
-            this.labelControl24.Text = "EA长度";
+            this.labelControl26.Location = new System.Drawing.Point(37, 72);
+            this.labelControl26.Name = "labelControl26";
+            this.labelControl26.Size = new System.Drawing.Size(24, 14);
+            this.labelControl26.TabIndex = 18;
+            this.labelControl26.Text = "下限";
+            // 
+            // labelControl27
+            // 
+            this.labelControl27.Location = new System.Drawing.Point(173, 46);
+            this.labelControl27.Name = "labelControl27";
+            this.labelControl27.Size = new System.Drawing.Size(20, 14);
+            this.labelControl27.TabIndex = 17;
+            this.labelControl27.Text = "mm";
+            // 
+            // textWidthMin
+            // 
+            this.textWidthMin.Location = new System.Drawing.Point(67, 43);
+            this.textWidthMin.MenuManager = this.barManager1;
+            this.textWidthMin.Name = "textWidthMin";
+            this.textWidthMin.Size = new System.Drawing.Size(100, 20);
+            this.textWidthMin.TabIndex = 16;
+            // 
+            // labelControl28
+            // 
+            this.labelControl28.Location = new System.Drawing.Point(37, 46);
+            this.labelControl28.Name = "labelControl28";
+            this.labelControl28.Size = new System.Drawing.Size(24, 14);
+            this.labelControl28.TabIndex = 15;
+            this.labelControl28.Text = "上限";
+            // 
+            // labelControl31
+            // 
+            this.labelControl31.Location = new System.Drawing.Point(173, 98);
+            this.labelControl31.Name = "labelControl31";
+            this.labelControl31.Size = new System.Drawing.Size(20, 14);
+            this.labelControl31.TabIndex = 23;
+            this.labelControl31.Text = "mm";
+            // 
+            // textWidthStep
+            // 
+            this.textWidthStep.Location = new System.Drawing.Point(67, 95);
+            this.textWidthStep.MenuManager = this.barManager1;
+            this.textWidthStep.Name = "textWidthStep";
+            this.textWidthStep.Size = new System.Drawing.Size(100, 20);
+            this.textWidthStep.TabIndex = 22;
+            // 
+            // labelControl32
+            // 
+            this.labelControl32.Location = new System.Drawing.Point(37, 98);
+            this.labelControl32.Name = "labelControl32";
+            this.labelControl32.Size = new System.Drawing.Size(24, 14);
+            this.labelControl32.TabIndex = 21;
+            this.labelControl32.Text = "步长";
             // 
             // XMain
             // 
@@ -1894,6 +1999,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).EndInit();
             this.groupLabel.ResumeLayout(false);
             this.groupLabel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAEveryOne.Properties)).EndInit();
@@ -1917,8 +2024,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).EndInit();
+            this.groupWidth.ResumeLayout(false);
+            this.groupWidth.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2068,5 +2179,15 @@
         private DevExpress.XtraEditors.TextEdit textLabelEAForce;
         private DevExpress.XtraEditors.LabelControl labelControl24;
         private DevExpress.XtraEditors.CheckEdit checkEnableLabelEAForce;
+        private DevExpress.XtraEditors.GroupControl groupWidth;
+        private DevExpress.XtraEditors.LabelControl labelControl31;
+        private DevExpress.XtraEditors.TextEdit textWidthStep;
+        private DevExpress.XtraEditors.LabelControl labelControl32;
+        private DevExpress.XtraEditors.LabelControl labelControl25;
+        private DevExpress.XtraEditors.TextEdit textWidthMax;
+        private DevExpress.XtraEditors.LabelControl labelControl26;
+        private DevExpress.XtraEditors.LabelControl labelControl27;
+        private DevExpress.XtraEditors.TextEdit textWidthMin;
+        private DevExpress.XtraEditors.LabelControl labelControl28;
     }
 }

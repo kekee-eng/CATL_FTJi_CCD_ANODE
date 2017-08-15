@@ -336,6 +336,10 @@ namespace DetectCCD {
             Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
             Static.Param.BindTextBox(textLabelEAForce, "LabelY_EA_Force");
             Static.Param.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
+
+            Static.Param.BindTextBox(textWidthMin, "TabWidthMin");
+            Static.Param.BindTextBox(textWidthMax, "TabWidthMax");
+            Static.Param.BindTextBox(textWidthStep, "TabWidthStep");
         }
         void init_status() {
 
@@ -564,6 +568,7 @@ namespace DetectCCD {
 
             Static.SafeRun(() => {
 
+                groupWidth.Visible = Static.App.Is4K;
                 groupLabel.Visible = Static.App.Is4K;
                 groupRemoteClient.Visible = Static.App.Is4K;
                 if (Static.App.Is4K) {
