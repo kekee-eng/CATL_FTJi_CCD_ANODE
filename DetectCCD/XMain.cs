@@ -436,10 +436,20 @@ namespace DetectCCD {
             });
 
         }
-        public void DeviceInit(bool isClear =false) {
+        public void DeviceInit(bool isClear = false) {
 
             runAction("初始化设备", () => {
+
+                //
                 device.Dispose();
+
+                //
+                record.InnerViewerImage.SetBottomTarget(0);
+                record.OuterViewerImage.SetBottomTarget(0);
+                record.InnerViewerImage.MoveTargetDirect();
+                record.OuterViewerImage.MoveTargetDirect();
+                
+                //
                 device.Open();
 
                 device.InnerCamera.Freeze();
@@ -458,17 +468,13 @@ namespace DetectCCD {
 
                     record.InnerDetect.Dispose();
                     record.OuterDetect.Dispose();
-                    
+
                     record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
                     record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+
+                    record.InnerViewerImage.MoveTargetDirect();
+                    record.OuterViewerImage.MoveTargetDirect();
                 }
-                else {
-                    record.InnerViewerImage.SetBottomTarget(record.InnerGrab.Max);
-                    record.OuterViewerImage.SetBottomTarget(record.OuterGrab.Max);
-                }
-                
-                record.InnerViewerImage.MoveTargetDirect();
-                record.OuterViewerImage.MoveTargetDirect();
 
             });
 
