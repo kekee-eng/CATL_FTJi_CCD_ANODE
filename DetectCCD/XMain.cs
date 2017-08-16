@@ -99,7 +99,7 @@ namespace DetectCCD {
                     var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
                     var outdefs = new List<DataDefect>();
                     foreach (var def in defs) {
-                        if (def.Type < 2) {
+                        if (def.Type < 2 && def.InInner(isInner)) {
                             outdefs.Add(new DataDefect() { Y = def.Y });
                         }
                     }

@@ -189,7 +189,7 @@ CfgParam        BLOB
             //
             checkLabel();
 
-            //TODO: 测试转标签
+            //转标签
             if (Static.App.Is4K && Static.App.EnableLabelDefect) {
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
                 if (remoteLables != null) {
@@ -200,14 +200,13 @@ CfgParam        BLOB
                         if (repeat1 == null && repeat2 == null) {
                             addLabel(new DataLabel() {
                                 Y = y0,
-                                Comment = "[测试]正面接头转标"
+                                Comment = "正面接头转标"
                             });
                         }
                     }
                 }
             }
 
-            //TODO: 测试转标签
             if (Static.App.Is4K && Static.App.EnableLabelDefect) {
                 var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
                 if (remoteLables != null) {
@@ -218,7 +217,7 @@ CfgParam        BLOB
                         if (repeat1 == null && repeat2 == null) {
                             addLabel(new DataLabel() {
                                 Y = y0,
-                                Comment = "[测试]背面接头转标"
+                                Comment = "背面接头转标"
                             });
                         }
                     }

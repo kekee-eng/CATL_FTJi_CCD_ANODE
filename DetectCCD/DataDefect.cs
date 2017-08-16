@@ -34,9 +34,17 @@ namespace DetectCCD {
         }
 
         //
+        public bool InInner(bool isinner) {
+            if(isinner)
+                return (X - W / 2 < 0.5);
+            else
+                return (X + W / 2 > 0.5);
+        }
+
+        //
         public string GetTypeCaption() {
-            switch(Type) {
-                default:return "UNKNOW";
+            switch (Type) {
+                default: return "UNKNOW";
                 case 0: return "[A]接头";
                 case 1: return "[B]标签";
                 case 10: return "[F]黑斑";
@@ -45,7 +53,7 @@ namespace DetectCCD {
                 case 30: return "[D]划痕";
                 case 40: return "[C]漏金属";
             }
-            
+
         }
 
     }
