@@ -18,7 +18,7 @@ namespace DetectCCD {
         public int DefectCountLocal;
         public int DefectCountFront;
         public int DefectCountBack;
-
+        
         public bool IsTabCountFail;
         public bool IsTabWidthFailCountFail;
         public bool IsTabDistFailCountFail;
