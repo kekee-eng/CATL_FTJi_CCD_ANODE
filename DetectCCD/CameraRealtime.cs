@@ -101,6 +101,7 @@ namespace DetectCCD {
         }
         private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
             
+            //Fix：通过编码器来判断是否为超时触发
             if(Math.Abs(m_encoder - encoder_current) < 200) {
                 m_trash++;
                 return;
