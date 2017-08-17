@@ -80,6 +80,7 @@ namespace DetectCCD {
 
         //运行模式：0=在线（实时检测）、1=离线（仿真）
         public int RunningMode = 0;
+        public string RollName = "";
 
         public bool ModeByRecord { get { return RunningMode == 1; } }
         public bool ModeByCamera { get { return RunningMode != 1; } }

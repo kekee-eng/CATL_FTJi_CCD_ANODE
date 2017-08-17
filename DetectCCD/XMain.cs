@@ -314,6 +314,8 @@ namespace DetectCCD {
         }
         void init_teston() {
 
+            Static.App.BindTextBox(textRollName, "RollName");
+
             Static.App.BindCheckBox(checkSaveOK, "RecordSaveImageOK");
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNG");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
@@ -598,7 +600,7 @@ namespace DetectCCD {
                 xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
                 xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
 
-                groupRoll.Enabled = device.isOpen;
+                groupRoll.Enabled = Static.App.Is4K && device.isOpen;
                 btnConnect.Enabled = isOnline;
                 btnDisconnect.Enabled = isOnline;
 
