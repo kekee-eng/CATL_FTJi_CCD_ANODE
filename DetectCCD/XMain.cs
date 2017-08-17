@@ -776,13 +776,18 @@ namespace DetectCCD {
             }
 
         }
-        private void btnConnect_Click(object sender, EventArgs e) {
-            if (Static.App.Is4K) {
-                Static.SafeRun(RemoteDefect.InitClient);
-                Static.SafeRun(RemotePLC.InitClient);
-            }
-            DeviceInit(true);
-            DeviceOpen();
+        private async void btnConnect_Click(object sender, EventArgs e) {
+            UtilTool.XFWait.Open();
+            await Task.Run(() => {
+                if (Static.App.Is4K) {
+                    Static.SafeRun(RemoteDefect.InitClient);
+                    Static.SafeRun(RemotePLC.InitClient);
+                }
+                DeviceInit(true);
+                DeviceOpen();
+
+                UtilTool.XFWait.Close();
+            });
         }
         private void btnDisconnect_Click(object sender, EventArgs e) {
             DeviceClose();
