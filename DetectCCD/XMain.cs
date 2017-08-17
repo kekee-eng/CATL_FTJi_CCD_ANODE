@@ -189,7 +189,6 @@ namespace DetectCCD {
                 };
 
             }))).Start();
-
             new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
@@ -208,6 +207,28 @@ namespace DetectCCD {
                             record.OuterViewerImage.SetBottomTarget(obj.Frame);
                             record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixFrameOuterOrBackOffset);
                         }
+                    });
+                };
+
+            }))).Start();
+
+            //同步瑕疵
+            new Thread(new ThreadStart((Action)(() => {
+
+                while (!isQuit) {
+                    Thread.Sleep(10);
+                    Static.SafeRun(() => {
+                        record.InnerDetect.TransLabel();
+                    });
+                };
+
+            }))).Start();
+            new Thread(new ThreadStart((Action)(() => {
+
+                while (!isQuit) {
+                    Thread.Sleep(10);
+                    Static.SafeRun(() => {
+                        record.OuterDetect.TransLabel();
                     });
                 };
 

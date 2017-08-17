@@ -82,6 +82,10 @@ namespace DetectCCD {
             monitor["Inner_Frame_Cache"] = () => getCountText(record.InnerGrab.Cache.Max);
             monitor["Inner_Frame_DB"] = () => getCountText(record.InnerGrab.DB.Max);
 
+            monitor["Inner_Detect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Inner_DetectTime"] = () => record.InnerDetect.TimeDetect;
+            monitor["Inner_DetectTransLabel"] = () => record.InnerDetect.TimeTransLabel;
+
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Caption"] = () => device.InnerCamera.Caption;
             monitor["Inner_Grab_Name"] = () => device.InnerCamera.Name;
@@ -172,6 +176,10 @@ namespace DetectCCD {
             monitor["Outer_Frame_Detect"] = () => getCountText(record.OuterDetect.m_frame);
             monitor["Outer_Frame_Cache"] = () => getCountText( record.OuterGrab.Cache.Max);
             monitor["Outer_Frame_DB"] = () => getCountText(record.OuterGrab.DB.Max);
+
+            monitor["Outer_Detect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Outer_DetectTime"] = () => record.OuterDetect.TimeDetect;
+            monitor["Outer_DetectTransLabel"] = () => record.OuterDetect.TimeTransLabel;
 
             monitor["Outer_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Outer_Grab_Caption"] = () => device.OuterCamera.Caption;

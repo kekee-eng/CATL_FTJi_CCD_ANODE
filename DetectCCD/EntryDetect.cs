@@ -101,14 +101,14 @@ CfgParam        BLOB
                 }
             });
         }
-        void checkLabel() {
+        void checkLabel(int frame) {
             Static.SafeRun(() => {
                 if (LabelsCache.Count == 0)
                     return;
 
                 var minLab = LabelsCache.OrderBy(x => x.Y).First();
                 if (minLab != null) {
-                    if (minLab.Y < grab.Max) {
+                    if (minLab.Y < frame) {
                         LabelsCache.Remove(minLab);
                         minLab.Encoder = grab.GetEncoder(minLab.Y);
 
@@ -129,42 +129,54 @@ CfgParam        BLOB
         public event Action<int> OnNewLabel;
         public event Action<DataTab, DataTab> OnSyncTab;
 
+        public int TimeTransLabel = 0;
+        public int TimeDetect = 0;
+
         int defectFrameCount = 0;
+
+        public void TransLabel() {
+
+            TimeTransLabel = UtilTool.TimeCounting(() => {
+
+                //转标签
+                if (Static.App.Is4K && Static.App.EnableLabelDefect) {
+                    var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
+                    if (remoteDefs != null) {
+                        foreach (var rl in remoteDefs) {
+                            if (rl.IsTransLabel()) {
+                                addLabel(new DataLabel() {
+                                    Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                    Comment = string.Format("转标[正面][{0}]", rl.GetTypeCaption())
+                                });
+                            }
+                        }
+                    }
+                }
+
+                if (Static.App.Is4K && Static.App.EnableLabelDefect) {
+                    var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+                    if (remoteDefs != null) {
+                        foreach (var rl in remoteDefs) {
+                            if (rl.IsTransLabel()) {
+                                addLabel(new DataLabel() {
+                                    Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                    Comment = string.Format("转标[背面][{0}]", rl.GetTypeCaption())
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+        }
         public bool TryDetect(DataGrab obj) {
 
-            //
-            checkLabel();
-
-            //转标签
-            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
-                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
-                if (remoteDefs != null) {
-                    foreach (var rl in remoteDefs) {
-                        if (rl.IsTransLabel()) {
-                            addLabel(new DataLabel() {
-                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
-                                Comment = string.Format("转标[正面][{0}]", rl.GetTypeCaption())
-                            });
-                        }
-                    }
-                }
-            }
-
-            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
-                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
-                if (remoteDefs != null) {
-                    foreach (var rl in remoteDefs) {
-                        if (rl.IsTransLabel()) {
-                            addLabel(new DataLabel() {
-                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
-                                Comment = string.Format("转标[背面][{0}]", rl.GetTypeCaption())
-                            });
-                        }
-                    }
-                }
-            }
-
-            return tryDetect(obj);
+            bool ret = false;
+            TimeDetect = UtilTool.TimeCounting(() => {
+                
+                checkLabel(obj.Frame);
+                ret = tryDetect(obj);
+            });
+            return ret;
         }
         public void Sync(EntryDetect partner) {
 
