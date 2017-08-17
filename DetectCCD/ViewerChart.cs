@@ -174,7 +174,7 @@ namespace DetectCCD {
             curve.Color = color;
             curve.Symbol = new Symbol(SymbolType.Square, color);
             curve.Symbol.Fill = new Fill(color, Color.White, color);
-            curve.Line.Width = 4;
+            curve.Line.Width = 2;
             curve.IsVisible = visible;
             chart.GraphPane.CurveList.Add(curve);
 
@@ -718,8 +718,8 @@ namespace DetectCCD {
 
             //上下限
             var diff = (Static.Param.TabWidthMax - Static.Param.TabWidthMin);
-            g.YAxis.Scale.Min = Static.Param.TabWidthMin - Math.Ceiling(diff * 0.1);
-            g.YAxis.Scale.Max = Static.Param.TabWidthMax + Math.Ceiling(diff * 0.1);
+            g.YAxis.Scale.Min = Static.Param.TabWidthMin - Math.Ceiling(diff * 0.1 * 2)/2;
+            g.YAxis.Scale.Max = Static.Param.TabWidthMax + Math.Ceiling(diff * 0.1 * 2)/2;
             g.YAxis.Scale.MajorStep = Static.Param.TabWidthStep;
 
             //
