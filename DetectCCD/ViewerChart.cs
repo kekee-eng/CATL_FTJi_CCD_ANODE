@@ -384,7 +384,7 @@ namespace DetectCCD {
             if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
-            int eaCount = Detect.EACount;
+            int eaCount = Detect.ShowEACount;
 
             if (eaCount > grid.Rows.Count) {
                 if (grid.Rows.Count != 0)
@@ -393,7 +393,6 @@ namespace DetectCCD {
                 var EAs = Detect.EAs;
                 for (int i = grid.Rows.Count; i < EAs.Count; i++)
                     addEAGrid(grid, EAs[i]);
-
             }
             if (eaCount < grid.Rows.Count) {
                 grid.Rows.Clear();

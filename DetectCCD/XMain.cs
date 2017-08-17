@@ -631,9 +631,9 @@ namespace DetectCCD {
                     _lc_inner_isopen.ForeColor = device.InnerCamera.isOpen ? Color.Green : Color.Red;
 
                     _lc_inner_caption.Text = device.InnerCamera.Caption;
-                    _lc_inner_eaCount.Text = record.InnerDetect.EACount.ToString();
-                    _lc_inner_widthCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
-                    _lc_inner_defectCount.Text = record.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                    _lc_inner_eaCount.Text = record.InnerDetect.ShowEACount.ToString();
+                    _lc_inner_widthCount.Text = record.InnerDetect.ShowEAWidthNGCount.ToString();
+                    _lc_inner_defectCount.Text = record.InnerDetect.ShowEADefectNGCount.ToString();
 
                     //
                     _lc_outer_camera.Text = device.OuterCamera.Name;
@@ -645,9 +645,9 @@ namespace DetectCCD {
                     _lc_outer_isopen.ForeColor = device.OuterCamera.isOpen ? Color.Green : Color.Red;
 
                     _lc_outer_caption.Text = device.OuterCamera.Caption;
-                    _lc_outer_eaCount.Text = record.OuterDetect.EACount.ToString();
-                    _lc_outer_widthCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
-                    _lc_outer_defectCount.Text = record.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail).ToString();
+                    _lc_outer_eaCount.Text = record.OuterDetect.ShowEACount.ToString();
+                    _lc_outer_widthCount.Text = record.OuterDetect.ShowEAWidthNGCount.ToString();
+                    _lc_outer_defectCount.Text = record.OuterDetect.ShowEADefectNGCount.ToString();
                 }
 
                 //状态栏
@@ -784,6 +784,7 @@ namespace DetectCCD {
                 Static.SafeRun(RemoteDefect.InitClient);
                 Static.SafeRun(RemotePLC.InitClient);
             }
+            DeviceInit(true);
             DeviceOpen();
         }
         private void btnDisconnect_Click(object sender, EventArgs e) {

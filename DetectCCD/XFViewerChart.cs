@@ -109,7 +109,6 @@ namespace DetectCCD {
             monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
 
             monitor["Inner_Record_TabCount"] = () => record.InnerDetect.Tabs.Count;
-            monitor["Inner_Record_EACount"] = () => record.InnerDetect.EACount;
             monitor["Inner_Record_DefectCount"] = () => record.InnerDetect.Defects.Count;
             monitor["Inner_Record_LabelCount"] = () => record.InnerDetect.Labels.Count;
 
@@ -201,7 +200,6 @@ namespace DetectCCD {
             monitor["Outer_Record_LastLoadDB"] = () => record.OuterGrab.LastLoadDB;
 
             monitor["Outer_Record_TabCount"] = () => record.OuterDetect.Tabs.Count;
-            monitor["Outer_Record_EACount"] = () => record.OuterDetect.EACount;
             monitor["Outer_Record_DefectCount"] = () => record.OuterDetect.Defects.Count;
             monitor["Outer_Record_LabelCount"] = () => record.OuterDetect.Labels.Count;
 

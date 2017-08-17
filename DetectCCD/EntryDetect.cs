@@ -20,6 +20,7 @@ namespace DetectCCD {
         }
 
         public void Dispose() {
+            EAs.Clear();
             Tabs.Clear();
             Defects.Clear();
             LabelsCache.Clear();
@@ -84,6 +85,7 @@ CfgParam        BLOB
 
         public int m_frame = -1;
 
+        public List<DataEA> EAs = new List<DataEA>();
         public List<DataTab> Tabs = new List<DataTab>();
         public List<DataDefect> Defects = new List<DataDefect>();
         public List<DataLabel> Labels = new List<DataLabel>();
@@ -120,74 +122,10 @@ CfgParam        BLOB
             
         }
 
-        public int EACount {
-            get {
-                int ret = 0;
-                Static.SafeRun(() => ret = Tabs.Select(x => x.EA).Distinct().Count());
-                return ret;
-            }
-        }
-        public DataEA GetEA(int id) {
-
-            var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
-            if (curEaTab == null)
-                return null;
-
-            DataEA obj = new DataEA();
-            obj.EA = id;
-            obj.TabCount = Tabs.Count(x => x.EA == id);
-            obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
-            
-            obj.EAX = curEaTab.MarkX;
-            obj.EAY = curEaTab.MarkY;
-
-            double start = curEaTab.MarkY;
-            double end = 0;
-            var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
-            if (nextEaTab != null) {
-                end = nextEaTab.MarkY;
-            }
-            else {
-                end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
-            }
-            
-            AllocAndGetDefectCount(start, end, id);
-
-            if (Static.App.Is4K) {
-                var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
-                var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
-
-                if (remoteDefsFront != null) {
-                    obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
-                    obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
-                    obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 40);
-                }
-
-                if (remoteDefsBack != null) {
-                    obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.Type == 0);
-                    obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
-                    obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 40);
-                }
-
-            }
-            
-            return obj;
-        }
-        public List<DataEA> EAs {
-            get {
-                List<DataEA> objs = new List<DataEA>();
-
-                Static.SafeRun(() => {
-                    var ids = Tabs.TakeWhile(x => x.TAB != 0).Select(x => x.EA).Distinct().OrderBy(x => x);
-                    foreach (var id in ids) {
-                        objs.Add(GetEA(id));
-                    }
-                });
-
-                return objs;
-            }
-        }
-
+        public int ShowEACount =0;
+        public int ShowEAWidthNGCount = 0;
+        public int ShowEADefectNGCount = 0;
+        
         public event Action<DataTab> OnNewTab;
         public event Action<DataEA> OnNewEA;
         public event Action<int> OnNewLabel;
@@ -582,6 +520,58 @@ CfgParam        BLOB
             Tabs.Add(data);
             return data;
         }
+        DataEA getEA(int id) {
+
+            var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
+            if (curEaTab == null)
+                return null;
+
+            DataEA obj = new DataEA();
+            obj.EA = id;
+            obj.TabCount = Tabs.Count(x => x.EA == id);
+            obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
+
+            if (curEaTab.IsNewEA) {
+                obj.EAX = curEaTab.MarkX;
+                obj.EAY = curEaTab.MarkY;
+            }
+            else {
+                obj.EAX = curEaTab.TabX;
+                obj.EAY = curEaTab.TabY1;
+            }
+
+            double start = curEaTab.MarkY;
+            double end = 0;
+            var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
+            if (nextEaTab != null) {
+                end = nextEaTab.MarkY;
+            }
+            else {
+                end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
+            }
+
+            AllocAndGetDefectCount(start, end, id);
+
+            if (Static.App.Is4K) {
+                var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
+                var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+
+                if (remoteDefsFront != null) {
+                    obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
+                    obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
+                    obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 40);
+                }
+
+                if (remoteDefsBack != null) {
+                    obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.Type == 0);
+                    obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
+                    obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 40);
+                }
+
+            }
+
+            return obj;
+        }
         void adjustDefect() {
 
             //去除与Mark点重合的瑕疵
@@ -605,13 +595,14 @@ CfgParam        BLOB
             //重新生成
             int ea = 0;
             int er = 0;
+            double posEAStart = -1;
             for (int i = 0; i < Tabs.Count; i++) {
 
                 if (Tabs[i].IsNewEA) {
                     ea++;
                     er = 1;
 
-                    var objEA = GetEA(ea - 1);
+                    var objEA = getEA(ea - 1);
                     if (objEA != null) {
 
                         //添加标签
@@ -630,8 +621,12 @@ CfgParam        BLOB
                         //
                         if (!Tabs[i].IsNewEACallBack) {
                             Tabs[i].IsNewEACallBack = true;
+                            EAs.Add(objEA);
                             OnNewEA?.Invoke(objEA);
                         }
+
+                        //
+                        posEAStart = Tabs[i].MarkY;
                     }
                 }
                 else {
@@ -648,10 +643,25 @@ CfgParam        BLOB
                 Tabs[i].ValHeight = (Tabs[i].TabY2 - Tabs[i].TabY1) * Fy;
                 Tabs[i].ValDist = (i == 0) ? 0 : (Tabs[i].TabY1 - Tabs[i - 1].TabY1) * Fy;
                 Tabs[i].ValDistDiff = (i < 2) ? 0 : Tabs[i].ValDist - Tabs[i - 1].ValDist;
-                Tabs[i].IsWidthFail = Tabs[i].ValWidth < Static.Param.TabWidthMin || Tabs[i].ValWidth > Static.Param.TabWidthMax;
-                Tabs[i].IsHeightFail = Tabs[i].ValHeight < Static.Param.TabHeightMin || Tabs[i].ValHeight > Static.Param.TabHeightMax;
-                Tabs[i].IsDistFail = Tabs[i].ValDist < Static.Param.TabDistMin || Tabs[i].ValDist > Static.Param.TabDistMax;
-                Tabs[i].IsDistDiffFail = Tabs[i].ValDistDiff < Static.Param.TabDistDiffMin || Tabs[i].ValDistDiff > Static.Param.TabDistDiffMax;
+
+                //强制打标
+                if (Static.App.Is4K && Static.App.EnableLabelEA && Static.App.EnableLabelEA_Force) {
+                    if (posEAStart >= 0) {
+                        var y0 = posEAStart + Static.Param.LabelY_EA_Force / Fy;
+                        if (Tabs[i].TabY1 > y0) {
+                            posEAStart = -1;
+
+                            var objLab = new DataLabel() {
+                                EA = ea,
+                                Y = y0,
+                                Comment = "EA末端强制贴标"
+                            };
+
+                            objLab.Encoder = grab.GetEncoder(objLab.Y);
+                            addLabel(objLab);
+                        }
+                    }
+                }
 
             }
 
