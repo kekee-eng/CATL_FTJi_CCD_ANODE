@@ -126,8 +126,6 @@ CfgParam        BLOB
         public int ShowEAWidthNGCount = 0;
         public int ShowEADefectNGCount = 0;
         
-        public event Action<DataTab> OnNewTab;
-        public event Action<DataEA> OnNewEA;
         public event Action<int> OnNewLabel;
         public event Action<DataTab, DataTab> OnSyncTab;
 
@@ -445,9 +443,6 @@ CfgParam        BLOB
             Tabs.Add(data);
             adjustER();
             adjustDefect();
-
-            //
-            OnNewTab?.Invoke(data);
             
             return true;
 
@@ -621,7 +616,6 @@ CfgParam        BLOB
                             //
                             Tabs[i].IsNewEACallBack = true;
                             EAs.Add(objEA);
-                            OnNewEA?.Invoke(objEA);
 
                             //添加标签
                             if (Static.App.Is4K && Static.App.EnableLabelEA) {

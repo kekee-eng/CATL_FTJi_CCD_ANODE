@@ -174,7 +174,7 @@ namespace DetectCCD {
             };
 
             //线程：图像处理
-            var tProcess1 = Task.Run((Action)(() => {
+            new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
                     Thread.Sleep(10);
@@ -188,8 +188,9 @@ namespace DetectCCD {
                     });
                 };
 
-            }));
-            var tProcess2 = Task.Run((Action)(() => {
+            }))).Start();
+
+            new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
                     Thread.Sleep(10);
@@ -210,10 +211,10 @@ namespace DetectCCD {
                     });
                 };
 
-            }));
+            }))).Start();
 
             //线程：更新显示
-            var tView1 = Task.Run((Action)(() => {
+            new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
                     Thread.Sleep(10);
@@ -228,8 +229,8 @@ namespace DetectCCD {
                     });
                 };
 
-            }));
-            var tView2 = Task.Run((Action)(() => {
+            }))).Start();
+            new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
                     Thread.Sleep(10);
@@ -244,10 +245,10 @@ namespace DetectCCD {
                     });
                 };
 
-            }));
+            }))).Start();
 
             //线程：写数据库
-            var tWriteDB = Task.Run((Action)(() => {
+            new Thread(new ThreadStart((Action)(() => {
 
                 do {
                     Thread.Sleep(100);
@@ -282,30 +283,43 @@ namespace DetectCCD {
 
                 } while (!isQuit);
 
-            }));
+            }))).Start();
 
             //PLC操作
             record.InnerDetect.OnNewLabel += obj => {
-                if (obj != 0)
-                    RemotePLC.In4KCallPLC_SendLabel(true, obj);
+                new Thread(new ThreadStart(new Action(() => {
+                    Static.SafeRun(() => {
+                        if (obj != 0)
+                            RemotePLC.In4KCallPLC_SendLabel(true, obj);
+                    });
+                }))).Start();
             };
             record.OuterDetect.OnNewLabel += obj => {
-                if (obj != 0)
-                    RemotePLC.In4KCallPLC_SendLabel(false, obj);
+
+                new Thread(new ThreadStart(new Action(() => {
+                    Static.SafeRun(() => {
+                        if (obj != 0)
+                            RemotePLC.In4KCallPLC_SendLabel(false, obj);
+                    });
+                }))).Start();
             };
             record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => {
 
                 if (tabOuter.ValWidth == 0 || tabInner.ValWidth == 0)
                     return;
 
-                saveWidthCSV(tabInner, tabOuter);
-                RemotePLC.In4KCallPLC_ForWidth(
-                    tabOuter.EA,
-                    tabOuter.TAB,
-                    !tabOuter.IsWidthFail && !tabInner.IsWidthFail,
-                    tabInner.ValWidth,
-                    tabOuter.ValWidth
-                    );
+                new Thread(new ThreadStart(new Action(() => {
+                    Static.SafeRun(() => {
+                        saveWidthCSV(tabInner, tabOuter);
+                        RemotePLC.In4KCallPLC_ForWidth(
+                            tabOuter.EA,
+                            tabOuter.TAB,
+                            !tabOuter.IsWidthFail && !tabInner.IsWidthFail,
+                            tabInner.ValWidth,
+                            tabOuter.ValWidth
+                            );
+                    });
+                }))).Start();
 
             };
         }
