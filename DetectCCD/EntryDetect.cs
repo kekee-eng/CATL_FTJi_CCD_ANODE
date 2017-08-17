@@ -136,7 +136,13 @@ CfgParam        BLOB
 
         public void TransLabel() {
 
+        }
+        public bool TryDetect(DataGrab obj) {
+
             TimeTransLabel = UtilTool.TimeCounting(() => {
+
+                //
+                checkLabel(obj.Frame);
 
                 //转标签
                 if (Static.App.Is4K && Static.App.EnableLabelDefect) {
@@ -167,13 +173,9 @@ CfgParam        BLOB
                     }
                 }
             });
-        }
-        public bool TryDetect(DataGrab obj) {
 
             bool ret = false;
             TimeDetect = UtilTool.TimeCounting(() => {
-                
-                checkLabel(obj.Frame);
                 ret = tryDetect(obj);
             });
             return ret;

@@ -177,7 +177,7 @@ namespace DetectCCD {
             new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
-                    Thread.Sleep(10);
+                    Thread.Sleep(1);
 
                     Static.SafeRun(() => {
 
@@ -192,7 +192,7 @@ namespace DetectCCD {
             new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
-                    Thread.Sleep(10);
+                    Thread.Sleep(1);
 
                     Static.SafeRun(() => {
 
@@ -211,29 +211,7 @@ namespace DetectCCD {
                 };
 
             }))).Start();
-
-            //同步瑕疵
-            new Thread(new ThreadStart((Action)(() => {
-
-                while (!isQuit) {
-                    Thread.Sleep(10);
-                    Static.SafeRun(() => {
-                        record.InnerDetect.TransLabel();
-                    });
-                };
-
-            }))).Start();
-            new Thread(new ThreadStart((Action)(() => {
-
-                while (!isQuit) {
-                    Thread.Sleep(10);
-                    Static.SafeRun(() => {
-                        record.OuterDetect.TransLabel();
-                    });
-                };
-
-            }))).Start();
-
+            
             //线程：更新显示
             new Thread(new ThreadStart((Action)(() => {
 
