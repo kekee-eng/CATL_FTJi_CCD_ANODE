@@ -235,12 +235,7 @@ CfgParam        BLOB
                         myMissER.MarkY = missER.MarkY + diffFrame;
                     }
                 }
-
-                //重置序号
-                //adjustER();
-                //partner.adjustER();
-                //OnSyncTab?.Invoke(myMissER, missER);
-
+                
             } while (true);
 
             //重置序号
@@ -596,6 +591,10 @@ CfgParam        BLOB
             int ea = 0;
             int er = 0;
             double posEAStart = -1;
+
+            int eaCount = 0;
+            int eaWidthNGCount = 0;
+            int eaDefectNGCount = 0;
             for (int i = 0; i < Tabs.Count; i++) {
 
                 if (Tabs[i].IsNewEA) {
@@ -605,28 +604,38 @@ CfgParam        BLOB
                     var objEA = getEA(ea - 1);
                     if (objEA != null) {
 
-                        //添加标签
-                        if (Static.App.Is4K && Static.App.EnableLabelEA) {
-                            if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
-                                var objLab = new DataLabel() {
-                                    EA = ea - 1,
-                                    Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
-                                    Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
-                                };
-                                objLab.Encoder = grab.GetEncoder(objLab.Y);
-                                addLabel(objLab);
-                            }
-                        }
+                        //
+                        eaCount++;
+                        if (objEA.IsTabWidthFailCountFail)
+                            eaWidthNGCount++;
+
+                        if (objEA.IsDefectCountFail)
+                            eaDefectNGCount++;
 
                         //
                         if (!Tabs[i].IsNewEACallBack) {
+
+                            //
                             Tabs[i].IsNewEACallBack = true;
                             EAs.Add(objEA);
                             OnNewEA?.Invoke(objEA);
-                        }
 
-                        //
-                        posEAStart = Tabs[i].MarkY;
+                            //添加标签
+                            if (Static.App.Is4K && Static.App.EnableLabelEA) {
+                                if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
+                                    var objLab = new DataLabel() {
+                                        EA = ea - 1,
+                                        Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
+                                        Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
+                                    };
+                                    objLab.Encoder = grab.GetEncoder(objLab.Y);
+                                    addLabel(objLab);
+                                }
+                            }
+
+                            //
+                            posEAStart = Tabs[i].MarkY;
+                        }
                     }
                 }
                 else {
@@ -664,6 +673,9 @@ CfgParam        BLOB
                 }
 
             }
+            ShowEACount = eaCount;
+            ShowEADefectNGCount = eaDefectNGCount;
+            ShowEAWidthNGCount = eaWidthNGCount;
 
             //
             needSave = true;

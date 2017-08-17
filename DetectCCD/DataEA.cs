@@ -40,11 +40,11 @@ namespace DetectCCD {
             }
         }
 
-        public bool IsFail { get { return IsDefectCountFail || IsTabCountFail || IsTabWidthFailCountFail; } }
+        public bool IsFail { get { return IsDefectCountFail ||  IsTabWidthFailCountFail; } }
         public string GetFailReason() {
             string text = "";
-            if (IsTabCountFail)
-                text += string.Format("极耳计数[{0}], ", TabCount);
+            //if (IsTabCountFail)
+                //text += string.Format("极耳计数[{0}], ", TabCount);
 
             if (IsTabWidthFailCountFail)
                 text += string.Format("宽度NG[{0}], ", TabWidthFailCount);
