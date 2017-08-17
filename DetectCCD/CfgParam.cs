@@ -42,9 +42,6 @@ namespace DetectCCD {
         //计数
         public int CheckTabCount = 33;
         public int CheckTabWidthCount = 10;
-        public int CheckTabHeightCount = 0;
-        public int CheckTabDistCount = 0;
-        public int CheckDefectCount = 0;
 
         //
         public double LabelY_Defect = 0;

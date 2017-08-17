@@ -56,6 +56,22 @@ namespace DetectCCD {
 
         }
 
+        public bool IsTransLabel() {
+            if (Static.App.LabelContextJoin && Type == 0) return true;
+            if (Static.App.LabelContextTag && Type == 1) return true;
+            if (Static.App.LabelContextLeakMetal && Type == 40) return true;
+
+            return false;
+        }
+
+        public bool IsCountEA() {
+            if (Static.App.EAContextJoin && Type == 0) return true;
+            if (Static.App.EAContextTag && Type == 1) return true;
+            if (Static.App.EAContextLeakMetal && Type == 40) return true;
+
+            return false;
+        }
+
     }
 
 

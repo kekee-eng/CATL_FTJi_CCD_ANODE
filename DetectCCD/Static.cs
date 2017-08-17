@@ -59,7 +59,7 @@ namespace DetectCCD {
                 act();
             }
             catch (Exception ex) {
-                Log.Error(string.Format("Run: {0}\n{1}", ex.Message, ex.StackTrace));
+                Log.Error(string.Format("Run: {0}", ex.Message),ex);
             }
         }
 

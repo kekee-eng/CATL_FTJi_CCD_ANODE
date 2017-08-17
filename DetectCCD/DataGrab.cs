@@ -199,6 +199,8 @@ Image           BLOB
                     return store.Keys.Contains(i) ? store[i] : null;
                 }
                 set {
+                    if (value == null)
+                        return;
 
                     //
                     int w, h;

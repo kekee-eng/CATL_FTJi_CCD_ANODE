@@ -21,12 +21,10 @@ namespace DetectCCD {
         public bool LabelContextJoin = false;
         public bool LabelContextTag = false;
         public bool LabelContextLeakMetal = false;
-        public bool LabelContextOther = false;
 
         public bool EAContextJoin = false;
         public bool EAContextTag = false;
         public bool EAContextLeakMetal = false;
-        public bool EAContextOther = false;
         
         //记录参数
         public int RecordCacheSize = 200;

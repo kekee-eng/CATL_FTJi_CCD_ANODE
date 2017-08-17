@@ -91,25 +91,16 @@ namespace DetectCCD {
 
                     start = Static.App.FrameInnerToFront(isFront, isInner, start);
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
-                    (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
+                    return (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
 
-                    //Fix
-                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
-                    int count=0;
-                    foreach (var def in defs) {
-                        if (def.Type < 2 && def.InInner(isInner)) {
-                            count++;
-                        }
-                    }
-                    return count;
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner) => {
 
                     var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
                     var outdefs = new List<DataDefect>();
                     foreach (var def in defs) {
-                        if (def.Type < 2 && def.InInner(isInner)) {
-                            outdefs.Add(new DataDefect() { Y = def.Y });
+                        if (def.InInner(isInner)) {
+                            outdefs.Add(new DataDefect() { Y = def.Y, Type = def.Type });
                         }
                     }
 
@@ -119,9 +110,16 @@ namespace DetectCCD {
                     arr = arr.OrderBy(x => x.Y).ToArray();
                     return arr;
                 };
-                RemoteDefect._func_in_8k_viewer += (isFront, isInner, y) => {
+                RemoteDefect._func_in_8k_viewer += (isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront) => {
+                    Static.App.DiffFrameInnerOuter = diffInnerOuter;
+                    Static.App.DiffFrameFrontBack = diffFrontBack;
+                    Static.App.DiffFrameInnerFront = diffInnerFront;
                     (isFront ? record.InnerViewerImage : record.OuterViewerImage).MoveToFrame(
                         Static.App.FrameInnerToFront(isFront, isInner, y));
+                };
+                RemoteDefect._func_in_8k_init += () => {
+                    DeviceInit(true);
+                    DeviceStartGrab();
                 };
 
             }
@@ -333,13 +331,11 @@ namespace DetectCCD {
             Static.App.BindCheckBox(checkLabelContext_Join, "LabelContextJoin");
             Static.App.BindCheckBox(checkLabelContext_Tag, "LabelContextTag");
             Static.App.BindCheckBox(checkLabelContext_LeakMetal, "LabelContextLeakMetal");
-            Static.App.BindCheckBox(checkLabelContext_Other, "LabelContextOther");
-
+            
             Static.App.BindCheckBox(checkEAContext_Join, "EAContextJoin");
             Static.App.BindCheckBox(checkEAContext_Tag, "EAContextTag");
             Static.App.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
-            Static.App.BindCheckBox(checkEAContext_Other, "EAContextOther");
-
+            
             Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
             Static.Param.BindTextBox(textLabelEAForce, "LabelY_EA_Force");
             Static.Param.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
@@ -784,6 +780,10 @@ namespace DetectCCD {
 
         }
         private void btnConnect_Click(object sender, EventArgs e) {
+            if (Static.App.Is4K) {
+                Static.SafeRun(RemoteDefect.InitClient);
+                Static.SafeRun(RemotePLC.InitClient);
+            }
             DeviceOpen();
         }
         private void btnDisconnect_Click(object sender, EventArgs e) {

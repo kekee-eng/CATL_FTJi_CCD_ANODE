@@ -197,10 +197,10 @@ namespace DetectCCD {
                 var obj1 = this[p1];
                 var obj2 = this[p2];
 
-                if (obj1 == null || obj2 == null) {
-                    obj1 = this[Min];
-                    obj2 = this[Max];
-                }
+                //if (obj1 == null || obj2 == null) {
+                //    obj1 = this[Min];
+                //    obj2 = this[Max];
+                //}
 
                 if (obj1 != null && obj2 != null) {
                     encoder = (int)(obj1.Encoder + (frame - 1 - p1) * (obj2.Encoder - obj1.Encoder));

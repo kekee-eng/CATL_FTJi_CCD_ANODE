@@ -22,8 +22,8 @@ namespace DetectCCD {
         public void Dispose() {
             Tabs.Clear();
             Defects.Clear();
-            Labels.Clear();
             LabelsCache.Clear();
+            Labels.Clear();
         }
 
         public void CreateTable() {
@@ -91,7 +91,12 @@ CfgParam        BLOB
         public List<DataLabel> LabelsCache = new List<DataLabel>();
         void addLabel(DataLabel lab) {
             Static.SafeRun(() => {
-                LabelsCache.Add(lab);
+
+                var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - lab.Y) < 0.5);
+                var repeat2 = Labels.Find(x => Math.Abs(x.Y - lab.Y) < 0.5);
+                if (repeat1 == null && repeat2 == null) {
+                    LabelsCache.Add(lab);
+                }
             });
         }
         void checkLabel() {
@@ -132,13 +137,7 @@ CfgParam        BLOB
             obj.EA = id;
             obj.TabCount = Tabs.Count(x => x.EA == id);
             obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
-            obj.TabHeightFailCount = Tabs.Count(x => x.EA == id && x.IsHeightFail);
-            obj.TabDistFailCount = Tabs.Count(x => x.EA == id && x.IsDistFail);
-            obj.IsTabCountFail = obj.TabCount != Static.Param.CheckTabCount;
-            obj.IsTabWidthFailCountFail = obj.TabWidthFailCount > Static.Param.CheckTabWidthCount;
-            obj.IsTabHeightFailCountFail = obj.TabHeightFailCount > Static.Param.CheckTabHeightCount;
-            obj.IsTabDistFailCountFail = obj.TabDistFailCount > Static.Param.CheckTabDistCount;
-
+            
             obj.EAX = curEaTab.MarkX;
             obj.EAY = curEaTab.MarkY;
 
@@ -152,15 +151,26 @@ CfgParam        BLOB
                 end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
             }
             
-            obj.DefectCountLocal = AllocAndGetDefectCount(start, end, id);
+            AllocAndGetDefectCount(start, end, id);
 
             if (Static.App.Is4K) {
-                obj.DefectCountFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
-                obj.DefectCountBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
+                var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
+                var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+
+                if (remoteDefsFront != null) {
+                    obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
+                    obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
+                    obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 40);
+                }
+
+                if (remoteDefsBack != null) {
+                    obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.Type == 0);
+                    obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
+                    obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 40);
+                }
+
             }
-
-            obj.IsDefectCountFail = (obj.DefectCountLocal + Math.Max(0, obj.DefectCountFront) + Math.Max(0, obj.DefectCountBack) > Static.Param.CheckDefectCount);
-
+            
             return obj;
         }
         public List<DataEA> EAs {
@@ -191,16 +201,13 @@ CfgParam        BLOB
 
             //转标签
             if (Static.App.Is4K && Static.App.EnableLabelDefect) {
-                var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
-                if (remoteLables != null) {
-                    foreach (var rl in remoteLables) {
-                        var y0 = rl.Y + Static.Param.LabelY_Defect / Fy;
-                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - y0) < 0.5);
-                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - y0) < 0.5);
-                        if (repeat1 == null && repeat2 == null) {
+                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
+                if (remoteDefs != null) {
+                    foreach (var rl in remoteDefs) {
+                        if (rl.IsTransLabel()) {
                             addLabel(new DataLabel() {
-                                Y = y0,
-                                Comment = "正面接头转标"
+                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                Comment = string.Format("转标[正面][{0}]", rl.GetTypeCaption())
                             });
                         }
                     }
@@ -208,16 +215,13 @@ CfgParam        BLOB
             }
 
             if (Static.App.Is4K && Static.App.EnableLabelDefect) {
-                var remoteLables = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
-                if (remoteLables != null) {
-                    foreach (var rl in remoteLables) {
-                        var y0 = rl.Y + Static.Param.LabelY_Defect / Fy;
-                        var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - y0) < 0.5);
-                        var repeat2 = Labels.Find(x => Math.Abs(x.Y - y0) < 0.5);
-                        if (repeat1 == null && repeat2 == null) {
+                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+                if (remoteDefs != null) {
+                    foreach (var rl in remoteDefs) {
+                        if (rl.IsTransLabel()) {
                             addLabel(new DataLabel() {
-                                Y = y0,
-                                Comment = "背面接头转标"
+                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                Comment = string.Format("转标[背面][{0}]", rl.GetTypeCaption())
                             });
                         }
                     }
@@ -616,13 +620,10 @@ CfgParam        BLOB
                                 var objLab = new DataLabel() {
                                     EA = ea - 1,
                                     Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
-                                    Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标"
+                                    Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
                                 };
                                 objLab.Encoder = grab.GetEncoder(objLab.Y);
-
-                                if (Labels.Find(x => x.EA == objLab.EA && x.Encoder == objLab.Encoder) == null) {
-                                    addLabel(objLab);
-                                }
+                                addLabel(objLab);
                             }
                         }
 

@@ -336,11 +336,12 @@ namespace DetectCCD {
                 dt.EAY.ToString("0.000"),
                 dt.TabCount,
                 dt.TabWidthFailCount,
-                dt.TabHeightFailCount,
-                dt.TabDistFailCount,
-                dt.DefectCountLocal,
-                dt.DefectCountFront,
-                dt.DefectCountBack
+                dt.DefectCountFront_Join,
+                dt.DefectCountFront_Tag,
+                dt.DefectCountFront_LeakMetal,
+                dt.DefectCountBack_Join,
+                dt.DefectCountBack_Tag,
+                dt.DefectCountBack_LeakMetal
                 );
 
             //
@@ -349,11 +350,12 @@ namespace DetectCCD {
                 false,
                 dt.IsTabCountFail,
                 dt.IsTabWidthFailCountFail,
-                dt.IsTabHeightFailCountFail,
-                dt.IsTabDistFailCountFail,
-                dt.IsDefectCountFail,
-                dt.IsDefectCountFail,
-                dt.IsDefectCountFail
+                dt.DefectCountFront_Join > 0,
+                dt.DefectCountFront_Tag > 0,
+                dt.DefectCountFront_LeakMetal > 0,
+                dt.DefectCountBack_Join > 0,
+                dt.DefectCountBack_Tag > 0,
+                dt.DefectCountBack_LeakMetal > 0
                 );
 
         }
@@ -365,12 +367,13 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "ID(EA)" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "位置", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "极耳数" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度不良" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "模切不良", Visible = false },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "间距不良", Visible = false },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(Local)" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(正面)" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "瑕疵数(背面)" }
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度NG" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "正面接头" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "正面标签" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "正面漏金属" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "背面接头" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "背面标签" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "背面漏金属" }
                 );
 
             //

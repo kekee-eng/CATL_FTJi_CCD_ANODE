@@ -149,13 +149,11 @@
             this.labelControl28 = new DevExpress.XtraEditors.LabelControl();
             this.groupLabel = new DevExpress.XtraEditors.GroupControl();
             this.groupEAContext = new DevExpress.XtraEditors.GroupControl();
-            this.checkEAContext_Other = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Tag = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Join = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
             this.groupLabelContext = new DevExpress.XtraEditors.GroupControl();
-            this.checkLabelContext_Other = new DevExpress.XtraEditors.CheckEdit();
             this.checkLabelContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkLabelContext_Tag = new DevExpress.XtraEditors.CheckEdit();
             this.checkLabelContext_Join = new DevExpress.XtraEditors.CheckEdit();
@@ -254,13 +252,11 @@
             this.groupLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).BeginInit();
             this.groupEAContext.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Other.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Tag.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Join.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabelContext)).BeginInit();
             this.groupLabelContext.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Other.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_LeakMetal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Tag.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Join.Properties)).BeginInit();
@@ -1656,24 +1652,14 @@
             // 
             // groupEAContext
             // 
-            this.groupEAContext.Controls.Add(this.checkEAContext_Other);
             this.groupEAContext.Controls.Add(this.checkEAContext_LeakMetal);
             this.groupEAContext.Controls.Add(this.checkEAContext_Tag);
             this.groupEAContext.Controls.Add(this.checkEAContext_Join);
             this.groupEAContext.Location = new System.Drawing.Point(177, 178);
             this.groupEAContext.Name = "groupEAContext";
-            this.groupEAContext.Size = new System.Drawing.Size(131, 171);
+            this.groupEAContext.Size = new System.Drawing.Size(131, 139);
             this.groupEAContext.TabIndex = 90;
             this.groupEAContext.Text = "末端贴标项";
-            // 
-            // checkEAContext_Other
-            // 
-            this.checkEAContext_Other.Location = new System.Drawing.Point(22, 119);
-            this.checkEAContext_Other.MenuManager = this.barManager1;
-            this.checkEAContext_Other.Name = "checkEAContext_Other";
-            this.checkEAContext_Other.Properties.Caption = "其它";
-            this.checkEAContext_Other.Size = new System.Drawing.Size(83, 19);
-            this.checkEAContext_Other.TabIndex = 40;
             // 
             // checkEAContext_LeakMetal
             // 
@@ -1712,24 +1698,14 @@
             // 
             // groupLabelContext
             // 
-            this.groupLabelContext.Controls.Add(this.checkLabelContext_Other);
             this.groupLabelContext.Controls.Add(this.checkLabelContext_LeakMetal);
             this.groupLabelContext.Controls.Add(this.checkLabelContext_Tag);
             this.groupLabelContext.Controls.Add(this.checkLabelContext_Join);
             this.groupLabelContext.Location = new System.Drawing.Point(22, 178);
             this.groupLabelContext.Name = "groupLabelContext";
-            this.groupLabelContext.Size = new System.Drawing.Size(131, 171);
+            this.groupLabelContext.Size = new System.Drawing.Size(131, 139);
             this.groupLabelContext.TabIndex = 80;
             this.groupLabelContext.Text = "转标项";
-            // 
-            // checkLabelContext_Other
-            // 
-            this.checkLabelContext_Other.Location = new System.Drawing.Point(22, 119);
-            this.checkLabelContext_Other.MenuManager = this.barManager1;
-            this.checkLabelContext_Other.Name = "checkLabelContext_Other";
-            this.checkLabelContext_Other.Properties.Caption = "其它";
-            this.checkLabelContext_Other.Size = new System.Drawing.Size(83, 19);
-            this.checkLabelContext_Other.TabIndex = 40;
             // 
             // checkLabelContext_LeakMetal
             // 
@@ -2139,13 +2115,11 @@
             this.groupLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).EndInit();
             this.groupEAContext.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Other.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Tag.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Join.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabelContext)).EndInit();
             this.groupLabelContext.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Other.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_LeakMetal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Tag.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Join.Properties)).EndInit();
@@ -2338,10 +2312,8 @@
         private DevExpress.XtraEditors.CheckEdit checkLabelContext_LeakMetal;
         private DevExpress.XtraEditors.CheckEdit checkLabelContext_Tag;
         private DevExpress.XtraEditors.CheckEdit checkLabelContext_Join;
-        private DevExpress.XtraEditors.CheckEdit checkLabelContext_Other;
         private DevExpress.XtraEditors.CheckEdit checkSaveNGSmall;
         private DevExpress.XtraEditors.GroupControl groupEAContext;
-        private DevExpress.XtraEditors.CheckEdit checkEAContext_Other;
         private DevExpress.XtraEditors.CheckEdit checkEAContext_LeakMetal;
         private DevExpress.XtraEditors.CheckEdit checkEAContext_Tag;
         private DevExpress.XtraEditors.CheckEdit checkEAContext_Join;

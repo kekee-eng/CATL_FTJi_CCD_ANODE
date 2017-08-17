@@ -24,12 +24,14 @@ namespace DetectCCD {
         }
         public static void InitClient() {
 
-            client = (RemoteDefect)Activator.GetObject(
-                typeof(RemoteDefect),
-                string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
+            if (client == null) {
+                client = (RemoteDefect)Activator.GetObject(
+                    typeof(RemoteDefect),
+                    string.Format("tcp://{0}:{1}/RemoteObject", Static.App.RemoteHost, Static.App.RemotePort));
+            }
 
             //测试连接
-            try { client._in_8k_return_4k_getDefectCount(true, true, 0, 0, 0); }
+            try { client._in_8k_init(); }
             catch {
                 client = null;
                 throw;
@@ -85,17 +87,38 @@ namespace DetectCCD {
 
             try {
                 if (client == null) return;
-                client._in_8k_viewer(isFront, isInner, y);
+                client._in_8k_viewer(isFront, isInner, y, 
+                    Static.App.DiffFrameInnerOuter,
+                    Static.App.DiffFrameFrontBack,
+                    Static.App.DiffFrameInnerFront);
             }
             catch {
                 client = null;
             }
         }
-        public static event Action<bool, bool, double> _func_in_8k_viewer;
-        public void _in_8k_viewer(bool isFront, bool isInner, double y) {
-            try { _func_in_8k_viewer(isFront, isInner, y); }
+        public static event Action<bool, bool, double, double, double, double> _func_in_8k_viewer;
+        public void _in_8k_viewer(bool isFront, bool isInner, double y, double diffInnerOuter, double diffFrontBack, double diffInnerFront) {
+            try { _func_in_8k_viewer(isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront); }
             catch { }
         }
         
+        public static void In4KCall8K_Init() {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            try {
+                if (client == null) return;
+                client._in_8k_init();
+            }
+            catch {
+                client = null;
+            }
+        }
+        public static event Action _func_in_8k_init;
+        public void _in_8k_init() {
+            try { _func_in_8k_init(); }
+            catch { }
+        }
+
     }
 }
