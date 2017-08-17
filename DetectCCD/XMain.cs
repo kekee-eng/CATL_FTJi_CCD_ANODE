@@ -316,31 +316,29 @@ namespace DetectCCD {
         }
         void init_teston() {
 
-            checkSaveOK.Checked = Static.App.RecordSaveImageOK;
-            checkSaveNG.Checked = Static.App.RecordSaveImageNG;
+            Static.App.BindCheckBox(checkSaveOK, "RecordSaveImageOK");
+            Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNG");
+            Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
 
-            checkSaveOK.CheckedChanged += (o, e) => Static.App.RecordSaveImageOK = (o as CheckEdit).Checked;
-            checkSaveNG.CheckedChanged += (o, e) => Static.App.RecordSaveImageNG = (o as CheckEdit).Checked;
+            Static.App.BindCheckBox(checkDetectDefect, "DetectDefect");
+            Static.App.BindCheckBox(checkDetectMark, "DetectMark");
+            Static.App.BindCheckBox(checkDetectTab, "DetectTab");
+            Static.App.BindCheckBox(checkDetectWidth, "DetectWidth");
 
-            checkDetectDefect.Checked = Static.App.DetectDefect;
-            checkDetectMark.Checked = Static.App.DetectMark;
-            checkDetectTab.Checked = Static.App.DetectTab;
-            checkDetectWidth.Checked = Static.App.DetectWidth;
+            Static.App.BindCheckBox(checkEnableLabelEA, "EnableLabelEA");
+            Static.App.BindCheckBox(checkEnableLabelEAEveryOne, "EnableLabelEA_EveryOne");
+            Static.App.BindCheckBox(checkEnableLabelEAForce, "EnableLabelEA_Force");
+            Static.App.BindCheckBox(checkEnableLabelDefect, "EnableLabelDefect");
 
-            checkDetectDefect.CheckedChanged += (o, e) => Static.App.DetectDefect = (o as CheckEdit).Checked;
-            checkDetectMark.CheckedChanged += (o, e) => Static.App.DetectMark = (o as CheckEdit).Checked;
-            checkDetectTab.CheckedChanged += (o, e) => Static.App.DetectTab = (o as CheckEdit).Checked;
-            checkDetectWidth.CheckedChanged += (o, e) => Static.App.DetectWidth = (o as CheckEdit).Checked;
+            Static.App.BindCheckBox(checkLabelContext_Join, "LabelContextJoin");
+            Static.App.BindCheckBox(checkLabelContext_Tag, "LabelContextTag");
+            Static.App.BindCheckBox(checkLabelContext_LeakMetal, "LabelContextLeakMetal");
+            Static.App.BindCheckBox(checkLabelContext_Other, "LabelContextOther");
 
-            checkEnableLabelEA.Checked = Static.App.EnableLabelEA;
-            checkEnableLabelEAEveryOne.Checked = Static.App.EnableLabelEA_EveryOne;
-            checkEnableLabelEAForce.Checked = Static.App.EnableLabelEA_Force;
-            checkEnableLabelDefect.Checked = Static.App.EnableLabelDefect;
-
-            checkEnableLabelEA.CheckedChanged += (o, e) => Static.App.EnableLabelEA = (o as CheckEdit).Checked;
-            checkEnableLabelEAEveryOne.CheckedChanged += (o, e) => Static.App.EnableLabelEA_EveryOne = (o as CheckEdit).Checked;
-            checkEnableLabelEAForce.CheckedChanged += (o, e) => Static.App.EnableLabelEA_Force = (o as CheckEdit).Checked;
-            checkEnableLabelDefect.CheckedChanged += (o, e) => Static.App.EnableLabelDefect = (o as CheckEdit).Checked;
+            Static.App.BindCheckBox(checkEAContext_Join, "EAContextJoin");
+            Static.App.BindCheckBox(checkEAContext_Tag, "EAContextTag");
+            Static.App.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
+            Static.App.BindCheckBox(checkEAContext_Other, "EAContextOther");
 
             Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
             Static.Param.BindTextBox(textLabelEAForce, "LabelY_EA_Force");
@@ -577,9 +575,10 @@ namespace DetectCCD {
 
             Static.SafeRun(() => {
 
-                groupWidth.Visible = Static.App.Is4K;
-                groupLabel.Visible = Static.App.Is4K;
-                groupRemoteClient.Visible = Static.App.Is4K;
+                groupWidth.Enabled = Static.App.Is4K;
+                groupLabel.Enabled = Static.App.Is4K;
+                groupRemoteClient.Enabled = Static.App.Is4K;
+
                 if (Static.App.Is4K) {
                     _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";
                     _lc_remote_8k.ForeColor = RemoteDefect.isConnect ? Color.Green : Color.Red;
@@ -596,6 +595,9 @@ namespace DetectCCD {
                 textLabelEAForce.Enabled = checkEnableLabelEA.Checked && checkEnableLabelEAForce.Checked;
                 checkEnableLabelEAEveryOne.Enabled = checkEnableLabelEA.Checked;
                 checkEnableLabelEAForce.Enabled = checkEnableLabelEA.Checked;
+
+                groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
+                groupEAContext.Enabled = checkEnableLabelEA.Checked;
 
                 xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
                 xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
@@ -615,6 +617,7 @@ namespace DetectCCD {
 
                 checkSaveOK.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
+                checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
 
                 checkDetectDefect.Enabled = Static.App.DetectEnable;
                 checkDetectMark.Enabled = Static.App.DetectEnable;

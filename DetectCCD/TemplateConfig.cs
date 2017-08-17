@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Xml;
 
 using TextBox = DevExpress.XtraEditors.TextEdit;
+using CheckBox = DevExpress.XtraEditors.CheckEdit;
 
 namespace DetectCCD {
 
@@ -121,6 +122,43 @@ namespace DetectCCD {
         }
 
         //绑定界面操作
+        public void BindCheckBox(CheckBox cb, string name) {
+
+            //加入绑定列表中
+            cb.Tag = name;
+            if (m_cbs == null)
+                m_cbs = new List<CheckBox>();
+            m_cbs.Add(cb);
+
+            //载入值
+            {
+                bool findIt = false;
+                var fields = this.GetType().GetFields();
+                foreach (var field in fields) {
+                    if (name == field.Name) {
+                        cb.Checked = Convert.ToBoolean(getValueFromField(field));
+                        findIt = true;
+                        break;
+                    }
+                }
+
+                if (!findIt) {
+                    throw new Exception("DataBase: BindCheckBox: 未找到变量: " + name);
+                }
+            }
+
+            //修改事件
+            cb.CheckedChanged += (s1, e1) => {
+                var fields = this.GetType().GetFields();
+                foreach (var field in fields) {
+                    if (name == field.Name) {
+                        setValueFromField(field, Convert.ToString(cb.Checked));
+                        OnValueChanged?.Invoke();
+                        break;
+                    }
+                }
+            };
+        }
         public void BindTextBox(TextBox tb, string name) {
 
             //加入绑定列表中
@@ -172,7 +210,7 @@ namespace DetectCCD {
                 }
             };
         }
-        public void UpdateAllTextBox() {
+        public void UpdateBind() {
 
             var fields = this.GetType().GetFields();
             foreach (var tb in m_tbs) {
@@ -180,6 +218,16 @@ namespace DetectCCD {
                     foreach (var field in fields) {
                         if ((string)tb.Tag == field.Name) {
                             tb.Text = getValueFromField(field);
+                            break;
+                        }
+                    }
+                }
+            }
+            foreach (var cb in m_cbs) {
+                if (cb != null && cb.IsHandleCreated) {
+                    foreach (var field in fields) {
+                        if ((string)cb.Tag == field.Name) {
+                            cb.Checked = Convert.ToBoolean(getValueFromField(field));
                             break;
                         }
                     }
@@ -248,6 +296,8 @@ namespace DetectCCD {
         ErrorProvider m_provider = null;
         [NonSerialized]
         List<TextBox> m_tbs = null;
+        [NonSerialized]
+        List<CheckBox> m_cbs = null;
         [NonSerialized]
         DataGridView m_grid;
 

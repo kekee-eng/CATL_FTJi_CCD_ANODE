@@ -18,18 +18,29 @@ namespace DetectCCD {
         public bool EnableLabelEA_EveryOne = false;
         public bool EnableLabelDefect = false;
 
+        public bool LabelContextJoin = false;
+        public bool LabelContextTag = false;
+        public bool LabelContextLeakMetal = false;
+        public bool LabelContextOther = false;
+
+        public bool EAContextJoin = false;
+        public bool EAContextTag = false;
+        public bool EAContextLeakMetal = false;
+        public bool EAContextOther = false;
+        
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordSaveImageEnable = false;
         public bool RecordSaveImageOK = false;
         public bool RecordSaveImageNG = false;
+        public bool RecordSaveImageNGSmall = false;
 
         //检测内容
         public bool DetectEnable = true;
-        public bool DetectTab = true;
-        public bool DetectWidth = true;
-        public bool DetectMark = true;
-        public bool DetectDefect = true;
+        public bool DetectTab = false;
+        public bool DetectWidth = false;
+        public bool DetectMark = false;
+        public bool DetectDefect = false;
 
         //显示参数
         public double CameraFpsControl = 10;

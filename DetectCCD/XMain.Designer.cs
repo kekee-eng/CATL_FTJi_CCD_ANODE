@@ -137,11 +137,6 @@
             this.panelDefect2 = new System.Windows.Forms.Panel();
             this.panelDefect1 = new System.Windows.Forms.Panel();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
-            this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
-            this.checkDefectOther = new DevExpress.XtraEditors.CheckEdit();
-            this.checkDefectMeta = new DevExpress.XtraEditors.CheckEdit();
-            this.checkDefectTag = new DevExpress.XtraEditors.CheckEdit();
-            this.checkDefectJoin = new DevExpress.XtraEditors.CheckEdit();
             this.groupWidth = new DevExpress.XtraEditors.GroupControl();
             this.labelControl31 = new DevExpress.XtraEditors.LabelControl();
             this.textWidthStep = new DevExpress.XtraEditors.TextEdit();
@@ -153,7 +148,17 @@
             this.textWidthMin = new DevExpress.XtraEditors.TextEdit();
             this.labelControl28 = new DevExpress.XtraEditors.LabelControl();
             this.groupLabel = new DevExpress.XtraEditors.GroupControl();
+            this.groupEAContext = new DevExpress.XtraEditors.GroupControl();
+            this.checkEAContext_Other = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEAContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEAContext_Tag = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEAContext_Join = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
+            this.groupLabelContext = new DevExpress.XtraEditors.GroupControl();
+            this.checkLabelContext_Other = new DevExpress.XtraEditors.CheckEdit();
+            this.checkLabelContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
+            this.checkLabelContext_Tag = new DevExpress.XtraEditors.CheckEdit();
+            this.checkLabelContext_Join = new DevExpress.XtraEditors.CheckEdit();
             this.textLabelEAForce = new DevExpress.XtraEditors.TextEdit();
             this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
             this.checkEnableLabelEAForce = new DevExpress.XtraEditors.CheckEdit();
@@ -169,7 +174,7 @@
             this.groupCtrl = new DevExpress.XtraEditors.GroupControl();
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
-            this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
+            this.groupViewer = new DevExpress.XtraEditors.GroupControl();
             this.checkDisableView = new DevExpress.XtraEditors.CheckEdit();
             this.ckViewOuterBack = new DevExpress.XtraEditors.CheckEdit();
             this.ckViewOuterFront = new DevExpress.XtraEditors.CheckEdit();
@@ -177,6 +182,7 @@
             this.ckViewInnerFront = new DevExpress.XtraEditors.CheckEdit();
             this.ckViewLocal = new DevExpress.XtraEditors.CheckEdit();
             this.groupTest = new DevExpress.XtraEditors.GroupControl();
+            this.checkSaveNGSmall = new DevExpress.XtraEditors.CheckEdit();
             this.checkDetectDefect = new DevExpress.XtraEditors.CheckEdit();
             this.checkDetectMark = new DevExpress.XtraEditors.CheckEdit();
             this.checkDetectWidth = new DevExpress.XtraEditors.CheckEdit();
@@ -239,12 +245,6 @@
             this.xtraTabPage7.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.xtraTabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).BeginInit();
-            this.groupControl3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectOther.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectMeta.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectTag.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectJoin.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).BeginInit();
             this.groupWidth.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).BeginInit();
@@ -252,6 +252,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).BeginInit();
             this.groupLabel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).BeginInit();
+            this.groupEAContext.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Other.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Tag.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Join.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupLabelContext)).BeginInit();
+            this.groupLabelContext.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Other.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_LeakMetal.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Tag.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Join.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).BeginInit();
@@ -261,8 +273,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).BeginInit();
             this.groupCtrl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
-            this.groupControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupViewer)).BeginInit();
+            this.groupViewer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterBack.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterFront.Properties)).BeginInit();
@@ -271,6 +283,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ckViewLocal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).BeginInit();
             this.groupTest.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectDefect.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectMark.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectWidth.Properties)).BeginInit();
@@ -1519,67 +1532,15 @@
             // 
             // xtraTabPage3
             // 
-            this.xtraTabPage3.Controls.Add(this.groupControl3);
             this.xtraTabPage3.Controls.Add(this.groupWidth);
             this.xtraTabPage3.Controls.Add(this.groupLabel);
             this.xtraTabPage3.Controls.Add(this.groupCtrl);
-            this.xtraTabPage3.Controls.Add(this.groupControl2);
+            this.xtraTabPage3.Controls.Add(this.groupViewer);
             this.xtraTabPage3.Controls.Add(this.groupTest);
             this.xtraTabPage3.ImageIndex = 2;
             this.xtraTabPage3.Name = "xtraTabPage3";
             this.xtraTabPage3.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage3.Text = "参数配置";
-            // 
-            // groupControl3
-            // 
-            this.groupControl3.Controls.Add(this.checkDefectOther);
-            this.groupControl3.Controls.Add(this.checkDefectMeta);
-            this.groupControl3.Controls.Add(this.checkDefectTag);
-            this.groupControl3.Controls.Add(this.checkDefectJoin);
-            this.groupControl3.Enabled = false;
-            this.groupControl3.Location = new System.Drawing.Point(805, 234);
-            this.groupControl3.Name = "groupControl3";
-            this.groupControl3.Size = new System.Drawing.Size(131, 171);
-            this.groupControl3.TabIndex = 32;
-            this.groupControl3.Text = "瑕疵开关";
-            // 
-            // checkDefectOther
-            // 
-            this.checkDefectOther.Location = new System.Drawing.Point(22, 119);
-            this.checkDefectOther.MenuManager = this.barManager1;
-            this.checkDefectOther.Name = "checkDefectOther";
-            this.checkDefectOther.Properties.Caption = "其它";
-            this.checkDefectOther.Size = new System.Drawing.Size(83, 19);
-            this.checkDefectOther.TabIndex = 6;
-            // 
-            // checkDefectMeta
-            // 
-            this.checkDefectMeta.Location = new System.Drawing.Point(22, 94);
-            this.checkDefectMeta.MenuManager = this.barManager1;
-            this.checkDefectMeta.Name = "checkDefectMeta";
-            this.checkDefectMeta.Properties.Caption = "漏金属";
-            this.checkDefectMeta.Size = new System.Drawing.Size(83, 19);
-            this.checkDefectMeta.TabIndex = 5;
-            // 
-            // checkDefectTag
-            // 
-            this.checkDefectTag.EditValue = true;
-            this.checkDefectTag.Location = new System.Drawing.Point(22, 69);
-            this.checkDefectTag.MenuManager = this.barManager1;
-            this.checkDefectTag.Name = "checkDefectTag";
-            this.checkDefectTag.Properties.Caption = "标签";
-            this.checkDefectTag.Size = new System.Drawing.Size(83, 19);
-            this.checkDefectTag.TabIndex = 4;
-            // 
-            // checkDefectJoin
-            // 
-            this.checkDefectJoin.EditValue = true;
-            this.checkDefectJoin.Location = new System.Drawing.Point(22, 44);
-            this.checkDefectJoin.MenuManager = this.barManager1;
-            this.checkDefectJoin.Name = "checkDefectJoin";
-            this.checkDefectJoin.Properties.Caption = "接头";
-            this.checkDefectJoin.Size = new System.Drawing.Size(87, 19);
-            this.checkDefectJoin.TabIndex = 1;
             // 
             // groupWidth
             // 
@@ -1592,10 +1553,10 @@
             this.groupWidth.Controls.Add(this.labelControl27);
             this.groupWidth.Controls.Add(this.textWidthMin);
             this.groupWidth.Controls.Add(this.labelControl28);
-            this.groupWidth.Location = new System.Drawing.Point(33, 234);
+            this.groupWidth.Location = new System.Drawing.Point(486, 21);
             this.groupWidth.Name = "groupWidth";
             this.groupWidth.Size = new System.Drawing.Size(281, 171);
-            this.groupWidth.TabIndex = 29;
+            this.groupWidth.TabIndex = 20;
             this.groupWidth.Text = "测宽设置";
             // 
             // labelControl31
@@ -1612,7 +1573,7 @@
             this.textWidthStep.MenuManager = this.barManager1;
             this.textWidthStep.Name = "textWidthStep";
             this.textWidthStep.Size = new System.Drawing.Size(100, 20);
-            this.textWidthStep.TabIndex = 22;
+            this.textWidthStep.TabIndex = 30;
             // 
             // labelControl32
             // 
@@ -1632,11 +1593,11 @@
             // 
             // textWidthMax
             // 
-            this.textWidthMax.Location = new System.Drawing.Point(67, 69);
+            this.textWidthMax.Location = new System.Drawing.Point(67, 44);
             this.textWidthMax.MenuManager = this.barManager1;
             this.textWidthMax.Name = "textWidthMax";
             this.textWidthMax.Size = new System.Drawing.Size(100, 20);
-            this.textWidthMax.TabIndex = 19;
+            this.textWidthMax.TabIndex = 10;
             // 
             // labelControl26
             // 
@@ -1656,11 +1617,11 @@
             // 
             // textWidthMin
             // 
-            this.textWidthMin.Location = new System.Drawing.Point(67, 43);
+            this.textWidthMin.Location = new System.Drawing.Point(67, 70);
             this.textWidthMin.MenuManager = this.barManager1;
             this.textWidthMin.Name = "textWidthMin";
             this.textWidthMin.Size = new System.Drawing.Size(100, 20);
-            this.textWidthMin.TabIndex = 16;
+            this.textWidthMin.TabIndex = 20;
             // 
             // labelControl28
             // 
@@ -1672,7 +1633,9 @@
             // 
             // groupLabel
             // 
+            this.groupLabel.Controls.Add(this.groupEAContext);
             this.groupLabel.Controls.Add(this.labelControl17);
+            this.groupLabel.Controls.Add(this.groupLabelContext);
             this.groupLabel.Controls.Add(this.textLabelEAForce);
             this.groupLabel.Controls.Add(this.labelControl24);
             this.groupLabel.Controls.Add(this.checkEnableLabelEAForce);
@@ -1685,11 +1648,59 @@
             this.groupLabel.Controls.Add(this.checkEnableLabelEAEveryOne);
             this.groupLabel.Controls.Add(this.checkEnableLabelEA);
             this.groupLabel.Controls.Add(this.checkEnableLabelDefect);
-            this.groupLabel.Location = new System.Drawing.Point(337, 234);
+            this.groupLabel.Location = new System.Drawing.Point(20, 21);
             this.groupLabel.Name = "groupLabel";
-            this.groupLabel.Size = new System.Drawing.Size(446, 171);
-            this.groupLabel.TabIndex = 29;
+            this.groupLabel.Size = new System.Drawing.Size(446, 373);
+            this.groupLabel.TabIndex = 10;
             this.groupLabel.Text = "贴标设置";
+            // 
+            // groupEAContext
+            // 
+            this.groupEAContext.Controls.Add(this.checkEAContext_Other);
+            this.groupEAContext.Controls.Add(this.checkEAContext_LeakMetal);
+            this.groupEAContext.Controls.Add(this.checkEAContext_Tag);
+            this.groupEAContext.Controls.Add(this.checkEAContext_Join);
+            this.groupEAContext.Location = new System.Drawing.Point(177, 178);
+            this.groupEAContext.Name = "groupEAContext";
+            this.groupEAContext.Size = new System.Drawing.Size(131, 171);
+            this.groupEAContext.TabIndex = 90;
+            this.groupEAContext.Text = "末端贴标项";
+            // 
+            // checkEAContext_Other
+            // 
+            this.checkEAContext_Other.Location = new System.Drawing.Point(22, 119);
+            this.checkEAContext_Other.MenuManager = this.barManager1;
+            this.checkEAContext_Other.Name = "checkEAContext_Other";
+            this.checkEAContext_Other.Properties.Caption = "其它";
+            this.checkEAContext_Other.Size = new System.Drawing.Size(83, 19);
+            this.checkEAContext_Other.TabIndex = 40;
+            // 
+            // checkEAContext_LeakMetal
+            // 
+            this.checkEAContext_LeakMetal.Location = new System.Drawing.Point(22, 94);
+            this.checkEAContext_LeakMetal.MenuManager = this.barManager1;
+            this.checkEAContext_LeakMetal.Name = "checkEAContext_LeakMetal";
+            this.checkEAContext_LeakMetal.Properties.Caption = "漏金属";
+            this.checkEAContext_LeakMetal.Size = new System.Drawing.Size(83, 19);
+            this.checkEAContext_LeakMetal.TabIndex = 30;
+            // 
+            // checkEAContext_Tag
+            // 
+            this.checkEAContext_Tag.Location = new System.Drawing.Point(22, 69);
+            this.checkEAContext_Tag.MenuManager = this.barManager1;
+            this.checkEAContext_Tag.Name = "checkEAContext_Tag";
+            this.checkEAContext_Tag.Properties.Caption = "标签";
+            this.checkEAContext_Tag.Size = new System.Drawing.Size(83, 19);
+            this.checkEAContext_Tag.TabIndex = 20;
+            // 
+            // checkEAContext_Join
+            // 
+            this.checkEAContext_Join.Location = new System.Drawing.Point(22, 44);
+            this.checkEAContext_Join.MenuManager = this.barManager1;
+            this.checkEAContext_Join.Name = "checkEAContext_Join";
+            this.checkEAContext_Join.Properties.Caption = "接头";
+            this.checkEAContext_Join.Size = new System.Drawing.Size(87, 19);
+            this.checkEAContext_Join.TabIndex = 10;
             // 
             // labelControl17
             // 
@@ -1699,13 +1710,61 @@
             this.labelControl17.TabIndex = 18;
             this.labelControl17.Text = "mm";
             // 
+            // groupLabelContext
+            // 
+            this.groupLabelContext.Controls.Add(this.checkLabelContext_Other);
+            this.groupLabelContext.Controls.Add(this.checkLabelContext_LeakMetal);
+            this.groupLabelContext.Controls.Add(this.checkLabelContext_Tag);
+            this.groupLabelContext.Controls.Add(this.checkLabelContext_Join);
+            this.groupLabelContext.Location = new System.Drawing.Point(22, 178);
+            this.groupLabelContext.Name = "groupLabelContext";
+            this.groupLabelContext.Size = new System.Drawing.Size(131, 171);
+            this.groupLabelContext.TabIndex = 80;
+            this.groupLabelContext.Text = "转标项";
+            // 
+            // checkLabelContext_Other
+            // 
+            this.checkLabelContext_Other.Location = new System.Drawing.Point(22, 119);
+            this.checkLabelContext_Other.MenuManager = this.barManager1;
+            this.checkLabelContext_Other.Name = "checkLabelContext_Other";
+            this.checkLabelContext_Other.Properties.Caption = "其它";
+            this.checkLabelContext_Other.Size = new System.Drawing.Size(83, 19);
+            this.checkLabelContext_Other.TabIndex = 40;
+            // 
+            // checkLabelContext_LeakMetal
+            // 
+            this.checkLabelContext_LeakMetal.Location = new System.Drawing.Point(22, 94);
+            this.checkLabelContext_LeakMetal.MenuManager = this.barManager1;
+            this.checkLabelContext_LeakMetal.Name = "checkLabelContext_LeakMetal";
+            this.checkLabelContext_LeakMetal.Properties.Caption = "漏金属";
+            this.checkLabelContext_LeakMetal.Size = new System.Drawing.Size(83, 19);
+            this.checkLabelContext_LeakMetal.TabIndex = 30;
+            // 
+            // checkLabelContext_Tag
+            // 
+            this.checkLabelContext_Tag.Location = new System.Drawing.Point(22, 69);
+            this.checkLabelContext_Tag.MenuManager = this.barManager1;
+            this.checkLabelContext_Tag.Name = "checkLabelContext_Tag";
+            this.checkLabelContext_Tag.Properties.Caption = "标签";
+            this.checkLabelContext_Tag.Size = new System.Drawing.Size(83, 19);
+            this.checkLabelContext_Tag.TabIndex = 20;
+            // 
+            // checkLabelContext_Join
+            // 
+            this.checkLabelContext_Join.Location = new System.Drawing.Point(22, 44);
+            this.checkLabelContext_Join.MenuManager = this.barManager1;
+            this.checkLabelContext_Join.Name = "checkLabelContext_Join";
+            this.checkLabelContext_Join.Properties.Caption = "接头";
+            this.checkLabelContext_Join.Size = new System.Drawing.Size(87, 19);
+            this.checkLabelContext_Join.TabIndex = 10;
+            // 
             // textLabelEAForce
             // 
             this.textLabelEAForce.Location = new System.Drawing.Point(268, 120);
             this.textLabelEAForce.MenuManager = this.barManager1;
             this.textLabelEAForce.Name = "textLabelEAForce";
             this.textLabelEAForce.Size = new System.Drawing.Size(100, 20);
-            this.textLabelEAForce.TabIndex = 17;
+            this.textLabelEAForce.TabIndex = 70;
             // 
             // labelControl24
             // 
@@ -1722,7 +1781,7 @@
             this.checkEnableLabelEAForce.Name = "checkEnableLabelEAForce";
             this.checkEnableLabelEAForce.Properties.Caption = "EA超长强制打标";
             this.checkEnableLabelEAForce.Size = new System.Drawing.Size(147, 19);
-            this.checkEnableLabelEAForce.TabIndex = 15;
+            this.checkEnableLabelEAForce.TabIndex = 40;
             // 
             // labelControl14
             // 
@@ -1738,7 +1797,7 @@
             this.textLabelEAOffset.MenuManager = this.barManager1;
             this.textLabelEAOffset.Name = "textLabelEAOffset";
             this.textLabelEAOffset.Size = new System.Drawing.Size(100, 20);
-            this.textLabelEAOffset.TabIndex = 13;
+            this.textLabelEAOffset.TabIndex = 60;
             // 
             // labelControl16
             // 
@@ -1762,7 +1821,7 @@
             this.textLabelDefectOffset.MenuManager = this.barManager1;
             this.textLabelDefectOffset.Name = "textLabelDefectOffset";
             this.textLabelDefectOffset.Size = new System.Drawing.Size(100, 20);
-            this.textLabelDefectOffset.TabIndex = 10;
+            this.textLabelDefectOffset.TabIndex = 50;
             // 
             // labelControl9
             // 
@@ -1779,7 +1838,7 @@
             this.checkEnableLabelEAEveryOne.Name = "checkEnableLabelEAEveryOne";
             this.checkEnableLabelEAEveryOne.Properties.Caption = "[测试]每个EA都贴标";
             this.checkEnableLabelEAEveryOne.Size = new System.Drawing.Size(147, 19);
-            this.checkEnableLabelEAEveryOne.TabIndex = 8;
+            this.checkEnableLabelEAEveryOne.TabIndex = 30;
             // 
             // checkEnableLabelEA
             // 
@@ -1788,7 +1847,7 @@
             this.checkEnableLabelEA.Name = "checkEnableLabelEA";
             this.checkEnableLabelEA.Properties.Caption = "启用“EA末端贴标”";
             this.checkEnableLabelEA.Size = new System.Drawing.Size(160, 19);
-            this.checkEnableLabelEA.TabIndex = 7;
+            this.checkEnableLabelEA.TabIndex = 20;
             // 
             // checkEnableLabelDefect
             // 
@@ -1797,16 +1856,16 @@
             this.checkEnableLabelDefect.Name = "checkEnableLabelDefect";
             this.checkEnableLabelDefect.Properties.Caption = "启用“接头标签转标”";
             this.checkEnableLabelDefect.Size = new System.Drawing.Size(160, 19);
-            this.checkEnableLabelDefect.TabIndex = 6;
+            this.checkEnableLabelDefect.TabIndex = 10;
             // 
             // groupCtrl
             // 
             this.groupCtrl.Controls.Add(this.btnOpenViewerChart);
             this.groupCtrl.Controls.Add(this.btnOfflineControl);
-            this.groupCtrl.Location = new System.Drawing.Point(655, 26);
+            this.groupCtrl.Location = new System.Drawing.Point(786, 211);
             this.groupCtrl.Name = "groupCtrl";
-            this.groupCtrl.Size = new System.Drawing.Size(281, 183);
-            this.groupCtrl.TabIndex = 28;
+            this.groupCtrl.Size = new System.Drawing.Size(298, 183);
+            this.groupCtrl.TabIndex = 50;
             this.groupCtrl.Text = "控制台";
             // 
             // btnOpenViewerChart
@@ -1827,23 +1886,23 @@
             this.btnOfflineControl.Text = "离线控制台";
             this.btnOfflineControl.Click += new System.EventHandler(this.btnOfflineControl_Click);
             // 
-            // groupControl2
+            // groupViewer
             // 
-            this.groupControl2.Controls.Add(this.checkDisableView);
-            this.groupControl2.Controls.Add(this.ckViewOuterBack);
-            this.groupControl2.Controls.Add(this.ckViewOuterFront);
-            this.groupControl2.Controls.Add(this.ckViewInnerBack);
-            this.groupControl2.Controls.Add(this.ckViewInnerFront);
-            this.groupControl2.Controls.Add(this.ckViewLocal);
-            this.groupControl2.Location = new System.Drawing.Point(337, 26);
-            this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(298, 183);
-            this.groupControl2.TabIndex = 31;
-            this.groupControl2.Text = "同步视图";
+            this.groupViewer.Controls.Add(this.checkDisableView);
+            this.groupViewer.Controls.Add(this.ckViewOuterBack);
+            this.groupViewer.Controls.Add(this.ckViewOuterFront);
+            this.groupViewer.Controls.Add(this.ckViewInnerBack);
+            this.groupViewer.Controls.Add(this.ckViewInnerFront);
+            this.groupViewer.Controls.Add(this.ckViewLocal);
+            this.groupViewer.Location = new System.Drawing.Point(786, 21);
+            this.groupViewer.Name = "groupViewer";
+            this.groupViewer.Size = new System.Drawing.Size(298, 171);
+            this.groupViewer.TabIndex = 40;
+            this.groupViewer.Text = "同步视图";
             // 
             // checkDisableView
             // 
-            this.checkDisableView.Location = new System.Drawing.Point(186, 44);
+            this.checkDisableView.Location = new System.Drawing.Point(186, 31);
             this.checkDisableView.MenuManager = this.barManager1;
             this.checkDisableView.Name = "checkDisableView";
             this.checkDisableView.Properties.Caption = "禁用显示";
@@ -1853,7 +1912,7 @@
             // ckViewOuterBack
             // 
             this.ckViewOuterBack.EditValue = true;
-            this.ckViewOuterBack.Location = new System.Drawing.Point(15, 144);
+            this.ckViewOuterBack.Location = new System.Drawing.Point(15, 131);
             this.ckViewOuterBack.MenuManager = this.barManager1;
             this.ckViewOuterBack.Name = "ckViewOuterBack";
             this.ckViewOuterBack.Properties.Caption = "Outer->Back";
@@ -1863,7 +1922,7 @@
             // ckViewOuterFront
             // 
             this.ckViewOuterFront.EditValue = true;
-            this.ckViewOuterFront.Location = new System.Drawing.Point(15, 119);
+            this.ckViewOuterFront.Location = new System.Drawing.Point(15, 106);
             this.ckViewOuterFront.MenuManager = this.barManager1;
             this.ckViewOuterFront.Name = "ckViewOuterFront";
             this.ckViewOuterFront.Properties.Caption = "Outer->Front";
@@ -1873,7 +1932,7 @@
             // ckViewInnerBack
             // 
             this.ckViewInnerBack.EditValue = true;
-            this.ckViewInnerBack.Location = new System.Drawing.Point(15, 94);
+            this.ckViewInnerBack.Location = new System.Drawing.Point(15, 81);
             this.ckViewInnerBack.MenuManager = this.barManager1;
             this.ckViewInnerBack.Name = "ckViewInnerBack";
             this.ckViewInnerBack.Properties.Caption = "Inner->Back";
@@ -1883,7 +1942,7 @@
             // ckViewInnerFront
             // 
             this.ckViewInnerFront.EditValue = true;
-            this.ckViewInnerFront.Location = new System.Drawing.Point(15, 69);
+            this.ckViewInnerFront.Location = new System.Drawing.Point(15, 56);
             this.ckViewInnerFront.MenuManager = this.barManager1;
             this.ckViewInnerFront.Name = "ckViewInnerFront";
             this.ckViewInnerFront.Properties.Caption = "Inner->Front";
@@ -1893,7 +1952,7 @@
             // ckViewLocal
             // 
             this.ckViewLocal.EditValue = true;
-            this.ckViewLocal.Location = new System.Drawing.Point(15, 44);
+            this.ckViewLocal.Location = new System.Drawing.Point(15, 31);
             this.ckViewLocal.MenuManager = this.barManager1;
             this.ckViewLocal.Name = "ckViewLocal";
             this.ckViewLocal.Properties.Caption = "本地同步";
@@ -1902,17 +1961,27 @@
             // 
             // groupTest
             // 
+            this.groupTest.Controls.Add(this.checkSaveNGSmall);
             this.groupTest.Controls.Add(this.checkDetectDefect);
             this.groupTest.Controls.Add(this.checkDetectMark);
             this.groupTest.Controls.Add(this.checkDetectWidth);
             this.groupTest.Controls.Add(this.checkDetectTab);
             this.groupTest.Controls.Add(this.checkSaveNG);
             this.groupTest.Controls.Add(this.checkSaveOK);
-            this.groupTest.Location = new System.Drawing.Point(33, 26);
+            this.groupTest.Location = new System.Drawing.Point(486, 211);
             this.groupTest.Name = "groupTest";
             this.groupTest.Size = new System.Drawing.Size(281, 183);
             this.groupTest.TabIndex = 30;
             this.groupTest.Text = "检测开关";
+            // 
+            // checkSaveNGSmall
+            // 
+            this.checkSaveNGSmall.Location = new System.Drawing.Point(22, 94);
+            this.checkSaveNGSmall.MenuManager = this.barManager1;
+            this.checkSaveNGSmall.Name = "checkSaveNGSmall";
+            this.checkSaveNGSmall.Properties.Caption = "保存NG小图";
+            this.checkSaveNGSmall.Size = new System.Drawing.Size(109, 19);
+            this.checkSaveNGSmall.TabIndex = 30;
             // 
             // checkDetectDefect
             // 
@@ -1920,8 +1989,8 @@
             this.checkDetectDefect.MenuManager = this.barManager1;
             this.checkDetectDefect.Name = "checkDetectDefect";
             this.checkDetectDefect.Properties.Caption = "检测瑕疵";
-            this.checkDetectDefect.Size = new System.Drawing.Size(87, 19);
-            this.checkDetectDefect.TabIndex = 8;
+            this.checkDetectDefect.Size = new System.Drawing.Size(105, 19);
+            this.checkDetectDefect.TabIndex = 130;
             // 
             // checkDetectMark
             // 
@@ -1929,8 +1998,8 @@
             this.checkDetectMark.MenuManager = this.barManager1;
             this.checkDetectMark.Name = "checkDetectMark";
             this.checkDetectMark.Properties.Caption = "检测Mark孔";
-            this.checkDetectMark.Size = new System.Drawing.Size(87, 19);
-            this.checkDetectMark.TabIndex = 7;
+            this.checkDetectMark.Size = new System.Drawing.Size(105, 19);
+            this.checkDetectMark.TabIndex = 120;
             // 
             // checkDetectWidth
             // 
@@ -1938,8 +2007,8 @@
             this.checkDetectWidth.MenuManager = this.barManager1;
             this.checkDetectWidth.Name = "checkDetectWidth";
             this.checkDetectWidth.Properties.Caption = "检测宽度";
-            this.checkDetectWidth.Size = new System.Drawing.Size(87, 19);
-            this.checkDetectWidth.TabIndex = 6;
+            this.checkDetectWidth.Size = new System.Drawing.Size(105, 19);
+            this.checkDetectWidth.TabIndex = 110;
             // 
             // checkDetectTab
             // 
@@ -1947,26 +2016,26 @@
             this.checkDetectTab.MenuManager = this.barManager1;
             this.checkDetectTab.Name = "checkDetectTab";
             this.checkDetectTab.Properties.Caption = "检测极耳";
-            this.checkDetectTab.Size = new System.Drawing.Size(87, 19);
-            this.checkDetectTab.TabIndex = 5;
+            this.checkDetectTab.Size = new System.Drawing.Size(105, 19);
+            this.checkDetectTab.TabIndex = 100;
             // 
             // checkSaveNG
             // 
             this.checkSaveNG.Location = new System.Drawing.Point(22, 69);
             this.checkSaveNG.MenuManager = this.barManager1;
             this.checkSaveNG.Name = "checkSaveNG";
-            this.checkSaveNG.Properties.Caption = "保存NG图";
-            this.checkSaveNG.Size = new System.Drawing.Size(83, 19);
-            this.checkSaveNG.TabIndex = 4;
+            this.checkSaveNG.Properties.Caption = "保存NG大图";
+            this.checkSaveNG.Size = new System.Drawing.Size(109, 19);
+            this.checkSaveNG.TabIndex = 20;
             // 
             // checkSaveOK
             // 
             this.checkSaveOK.Location = new System.Drawing.Point(22, 44);
             this.checkSaveOK.MenuManager = this.barManager1;
             this.checkSaveOK.Name = "checkSaveOK";
-            this.checkSaveOK.Properties.Caption = "保存OK图";
-            this.checkSaveOK.Size = new System.Drawing.Size(87, 19);
-            this.checkSaveOK.TabIndex = 1;
+            this.checkSaveOK.Properties.Caption = "保存OK大图";
+            this.checkSaveOK.Size = new System.Drawing.Size(113, 19);
+            this.checkSaveOK.TabIndex = 10;
             // 
             // xtraTabPage4
             // 
@@ -2059,12 +2128,6 @@
             this.xtraTabPage7.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
             this.xtraTabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).EndInit();
-            this.groupControl3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectOther.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectMeta.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectTag.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDefectJoin.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).EndInit();
             this.groupWidth.ResumeLayout(false);
             this.groupWidth.PerformLayout();
@@ -2074,6 +2137,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).EndInit();
             this.groupLabel.ResumeLayout(false);
             this.groupLabel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).EndInit();
+            this.groupEAContext.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Other.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Tag.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Join.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupLabelContext)).EndInit();
+            this.groupLabelContext.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Other.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_LeakMetal.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Tag.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Join.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).EndInit();
@@ -2083,8 +2158,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).EndInit();
             this.groupCtrl.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
-            this.groupControl2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupViewer)).EndInit();
+            this.groupViewer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterBack.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterFront.Properties)).EndInit();
@@ -2093,6 +2168,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ckViewLocal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).EndInit();
             this.groupTest.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectDefect.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectMark.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectWidth.Properties)).EndInit();
@@ -2207,7 +2283,7 @@
         private DevExpress.XtraEditors.SimpleButton btnConnectRemotePLC;
         private DevExpress.XtraEditors.SimpleButton btnConnectRemote8K;
         private DevExpress.XtraEditors.LabelControl _lc_inner_frame;
-        private DevExpress.XtraEditors.GroupControl groupControl2;
+        private DevExpress.XtraEditors.GroupControl groupViewer;
         private DevExpress.XtraEditors.CheckEdit checkDisableView;
         private DevExpress.XtraEditors.CheckEdit ckViewOuterBack;
         private DevExpress.XtraEditors.CheckEdit ckViewOuterFront;
@@ -2258,10 +2334,16 @@
         private DevExpress.XtraEditors.LabelControl labelControl27;
         private DevExpress.XtraEditors.TextEdit textWidthMin;
         private DevExpress.XtraEditors.LabelControl labelControl28;
-        private DevExpress.XtraEditors.GroupControl groupControl3;
-        private DevExpress.XtraEditors.CheckEdit checkDefectMeta;
-        private DevExpress.XtraEditors.CheckEdit checkDefectTag;
-        private DevExpress.XtraEditors.CheckEdit checkDefectJoin;
-        private DevExpress.XtraEditors.CheckEdit checkDefectOther;
+        private DevExpress.XtraEditors.GroupControl groupLabelContext;
+        private DevExpress.XtraEditors.CheckEdit checkLabelContext_LeakMetal;
+        private DevExpress.XtraEditors.CheckEdit checkLabelContext_Tag;
+        private DevExpress.XtraEditors.CheckEdit checkLabelContext_Join;
+        private DevExpress.XtraEditors.CheckEdit checkLabelContext_Other;
+        private DevExpress.XtraEditors.CheckEdit checkSaveNGSmall;
+        private DevExpress.XtraEditors.GroupControl groupEAContext;
+        private DevExpress.XtraEditors.CheckEdit checkEAContext_Other;
+        private DevExpress.XtraEditors.CheckEdit checkEAContext_LeakMetal;
+        private DevExpress.XtraEditors.CheckEdit checkEAContext_Tag;
+        private DevExpress.XtraEditors.CheckEdit checkEAContext_Join;
     }
 }
