@@ -523,6 +523,7 @@ namespace DetectCCD {
         StreamWriter csvWriter;
         void closeWidthCSV() {
             if(csvWriter!=null) {
+                csvWriter.Flush();
                 csvWriter.Dispose();
                 csvWriter = null;
             }
@@ -559,7 +560,6 @@ namespace DetectCCD {
                 appendItem(inner.ValWidth);
                 appendItem(outer.ValWidth);
                 csvWriter.WriteLine();
-                csvWriter.FlushAsync();
 
             });
         }
