@@ -1536,6 +1536,7 @@
             this.groupControl3.Controls.Add(this.checkDefectMeta);
             this.groupControl3.Controls.Add(this.checkDefectTag);
             this.groupControl3.Controls.Add(this.checkDefectJoin);
+            this.groupControl3.Enabled = false;
             this.groupControl3.Location = new System.Drawing.Point(805, 234);
             this.groupControl3.Name = "groupControl3";
             this.groupControl3.Size = new System.Drawing.Size(131, 171);
@@ -1562,6 +1563,7 @@
             // 
             // checkDefectTag
             // 
+            this.checkDefectTag.EditValue = true;
             this.checkDefectTag.Location = new System.Drawing.Point(22, 69);
             this.checkDefectTag.MenuManager = this.barManager1;
             this.checkDefectTag.Name = "checkDefectTag";
@@ -1571,6 +1573,7 @@
             // 
             // checkDefectJoin
             // 
+            this.checkDefectJoin.EditValue = true;
             this.checkDefectJoin.Location = new System.Drawing.Point(22, 44);
             this.checkDefectJoin.MenuManager = this.barManager1;
             this.checkDefectJoin.Name = "checkDefectJoin";

@@ -91,8 +91,17 @@ namespace DetectCCD {
 
                     start = Static.App.FrameInnerToFront(isFront, isInner, start);
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
-                    return (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
+                    (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
 
+                    //Fix
+                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
+                    int count=0;
+                    foreach (var def in defs) {
+                        if (def.Type < 2 && def.InInner(isInner)) {
+                            count++;
+                        }
+                    }
+                    return count;
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner) => {
 
