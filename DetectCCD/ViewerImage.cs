@@ -106,10 +106,6 @@ namespace DetectCCD {
             targetVx = x;
             targetVy = y;
             targetVs = s;
-
-            //Fix:
-            if (frameDy == 0)
-                targetVy = -10;
         }
         
         public void MoveToView(double y, double x, double s) {

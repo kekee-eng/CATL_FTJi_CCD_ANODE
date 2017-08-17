@@ -123,13 +123,7 @@ namespace DetectCCD {
                 };
 
             }
-            else {
 
-                //4K
-                Static.SafeRun(RemotePLC.InitClient);
-                //Static.SafeRun(RemoteDefect.InitClient);
-
-            }
         }
         void init_device() {
 
@@ -565,7 +559,8 @@ namespace DetectCCD {
                 appendItem(inner.ValWidth);
                 appendItem(outer.ValWidth);
                 csvWriter.WriteLine();
-                csvWriter.Flush();
+                csvWriter.FlushAsync();
+
             });
         }
 
