@@ -688,9 +688,8 @@ CfgParam        BLOB
         public int AllocAndGetDefectCount(double start, double end, int ea) {
             int count = 0;
             for (int i = 0; i < Defects.Count; i++) {
-                var x = Defects[i];
-                if (x.Y + x.H / 2 > start && x.Y - x.H / 2 < end) {
-                    x.EA = ea;
+                if (Defects[i].InRange(start, end)) {
+                    Defects[i].EA = ea;
                     count++;
                 }
             }

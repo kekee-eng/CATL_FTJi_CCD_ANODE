@@ -100,7 +100,7 @@ namespace DetectCCD {
                     var outdefs = new List<DataDefect>();
                     foreach (var def in defs) {
                         if (def.InInner(isInner)) {
-                            outdefs.Add(new DataDefect() { Y = def.Y, Type = def.Type });
+                            outdefs.Add(new DataDefect() { EA = def.EA, Y = def.Y, Type = def.Type });
                         }
                     }
 
