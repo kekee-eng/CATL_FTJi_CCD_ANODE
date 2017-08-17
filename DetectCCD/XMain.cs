@@ -254,6 +254,9 @@ namespace DetectCCD {
                     if (!isRollOk)
                         continue;
 
+                    if (!Static.App.RecordSaveImageEnable)
+                        continue;
+
                     Static.SafeRun(() => {
 
                         //

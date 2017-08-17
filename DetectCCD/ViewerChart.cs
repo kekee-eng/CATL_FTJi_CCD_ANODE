@@ -311,7 +311,7 @@ namespace DetectCCD {
             if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
-
+            grid.Tag = false;
             if (grid.Rows.Count < Detect.Tabs.Count) {
 
                 if (grid.Rows.Count != 0)
@@ -324,7 +324,7 @@ namespace DetectCCD {
             if (grid.Rows.Count > Detect.Tabs.Count) {
                 grid.Rows.Clear();
             }
-
+            grid.Tag = true;
         }
 
         //EA表格
@@ -385,7 +385,7 @@ namespace DetectCCD {
 
             var grid = parentGetGrid(parent);
             int eaCount = Detect.ShowEACount;
-
+            grid.Tag = false;
             if (eaCount > grid.Rows.Count) {
                 if (grid.Rows.Count != 0)
                     grid.Rows.RemoveAt(0);
@@ -397,7 +397,7 @@ namespace DetectCCD {
             if (eaCount < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
-
+            grid.Tag = true;
         }
 
         //缺陷表格
@@ -443,7 +443,7 @@ namespace DetectCCD {
             if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
-
+            grid.Tag = false;
             if (Detect.Defects.Count > grid.Rows.Count) {
                 for (int i = grid.Rows.Count; i < Detect.Defects.Count; i++)
                     addDefectGrid(grid, Detect.Defects[i]);
@@ -451,6 +451,7 @@ namespace DetectCCD {
             if (Detect.Defects.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
+            grid.Tag = true;
         }
 
         //标签表格
@@ -492,7 +493,7 @@ namespace DetectCCD {
             if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
-
+            grid.Tag = false;
             if (Detect.Labels.Count > grid.Rows.Count) {
                 for (int i = grid.Rows.Count; i < Detect.Labels.Count; i++)
                     addLabelGrid(grid, Detect.Labels[i]);
@@ -500,6 +501,7 @@ namespace DetectCCD {
             if (Detect.Labels.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
+            grid.Tag = true;
         }
 
         //极耳曲线图
@@ -532,7 +534,7 @@ namespace DetectCCD {
 
             //
             var chart = parentGetChart(parent);
-
+            chart.Tag = false;
             int numShow = chart.GraphPane.CurveList[0].Points.Count;
             int numExist = Detect.Tabs.Count;
 
@@ -551,6 +553,7 @@ namespace DetectCCD {
 
                 chart.Refresh();
             }
+            chart.Tag = true;
         }
         public void SyncTabChart(Control parent, int select) {
             if (!parent.Visible) return;
@@ -619,7 +622,7 @@ namespace DetectCCD {
             if (!parent.Visible) return;
 
             var grid = parentGetGrid(parent);
-
+            grid.Tag = false;
             if (grid.Rows.Count < Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count)) {
 
                 if (grid.Rows.Count != 0)
@@ -632,7 +635,7 @@ namespace DetectCCD {
             if (grid.Rows.Count > Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count)) {
                 grid.Rows.Clear();
             }
-
+            grid.Tag = true;
         }
 
         //两边同步宽度曲线图
@@ -690,7 +693,7 @@ namespace DetectCCD {
 
             //
             var chart = parentGetChart(parent);
-
+            chart.Tag = false;
             int numShow = chart.GraphPane.CurveList[0].Points.Count;
             int numExist = Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count);
 
@@ -707,7 +710,7 @@ namespace DetectCCD {
 
                 chart.Refresh();
             }
-
+            chart.Tag = true;
         }
         public static void SyncMergeTabChart(Control parent, EntryDetect detInner, EntryDetect detOuter, int select) {
             if (!parent.Visible) return;
@@ -715,7 +718,7 @@ namespace DetectCCD {
             //绘制对象
             var chart = parentGetChart(parent);
             var g = chart.GraphPane;
-
+            chart.Tag = false;
             //上下限
             var diff = (Static.Param.TabWidthMax - Static.Param.TabWidthMin);
             g.YAxis.Scale.Min = Static.Param.TabWidthMin - Math.Ceiling(diff * 0.1 * 2)/2;
@@ -734,7 +737,7 @@ namespace DetectCCD {
 
             //
             SyncMergeTabChart(parent, detInner, detOuter);
-
+            chart.Tag = true;
         }
 
         void demoDebug(Control parent) {
