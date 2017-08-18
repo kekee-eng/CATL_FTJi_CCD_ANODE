@@ -50,6 +50,7 @@ namespace DetectCCD {
         //
         public bool IsNewEA = false; //EA起始
         public bool IsSync = false; //已同步
+        public bool IsSort = false; //已排序
         public bool IsFix = false; //补测
 
         //

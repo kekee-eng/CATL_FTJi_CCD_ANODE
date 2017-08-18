@@ -78,7 +78,7 @@ namespace DetectCCD {
         string rollType = "";
         string rollName = "";
         int rollRepeat = 0;
-
+        
         public ModRecord record = new ModRecord();
         public ModDevice device = new ModDevice();
 
@@ -179,13 +179,19 @@ namespace DetectCCD {
                 while (!isQuit) {
                     Thread.Sleep(1);
 
-                    Static.SafeRun(() => {
+                    bool used = false;
+                    var time = UtilTool.TimeCounting(() => {
+                        Static.SafeRun(() => {
 
-                        var obj = record.InnerGrab.Cache.GetFirstUnDetect();
-                        if (obj != null) {
-                            record.InnerDetect.TryDetect(obj);
-                        }
+                            var obj = record.InnerGrab.Cache.GetFirstUnDetect();
+                            if (obj != null) {
+                                used = true;
+                                record.InnerDetect.TryDetect(obj);
+                            }
+                        });
                     });
+
+                    if(used) record.InnerDetect.TimeTotal = time;
                 };
 
             }))).Start();
@@ -194,20 +200,26 @@ namespace DetectCCD {
                 while (!isQuit) {
                     Thread.Sleep(1);
 
-                    Static.SafeRun(() => {
+                    bool used = false;
+                    var time = UtilTool.TimeCounting(() => {
+                        Static.SafeRun(() => {
 
-                        var obj = record.OuterGrab.Cache.GetFirstUnDetect();
-                        if (obj != null) {
-                            if (record.OuterDetect.TryDetect(obj)) {
+                            var obj = record.OuterGrab.Cache.GetFirstUnDetect();
+                            if (obj != null) {
+                                used = true;
+                                if (record.OuterDetect.TryDetect(obj)) {
 
-                                //外侧同步到内侧
-                                record.OuterDetect.Sync(record.InnerDetect);
+                                    //外侧同步到内侧
+                                    record.OuterDetect.Sync(record.InnerDetect);
 
+                                }
+                                record.OuterViewerImage.SetBottomTarget(obj.Frame);
+                                record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixFrameOuterOrBackOffset);
                             }
-                            record.OuterViewerImage.SetBottomTarget(obj.Frame);
-                            record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixFrameOuterOrBackOffset);
-                        }
+                        });
                     });
+
+                    if(used) record.OuterDetect.TimeTotal = time;
                 };
 
             }))).Start();
@@ -216,7 +228,7 @@ namespace DetectCCD {
             new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
-                    Thread.Sleep(10);
+                    Thread.Sleep(1);
                     if (checkDisableView.Checked) continue;
 
                     Static.SafeRun(() => {
@@ -232,7 +244,7 @@ namespace DetectCCD {
             new Thread(new ThreadStart((Action)(() => {
 
                 while (!isQuit) {
-                    Thread.Sleep(10);
+                    Thread.Sleep(1);
                     if (checkDisableView.Checked) continue;
 
                     Static.SafeRun(() => {

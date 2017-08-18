@@ -63,6 +63,9 @@ namespace DetectCCD {
             monitor["ImageProcess_ImageDefectWidth"] = () => ImageProcess.ImageDefectWidth;
             monitor["ImageProcess_ImageDefectHeight"] = () => ImageProcess.ImageDefectHeight;
 
+            monitor["Time"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Time_DetectInner"] = () => record.InnerDetect.TimeTotal;
+            monitor["Time_DetectOuter"] = () => record.OuterDetect.TimeTotal;
             //
             return monitor;
 
@@ -83,8 +86,8 @@ namespace DetectCCD {
             monitor["Inner_Frame_DB"] = () => getCountText(record.InnerGrab.DB.Max);
 
             monitor["Inner_Detect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
-            monitor["Inner_DetectTime"] = () => record.InnerDetect.TimeDetect;
-            monitor["Inner_DetectTransLabel"] = () => record.InnerDetect.TimeTransLabel;
+            //monitor["Inner_DetectTime"] = () => record.InnerDetect.TimeDetect;
+            //monitor["Inner_DetectTransLabel"] = () => record.InnerDetect.TimeTransLabel;
 
             monitor["Inner_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Grab_Caption"] = () => device.InnerCamera.Caption;
@@ -178,8 +181,8 @@ namespace DetectCCD {
             monitor["Outer_Frame_DB"] = () => getCountText(record.OuterGrab.DB.Max);
 
             monitor["Outer_Detect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
-            monitor["Outer_DetectTime"] = () => record.OuterDetect.TimeDetect;
-            monitor["Outer_DetectTransLabel"] = () => record.OuterDetect.TimeTransLabel;
+            //monitor["Outer_DetectTime"] = () => record.OuterDetect.TimeDetect;
+            //monitor["Outer_DetectTransLabel"] = () => record.OuterDetect.TimeTransLabel;
 
             monitor["Outer_Grab"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Outer_Grab_Caption"] = () => device.OuterCamera.Caption;

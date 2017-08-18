@@ -128,56 +128,45 @@ CfgParam        BLOB
         
         public event Action<int> OnNewLabel;
         public event Action<DataTab, DataTab> OnSyncTab;
-
-        public int TimeTransLabel = 0;
-        public int TimeDetect = 0;
-
+        
         int defectFrameCount = 0;
 
-        public void TransLabel() {
-
-        }
+        public int TimeTotal =0;
         public bool TryDetect(DataGrab obj) {
 
-            TimeTransLabel = UtilTool.TimeCounting(() => {
+            //
+            checkLabel(obj.Frame);
 
-                //
-                checkLabel(obj.Frame);
-
-                //转标签
-                if (Static.App.Is4K && Static.App.EnableLabelDefect) {
-                    var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
-                    if (remoteDefs != null) {
-                        foreach (var rl in remoteDefs) {
-                            if (rl.IsTransLabel()) {
-                                addLabel(new DataLabel() {
-                                    Y = rl.Y + Static.Param.LabelY_Defect / Fy,
-                                    Comment = string.Format("转标[正面][{0}]", rl.GetTypeCaption())
-                                });
-                            }
+            //转标签
+            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
+                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
+                if (remoteDefs != null) {
+                    foreach (var rl in remoteDefs) {
+                        if (rl.IsTransLabel()) {
+                            addLabel(new DataLabel() {
+                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                Comment = string.Format("转标[正面][{0}]", rl.GetTypeCaption())
+                            });
                         }
                     }
                 }
+            }
 
-                if (Static.App.Is4K && Static.App.EnableLabelDefect) {
-                    var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
-                    if (remoteDefs != null) {
-                        foreach (var rl in remoteDefs) {
-                            if (rl.IsTransLabel()) {
-                                addLabel(new DataLabel() {
-                                    Y = rl.Y + Static.Param.LabelY_Defect / Fy,
-                                    Comment = string.Format("转标[背面][{0}]", rl.GetTypeCaption())
-                                });
-                            }
+            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
+                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+                if (remoteDefs != null) {
+                    foreach (var rl in remoteDefs) {
+                        if (rl.IsTransLabel()) {
+                            addLabel(new DataLabel() {
+                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                Comment = string.Format("转标[背面][{0}]", rl.GetTypeCaption())
+                            });
                         }
                     }
                 }
-            });
+            }
 
-            bool ret = false;
-            TimeDetect = UtilTool.TimeCounting(() => {
-                ret = tryDetect(obj);
-            });
+            var ret = tryDetect(obj);
             return ret;
         }
         public void Sync(EntryDetect partner) {
@@ -252,7 +241,9 @@ CfgParam        BLOB
 
             //重置序号
             adjustER();
+            //adjustDefect();
             partner.adjustER();
+            //partner.adjustDefect();
             OnSyncTab?.Invoke(myER, bindER);
 
         }
@@ -411,6 +402,7 @@ CfgParam        BLOB
                 return false;
 
             if (Static.App.DetectWidth) {
+
                 //宽度检测
                 double[] bx1, bx2;
                 double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
@@ -455,9 +447,7 @@ CfgParam        BLOB
 
             //
             Tabs.Add(data);
-            adjustER();
-            adjustDefect();
-            
+
             return true;
 
         }
@@ -579,26 +569,38 @@ CfgParam        BLOB
 
             return obj;
         }
-        void adjustDefect() {
+        //void adjustDefect() {
 
-            //去除与Mark点重合的瑕疵
-            double ck = 1;
-            for (int i = 0; i < Tabs.Count; i++) {
-                if (Tabs[i].IsNewEA) {
-                    var mark = Tabs[i];
-                    Defects.RemoveAll(m =>
-                        (Math.Abs(m.X - mark.MarkX) * Fx < ck && Math.Abs(m.Y - mark.MarkY) * Fy < ck) ||
-                        (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) * Fx < ck && Math.Abs(m.Y - mark.MarkY_P) * Fy < ck)
-                    );
-                }
-            }
+        //    //去除与Mark点重合的瑕疵
+        //    double ck = 1;
+        //    for (int i = 0; i < Tabs.Count; i++) {
+        //        if (Tabs[i].IsNewEA) {
+        //            var mark = Tabs[i];
+        //            Defects.RemoveAll(m =>
+        //                (Math.Abs(m.X - mark.MarkX) * Fx < ck && Math.Abs(m.Y - mark.MarkY) * Fy < ck) ||
+        //                (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) * Fx < ck && Math.Abs(m.Y - mark.MarkY_P) * Fy < ck)
+        //            );
+        //        }
+        //    }
 
-        }
+        //}
         void adjustER() {
 
             //排序
-            Tabs.Sort((a, b) => (int)((a.TabY1 - b.TabY1) * 1000));
-
+            //Tabs.Sort((a, b) => (int)((a.TabY1 - b.TabY1) * 1000));
+            for (int i = 0; i < Tabs.Count - 1; i++) {
+                for (int j = i + 1; j < Tabs.Count; j++) {
+                    var obj1 = Tabs[i];
+                    var obj2 = Tabs[j];
+                    if (obj1.TabY1 > obj2.TabY1) {
+                        Tabs.RemoveAt(j);
+                        Tabs.RemoveAt(i);
+                        Tabs.Insert(i, obj2);
+                        Tabs.Insert(j, obj1);
+                    }
+                }
+            }
+            
             //重新生成
             int ea = 0;
             int er = 0;
@@ -654,6 +656,7 @@ CfgParam        BLOB
                 }
 
                 //EA值
+                Tabs[i].IsSort = true;
                 Tabs[i].ID = i + 1;
                 Tabs[i].EA = ea;
                 Tabs[i].TAB = er;

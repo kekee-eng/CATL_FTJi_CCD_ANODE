@@ -68,6 +68,8 @@ namespace DetectCCD {
 
                 //
                 double distMove = Math.Max(distTotal, 1) * refFps / fpsRealtime;
+                if (showImageDynamic)
+                    distMove = distTotal;
 
                 //
                 if (showImageStatic || distMove <= 0 || distMove >= distTotal) {
@@ -760,6 +762,7 @@ namespace DetectCCD {
                         
                         g.SetLineStyle(new HTuple());
 
+                        g.SetColor("yellow");
                         g.SetTposition((int)getPixRow(lab.Y - lab.H / 2), (int)getPixCol(lab.X - lab.W / 2));
                         g.WriteString(string.Format("{0}", i + 1));
 
