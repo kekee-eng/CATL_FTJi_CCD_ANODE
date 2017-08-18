@@ -165,7 +165,7 @@ CfgParam        BLOB
                     }
                 }
             }
-
+            
             var ret = tryDetect(obj);
             return ret;
         }
@@ -177,75 +177,79 @@ CfgParam        BLOB
             var diffFrame = Static.App.FixFrameOuterOrBackOffset;
 
             //需要同步的对象
-            var myER = Tabs.Last();
-            if (myER.IsSync)
+            var myER = getFirstUnBind();
+            if (myER == null)
                 return;
 
-            //尝试找到对应项
-            var bindER = partner.findBind(myER.TabY1 - diffFrame);
-            if (bindER == null) {
+            lock (Tabs) {
+                lock (partner.Tabs) {
+                    
+                    //尝试找到对应项
+                    var bindER = partner.findBind(myER.TabY1 - diffFrame);
+                    if (bindER == null) {
 
-                //未找到：对方补测一个宽度
-                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
-            }
-
-            //找到：标记已同步
-            myER.IsSync = true;
-            bindER.IsSync = true;
-
-            //同步EA头
-            if (myER.IsNewEA || bindER.IsNewEA) {
-                myER.IsNewEA = true;
-                bindER.IsNewEA = true;
-
-                if (myER.MarkX == 0 && bindER.MarkX != 0) {
-                    myER.MarkX = bindER.MarkX;
-                    myER.MarkY = bindER.MarkY + diffFrame;
-                }
-
-                if (myER.MarkX != 0 && bindER.MarkX == 0) {
-                    bindER.MarkX = myER.MarkX;
-                    bindER.MarkY = myER.MarkY - diffFrame;
-                }
-            }
-
-            //查看我方是否有漏测
-            do {
-                var missER = partner.Tabs.Find(x => !x.IsSync && x.TabY1 < bindER.TabY1);
-                if (missER == null)
-                    break;
-
-                //补测宽度
-                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
-
-                //标记同步
-                missER.IsSync = true;
-
-                //同步EA头
-                if (missER.IsNewEA || myMissER.IsNewEA) {
-                    missER.IsNewEA = true;
-                    myMissER.IsNewEA = true;
-
-                    if (missER.MarkX == 0 && myMissER.MarkX != 0) {
-                        missER.MarkX = myMissER.MarkX;
-                        missER.MarkY = myMissER.MarkY - diffFrame;
+                        //未找到：对方补测一个宽度
+                        bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
                     }
 
-                    if (missER.MarkX != 0 && bindER.MarkX == 0) {
-                        myMissER.MarkX = missER.MarkX;
-                        myMissER.MarkY = missER.MarkY + diffFrame;
+                    //找到：标记已同步
+                    myER.IsSync = true;
+                    bindER.IsSync = true;
+
+                    //同步EA头
+                    if (myER.IsNewEA || bindER.IsNewEA) {
+                        myER.IsNewEA = true;
+                        bindER.IsNewEA = true;
+
+                        if (myER.MarkX == 0 && bindER.MarkX != 0) {
+                            myER.MarkX = bindER.MarkX;
+                            myER.MarkY = bindER.MarkY + diffFrame;
+                        }
+
+                        if (myER.MarkX != 0 && bindER.MarkX == 0) {
+                            bindER.MarkX = myER.MarkX;
+                            bindER.MarkY = myER.MarkY - diffFrame;
+                        }
                     }
+
+                    //查看我方是否有漏测
+                    do {
+                        var missER = partner.Tabs.Find(x => !x.IsSync && x.TabY1 < bindER.TabY1);
+                        if (missER == null)
+                            break;
+
+                        //补测宽度
+                        var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
+
+                        //标记同步
+                        missER.IsSync = true;
+
+                        //同步EA头
+                        if (missER.IsNewEA || myMissER.IsNewEA) {
+                            missER.IsNewEA = true;
+                            myMissER.IsNewEA = true;
+
+                            if (missER.MarkX == 0 && myMissER.MarkX != 0) {
+                                missER.MarkX = myMissER.MarkX;
+                                missER.MarkY = myMissER.MarkY - diffFrame;
+                            }
+
+                            if (missER.MarkX != 0 && bindER.MarkX == 0) {
+                                myMissER.MarkX = missER.MarkX;
+                                myMissER.MarkY = missER.MarkY + diffFrame;
+                            }
+                        }
+
+                    } while (true);
+
+                    //重置序号
+                    adjustER();
+                    //adjustDefect();
+                    partner.adjustER();
+                    //partner.adjustDefect();
+                    OnSyncTab?.Invoke(myER, bindER);
                 }
-                
-            } while (true);
-
-            //重置序号
-            adjustER();
-            //adjustDefect();
-            partner.adjustER();
-            //partner.adjustDefect();
-            OnSyncTab?.Invoke(myER, bindER);
-
+            }
         }
 
         bool tryDetect(DataGrab obj) {
@@ -445,9 +449,9 @@ CfgParam        BLOB
                 }
             }
 
-            //
-            Tabs.Add(data);
-
+            lock (Tabs) {
+                Tabs.Add(data);
+            }
             return true;
 
         }
@@ -569,21 +573,21 @@ CfgParam        BLOB
 
             return obj;
         }
-        //void adjustDefect() {
+        void adjustDefect() {
 
-        //    //去除与Mark点重合的瑕疵
-        //    double ck = 1;
-        //    for (int i = 0; i < Tabs.Count; i++) {
-        //        if (Tabs[i].IsNewEA) {
-        //            var mark = Tabs[i];
-        //            Defects.RemoveAll(m =>
-        //                (Math.Abs(m.X - mark.MarkX) * Fx < ck && Math.Abs(m.Y - mark.MarkY) * Fy < ck) ||
-        //                (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) * Fx < ck && Math.Abs(m.Y - mark.MarkY_P) * Fy < ck)
-        //            );
-        //        }
-        //    }
+            //去除与Mark点重合的瑕疵
+            double ck = 1;
+            for (int i = 0; i < Tabs.Count; i++) {
+                if (Tabs[i].IsNewEA) {
+                    var mark = Tabs[i];
+                    Defects.RemoveAll(m =>
+                        (Math.Abs(m.X - mark.MarkX) * Fx < ck && Math.Abs(m.Y - mark.MarkY) * Fy < ck) ||
+                        (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) * Fx < ck && Math.Abs(m.Y - mark.MarkY_P) * Fy < ck)
+                    );
+                }
+            }
 
-        //}
+        }
         void adjustER() {
 
             //排序
@@ -693,6 +697,18 @@ CfgParam        BLOB
 
             //
             needSave = true;
+        }
+        DataTab getFirstUnBind() {
+
+            double unBindPos = double.MaxValue;
+            DataTab unBindObj = null;
+            for (int i = Tabs.Count - 1; i >= 0; i--) {
+                if (!Tabs[i].IsSync && Tabs[i].TabY1 < unBindPos) {
+                    unBindPos = Tabs[i].TabY1;
+                    unBindObj = Tabs[i];
+                }
+            }
+            return unBindObj;
         }
 
         public List<DataEA_SyncFrom4K> _IN_8K_FROM_4K = new List<DataEA_SyncFrom4K>();

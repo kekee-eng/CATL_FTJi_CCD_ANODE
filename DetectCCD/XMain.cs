@@ -209,12 +209,17 @@ namespace DetectCCD {
                                 used = true;
                                 if (record.OuterDetect.TryDetect(obj)) {
 
-                                    //外侧同步到内侧
-                                    record.OuterDetect.Sync(record.InnerDetect);
+                                    new Thread(new ThreadStart(() => {
 
+                                        //外侧同步到内侧
+                                        record.OuterDetect.Sync(record.InnerDetect);
+
+                                        //显示视图
+                                        record.OuterViewerImage.SetBottomTarget(obj.Frame);
+                                        record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixFrameOuterOrBackOffset);
+
+                                    })).Start();
                                 }
-                                record.OuterViewerImage.SetBottomTarget(obj.Frame);
-                                record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixFrameOuterOrBackOffset);
                             }
                         });
                     });
