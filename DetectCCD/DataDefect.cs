@@ -36,9 +36,9 @@ namespace DetectCCD {
         //
         public bool InInner(bool isinner) {
             if(isinner)
-                return (X - W / 2 < 0.5);
+                return (X - W / 2 > 0.5);
             else
-                return (X + W / 2 > 0.5);
+                return (X + W / 2 < 0.5);
         }
 
         //
