@@ -448,6 +448,7 @@ CfgParam        BLOB
                     
                 }
             }
+            
 
             lock (Tabs) {
                 Tabs.Add(data);

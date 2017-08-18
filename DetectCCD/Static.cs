@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using System.IO;
+using System.Threading;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace DetectCCD {
@@ -61,6 +62,9 @@ namespace DetectCCD {
             catch (Exception ex) {
                 Log.Error(string.Format("->"),ex);
             }
+        }
+        public static void SafeRunThread(Action act) {
+            new Thread(new ThreadStart(() => SafeRun(act))).Start();
         }
 
     }

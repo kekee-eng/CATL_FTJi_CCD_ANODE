@@ -178,57 +178,58 @@ namespace DetectCCD {
 
                 while (!isQuit) {
                     Thread.Sleep(1);
-
-                    bool used = false;
-                    var time = UtilTool.TimeCounting(() => {
+                    
                         Static.SafeRun(() => {
 
                             var obj = record.InnerGrab.Cache.GetFirstUnDetect();
                             if (obj != null) {
-                                used = true;
-                                record.InnerDetect.TryDetect(obj);
+                                
+                                    record.InnerDetect.TimeTotal = UtilTool.TimeCounting(() => {
+                                        record.InnerDetect.TryDetect(obj);
+                                    });
+                                
                             }
                         });
-                    });
-
-                    if(used) record.InnerDetect.TimeTotal = time;
+                    
                 };
 
             }))).Start();
-            new Thread(new ThreadStart((Action)(() => {
+            new Thread(new ThreadStart(() => {
 
                 while (!isQuit) {
                     Thread.Sleep(1);
 
-                    bool used = false;
-                    var time = UtilTool.TimeCounting(() => {
-                        Static.SafeRun(() => {
+                    Static.SafeRun(() => {
 
-                            var obj = record.OuterGrab.Cache.GetFirstUnDetect();
-                            if (obj != null) {
-                                used = true;
-                                if (record.OuterDetect.TryDetect(obj)) {
+                        var obj = record.OuterGrab.Cache.GetFirstUnDetect();
+                        if (obj != null) {
+                            
+                                record.OuterDetect.TimeTotal = UtilTool.TimeCounting(() => {
+                                    record.OuterDetect.TryDetect(obj);
+                                });
+                            
+                        }
 
-                                    new Thread(new ThreadStart(() => {
-
-                                        //外侧同步到内侧
-                                        record.OuterDetect.Sync(record.InnerDetect);
-
-                                        //显示视图
-                                        record.OuterViewerImage.SetBottomTarget(obj.Frame);
-                                        record.InnerViewerImage.SetBottomTarget(obj.Frame - Static.App.FixFrameOuterOrBackOffset);
-
-                                    })).Start();
-                                }
-                            }
-                        });
                     });
-
-                    if(used) record.OuterDetect.TimeTotal = time;
                 };
 
-            }))).Start();
-            
+            })).Start();
+
+            new Thread(new ThreadStart(() => {
+
+                while (!isQuit) {
+                    Thread.Sleep(1);
+
+                    Static.SafeRun(() => {
+
+                        //外侧同步到内侧
+                        record.OuterDetect.Sync(record.InnerDetect);
+
+                    });
+                };
+
+            })).Start();
+
             //线程：更新显示
             new Thread(new ThreadStart((Action)(() => {
 
@@ -320,6 +321,10 @@ namespace DetectCCD {
                 }))).Start();
             };
             record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => {
+                
+                //显示视图
+                record.OuterViewerImage.SetBottomTarget(tabOuter.TabY1);
+                record.InnerViewerImage.SetBottomTarget(tabInner.TabY1);
 
                 if (tabOuter.ValWidth == 0 || tabInner.ValWidth == 0)
                     return;
