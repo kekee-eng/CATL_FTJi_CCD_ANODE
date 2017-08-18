@@ -66,6 +66,7 @@ namespace DetectCCD {
             monitor["Time"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Time_DetectInner"] = () => record.InnerDetect.TimeTotal;
             monitor["Time_DetectOuter"] = () => record.OuterDetect.TimeTotal;
+            monitor["Time_Sync"] = () => record.OuterDetect.TimeSync;
             //
             return monitor;
 

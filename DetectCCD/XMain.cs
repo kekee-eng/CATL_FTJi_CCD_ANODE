@@ -35,7 +35,7 @@ namespace DetectCCD {
                 e.Cancel = true;
                 return;
             }
-            
+
             //取消全屏显示
             UtilTool.FullScreen.Set(this, false);
 
@@ -58,6 +58,11 @@ namespace DetectCCD {
         }
         void appendLog(string msg, int msgStatus = 0, Exception ex = null) {
 
+            if (InvokeRequired) {
+                this.Invoke(new Action(() => appendLog(msg, msgStatus, ex)));
+                return;
+            }
+
             //
             status_info.Caption = msg;
             status_info.ItemAppearance.Normal.ForeColor = msgStatus == 0 ? Color.Black : msgStatus > 0 ? Color.Green : Color.Red;
@@ -78,7 +83,7 @@ namespace DetectCCD {
         string rollType = "";
         string rollName = "";
         int rollRepeat = 0;
-        
+
         public ModRecord record = new ModRecord();
         public ModDevice device = new ModDevice();
 
@@ -178,19 +183,21 @@ namespace DetectCCD {
 
                 while (!isQuit) {
                     Thread.Sleep(1);
-                    
-                        Static.SafeRun(() => {
 
-                            var obj = record.InnerGrab.Cache.GetFirstUnDetect();
-                            if (obj != null) {
-                                
-                                    record.InnerDetect.TimeTotal = UtilTool.TimeCounting(() => {
-                                        record.InnerDetect.TryDetect(obj);
-                                    });
-                                
-                            }
-                        });
-                    
+                    Static.SafeRun(() => {
+
+                        var obj = record.InnerGrab.Cache.GetFirstUnDetect();
+                        if (obj != null) {
+
+                            record.InnerDetect.TimeTotal = UtilTool.TimeCounting(() => {
+                                if (record.InnerDetect.TryDetect(obj)) {
+                                    record.InnerGrab.Cache.GetFirstUnDetect().IsDetect = true;
+                                }
+                            });
+
+                        }
+                    });
+
                 };
 
             }))).Start();
@@ -203,11 +210,13 @@ namespace DetectCCD {
 
                         var obj = record.OuterGrab.Cache.GetFirstUnDetect();
                         if (obj != null) {
-                            
-                                record.OuterDetect.TimeTotal = UtilTool.TimeCounting(() => {
-                                    record.OuterDetect.TryDetect(obj);
-                                });
-                            
+
+                            record.OuterDetect.TimeTotal = UtilTool.TimeCounting(() => {
+                                if (record.OuterDetect.TryDetect(obj)) {
+                                    record.OuterGrab.Cache.GetFirstUnDetect().IsDetect = true;
+                                }
+                            });
+
                         }
 
                     });
@@ -223,7 +232,10 @@ namespace DetectCCD {
                     Static.SafeRun(() => {
 
                         //外侧同步到内侧
-                        record.OuterDetect.Sync(record.InnerDetect);
+                        record.OuterDetect.TimeSync = UtilTool.TimeCounting(() => {
+
+                            record.OuterDetect.Sync(record.InnerDetect);
+                        });
 
                     });
                 };
@@ -321,7 +333,7 @@ namespace DetectCCD {
                 }))).Start();
             };
             record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => {
-                
+
                 //显示视图
                 record.OuterViewerImage.SetBottomTarget(tabOuter.TabY1);
                 record.InnerViewerImage.SetBottomTarget(tabInner.TabY1);
@@ -365,11 +377,11 @@ namespace DetectCCD {
             Static.App.BindCheckBox(checkLabelContext_Join, "LabelContextJoin");
             Static.App.BindCheckBox(checkLabelContext_Tag, "LabelContextTag");
             Static.App.BindCheckBox(checkLabelContext_LeakMetal, "LabelContextLeakMetal");
-            
+
             Static.App.BindCheckBox(checkEAContext_Join, "EAContextJoin");
             Static.App.BindCheckBox(checkEAContext_Tag, "EAContextTag");
             Static.App.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
-            
+
             Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
             Static.Param.BindTextBox(textLabelEAForce, "LabelY_EA_Force");
             Static.Param.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
@@ -489,7 +501,7 @@ namespace DetectCCD {
                 record.OuterViewerImage.SetBottomTarget(0);
                 record.InnerViewerImage.MoveTargetDirect();
                 record.OuterViewerImage.MoveTargetDirect();
-                
+
                 //
                 device.Open();
 
@@ -560,7 +572,7 @@ namespace DetectCCD {
 
         StreamWriter csvWriter;
         void closeWidthCSV() {
-            if(csvWriter!=null) {
+            if (csvWriter != null) {
                 csvWriter.Flush();
                 csvWriter.Dispose();
                 csvWriter = null;
@@ -710,8 +722,8 @@ namespace DetectCCD {
         }
         private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
 
-            if(!device.isGrabbing) {
-                if(!device.isOpen) {
+            if (!device.isGrabbing) {
+                if (!device.isOpen) {
                     //DeviceOpen();
                 }
             }
@@ -841,16 +853,24 @@ namespace DetectCCD {
             splitContainerOuter.Panel1Collapsed ^= true;
         }
 
-        private void btnConnectRemote8K_Click(object sender, EventArgs e) {
+        private async void btnConnectRemote8K_Click(object sender, EventArgs e) {
 
-            runAction((sender as SimpleButton).Text, () => {
-                RemoteDefect.InitClient();
+            UtilTool.XFWait.Open();
+            await Task.Run(() => {
+                runAction((sender as SimpleButton).Text, () => {
+                    RemoteDefect.InitClient();
+                });
+                UtilTool.XFWait.Close();
             });
         }
-        private void btnConnectRemotePLC_Click(object sender, EventArgs e) {
+        private async void btnConnectRemotePLC_Click(object sender, EventArgs e) {
 
-            runAction((sender as SimpleButton).Text, () => {
-                RemotePLC.InitClient();
+            UtilTool.XFWait.Open();
+            await Task.Run(() => {
+                runAction((sender as SimpleButton).Text, () => {
+                    RemotePLC.InitClient();
+                });
+                UtilTool.XFWait.Close();
             });
         }
 

@@ -26,7 +26,7 @@ namespace DetectCCD {
         public double ValDistDiff;
         public double ValHeight;
 
-        public bool IsWidthFail { get { return ValWidth < Static.Param.TabWidthMin || ValWidth > Static.Param.TabWidthMax; } }
+        public bool IsWidthFail { get { return ValWidth != 0 && (ValWidth < Static.Param.TabWidthMin || ValWidth > Static.Param.TabWidthMax); } }
         public bool IsDistFail { get { return ValHeight < Static.Param.TabHeightMin || ValHeight > Static.Param.TabHeightMax; } }
         public bool IsDistDiffFail { get { return ValDist < Static.Param.TabDistMin || ValDist > Static.Param.TabDistMax; } }
         public bool IsHeightFail { get { return ValDistDiff < Static.Param.TabDistDiffMin || ValDistDiff > Static.Param.TabDistDiffMax; } }

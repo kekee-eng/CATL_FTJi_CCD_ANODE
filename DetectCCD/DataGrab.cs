@@ -246,6 +246,7 @@ Image           BLOB
 
             }
 
+            public DataGrab LastDataGrab = null;
             public DataGrab GetFirstUnDetect() {
 
                 int min = Min;

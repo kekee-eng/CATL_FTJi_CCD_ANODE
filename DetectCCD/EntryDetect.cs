@@ -132,6 +132,7 @@ CfgParam        BLOB
         int defectFrameCount = 0;
 
         public int TimeTotal =0;
+        public int TimeSync = 0;
         public bool TryDetect(DataGrab obj) {
 
             //
@@ -244,9 +245,7 @@ CfgParam        BLOB
 
                     //重置序号
                     adjustER();
-                    //adjustDefect();
                     partner.adjustER();
-                    //partner.adjustDefect();
                     OnSyncTab?.Invoke(myER, bindER);
                 }
             }
@@ -335,11 +334,11 @@ CfgParam        BLOB
                 data.TabY2_P = frame + ay2[1] / h;
             }
 
-            //是否新极耳
+            ////是否新极耳
             bool isNewData = true;
             if (Tabs.Count > 0) {
-                var nearTab = Tabs.OrderBy(x => Math.Abs(x.TabY1 - data.TabY1)).First();
-                if (Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Param.TabMergeDistance) {
+                var nearTab = Tabs.Last();
+                if (nearTab != null && Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Param.TabMergeDistance) {
 
                     //更新极耳大小
                     double dist = 10 / Fx; //10mm
@@ -485,33 +484,33 @@ CfgParam        BLOB
                 }
             }
 
-            if (Static.App.DetectMark) {
+            //if (Static.App.DetectMark) {
 
-                //EA头部Mark检测
-                double[] cx, cy;
-                double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
-                double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
+            //    //EA头部Mark检测
+            //    double[] cx, cy;
+            //    double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
+            //    double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
 
-                //
-                data.MarkImageStart = cfy1;
-                data.MarkImageEnd = cfy2;
+            //    //
+            //    data.MarkImageStart = cfy1;
+            //    data.MarkImageEnd = cfy2;
 
-                var cimage = grab.GetImage(cfy1, cfy2);
-                if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+            //    var cimage = grab.GetImage(cfy1, cfy2);
+            //    if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
 
-                    //将最后一个极耳放到下个EA中
-                    data.IsNewEA = true;
-                    data.MarkX = data.MarkX_P = cx[0] / w;
-                    data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+            //        //将最后一个极耳放到下个EA中
+            //        data.IsNewEA = true;
+            //        data.MarkX = data.MarkX_P = cx[0] / w;
+            //        data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
 
-                    if (cx.Length == 2 && cy.Length == 2) {
-                        data.HasTwoMark = true;
-                        data.MarkX_P = cx[1] / w;
-                        data.MarkY_P = cfy1 + cy[1] / h;
-                    }
+            //        if (cx.Length == 2 && cy.Length == 2) {
+            //            data.HasTwoMark = true;
+            //            data.MarkX_P = cx[1] / w;
+            //            data.MarkY_P = cfy1 + cy[1] / h;
+            //        }
 
-                }
-            }
+            //    }
+            //}
             
             data.IsFix = true;
             data.IsSync = true;
@@ -592,19 +591,19 @@ CfgParam        BLOB
         void adjustER() {
 
             //排序
-            //Tabs.Sort((a, b) => (int)((a.TabY1 - b.TabY1) * 1000));
-            for (int i = 0; i < Tabs.Count - 1; i++) {
-                for (int j = i + 1; j < Tabs.Count; j++) {
-                    var obj1 = Tabs[i];
-                    var obj2 = Tabs[j];
-                    if (obj1.TabY1 > obj2.TabY1) {
-                        Tabs.RemoveAt(j);
-                        Tabs.RemoveAt(i);
-                        Tabs.Insert(i, obj2);
-                        Tabs.Insert(j, obj1);
-                    }
-                }
-            }
+            Tabs.Sort((a, b) => (int)((a.TabY1 - b.TabY1) * 1000));
+            //for (int i = 0; i < Tabs.Count - 1; i++) {
+            //    for (int j = i + 1; j < Tabs.Count; j++) {
+            //        var obj1 = Tabs[i];
+            //        var obj2 = Tabs[j];
+            //        if (obj1.TabY1 > obj2.TabY1) {
+            //            Tabs.RemoveAt(j);
+            //            Tabs.RemoveAt(i);
+            //            Tabs.Insert(i, obj2);
+            //            Tabs.Insert(j, obj1);
+            //        }
+            //    }
+            //}
             
             //重新生成
             int ea = 0;
