@@ -501,7 +501,7 @@ CfgParam        BLOB
                 obj.EAY = curEaTab.TabY1;
             }
 
-            double start = curEaTab.MarkY;
+            double start = obj.EAY;
             double end = 0;
             var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
             if (nextEaTab != null) {
