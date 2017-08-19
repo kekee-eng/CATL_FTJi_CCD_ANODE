@@ -241,7 +241,6 @@ namespace DetectCCD {
             isGrabbing = false;
             isQuit = true;
             Name = "";
-
         }
         public override void Grab() {
             if (!isGrabbing) {
