@@ -623,7 +623,7 @@ namespace DetectCCD {
 
             var grid = parentGetGrid(parent);
             grid.Tag = false;
-            int numExist = detOuter.Tabs.TakeWhile(x => x.IsSync).Count();
+            int numExist = Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count);
             if (grid.Rows.Count < numExist) {
 
                 if (grid.Rows.Count != 0)
@@ -696,7 +696,7 @@ namespace DetectCCD {
             var chart = parentGetChart(parent);
             chart.Tag = false;
             int numShow = chart.GraphPane.CurveList[0].Points.Count;
-            int numExist = detOuter.Tabs.TakeWhile(x => x.IsSync).Count();
+            int numExist = Math.Min(detInner.Tabs.Count, detOuter.Tabs.Count);
 
             if (numShow < numExist - 1) {
                 for (int i = numShow; i < numExist - 1; i++)
