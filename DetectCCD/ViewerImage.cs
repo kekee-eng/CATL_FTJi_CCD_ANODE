@@ -735,7 +735,10 @@ namespace DetectCCD {
                         g.SetLineStyle(new HTuple());
 
                         g.SetTposition((int)getPixRow(extEa.Start), (int)getPixCol(0));
-                        g.WriteString(string.Format("EA=#{0}", extEa.EA));
+                        g.WriteString(string.Format("EAStart=#{0}", extEa.EA));
+
+                        g.SetTposition((int)getPixRow(extEa.End), (int)getPixCol(0));
+                        g.WriteString(string.Format("EAEnd=#{0}", extEa.EA));
 
                     }
                 }
