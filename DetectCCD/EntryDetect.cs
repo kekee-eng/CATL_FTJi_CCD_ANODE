@@ -344,6 +344,10 @@ CfgParam        BLOB
                 data.WidthX2 = bx2[0] / w;
             }
 
+            //
+            data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
+            data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
+
             //EA头部Mark检测
             double[] cx, cy;
             double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
@@ -371,6 +375,56 @@ CfgParam        BLOB
 
             //
             TabsCache.Add(data);
+
+            //
+            if(data.IsNewEA) {
+
+                int ea = 0;
+                if (Tabs.Count != 0) {
+                    ea = Tabs.Last().EA;
+                }
+                
+                var objEA = getEA(ea);
+                if (objEA != null) {
+
+                    //添加标签
+                    if (Static.App.Is4K && Static.App.EnableLabelEA) {
+                        if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
+                            var objLab = new DataLabel() {
+                                EA = ea,
+                                Y = data.MarkY + Static.Param.LabelY_EA / Fy,
+                                Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
+                            };
+                            objLab.Encoder = grab.GetEncoder(objLab.Y);
+                            addLabel(objLab);
+                        }
+                    }
+
+                    //
+                    posEAStart = data.MarkY;
+                }
+
+            }
+
+            //强制打标
+            if (Static.App.Is4K && Static.App.EnableLabelEA && Static.App.EnableLabelEA_Force) {
+                if (posEAStart >= 0) {
+                    var y0 = posEAStart + Static.Param.LabelY_EA_Force / Fy;
+                    if (data.TabY1 > y0) {
+                        posEAStart = -1;
+
+                        var objLab = new DataLabel() {
+                            EA = data.EA,
+                            Y = y0,
+                            Comment = "EA末端强制贴标"
+                        };
+
+                        objLab.Encoder = grab.GetEncoder(objLab.Y);
+                        addLabel(objLab);
+                    }
+                }
+            }
+
             return true;
         }
         public void TryAddDefect(bool hasDefect, int frame) {
@@ -560,8 +614,6 @@ CfgParam        BLOB
             data.EA = ea;
             data.TAB = tab;
 
-            data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
-            data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
             data.ValDist = (i == 0) ? 0 : (data.TabY1 - Tabs[i - 1].TabY1) * Fy;
             data.ValDistDiff = (i < 2) ? 0 : data.ValDist - Tabs[i - 1].ValDist;
 
@@ -572,24 +624,6 @@ CfgParam        BLOB
                 appendEA(data);
             }
 
-            //强制打标
-            if (Static.App.Is4K && Static.App.EnableLabelEA && Static.App.EnableLabelEA_Force) {
-                if (posEAStart >= 0) {
-                    var y0 = posEAStart + Static.Param.LabelY_EA_Force / Fy;
-                    if (data.TabY1 > y0) {
-                        posEAStart = -1;
-
-                        var objLab = new DataLabel() {
-                            EA = ea,
-                            Y = y0,
-                            Comment = "EA末端强制贴标"
-                        };
-
-                        objLab.Encoder = grab.GetEncoder(objLab.Y);
-                        addLabel(objLab);
-                    }
-                }
-            }
         }
         void appendEA(DataTab data) {
 
@@ -607,23 +641,9 @@ CfgParam        BLOB
                 //
                 EAs.Add(objEA);
 
-                //添加标签
-                if (Static.App.Is4K && Static.App.EnableLabelEA) {
-                    if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
-                        var objLab = new DataLabel() {
-                            EA = data.EA - 1,
-                            Y = data.MarkY + Static.Param.LabelY_EA / Fy,
-                            Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
-                        };
-                        objLab.Encoder = grab.GetEncoder(objLab.Y);
-                        addLabel(objLab);
-                    }
-                }
-
-                //
-                posEAStart = data.MarkY;
             }
         }
+
 
         public List<DataEA_SyncFrom4K> _IN_8K_FROM_4K = new List<DataEA_SyncFrom4K>();
         public int AllocAndGetDefectCount(double start, double end, int ea) {
