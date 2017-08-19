@@ -10,7 +10,6 @@ namespace DetectCCD
         /// <summary> 检测硬件加密狗 </summary>
         public static void CheckKey()
         {
-            return;
 #if !DEBUG
             string vendorCode =
             "D8CPhYXeRxY72GGDefe03jBMsMqlT+bYl6Pxtl59KvvWV5+fitH9FqwsLQdyXoCrUlpmoH8RDD8rD8q9" +
