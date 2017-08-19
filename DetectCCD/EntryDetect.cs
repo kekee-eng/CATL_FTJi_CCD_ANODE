@@ -633,10 +633,10 @@ CfgParam        BLOB
                 //
                 ShowEACount++;
                 if (objEA.IsTabWidthFailCountFail)
-                    ShowEADefectNGCount++;
+                    ShowEAWidthNGCount++;
 
                 if (objEA.IsDefectCountFail)
-                    ShowEAWidthNGCount++;
+                    ShowEADefectNGCount++;
 
                 //
                 EAs.Add(objEA);
