@@ -42,7 +42,7 @@ namespace DetectCCD {
             });
 
         }
-        
+
         Dictionary<string, Func<object>> getMonitorApp() {
 
             //
@@ -82,7 +82,7 @@ namespace DetectCCD {
 
             monitor["Inner_Frame"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Inner_Frame_Grab"] = () => device.InnerCamera.m_frame;
-            monitor["Inner_Frame_Detect"] = () => getCountText(record.InnerDetect.m_frame);
+            monitor["Inner_Frame_Detect"] = () => getCountText(record.InnerDetect.m_frame - 1);
             monitor["Inner_Frame_Cache"] = () => getCountText(record.InnerGrab.Cache.Max);
             monitor["Inner_Frame_DB"] = () => getCountText(record.InnerGrab.DB.Max);
 
@@ -112,7 +112,7 @@ namespace DetectCCD {
             monitor["Inner_Record_GrabDBMin"] = () => record.InnerGrab.DB.Min;
             monitor["Inner_Record_GrabDBMax"] = () => record.InnerGrab.DB.Max;
             monitor["Inner_Record_GrabDBCount"] = () => record.InnerGrab.DB.Count;
-            
+
             monitor["Inner_Record_LastLoadCache"] = () => record.InnerGrab.LastLoadCache;
             monitor["Inner_Record_LastLoadDB"] = () => record.InnerGrab.LastLoadDB;
 
@@ -161,7 +161,7 @@ namespace DetectCCD {
             monitor["Inner_Viewer_frameEndRequire"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEndRequire");
             monitor["Inner_Viewer_frameStartLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameStartLimit");
             monitor["Inner_Viewer_frameEndLimit"] = () => UtilTool.AutoInfo.GetPrivateValue(record.InnerViewerImage, "frameEndLimit");
-            
+
             //
             return monitor;
 
@@ -177,8 +177,8 @@ namespace DetectCCD {
 
             monitor["Outer_Frame"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             monitor["Outer_Frame_Grab"] = () => device.OuterCamera.m_frame;
-            monitor["Outer_Frame_Detect"] = () => getCountText(record.OuterDetect.m_frame);
-            monitor["Outer_Frame_Cache"] = () => getCountText( record.OuterGrab.Cache.Max);
+            monitor["Outer_Frame_Detect"] = () => getCountText(record.OuterDetect.m_frame - 1);
+            monitor["Outer_Frame_Cache"] = () => getCountText(record.OuterGrab.Cache.Max);
             monitor["Outer_Frame_DB"] = () => getCountText(record.OuterGrab.DB.Max);
 
             monitor["Outer_Detect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
@@ -207,7 +207,7 @@ namespace DetectCCD {
             monitor["Outer_Record_GrabDBMin"] = () => record.OuterGrab.DB.Min;
             monitor["Outer_Record_GrabDBMax"] = () => record.OuterGrab.DB.Max;
             monitor["Outer_Record_GrabDBCount"] = () => record.OuterGrab.DB.Count;
-            
+
             monitor["Outer_Record_LastLoadCache"] = () => record.OuterGrab.LastLoadCache;
             monitor["Outer_Record_LastLoadDB"] = () => record.OuterGrab.LastLoadDB;
 
@@ -339,7 +339,7 @@ namespace DetectCCD {
             viewerInit(x => {
                 ViewerChart.InitMergeTabGrid(this, record.InnerViewerImage, record.OuterViewerImage);
             },
-            x=> {
+            x => {
                 ViewerChart.SyncMergeTabGrid(this, record.InnerDetect, record.OuterDetect);
             });
         }
