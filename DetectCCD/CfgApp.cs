@@ -25,7 +25,8 @@ namespace DetectCCD {
         public bool EAContextJoin = false;
         public bool EAContextTag = false;
         public bool EAContextLeakMetal = false;
-        
+        public bool EAContextWidth = false;
+
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordSaveImageEnable = false;

@@ -21,7 +21,16 @@ namespace DetectCCD {
         public int DefectCountBack_LeakMetal;
 
         public bool IsTabCountFail { get { return TabCount != Static.Param.CheckTabCount; } }
-        public bool IsTabWidthFailCountFail { get { return TabWidthFailCount > Static.Param.CheckTabWidthCount; } }
+        public bool IsTabWidthFailCountFail {
+            get {
+                if (Static.App.EAContextWidth) {
+                    if (TabWidthFailCount > Static.Param.CheckTabWidthCount) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         public bool IsDefectCountFail {
             get {
                 if (Static.App.EAContextJoin) {
@@ -46,7 +55,7 @@ namespace DetectCCD {
             //if (IsTabCountFail)
                 //text += string.Format("极耳计数[{0}], ", TabCount);
 
-            if (IsTabWidthFailCountFail)
+            if ( IsTabWidthFailCountFail)
                 text += string.Format("宽度NG[{0}], ", TabWidthFailCount);
 
             if (IsDefectCountFail) {

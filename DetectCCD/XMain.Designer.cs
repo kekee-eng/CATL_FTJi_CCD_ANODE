@@ -191,6 +191,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkEAContext_Width = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -286,6 +287,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Width.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -1652,12 +1654,13 @@
             // 
             // groupEAContext
             // 
+            this.groupEAContext.Controls.Add(this.checkEAContext_Width);
             this.groupEAContext.Controls.Add(this.checkEAContext_LeakMetal);
             this.groupEAContext.Controls.Add(this.checkEAContext_Tag);
             this.groupEAContext.Controls.Add(this.checkEAContext_Join);
             this.groupEAContext.Location = new System.Drawing.Point(177, 178);
             this.groupEAContext.Name = "groupEAContext";
-            this.groupEAContext.Size = new System.Drawing.Size(131, 139);
+            this.groupEAContext.Size = new System.Drawing.Size(131, 162);
             this.groupEAContext.TabIndex = 90;
             this.groupEAContext.Text = "末端贴标项";
             // 
@@ -1703,7 +1706,7 @@
             this.groupLabelContext.Controls.Add(this.checkLabelContext_Join);
             this.groupLabelContext.Location = new System.Drawing.Point(22, 178);
             this.groupLabelContext.Name = "groupLabelContext";
-            this.groupLabelContext.Size = new System.Drawing.Size(131, 139);
+            this.groupLabelContext.Size = new System.Drawing.Size(131, 162);
             this.groupLabelContext.TabIndex = 80;
             this.groupLabelContext.Text = "转标项";
             // 
@@ -2035,6 +2038,15 @@
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
+            // checkEAContext_Width
+            // 
+            this.checkEAContext_Width.Location = new System.Drawing.Point(22, 131);
+            this.checkEAContext_Width.MenuManager = this.barManager1;
+            this.checkEAContext_Width.Name = "checkEAContext_Width";
+            this.checkEAContext_Width.Properties.Caption = "宽度不良";
+            this.checkEAContext_Width.Size = new System.Drawing.Size(83, 19);
+            this.checkEAContext_Width.TabIndex = 31;
+            // 
             // XMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -2149,6 +2161,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkDetectTab.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Width.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2317,5 +2330,6 @@
         private DevExpress.XtraEditors.CheckEdit checkEAContext_LeakMetal;
         private DevExpress.XtraEditors.CheckEdit checkEAContext_Tag;
         private DevExpress.XtraEditors.CheckEdit checkEAContext_Join;
+        private DevExpress.XtraEditors.CheckEdit checkEAContext_Width;
     }
 }

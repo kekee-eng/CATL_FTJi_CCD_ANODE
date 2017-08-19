@@ -370,6 +370,7 @@ namespace DetectCCD {
             Static.App.BindCheckBox(checkEAContext_Join, "EAContextJoin");
             Static.App.BindCheckBox(checkEAContext_Tag, "EAContextTag");
             Static.App.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
+            Static.App.BindCheckBox(checkEAContext_Width, "EAContextWidth");
 
             Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
             Static.Param.BindTextBox(textLabelEAForce, "LabelY_EA_Force");
