@@ -40,11 +40,43 @@ namespace DetectCCD {
         public bool IsDetect = false;
         public bool IsCache = false;
         public bool IsStore = false;
-        
-        //是否存在
+
+        //
+        public bool isDetectTab = false;
         public bool hasTab = false;
-        public bool hasMark = false;
         public bool hasDefect = false;
+        public DataTab TabData = null;
+
+        public void DetectTab() {
+            if (isDetectTab)
+                return;
+
+            //极耳检测、并判断是否可能有瑕疵
+            var aimage = Image;
+            double[] ax, ay1, ay2;
+            if (aimage != null && ImageProcess.DetectTab(aimage, out hasDefect, out hasTab, out ax, out ay1, out ay2)) {
+
+                if (hasTab) {
+                    //极耳数据整理
+                    TabData = new DataTab();
+                    TabData.TabX = ax[0] / Width;
+                    TabData.TabY1 = TabData.TabY1_P = Frame + ay1[0] / Height;
+                    TabData.TabY2 = TabData.TabY2_P = Frame + ay2[0] / Height;
+                    if (ax.Length == 2 && ay1.Length == 2 && ay2.Length == 2) {
+                        TabData.HasTwoTab = true;
+                        TabData.TabX_P = ax[1] / Width;
+                        TabData.TabY1_P = Frame + ay1[1] / Height;
+                        TabData.TabY2_P = Frame + ay2[1] / Height;
+                    }
+                }
+
+            }
+
+            isDetectTab = true;
+        }
+
+        //是否存在
+        public bool hasMark = false;
 
         //生成时间戳
         public static string GenTimeStamp(DateTime time) {

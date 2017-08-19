@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +21,22 @@ namespace DetectCCD {
         }
 
         public void Dispose() {
+
             EAs.Clear();
             Tabs.Clear();
+            TabsCache.Clear();
+
             Defects.Clear();
+
             LabelsCache.Clear();
             Labels.Clear();
+
+
+            ShowEACount = 0;
+            ShowEADefectNGCount = 0;
+            ShowEAWidthNGCount = 0;
+
+            m_frame = 1;
         }
 
         public void CreateTable() {
@@ -83,14 +95,16 @@ CfgParam        BLOB
         public double Fx { get { return grab.Fx; } }
         public double Fy { get { return grab.Fy; } }
 
-        public int m_frame = -1;
+        public int m_frame = 1;
 
         public List<DataEA> EAs = new List<DataEA>();
         public List<DataTab> Tabs = new List<DataTab>();
         public List<DataDefect> Defects = new List<DataDefect>();
         public List<DataLabel> Labels = new List<DataLabel>();
 
+        public List<DataTab> TabsCache = new List<DataTab>();
         public List<DataLabel> LabelsCache = new List<DataLabel>();
+        
         void addLabel(DataLabel lab) {
             Static.SafeRun(() => {
 
@@ -133,13 +147,13 @@ CfgParam        BLOB
 
         public int TimeTotal =0;
         public int TimeSync = 0;
-        public bool TryDetect(DataGrab obj) {
+        public void TryTransLabel(int frame) {
 
             //
-            checkLabel(obj.Frame);
+            checkLabel(frame);
 
             //转标签
-            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
+            if (Static.App.EnableLabelDefect) {
                 var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
                 if (remoteDefs != null) {
                     foreach (var rl in remoteDefs) {
@@ -152,8 +166,7 @@ CfgParam        BLOB
                     }
                 }
             }
-
-            if (Static.App.Is4K && Static.App.EnableLabelDefect) {
+            if (Static.App.EnableLabelDefect) {
                 var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
                 if (remoteDefs != null) {
                     foreach (var rl in remoteDefs) {
@@ -166,11 +179,9 @@ CfgParam        BLOB
                     }
                 }
             }
-            
-            var ret = tryDetect(obj);
-            return ret;
+
         }
-        public void Sync(EntryDetect partner) {
+        public void TrySync(EntryDetect partner) {
 
             // diff = this - partner
             // this = partner + diff
@@ -178,170 +189,86 @@ CfgParam        BLOB
             var diffFrame = Static.App.FixFrameOuterOrBackOffset;
 
             //需要同步的对象
-            var myER = getFirstUnBind();
+            var myER = TabsCache.Last();
             if (myER == null)
                 return;
 
-            lock (Tabs) {
-                lock (partner.Tabs) {
-                    
-                    //尝试找到对应项
-                    var bindER = partner.findBind(myER.TabY1 - diffFrame);
-                    if (bindER == null) {
+            //尝试找到对应项
+            var bindER = partner.findBind(myER.TabY1 - diffFrame);
+            if (bindER == null) {
 
-                        //未找到：对方补测一个宽度
-                        bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
-                    }
+                //未找到：对方补测一个宽度
+                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
+            }
 
-                    //找到：标记已同步
-                    myER.IsSync = true;
-                    bindER.IsSync = true;
+            //找到：标记已同步
+            myER.IsSync = true;
+            bindER.IsSync = true;
 
-                    //同步EA头
-                    if (myER.IsNewEA || bindER.IsNewEA) {
-                        myER.IsNewEA = true;
-                        bindER.IsNewEA = true;
+            //同步EA头
+            if (myER.IsNewEA || bindER.IsNewEA) {
+                myER.IsNewEA = true;
+                bindER.IsNewEA = true;
 
-                        if (myER.MarkX == 0 && bindER.MarkX != 0) {
-                            myER.MarkX = bindER.MarkX;
-                            myER.MarkY = bindER.MarkY + diffFrame;
-                        }
+                if (myER.MarkX == 0 && bindER.MarkX != 0) {
+                    myER.MarkX = bindER.MarkX;
+                    myER.MarkY = bindER.MarkY + diffFrame;
+                }
 
-                        if (myER.MarkX != 0 && bindER.MarkX == 0) {
-                            bindER.MarkX = myER.MarkX;
-                            bindER.MarkY = myER.MarkY - diffFrame;
-                        }
-                    }
-
-                    //查看我方是否有漏测
-                    do {
-                        var missER = partner.Tabs.Find(x => !x.IsSync && x.TabY1 < bindER.TabY1);
-                        if (missER == null)
-                            break;
-
-                        //补测宽度
-                        var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
-
-                        //标记同步
-                        missER.IsSync = true;
-
-                        //同步EA头
-                        if (missER.IsNewEA || myMissER.IsNewEA) {
-                            missER.IsNewEA = true;
-                            myMissER.IsNewEA = true;
-
-                            if (missER.MarkX == 0 && myMissER.MarkX != 0) {
-                                missER.MarkX = myMissER.MarkX;
-                                missER.MarkY = myMissER.MarkY - diffFrame;
-                            }
-
-                            if (missER.MarkX != 0 && bindER.MarkX == 0) {
-                                myMissER.MarkX = missER.MarkX;
-                                myMissER.MarkY = missER.MarkY + diffFrame;
-                            }
-                        }
-
-                    } while (true);
-
-                    //重置序号
-                    adjustER();
-                    partner.adjustER();
-                    OnSyncTab?.Invoke(myER, bindER);
+                if (myER.MarkX != 0 && bindER.MarkX == 0) {
+                    bindER.MarkX = myER.MarkX;
+                    bindER.MarkY = myER.MarkY - diffFrame;
                 }
             }
+
+            //查看我方是否有漏测
+            do {
+                var missER = partner.TabsCache.Find(x => x.TabY1 < bindER.TabY1);
+                if (missER == null)
+                    break;
+
+                //补测宽度
+                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
+                
+                //同步EA头
+                if (missER.IsNewEA || myMissER.IsNewEA) {
+                    missER.IsNewEA = true;
+                    myMissER.IsNewEA = true;
+
+                    if (missER.MarkX == 0 && myMissER.MarkX != 0) {
+                        missER.MarkX = myMissER.MarkX;
+                        missER.MarkY = myMissER.MarkY - diffFrame;
+                    }
+
+                    if (missER.MarkX != 0 && bindER.MarkX == 0) {
+                        myMissER.MarkX = missER.MarkX;
+                        myMissER.MarkY = missER.MarkY + diffFrame;
+                    }
+                }
+
+                appendTab(myMissER);
+                partner.appendTab(missER);
+            } while (true);
+
+            //重置序号
+            appendTab(myER);
+            partner.appendTab(bindER);
+            OnSyncTab?.Invoke(myER, bindER);
+
         }
+        public bool TryAddTab(DataTab data) {
 
-        bool tryDetect(DataGrab obj) {
-
-            //
-            m_frame = obj.Frame;
-            int frame = obj.Frame;
-            obj.IsDetect = true;
-
-            //
-            int w = obj.Width;
-            int h = obj.Height;
-
-            //
-            if (!Static.App.DetectEnable)
-                return false;
-
-            //极耳检测、并判断是否可能有瑕疵
-            var aimage = grab.GetImage(frame);
-            double[] ax, ay1, ay2;
-            if (aimage == null || !ImageProcess.DetectTab(aimage, out obj.hasDefect, out obj.hasTab, out ax, out ay1, out ay2))
-                return false;
-
-            if (Static.App.DetectDefect) {
-
-                //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
-                if (obj.hasDefect) {
-                    defectFrameCount++;
-                }
-
-                if (defectFrameCount >= 10 || (!obj.hasDefect && defectFrameCount > 0)) {
-
-                    //拼成大图进行瑕疵检测
-                    int efx1 = frame - 1 - defectFrameCount;
-                    int efx2 = frame - 1;
-                    defectFrameCount = 0;
-
-                    Task.Run(() => {
-                        var eimage = grab.GetImage(efx1, efx2);
-                        int[] etype;
-                        double[] ex, ey, ew, eh, earea;
-                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
-
-                            int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
-                            for (int i = 0; i < ecc; i++) {
-                                DataDefect defect = new DataDefect() {
-                                    EA= -1,
-                                    Type = etype[i],
-                                    X = ex[i] / w,
-                                    Y = efx1 + ey[i] / h,
-                                    W = ew[i] / w,
-                                    H = eh[i] / h
-                                };
-
-                                defect.Width = defect.W * Fx;
-                                defect.Height = defect.H * Fy;
-                                defect.Area = earea[i] * Fx * Fy / w / h;
-
-                                Defects.Add(defect);
-                            }
-                        }
-                    });
-
-                }
-            }
-
-            //是否有极耳
-            if (!obj.hasTab)
-                return false;
-
-            if (!Static.App.DetectTab)
-                return false;
-
-            //极耳数据整理
-            var data = new DataTab();
-            data.TabX = ax[0] / w;
-            data.TabY1 = data.TabY1_P = frame + ay1[0] / h;
-            data.TabY2 = data.TabY2_P = frame + ay2[0] / h;
-            if (ax.Length == 2 && ay1.Length == 2 && ay2.Length == 2) {
-                data.HasTwoTab = true;
-                data.TabX_P = ax[1] / w;
-                data.TabY1_P = frame + ay1[1] / h;
-                data.TabY2_P = frame + ay2[1] / h;
-            }
-
-            ////是否新极耳
+            //是否新极耳
+            int w = grab.Width;
+            int h = grab.Height;
             bool isNewData = true;
-            if (Tabs.Count > 0) {
-                var nearTab = Tabs.Last();
+            if (Tabs.Count > 0 || TabsCache.Count>0) {
+
+                var nearTab = (TabsCache.Count > 0 ? TabsCache.Last() : Tabs.Last());
                 if (nearTab != null && Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Param.TabMergeDistance) {
 
                     //更新极耳大小
-                    double dist = 10 / Fx; //10mm
+                    double dist = 30 / Fx;
                     if (data.HasTwoTab || nearTab.HasTwoTab || Math.Abs(data.TabX - nearTab.TabX) >= dist) {
 
                         //
@@ -404,8 +331,108 @@ CfgParam        BLOB
             if (!isNewData)
                 return false;
 
-            if (Static.App.DetectWidth) {
+            //宽度检测
+            double[] bx1, bx2;
+            double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
+            double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
 
+            var bimage = grab.GetImage(bfy1, bfy2);
+            if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
+                data.WidthY1 = bfy1;
+                data.WidthY2 = bfy2;
+                data.WidthX1 = bx1[0] / w;
+                data.WidthX2 = bx2[0] / w;
+            }
+
+            //EA头部Mark检测
+            double[] cx, cy;
+            double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
+            double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
+
+            //
+            data.MarkImageStart = cfy1;
+            data.MarkImageEnd = cfy2;
+
+            var cimage = grab.GetImage(cfy1, cfy2);
+            if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+
+                //将最后一个极耳放到下个EA中
+                data.IsNewEA = true;
+                data.MarkX = data.MarkX_P = cx[0] / w;
+                data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+
+                if (cx.Length == 2 && cy.Length == 2) {
+                    data.HasTwoMark = true;
+                    data.MarkX_P = cx[1] / w;
+                    data.MarkY_P = cfy1 + cy[1] / h;
+                }
+
+            }
+
+            //
+            TabsCache.Add(data);
+            return true;
+        }
+        public void TryAddDefect(bool hasDefect, int frame) {
+
+            //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
+            if (hasDefect) {
+                defectFrameCount++;
+            }
+
+            if (defectFrameCount >= 10 || (!hasDefect && defectFrameCount > 0)) {
+
+                //拼成大图进行瑕疵检测
+                int w = grab.Width;
+                int h = grab.Height;
+                int efx1 = frame - 1 - defectFrameCount;
+                int efx2 = frame - 1;
+                defectFrameCount = 0;
+
+                Task.Run(() => {
+                    var eimage = grab.GetImage(efx1, efx2);
+                    int[] etype;
+                    double[] ex, ey, ew, eh, earea;
+                    if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
+
+                        int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
+                        for (int i = 0; i < ecc; i++) {
+                            DataDefect defect = new DataDefect() {
+                                EA = -1,
+                                Type = etype[i],
+                                X = ex[i] / w,
+                                Y = efx1 + ey[i] / h,
+                                W = ew[i] / w,
+                                H = eh[i] / h
+                            };
+
+                            defect.Width = defect.W * Fx;
+                            defect.Height = defect.H * Fy;
+                            defect.Area = earea[i] * Fx * Fy / w / h;
+
+                            Defects.Add(defect);
+                        }
+                    }
+                });
+
+            }
+        }
+        
+        DataTab findBind(double frame) {
+            return TabsCache.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Param.TabMergeDistance);
+        }
+        DataTab fixER(double x, double y1, double y2) {
+
+            int w = grab.Width;
+            int h = grab.Height;
+
+            DataTab data = new DataTab();
+            data.TabX = x;
+            data.TabY1 = y1;
+            data.TabY2 = y1;
+            data.HasTwoMark = false;
+
+            if (Static.App.DetectWidth) {
                 //宽度检测
                 double[] bx1, bx2;
                 double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
@@ -444,78 +471,14 @@ CfgParam        BLOB
                         data.MarkX_P = cx[1] / w;
                         data.MarkY_P = cfy1 + cy[1] / h;
                     }
-                    
-                }
-            }
-            
 
-            lock (Tabs) {
-                Tabs.Add(data);
-            }
-            return true;
-
-        }
-        DataTab findBind(double frame) {
-            return Tabs.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Param.TabMergeDistance);
-        }
-        DataTab fixER(double x, double y1, double y2) {
-
-            int w = grab.Width;
-            int h = grab.Height;
-
-            DataTab data = new DataTab();
-            data.TabX = x;
-            data.TabY1 = y1;
-            data.TabY2 = y1;
-            data.HasTwoMark = false;
-
-            if (Static.App.DetectWidth) {
-                //宽度检测
-                double[] bx1, bx2;
-                double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
-                double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
-
-                var bimage = grab.GetImage(bfy1, bfy2);
-                if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
-                    data.WidthY1 = bfy1;
-                    data.WidthY2 = bfy2;
-                    data.WidthX1 = bx1[0] / w;
-                    data.WidthX2 = bx2[0] / w;
                 }
             }
 
-            //if (Static.App.DetectMark) {
-
-            //    //EA头部Mark检测
-            //    double[] cx, cy;
-            //    double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
-            //    double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
-
-            //    //
-            //    data.MarkImageStart = cfy1;
-            //    data.MarkImageEnd = cfy2;
-
-            //    var cimage = grab.GetImage(cfy1, cfy2);
-            //    if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
-
-            //        //将最后一个极耳放到下个EA中
-            //        data.IsNewEA = true;
-            //        data.MarkX = data.MarkX_P = cx[0] / w;
-            //        data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
-
-            //        if (cx.Length == 2 && cy.Length == 2) {
-            //            data.HasTwoMark = true;
-            //            data.MarkX_P = cx[1] / w;
-            //            data.MarkY_P = cfy1 + cy[1] / h;
-            //        }
-
-            //    }
-            //}
-            
             data.IsFix = true;
             data.IsSync = true;
 
-            Tabs.Add(data);
+            TabsCache.Add(data);
             return data;
         }
         DataEA getEA(int id) {
@@ -573,142 +536,93 @@ CfgParam        BLOB
 
             return obj;
         }
-        void adjustDefect() {
-
-            //去除与Mark点重合的瑕疵
-            double ck = 1;
-            for (int i = 0; i < Tabs.Count; i++) {
-                if (Tabs[i].IsNewEA) {
-                    var mark = Tabs[i];
-                    Defects.RemoveAll(m =>
-                        (Math.Abs(m.X - mark.MarkX) * Fx < ck && Math.Abs(m.Y - mark.MarkY) * Fy < ck) ||
-                        (mark.HasTwoMark && Math.Abs(m.X - mark.MarkX_P) * Fx < ck && Math.Abs(m.Y - mark.MarkY_P) * Fy < ck)
-                    );
-                }
-            }
-
-        }
-        void adjustER() {
-
-            //排序
-            Tabs.Sort((a, b) => (int)((a.TabY1 - b.TabY1) * 1000));
-            //for (int i = 0; i < Tabs.Count - 1; i++) {
-            //    for (int j = i + 1; j < Tabs.Count; j++) {
-            //        var obj1 = Tabs[i];
-            //        var obj2 = Tabs[j];
-            //        if (obj1.TabY1 > obj2.TabY1) {
-            //            Tabs.RemoveAt(j);
-            //            Tabs.RemoveAt(i);
-            //            Tabs.Insert(i, obj2);
-            //            Tabs.Insert(j, obj1);
-            //        }
-            //    }
-            //}
-            
-            //重新生成
+        
+        double posEAStart = -1;
+        void appendTab(DataTab data) {
             int ea = 0;
-            int er = 0;
-            double posEAStart = -1;
-
-            int eaCount = 0;
-            int eaWidthNGCount = 0;
-            int eaDefectNGCount = 0;
-            for (int i = 0; i < Tabs.Count; i++) {
-
-                if (Tabs[i].IsNewEA) {
-                    ea++;
-                    er = 1;
-
-                    var objEA = getEA(ea - 1);
-                    if (objEA != null) {
-
-                        //
-                        eaCount++;
-                        if (objEA.IsTabWidthFailCountFail)
-                            eaWidthNGCount++;
-
-                        if (objEA.IsDefectCountFail)
-                            eaDefectNGCount++;
-
-                        //
-                        if (!Tabs[i].IsNewEACallBack) {
-
-                            //
-                            Tabs[i].IsNewEACallBack = true;
-                            EAs.Add(objEA);
-
-                            //添加标签
-                            if (Static.App.Is4K && Static.App.EnableLabelEA) {
-                                if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
-                                    var objLab = new DataLabel() {
-                                        EA = ea - 1,
-                                        Y = Tabs[i].MarkY + Static.Param.LabelY_EA / Fy,
-                                        Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
-                                    };
-                                    objLab.Encoder = grab.GetEncoder(objLab.Y);
-                                    addLabel(objLab);
-                                }
-                            }
-
-                            //
-                            posEAStart = Tabs[i].MarkY;
-                        }
-                    }
-                }
-                else {
-                    er++;
-                }
-
-                //EA值
-                Tabs[i].IsSort = true;
-                Tabs[i].ID = i + 1;
-                Tabs[i].EA = ea;
-                Tabs[i].TAB = er;
-
-                //测量值
-                Tabs[i].ValWidth = (Tabs[i].WidthX2 - Tabs[i].WidthX1) * Fx;
-                Tabs[i].ValHeight = (Tabs[i].TabY2 - Tabs[i].TabY1) * Fy;
-                Tabs[i].ValDist = (i == 0) ? 0 : (Tabs[i].TabY1 - Tabs[i - 1].TabY1) * Fy;
-                Tabs[i].ValDistDiff = (i < 2) ? 0 : Tabs[i].ValDist - Tabs[i - 1].ValDist;
-
-                //强制打标
-                if (Static.App.Is4K && Static.App.EnableLabelEA && Static.App.EnableLabelEA_Force) {
-                    if (posEAStart >= 0) {
-                        var y0 = posEAStart + Static.Param.LabelY_EA_Force / Fy;
-                        if (Tabs[i].TabY1 > y0) {
-                            posEAStart = -1;
-
-                            var objLab = new DataLabel() {
-                                EA = ea,
-                                Y = y0,
-                                Comment = "EA末端强制贴标"
-                            };
-
-                            objLab.Encoder = grab.GetEncoder(objLab.Y);
-                            addLabel(objLab);
-                        }
-                    }
-                }
-
+            int tab = 0;
+            if (Tabs.Count != 0) {
+                var last = Tabs.Last();
+                ea = last.EA;
+                tab = last.TAB;
             }
-            ShowEACount = eaCount;
-            ShowEADefectNGCount = eaDefectNGCount;
-            ShowEAWidthNGCount = eaWidthNGCount;
 
-            //
-            needSave = true;
+            if (data.IsNewEA) {
+                ea++;
+                tab = 1;
+            }
+            else {
+                tab++;
+            }
+
+            int i = Tabs.Count;
+            data.ID = i + 1;
+            data.EA = ea;
+            data.TAB = tab;
+
+            data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
+            data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
+            data.ValDist = (i == 0) ? 0 : (data.TabY1 - Tabs[i - 1].TabY1) * Fy;
+            data.ValDistDiff = (i < 2) ? 0 : data.ValDist - Tabs[i - 1].ValDist;
+
+            TabsCache.Remove(data);
+            Tabs.Add(data);
+
+            if (data.IsNewEA) {
+                appendEA(data);
+            }
+
+            //强制打标
+            if (Static.App.Is4K && Static.App.EnableLabelEA && Static.App.EnableLabelEA_Force) {
+                if (posEAStart >= 0) {
+                    var y0 = posEAStart + Static.Param.LabelY_EA_Force / Fy;
+                    if (data.TabY1 > y0) {
+                        posEAStart = -1;
+
+                        var objLab = new DataLabel() {
+                            EA = ea,
+                            Y = y0,
+                            Comment = "EA末端强制贴标"
+                        };
+
+                        objLab.Encoder = grab.GetEncoder(objLab.Y);
+                        addLabel(objLab);
+                    }
+                }
+            }
         }
-        DataTab getFirstUnBind() {
+        void appendEA(DataTab data) {
 
-            double unBindPos = double.MaxValue;
-            DataTab unBindObj = null;
-            for (int i = Tabs.Count - 1; i >= 0; i--) {
-                if (!Tabs[i].IsSync && Tabs[i].TabY1 < unBindPos) {
-                    unBindPos = Tabs[i].TabY1;
-                    unBindObj = Tabs[i];
+            var objEA = getEA(data.EA - 1);
+            if (objEA != null) {
+
+                //
+                ShowEACount++;
+                if (objEA.IsTabWidthFailCountFail)
+                    ShowEADefectNGCount++;
+
+                if (objEA.IsDefectCountFail)
+                    ShowEAWidthNGCount++;
+
+                //
+                EAs.Add(objEA);
+
+                //添加标签
+                if (Static.App.Is4K && Static.App.EnableLabelEA) {
+                    if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
+                        var objLab = new DataLabel() {
+                            EA = data.EA - 1,
+                            Y = data.MarkY + Static.Param.LabelY_EA / Fy,
+                            Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
+                        };
+                        objLab.Encoder = grab.GetEncoder(objLab.Y);
+                        addLabel(objLab);
+                    }
                 }
+
+                //
+                posEAStart = data.MarkY;
             }
-            return unBindObj;
         }
 
         public List<DataEA_SyncFrom4K> _IN_8K_FROM_4K = new List<DataEA_SyncFrom4K>();

@@ -144,12 +144,14 @@ namespace DetectCCD {
             device.EventInnerCamera = obj => {
                 Static.SafeRun(() => {
                     record.InnerGrab[obj.Frame] = obj;
+                    Static.SafeRunThread(obj.DetectTab);
                 });
             };
             record.OuterViewerImage.Init(hwinOuter);
             device.EventOuterCamera = obj => {
                 Static.SafeRun(() => {
                     record.OuterGrab[obj.Frame] = obj;
+                    Static.SafeRunThread(obj.DetectTab);
                 });
             };
 
@@ -179,69 +181,56 @@ namespace DetectCCD {
             };
 
             //线程：图像处理
-            new Thread(new ThreadStart((Action)(() => {
-
-                while (!isQuit) {
-                    Thread.Sleep(1);
-
-                    Static.SafeRun(() => {
-
-                        var obj = record.InnerGrab.Cache.GetFirstUnDetect();
-                        if (obj != null) {
-
-                            record.InnerDetect.TimeTotal = UtilTool.TimeCounting(() => {
-                                if (record.InnerDetect.TryDetect(obj)) {
-                                    record.InnerGrab.Cache.GetFirstUnDetect().IsDetect = true;
-                                }
-                            });
-
-                        }
-                    });
-
-                };
-
-            }))).Start();
             new Thread(new ThreadStart(() => {
-
+                var detect = record.InnerDetect;
                 while (!isQuit) {
                     Thread.Sleep(1);
 
-                    Static.SafeRun(() => {
+                    var frame = detect.m_frame;
+                    var g = record.InnerGrab.Cache[frame];
+                    if (g == null || !g.isDetectTab)
+                        continue;
 
-                        var obj = record.OuterGrab.Cache.GetFirstUnDetect();
-                        if (obj != null) {
-
-                            record.OuterDetect.TimeTotal = UtilTool.TimeCounting(() => {
-                                if (record.OuterDetect.TryDetect(obj)) {
-                                    record.OuterGrab.Cache.GetFirstUnDetect().IsDetect = true;
-                                }
-                            });
-
+                    if (Static.App.Is4K) {
+                        if (g.hasTab && g.TabData != null) {
+                            detect.TryTransLabel(frame);
+                            detect.TryAddTab(g.TabData);
                         }
-
-                    });
+                    }
+                    else {
+                        detect.TryAddDefect(g.hasDefect, frame);
+                    }
+                    detect.m_frame++;
                 };
-
             })).Start();
 
             new Thread(new ThreadStart(() => {
 
+                var detect = record.OuterDetect;
                 while (!isQuit) {
                     Thread.Sleep(1);
+                    var frame = detect.m_frame;
+                    var g = record.OuterGrab.Cache[frame];
+                    if (g == null || !g.isDetectTab)
+                        continue;
 
-                    Static.SafeRun(() => {
-
-                        //外侧同步到内侧
-                        record.OuterDetect.TimeSync = UtilTool.TimeCounting(() => {
-
-                            record.OuterDetect.Sync(record.InnerDetect);
-                        });
-
-                    });
+                    if (Static.App.Is4K) {
+                        if (g.hasTab && g.TabData != null) {
+                            detect.TryTransLabel(frame);
+                            if (detect.TryAddTab(g.TabData)) {
+                                detect.TrySync(record.InnerDetect);
+                            }
+                        }
+                    }
+                    else {
+                        detect.TryAddDefect(g.hasDefect, frame);
+                    }
+                    record.OuterViewerImage.SetBottomTarget(frame);
+                    record.InnerViewerImage.SetBottomTarget(frame - Static.App.FixFrameOuterOrBackOffset);
+                    detect.m_frame++;
                 };
-
             })).Start();
-
+            
             //线程：更新显示
             new Thread(new ThreadStart((Action)(() => {
 
