@@ -564,7 +564,12 @@ CfgParam        BLOB
                 end = nextEaTab.MarkY;
             }
             else {
-                end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
+                if (TabsCache.Count > 0) {
+                    end = TabsCache.Select(x => x.TabY1).Max();
+                }
+                else {
+                    end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
+                }
             }
 
             AllocAndGetDefectCount(start, end, id);
