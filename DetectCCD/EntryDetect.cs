@@ -22,6 +22,8 @@ namespace DetectCCD {
 
         public void Dispose() {
 
+            _IN_8K_FROM_4K.Clear();
+
             EAs.Clear();
             Tabs.Clear();
             TabsCache.Clear();

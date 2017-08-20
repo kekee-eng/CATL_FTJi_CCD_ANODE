@@ -48,7 +48,7 @@ namespace DetectCCD {
 
         public void MoveTargetSync(double refFps) {
 
-            double fpsNow = Math.Max(1, showImageDynamic ? fpsControl : 1);
+            double fpsNow = fpsControl;
             if (!fpsWatch.IsRunning || fpsWatch.ElapsedMilliseconds > 1000 / fpsNow) {
 
                 //实时显示帧率
@@ -67,22 +67,9 @@ namespace DetectCCD {
                     return;
 
                 //
-                double distMove = Math.Max(distTotal, 1) * refFps / fpsRealtime;
-                if (showImageDynamic)
-                    distMove = distTotal;
-
-                //
-                if (showImageStatic || distMove <= 0 || distMove >= distTotal) {
-                    frameVx = targetVx;
-                    frameVy = targetVy;
-                    frameVs = targetVs;
-                }
-                else {
-                    double precent = distMove / distTotal;
-                    frameVx += targetDx * precent;
-                    frameVy += targetDy * precent;
-                    frameVs += targetDs * precent;
-                }
+                frameVx = targetVx;
+                frameVy = targetVy;
+                frameVs = targetVs;
 
                 Static.SafeRun(() => updateView(false));
             }
@@ -220,12 +207,7 @@ namespace DetectCCD {
 
             //
             var rtMenu = new ContextMenuStrip();
-
-            //
-            var rtImage = addItem(rtMenu, "图像模式");
-            var rtImageStatic = addItem(rtImage, "静态图像");
-            var rtImageDynamic = addItem(rtImage, "滚动图像");
-
+            
             //
             var rtContext = addItem(rtMenu, "显示内容");
             var rtContextDef1 = addItem(rtContext, "[预设1] 开启检测");
@@ -265,9 +247,6 @@ namespace DetectCCD {
             var rtMeasurePolygon = addItem(rtMeasure, "多边形测面积");
 
             //
-            bindItem(rtImageStatic, b => rtImageDynamic.Checked = !(showImageStatic = b));
-            bindItem(rtImageDynamic, b => rtImageStatic.Checked = !(showImageDynamic = b));
-
             bindItem(rtContextDef1, null);
             bindItem(rtContextDef2, null);
 
@@ -446,7 +425,6 @@ namespace DetectCCD {
             };
 
             //
-            rtImageDynamic.Checked = true;
             rtContextDef1.Checked = true;
 
             rtEnableUser.Checked = true;
@@ -832,9 +810,6 @@ namespace DetectCCD {
         
         ToolStripMenuItem rtEnableUser;
         
-        bool showImageStatic = false;
-        bool showImageDynamic = false;
-
         bool showContextMark = false;
         bool showContextTab = false;
         bool showContextWidth = false;
@@ -859,7 +834,7 @@ namespace DetectCCD {
         double mouseFrameY = 0;
 
         //
-        double fpsControl = 25;
+        double fpsControl = 1;
         double fpsRealtime = 1;
         Stopwatch fpsWatch = new Stopwatch();
 
