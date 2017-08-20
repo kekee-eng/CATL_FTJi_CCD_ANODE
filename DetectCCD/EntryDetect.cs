@@ -130,7 +130,7 @@ CfgParam        BLOB
 
                         if (null == Labels.Find(x => Math.Abs(x.Y - minLab.Y) < 0.5)) {
                             Labels.Add(minLab);
-                            OnNewLabel?.Invoke(minLab.Encoder);
+                            OnNewLabel?.Invoke(minLab);
                         }
                     }
                 } 
@@ -142,7 +142,7 @@ CfgParam        BLOB
         public int ShowEAWidthNGCount = 0;
         public int ShowEADefectNGCount = 0;
         
-        public event Action<int> OnNewLabel;
+        public event Action<DataLabel> OnNewLabel;
         public event Action<DataTab, DataTab> OnSyncTab;
         
         int defectFrameCount = 0;
@@ -488,7 +488,7 @@ CfgParam        BLOB
             data.TabY2 = y1;
             data.HasTwoMark = false;
 
-            if (Static.App.DetectWidth) {
+            {
                 //宽度检测
                 double[] bx1, bx2;
                 double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
@@ -503,7 +503,7 @@ CfgParam        BLOB
                 }
             }
 
-            if (Static.App.DetectMark) {
+            {
 
                 //EA头部Mark检测
                 double[] cx, cy;

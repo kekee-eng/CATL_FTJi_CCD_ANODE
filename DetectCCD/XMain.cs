@@ -43,7 +43,9 @@ namespace DetectCCD {
             isQuit = true;
             record?.Dispose();
             device?.Dispose();
-            csvWriter?.Dispose();
+
+            closeLabelCSV();
+            closeWidthCSV();
         }
 
         void runAction(string actName, Action act) {
@@ -317,8 +319,9 @@ namespace DetectCCD {
             record.InnerDetect.OnNewLabel += obj => {
                 new Thread(new ThreadStart(new Action(() => {
                     Static.SafeRun(() => {
-                        if (obj != 0)
-                            RemotePLC.In4KCallPLC_SendLabel(true, obj);
+                        if (obj.Encoder != 0)
+                            RemotePLC.In4KCallPLC_SendLabel(true, obj.Encoder);
+                        saveLabelCSV( true, obj);
                     });
                 }))).Start();
             };
@@ -326,23 +329,21 @@ namespace DetectCCD {
 
                 new Thread(new ThreadStart(new Action(() => {
                     Static.SafeRun(() => {
-                        if (obj != 0)
-                            RemotePLC.In4KCallPLC_SendLabel(false, obj);
+                        if (obj.Encoder != 0) {
+                            RemotePLC.In4KCallPLC_SendLabel(false, obj.Encoder);
+                        }
+                        saveLabelCSV( false, obj);
                     });
                 }))).Start();
+                
             };
             record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => {
-
-                //显示视图
-                record.OuterViewerImage.SetBottomTarget(tabOuter.TabY1);
-                record.InnerViewerImage.SetBottomTarget(tabInner.TabY1);
-
+                
                 if (tabOuter.ValWidth == 0 || tabInner.ValWidth == 0)
                     return;
 
                 new Thread(new ThreadStart(new Action(() => {
                     Static.SafeRun(() => {
-                        saveWidthCSV(tabInner, tabOuter);
                         RemotePLC.In4KCallPLC_ForWidth(
                             tabOuter.EA,
                             tabOuter.TAB,
@@ -350,6 +351,7 @@ namespace DetectCCD {
                             tabInner.ValWidth,
                             tabOuter.ValWidth
                             );
+                        saveWidthCSV( tabInner, tabOuter);
                     });
                 }))).Start();
 
@@ -362,12 +364,7 @@ namespace DetectCCD {
             Static.App.BindCheckBox(checkSaveOK, "RecordSaveImageOK");
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNG");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
-
-            Static.App.BindCheckBox(checkDetectDefect, "DetectDefect");
-            Static.App.BindCheckBox(checkDetectMark, "DetectMark");
-            Static.App.BindCheckBox(checkDetectTab, "DetectTab");
-            Static.App.BindCheckBox(checkDetectWidth, "DetectWidth");
-
+            
             Static.App.BindCheckBox(checkEnableLabelEA, "EnableLabelEA");
             Static.App.BindCheckBox(checkEnableLabelEAEveryOne, "EnableLabelEA_EveryOne");
             Static.App.BindCheckBox(checkEnableLabelEAForce, "EnableLabelEA_Force");
@@ -570,17 +567,25 @@ namespace DetectCCD {
             });
         }
 
-        StreamWriter csvWriter;
+        StreamWriter csvWidthWriter =null;
+        StreamWriter csvLabelWriter =null;
         void closeWidthCSV() {
-            if (csvWriter != null) {
-                csvWriter.Flush();
-                csvWriter.Dispose();
-                csvWriter = null;
+            if (csvWidthWriter != null) {
+                csvWidthWriter.Flush();
+                csvWidthWriter.Dispose();
+                csvWidthWriter = null;
+            }
+        }
+        void closeLabelCSV() {
+            if (csvLabelWriter != null) {
+                csvLabelWriter.Flush();
+                csvLabelWriter.Dispose();
+                csvLabelWriter = null;
             }
         }
         void saveWidthCSV(DataTab inner, DataTab outer) {
             Static.SafeRun(() => {
-                if (csvWriter == null) {
+                if (csvWidthWriter == null) {
                     var folder = Static.FolderTemp + "csv";
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
@@ -592,15 +597,15 @@ namespace DetectCCD {
                         DateTime.Now.Minute,
                         DateTime.Now.Second
                         );
-                    csvWriter = new StreamWriter(path);
+                    csvWidthWriter = new StreamWriter(path);
 
-                    csvWriter.WriteLine("时间,EA数,内膜宽,外膜宽,内外膜宽差,总膜宽,内膜宽-TARGET,外膜宽-TARGET,内极宽,外极宽,");
+                    csvWidthWriter.WriteLine("时间,EA数,内膜宽,外膜宽,内外膜宽差,总膜宽,内膜宽-TARGET,外膜宽-TARGET,内极宽,外极宽,");
                 }
 
-                Action<double> appendItem = val => csvWriter.Write(val.ToString("0.000") + ",");
+                Action<double> appendItem = val => csvWidthWriter.Write(val.ToString("0.000") + ",");
 
-                csvWriter.Write(DateTime.Now.ToString() + ",");
-                csvWriter.Write(inner.EA + ",");
+                csvWidthWriter.Write(DateTime.Now.ToString() + ",");
+                csvWidthWriter.Write(inner.EA + ",");
                 appendItem(inner.ValWidth);
                 appendItem(outer.ValWidth);
                 appendItem(inner.ValWidth - outer.ValWidth);
@@ -609,7 +614,33 @@ namespace DetectCCD {
                 appendItem(outer.ValWidth - Static.Param.TabWidthTarget);
                 appendItem(inner.ValWidth);
                 appendItem(outer.ValWidth);
-                csvWriter.WriteLine();
+                csvWidthWriter.WriteLine();
+            });
+        }
+
+        void saveLabelCSV(bool isInner, DataLabel label) {
+            Static.SafeRun(() => {
+                if (csvLabelWriter == null) {
+                    var folder = Static.FolderTemp + "csv";
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
+                    var path = string.Format("{0}\\贴标数据-{1:D2}-{2:D2}_{3:D2}-{4:D2}-{5:D2}.csv",
+                        folder,
+                        DateTime.Now.Month,
+                        DateTime.Now.Day,
+                        DateTime.Now.Hour,
+                        DateTime.Now.Minute,
+                        DateTime.Now.Second
+                        );
+                    csvLabelWriter = new StreamWriter(path);
+                    csvLabelWriter.WriteLine("时间,EA数,位置,贴标原因");
+                }
+
+                csvLabelWriter.Write(DateTime.Now.ToString() + ",");
+                csvLabelWriter.Write(label.EA + ",");
+                csvLabelWriter.Write((isInner ? "内侧" : "外侧") + ",");
+                csvLabelWriter.Write(label.Comment.Replace(",","|") + ",");
+                csvLabelWriter.WriteLine();
             });
         }
 
@@ -660,12 +691,7 @@ namespace DetectCCD {
                 checkSaveOK.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
-
-                checkDetectDefect.Enabled = Static.App.DetectEnable;
-                checkDetectMark.Enabled = Static.App.DetectEnable;
-                checkDetectTab.Enabled = Static.App.DetectEnable;
-                checkDetectWidth.Enabled = Static.App.DetectEnable;
-
+                
                 if (device.isOpen) {
                     //
                     _lc_inner_camera.Text = device.InnerCamera.Name;
@@ -757,6 +783,7 @@ namespace DetectCCD {
                 if (device.isGrabbing)
                     throw new Exception("请先停止采集图像！");
 
+                closeLabelCSV();
                 closeWidthCSV();
                 if (!isRollOk) {
 
@@ -779,8 +806,8 @@ namespace DetectCCD {
                         rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
 
                     //
-                    record.Dispose();
-                    record.Open(rPath);
+                    //record.Dispose();
+                    //record.Open(rPath);
 
                     //
                     textRollType.Enabled = false;
@@ -791,7 +818,7 @@ namespace DetectCCD {
                 else {
 
                     //
-                    record.Dispose();
+                    //record.Dispose();
 
                     //
                     textRollType.Enabled = true;
@@ -840,6 +867,8 @@ namespace DetectCCD {
         }
         private void btnDisconnect_Click(object sender, EventArgs e) {
             DeviceClose();
+            closeLabelCSV();
+            closeWidthCSV();
         }
         private void btnQuit_Click(object sender, EventArgs e) {
             this.Close();

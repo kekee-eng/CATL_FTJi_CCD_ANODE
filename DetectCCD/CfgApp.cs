@@ -33,14 +33,7 @@ namespace DetectCCD {
         public bool RecordSaveImageOK = false;
         public bool RecordSaveImageNG = false;
         public bool RecordSaveImageNGSmall = false;
-
-        //检测内容
-        public bool DetectEnable = true;
-        public bool DetectTab = false;
-        public bool DetectWidth = false;
-        public bool DetectMark = false;
-        public bool DetectDefect = false;
-
+        
         //显示参数
         public double CameraFpsControl = 10;
         public int CameraFrameStart = 1;
