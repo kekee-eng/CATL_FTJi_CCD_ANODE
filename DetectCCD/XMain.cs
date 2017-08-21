@@ -198,21 +198,23 @@ namespace DetectCCD {
                 while (!isQuit) {
                     Thread.Sleep(1);
 
-                    var frame = detect.m_frame;
-                    var g = record.InnerGrab.Cache[frame];
-                    if (g == null || !g.isDetectTab)
-                        continue;
+                        var frame = detect.m_frame;
+                        var g = record.InnerGrab.Cache[frame];
+                        if (g == null || !g.isDetectTab)
+                            continue;
 
-                    if (Static.App.Is4K) {
-                        if (g.hasTab && g.TabData != null) {
-                            detect.TryTransLabel(frame);
-                            detect.TryAddTab(g.TabData);
+                    Static.SafeRun(() => {
+                        if (Static.App.Is4K) {
+                            if (g.hasTab && g.TabData != null) {
+                                detect.TryTransLabel(frame);
+                                detect.TryAddTab(g.TabData);
+                            }
                         }
-                    }
-                    else {
-                        detect.TryAddDefect(g.hasDefect, frame);
-                    }
-                    detect.m_frame++;
+                        else {
+                            detect.TryAddDefect(g.hasDefect, frame);
+                        }
+                        detect.m_frame++;
+                    });
                 };
             })).Start();
 
@@ -226,20 +228,22 @@ namespace DetectCCD {
                     if (g == null || !g.isDetectTab)
                         continue;
 
-                    if (Static.App.Is4K) {
-                        if (g.hasTab && g.TabData != null) {
-                            detect.TryTransLabel(frame);
-                            if (detect.TryAddTab(g.TabData)) {
-                                detect.TrySync(record.InnerDetect);
+                    Static.SafeRun(() => {
+                        if (Static.App.Is4K) {
+                            if (g.hasTab && g.TabData != null) {
+                                detect.TryTransLabel(frame);
+                                if (detect.TryAddTab(g.TabData)) {
+                                    detect.TrySync(record.InnerDetect);
+                                }
                             }
                         }
-                    }
-                    else {
-                        detect.TryAddDefect(g.hasDefect, frame);
-                    }
-                    record.OuterViewerImage.SetBottomTarget(frame);
-                    record.InnerViewerImage.SetBottomTarget(frame - Static.App.FixFrameOuterOrBackOffset);
-                    detect.m_frame++;
+                        else {
+                            detect.TryAddDefect(g.hasDefect, frame);
+                        }
+                        record.OuterViewerImage.SetBottomTarget(frame);
+                        record.InnerViewerImage.SetBottomTarget(frame - Static.App.FixFrameOuterOrBackOffset);
+                        detect.m_frame++;
+                    });
                 };
             })).Start();
             
