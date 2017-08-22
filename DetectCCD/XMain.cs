@@ -203,7 +203,9 @@ namespace DetectCCD {
                         if (Static.App.Is4K) {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
-                                detect.TryAddTab(g.TabData);
+                                lock (detect) {
+                                    detect.TryAddTab(g.TabData);
+                                }
                             }
                         }
                         else {
@@ -229,7 +231,9 @@ namespace DetectCCD {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
                                 if (detect.TryAddTab(g.TabData)) {
-                                    detect.TrySync(record.InnerDetect);
+                                    lock (detect) {
+                                        detect.TrySync(record.InnerDetect);
+                                    }
                                 }
                             }
                         }
