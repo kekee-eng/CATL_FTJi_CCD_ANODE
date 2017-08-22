@@ -26,19 +26,19 @@ namespace DetectCCD {
 
             EAs.Clear();
             Tabs.Clear();
-            TabsCache.Clear();
-
             Defects.Clear();
-
-            LabelsCache.Clear();
             Labels.Clear();
 
+            TabsCache.Clear();
+            LabelsCache.Clear();
 
             ShowEACount = 0;
             ShowEADefectNGCount = 0;
             ShowEAWidthNGCount = 0;
 
             m_frame = 1;
+            defectFrameCount = 0;
+            posEAStart = -1;
         }
 
         public void CreateTable() {
@@ -146,9 +146,7 @@ CfgParam        BLOB
         public event Action<DataTab, DataTab> OnSyncTab;
         
         int defectFrameCount = 0;
-
-        public int TimeTotal =0;
-        public int TimeSync = 0;
+        
         public void TryTransLabel(int frame) {
 
             //
@@ -488,46 +486,44 @@ CfgParam        BLOB
             data.TabY2 = y1;
             data.HasTwoMark = false;
 
-            {
-                //宽度检测
-                double[] bx1, bx2;
-                double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
-                double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
+            //宽度检测
+            double[] bx1, bx2;
+            double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
+            double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
 
-                var bimage = grab.GetImage(bfy1, bfy2);
-                if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
-                    data.WidthY1 = bfy1;
-                    data.WidthY2 = bfy2;
-                    data.WidthX1 = bx1[0] / w;
-                    data.WidthX2 = bx2[0] / w;
-                }
+            var bimage = grab.GetImage(bfy1, bfy2);
+            if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
+                data.WidthY1 = bfy1;
+                data.WidthY2 = bfy2;
+                data.WidthX1 = bx1[0] / w;
+                data.WidthX2 = bx2[0] / w;
             }
 
-            {
+            //
+            data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
+            data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
 
-                //EA头部Mark检测
-                double[] cx, cy;
-                double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
-                double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
+            //EA头部Mark检测
+            double[] cx, cy;
+            double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
+            double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
 
-                //
-                data.MarkImageStart = cfy1;
-                data.MarkImageEnd = cfy2;
+            //
+            data.MarkImageStart = cfy1;
+            data.MarkImageEnd = cfy2;
 
-                var cimage = grab.GetImage(cfy1, cfy2);
-                if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+            var cimage = grab.GetImage(cfy1, cfy2);
+            if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
 
-                    //将最后一个极耳放到下个EA中
-                    data.IsNewEA = true;
-                    data.MarkX = data.MarkX_P = cx[0] / w;
-                    data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+                //将最后一个极耳放到下个EA中
+                data.IsNewEA = true;
+                data.MarkX = data.MarkX_P = cx[0] / w;
+                data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
 
-                    if (cx.Length == 2 && cy.Length == 2) {
-                        data.HasTwoMark = true;
-                        data.MarkX_P = cx[1] / w;
-                        data.MarkY_P = cfy1 + cy[1] / h;
-                    }
-
+                if (cx.Length == 2 && cy.Length == 2) {
+                    data.HasTwoMark = true;
+                    data.MarkX_P = cx[1] / w;
+                    data.MarkY_P = cfy1 + cy[1] / h;
                 }
             }
 
@@ -650,8 +646,7 @@ CfgParam        BLOB
 
             }
         }
-
-
+        
         public List<DataEA_SyncFrom4K> _IN_8K_FROM_4K = new List<DataEA_SyncFrom4K>();
         public int AllocAndGetDefectCount(double start, double end, int ea) {
             int count = 0;
