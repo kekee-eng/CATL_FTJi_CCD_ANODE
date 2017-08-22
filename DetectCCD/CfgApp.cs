@@ -70,8 +70,7 @@ namespace DetectCCD {
 
             return (eOutput);
         }
-
-
+        
         //运行模式：0=在线（实时检测）、1=离线（仿真）
         public int RunningMode = 0;
         public string RollName = "";
