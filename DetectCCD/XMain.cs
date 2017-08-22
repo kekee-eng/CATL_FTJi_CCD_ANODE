@@ -564,6 +564,7 @@ namespace DetectCCD {
         public void DeviceClose() {
             runAction("停止设备", () => {
                 device.Dispose();
+                RemotePLC.In4KCallPLC_ClearEncoder();
             });
         }
 
@@ -658,6 +659,8 @@ namespace DetectCCD {
 
                     _lc_remote_plc.Text = RemotePLC.isConnect ? "On" : "Off";
                     _lc_remote_plc.ForeColor = RemotePLC.isConnect ? Color.Green : Color.Red;
+
+                    RemotePLC.In4KCallPLC_OnGrabbing();
                 }
 
                 //
@@ -785,6 +788,8 @@ namespace DetectCCD {
 
                 closeLabelCSV();
                 closeWidthCSV();
+                RemotePLC.In4KCallPLC_ClearEncoder();
+
                 if (!isRollOk) {
 
                     if (textRollType.SelectedIndex == -1)
