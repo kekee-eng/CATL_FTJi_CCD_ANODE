@@ -25,7 +25,8 @@ public class RemotePLC : MarshalByRefObject {
 
         //测试连接
         try { client._IN_PLC_Call_encoderProvider(true); }
-        catch {
+        catch (Exception ex) {
+            DetectCCD.Static.Log.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
             client = null;
             throw;
         }

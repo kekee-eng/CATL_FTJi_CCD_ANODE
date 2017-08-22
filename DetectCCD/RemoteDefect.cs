@@ -32,7 +32,8 @@ namespace DetectCCD {
 
             //测试连接
             try { client._in_8k_init(); }
-            catch {
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
                 client = null;
                 throw;
             }
@@ -46,7 +47,8 @@ namespace DetectCCD {
                 if (client == null) return -1;
                 return client._in_8k_return_4k_getDefectCount(isFront, isInner, start, end, ea);
             }
-            catch {
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
                 client = null;
             }
             return -2;
@@ -58,7 +60,9 @@ namespace DetectCCD {
                 return -3; //Master未关联
 
             try { return _func_in_8k_getDefectCount(isFront, isInner, start, end, ea); }
-            catch { }
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
+            }
             return -4; //Master函数有问题
         }
 
@@ -70,7 +74,8 @@ namespace DetectCCD {
                 if (client == null) return null;
                 return client._in_8k_return_4k_getDefectList(isFront, isInner);
             }
-            catch {
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
                 client = null;
             }
             return null;
@@ -78,7 +83,10 @@ namespace DetectCCD {
         public static event Func<bool, bool, DataDefect[]> _func_in_8k_getDefectList;
         public DataDefect[] _in_8k_return_4k_getDefectList(bool isFront, bool isInner) {
             try { return _func_in_8k_getDefectList(isFront, isInner); }
-            catch { return null; }
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
+                return null;
+            }
         }
 
         public static void In4KCall8K_Viewer(bool isFront, bool isInner, double y) {
@@ -87,21 +95,24 @@ namespace DetectCCD {
 
             try {
                 if (client == null) return;
-                client._in_8k_viewer(isFront, isInner, y, 
+                client._in_8k_viewer(isFront, isInner, y,
                     Static.App.DiffFrameInnerOuter,
                     Static.App.DiffFrameFrontBack,
                     Static.App.DiffFrameInnerFront);
             }
-            catch {
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
                 client = null;
             }
         }
         public static event Action<bool, bool, double, double, double, double> _func_in_8k_viewer;
         public void _in_8k_viewer(bool isFront, bool isInner, double y, double diffInnerOuter, double diffFrontBack, double diffInnerFront) {
             try { _func_in_8k_viewer(isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront); }
-            catch { }
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
+            }
         }
-        
+
         public static void In4KCall8K_Init() {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -110,14 +121,17 @@ namespace DetectCCD {
                 if (client == null) return;
                 client._in_8k_init();
             }
-            catch {
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
                 client = null;
             }
         }
         public static event Action _func_in_8k_init;
         public void _in_8k_init() {
             try { _func_in_8k_init(); }
-            catch { }
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
+            }
         }
 
     }
