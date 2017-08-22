@@ -43,6 +43,10 @@ namespace DetectCCD {
         public event Action<double, double, double> OnViewUpdate;
 
         public void SetUserEnable(bool allow) {
+            if(Box.InvokeRequired) {
+                Box.Invoke(new Action(() => SetUserEnable(allow)));
+                return;
+            }
             rtEnableUser.Checked = allow;
         }
 
