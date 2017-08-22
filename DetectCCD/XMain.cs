@@ -102,8 +102,6 @@ namespace DetectCCD {
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
 
                     var ret = (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
-
-                    Static.Log.Info(string.Format("GetDefectCount: Count={0}", ret));
                     return ret;
 
                 };
@@ -123,8 +121,6 @@ namespace DetectCCD {
                     for (int i = 0; i < arr.Length; i++)
                         arr[i].Y = Static.App.FrameFrontToInner(isFront, isInner, arr[i].Y);
                     arr = arr.OrderBy(x => x.Y).ToArray();
-
-                    Static.Log.Info(string.Format("GetDefectList: Count={0}", arr.Length));
                     return arr;
                 };
                 RemoteDefect._func_in_8k_viewer += (isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront) => {
@@ -864,8 +860,7 @@ namespace DetectCCD {
                     Static.SafeRun(RemotePLC.InitClient);
                 }
                 DeviceInit(true);
-                DeviceOpen();
-
+                DeviceStartGrab();
                 UtilTool.XFWait.Close();
             });
         }
