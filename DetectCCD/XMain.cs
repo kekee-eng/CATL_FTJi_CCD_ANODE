@@ -660,7 +660,8 @@ namespace DetectCCD {
                     _lc_remote_plc.Text = RemotePLC.isConnect ? "On" : "Off";
                     _lc_remote_plc.ForeColor = RemotePLC.isConnect ? Color.Green : Color.Red;
 
-                    RemotePLC.In4KCallPLC_OnGrabbing();
+                    if (device.isGrabbing)
+                        RemotePLC.In4KCallPLC_OnGrabbing();
                 }
 
                 //
