@@ -66,13 +66,13 @@ namespace DetectCCD {
             return -4; //Master函数有问题
         }
 
-        public static DataDefect[] In4KCall8K_GetDefectList(bool isFront, bool isInner) {
+        public static DataDefect[] In4KCall8K_GetDefectList(bool isFront, bool isInner, int ea) {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
 
             try {
                 if (client == null) return null;
-                return client._in_8k_return_4k_getDefectList(isFront, isInner);
+                return client._in_8k_return_4k_getDefectList(isFront, isInner, ea);
             }
             catch (Exception ex) {
                 Static.Log.Error("RemoteDefect:", ex);
@@ -80,9 +80,9 @@ namespace DetectCCD {
             }
             return null;
         }
-        public static event Func<bool, bool, DataDefect[]> _func_in_8k_getDefectList;
-        public DataDefect[] _in_8k_return_4k_getDefectList(bool isFront, bool isInner) {
-            try { return _func_in_8k_getDefectList(isFront, isInner); }
+        public static event Func<bool, bool,int, DataDefect[]> _func_in_8k_getDefectList;
+        public DataDefect[] _in_8k_return_4k_getDefectList(bool isFront, bool isInner, int ea) {
+            try { return _func_in_8k_getDefectList(isFront, isInner, ea); }
             catch (Exception ex) {
                 Static.Log.Error("RemoteDefect:", ex);
                 return null;

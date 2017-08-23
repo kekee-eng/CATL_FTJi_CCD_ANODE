@@ -105,16 +105,21 @@ namespace DetectCCD {
                     return ret;
 
                 };
-                RemoteDefect._func_in_8k_getDefectList += (isFront, isInner) => {
+                RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, ea) => {
 
                     Static.Log.Info(string.Format("GetDefectList: IsFront={0} IsInner={1}", isFront, isInner));
 
                     var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
                     var outdefs = new List<DataDefect>();
-                    foreach (var def in defs) {
-                        if (def.InInner(isInner)) {
-                            outdefs.Add(new DataDefect() { EA = def.EA, Y = def.Y, Type = def.Type });
-                        }
+                    for (int i = 0; i < defs.Count; i++) {
+
+                        if (ea != -1 && defs[i].EA != ea)
+                            continue;
+
+                        if (!defs[i].InInner(isInner))
+                            continue;
+
+                        outdefs.Add(new DataDefect() { EA = defs[i].EA, Y = defs[i].Y, Type = defs[i].Type });
                     }
 
                     var arr = outdefs.ToArray();

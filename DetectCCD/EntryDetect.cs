@@ -154,7 +154,7 @@ CfgParam        BLOB
 
             //转标签
             if (Static.App.EnableLabelDefect) {
-                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
+                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, -1);
                 if (remoteDefs != null) {
                     foreach (var rl in remoteDefs) {
                         if (rl.IsTransLabel()) {
@@ -167,7 +167,7 @@ CfgParam        BLOB
                 }
             }
             if (Static.App.EnableLabelDefect) {
-                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+                var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, -1);
                 if (remoteDefs != null) {
                     foreach (var rl in remoteDefs) {
                         if (rl.IsTransLabel()) {
@@ -574,8 +574,8 @@ CfgParam        BLOB
                 var setFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
                 var setBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
 
-                var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner);
-                var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner);
+                var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, id);
+                var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, id);
 
                 if (remoteDefsFront != null) {
                     obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.EA == id && x.Type == 0);
