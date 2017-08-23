@@ -138,7 +138,17 @@ CfgParam        BLOB
             
         }
 
+
         public int ShowEACount =0;
+        public int ShowEACountView {
+            get {
+                var count1 = Tabs.Count / Static.Param.CheckTabCount;
+                if (Math.Abs(count1 - ShowEACount) < 3)
+                    return ShowEACount;
+                else
+                    return count1;
+            }
+        }
         public int ShowEAWidthNGCount = 0;
         public int ShowEADefectNGCount = 0;
         

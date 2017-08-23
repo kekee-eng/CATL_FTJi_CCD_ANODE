@@ -713,7 +713,7 @@ namespace DetectCCD {
                     _lc_inner_isopen.ForeColor = device.InnerCamera.isOpen ? Color.Green : Color.Red;
 
                     _lc_inner_caption.Text = device.InnerCamera.Caption;
-                    _lc_inner_eaCount.Text = record.InnerDetect.ShowEACount.ToString();
+                    _lc_inner_eaCount.Text = record.InnerDetect.ShowEACountView.ToString();
                     _lc_inner_widthCount.Text = record.InnerDetect.ShowEAWidthNGCount.ToString();
                     _lc_inner_defectCount.Text = record.InnerDetect.ShowEADefectNGCount.ToString();
 
@@ -727,7 +727,7 @@ namespace DetectCCD {
                     _lc_outer_isopen.ForeColor = device.OuterCamera.isOpen ? Color.Green : Color.Red;
 
                     _lc_outer_caption.Text = device.OuterCamera.Caption;
-                    _lc_outer_eaCount.Text = record.OuterDetect.ShowEACount.ToString();
+                    _lc_outer_eaCount.Text = record.OuterDetect.ShowEACountView.ToString();
                     _lc_outer_widthCount.Text = record.OuterDetect.ShowEAWidthNGCount.ToString();
                     _lc_outer_defectCount.Text = record.OuterDetect.ShowEADefectNGCount.ToString();
                 }
