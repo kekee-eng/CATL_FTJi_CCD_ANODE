@@ -451,6 +451,12 @@ namespace DetectCCD {
             if (Detect.Defects.Count < grid.Rows.Count) {
                 grid.Rows.Clear();
             }
+
+            //Fix: 修正ID
+            for(int i=0;i<grid.Rows.Count && i< Detect.Defects.Count; i++) {
+                grid.Rows[i].Cells[1].Value = Detect.Defects[i].EA;
+            }
+
             grid.Tag = true;
         }
 

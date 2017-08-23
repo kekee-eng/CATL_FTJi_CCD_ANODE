@@ -915,7 +915,7 @@ namespace DetectCCD {
                 UtilTool.XFWait.Close();
             });
         }
-
+        
     }
 
 }
