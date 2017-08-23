@@ -576,17 +576,17 @@ CfgParam        BLOB
 
                 var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, id);
                 var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, id);
-
+                
                 if (remoteDefsFront != null) {
-                    obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.EA == id && x.Type == 0);
-                    obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.EA == id && x.Type == 1);
-                    obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.EA == id && x.Type == 40);
+                    obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
+                    obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
+                    obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 40);
                 }
 
                 if (remoteDefsBack != null) {
-                    obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.EA == id && x.Type == 0);
-                    obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.EA == id && x.Type == 1);
-                    obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.EA == id && x.Type == 40);
+                    obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.Type == 0);
+                    obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
+                    obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 40);
                 }
 
             }

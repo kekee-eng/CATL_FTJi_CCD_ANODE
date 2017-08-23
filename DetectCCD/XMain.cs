@@ -95,9 +95,7 @@ namespace DetectCCD {
 
                 RemoteDefect.InitServer();
                 RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) => {
-
-                    Static.Log.Info(string.Format("GetDefectCount: ID={0} START={1:0.00} END={2:0.00}", id, start, end));
-
+                    
                     start = Static.App.FrameInnerToFront(isFront, isInner, start);
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
 
@@ -106,9 +104,7 @@ namespace DetectCCD {
 
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, ea) => {
-
-                    Static.Log.Info(string.Format("GetDefectList: IsFront={0} IsInner={1}", isFront, isInner));
-
+                    
                     var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
                     var outdefs = new List<DataDefect>();
                     for (int i = 0; i < defs.Count; i++) {
