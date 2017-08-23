@@ -572,7 +572,8 @@ namespace DetectCCD {
         }
         public void DeviceClose() {
             runAction("停止设备", () => {
-                device.Dispose();
+                device?.Dispose();
+                record?.Dispose();
                 RemotePLC.In4KCallPLC_ClearEncoder();
             });
         }
