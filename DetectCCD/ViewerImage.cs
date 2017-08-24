@@ -228,6 +228,8 @@ namespace DetectCCD {
             var rtContextPosWidth = addItem(rtContext, "显示宽度检测范围");
             var rtContextPosMark = addItem(rtContext, "显示Mask检测范围");
 
+            var rtSaveImage = addItem(rtMenu, "保存图像");
+
             //
             var rtLocFrameText = new ToolStripTextBox();
             var rtLocEAText1 = new ToolStripTextBox();
@@ -426,6 +428,34 @@ namespace DetectCCD {
                 g.WriteString(string.Format("{0:0.000}mm2", area));
 
                 mouseAllow = true;
+            };
+
+            rtSaveImage.Click += (o, e) => {
+                Static.SafeRun(() => {
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.Filter = "BMP文件|*.bmp";
+                    sfd.FileName = string.Format("IMG_{0}.bmp", DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss"));
+                    if (sfd.ShowDialog() == DialogResult.OK) {
+                        string name = sfd.FileName;
+
+                        int start = (int)(Math.Floor(frameY1));
+                        int end = (int)(Math.Ceiling(frameY2));
+
+                        //序列帧
+                        for (int i = start; i <= end; i++) {
+                            var img = Grab.GetImage(i);
+                            if (img != null) {
+                                img.WriteImage("bmp", 0, name.ToLower().Replace(".bmp", string.Format("_F{0}.bmp", i)));
+                            }
+                        }
+
+                        //合并图
+                        var img2 = Grab.GetImage(start, end);
+                        if (img2 != null) {
+                            img2.WriteImage("bmp", 0, name.ToLower().Replace(".bmp", string.Format("_Merge.bmp")));
+                        }
+                    }
+                });
             };
 
             //
