@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 
 namespace DetectCCD {
 #pragma warning disable 0649
@@ -70,6 +71,29 @@ namespace DetectCCD {
                     }
                 }
 
+                if (Static.App.RecordSaveImageEnable) {
+                    bool isSaveImage = false;
+                    if (hasDefect) {
+                        isSaveImage = Static.App.RecordSaveImageNG;
+                    }
+                    else {
+                        isSaveImage = Static.App.RecordSaveImageOK;
+                    }
+
+                    if (isSaveImage) {
+                        var folder = Static.FolderTemp + "ImageBig/";
+                        var filename = string.Format("{0}{1}_F{2}", folder, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff"), Frame);
+
+                        if (!System.IO.Directory.Exists(folder))
+                            System.IO.Directory.CreateDirectory(folder);
+
+                        new Thread(new ThreadStart((() => {
+                            Static.SafeRun(() => {
+                                aimage.WriteImage("bmp", 0, filename);
+                            });
+                        }))).Start();
+                    }
+                }
             }
 
             isDetectTab = true;

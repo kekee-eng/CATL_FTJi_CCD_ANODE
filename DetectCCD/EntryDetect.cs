@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -475,7 +476,28 @@ CfgParam        BLOB
                             defect.Area = earea[i] * Fx * Fy / w / h;
 
                             Defects.Add(defect);
+
+                            //保存NG小图
+                            if (Static.App.RecordSaveImageEnable) {
+                                if (Static.App.RecordSaveImageNGSmall && defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
+                                    var saveimg = eimage.ReduceDomain(new HalconDotNet.HRegion(ey[i] - eh[i] / 2, ex[i] - ew[i] / 2, ey[i] + eh[i] / 2, ex[i] + ew[i] / 2)).CropDomain().Clone();
+                                    if (saveimg != null) {
+                                        var folder = Static.FolderTemp + "ImageNGPart/";
+                                        var filename = string.Format("{0}{1}_{2}", folder, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff"), defect.GetTypeCaption());
+
+                                        if (!System.IO.Directory.Exists(folder))
+                                            System.IO.Directory.CreateDirectory(folder);
+
+                                        new Thread(new ThreadStart(() => {
+                                            Static.SafeRun(() => {
+                                                saveimg.WriteImage("bmp", 0, filename);
+                                            });
+                                        })).Start();
+                                    }
+                                }
+                            }
                         }
+
                     }
                 });
 
