@@ -34,6 +34,7 @@ namespace DetectCCD {
 
                 HDevProcedure procedure = new HDevProcedure();
                 if (Static.App.ImageProcessReload) {
+                    Static.App.ImageProcessReload = false;
                     lock (m_program) {
                         m_program.Dispose();
                         m_program = new HDevProgram(Static.PathImageProcess);
