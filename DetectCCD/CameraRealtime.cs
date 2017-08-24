@@ -62,6 +62,7 @@ namespace DetectCCD {
 
         Stopwatch fps_watch = new Stopwatch();
         int encoder_current { get { return Static.App.Is4K ? callGetEncoder() : (int)Buffers.CounterStamp; } }
+        int encoder_check = 100000;
 
         bool create_objects() {
 
@@ -101,10 +102,13 @@ namespace DetectCCD {
         }
         private void Xfer_XferNotify(object sender, SapXferNotifyEventArgs e) {
 
-            //Fix：通过编码器来判断是否为超时触发
-            if (Math.Abs(m_encoder - encoder_current) < Buffers.Height - 200) {
-                m_trash++;
-                return;
+            if (Static.App.Is4K) {
+                //Fix：通过编码器来判断是否为超时触发
+                if (Math.Abs(encoder_check - callGetEncoderCheck()) < Buffers.Height - 200) {
+                    m_trash++;
+                    return;
+                }
+                encoder_check = callGetEncoderCheck();
             }
             
             //

@@ -42,12 +42,16 @@ namespace DetectCCD {
         public int callGetEncoder() {
             return GetEncoder == null ? 0 : GetEncoder();
         }
+        public int callGetEncoderCheck() {
+            return GetEncoderCheck == null ? 0 : GetEncoderCheck();
+        }
         public void callComplete() {
             OnComplete?.Invoke();
         }
 
         public event Action<DataGrab> OnImageReady = null;
         public event Func<int> GetEncoder = null;
+        public event Func<int> GetEncoderCheck = null;
         public event Action OnComplete = null;
 
         public int m_trash = 0;

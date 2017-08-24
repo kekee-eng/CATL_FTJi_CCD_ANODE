@@ -147,6 +147,9 @@ namespace DetectCCD {
             if (Static.App.Is4K) {
                 InnerCamera.GetEncoder += () => RemotePLC.In4KCallPLC_GetEncoder(true);
                 OuterCamera.GetEncoder += () => RemotePLC.In4KCallPLC_GetEncoder(false);
+
+                InnerCamera.GetEncoderCheck += () => RemotePLC.In4KCallPLC_GetEncoder(false);
+                OuterCamera.GetEncoderCheck += () => RemotePLC.In4KCallPLC_GetEncoder(false);
             }
 
         }
