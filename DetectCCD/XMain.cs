@@ -285,6 +285,7 @@ namespace DetectCCD {
             //线程：写数据库
             new Thread(new ThreadStart((Action)(() => {
 
+                return;
                 do {
                     Thread.Sleep(100);
                     if (!isRollOk)

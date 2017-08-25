@@ -146,7 +146,7 @@ namespace DetectCCD {
             Buffers.GetAddress(out data);
             dg.Image = new HalconDotNet.HImage("byte", w, h, data);
             dg.IsCreated = true;
-
+            
             //
             callImageReady(dg);
         }

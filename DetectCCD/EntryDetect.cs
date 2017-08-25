@@ -354,6 +354,7 @@ CfgParam        BLOB
                 data.WidthX1 = bx1[0] / w;
                 data.WidthX2 = bx2[0] / w;
             }
+            bimage?.Dispose();
 
             //
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
@@ -383,6 +384,7 @@ CfgParam        BLOB
                 }
 
             }
+            cimage?.Dispose();
 
             //
             TabsCache.Add(data);
@@ -480,8 +482,10 @@ CfgParam        BLOB
                             //保存NG小图
                             if (Static.App.RecordSaveImageEnable) {
                                 if (Static.App.RecordSaveImageNGSmall && defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
-                                    var saveimg = eimage.ReduceDomain(new HalconDotNet.HRegion(ey[i] - eh[i] / 2, ex[i] - ew[i] / 2, ey[i] + eh[i] / 2, ex[i] + ew[i] / 2)).CropDomain().Clone();
-                                    if (saveimg != null) {
+                                    Static.SafeRun(() => {
+                                        var img1 = eimage.ReduceDomain(new HalconDotNet.HRegion(ey[i] - eh[i] / 2, ex[i] - ew[i] / 2, ey[i] + eh[i] / 2, ex[i] + ew[i] / 2));
+                                        var saveimg = img1.CropDomain();
+
                                         var folder = Static.FolderTemp + "ImageNGPart/";
                                         var filename = string.Format("{0}{1}_{2}", folder, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff"), defect.GetTypeCaption());
 
@@ -491,14 +495,17 @@ CfgParam        BLOB
                                         new Thread(new ThreadStart(() => {
                                             Static.SafeRun(() => {
                                                 saveimg.WriteImage("bmp", 0, filename);
+                                                saveimg.Dispose();
+                                                img1.Dispose();
                                             });
                                         })).Start();
-                                    }
+                                    });
                                 }
                             }
                         }
 
                     }
+                    eimage?.Dispose();
                 });
 
             }
@@ -530,6 +537,7 @@ CfgParam        BLOB
                 data.WidthX1 = bx1[0] / w;
                 data.WidthX2 = bx2[0] / w;
             }
+            bimage?.Dispose();
 
             //
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
@@ -558,6 +566,7 @@ CfgParam        BLOB
                     data.MarkY_P = cfy1 + cy[1] / h;
                 }
             }
+            cimage?.Dispose();
 
             data.IsFix = true;
             data.IsSync = true;

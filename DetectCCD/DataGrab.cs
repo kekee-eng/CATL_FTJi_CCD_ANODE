@@ -53,9 +53,8 @@ namespace DetectCCD {
                 return;
 
             //极耳检测、并判断是否可能有瑕疵
-            var aimage = Image;
             double[] ax, ay1, ay2;
-            if (aimage != null && ImageProcess.DetectTab(aimage, out hasDefect, out hasTab, out ax, out ay1, out ay2)) {
+            if (Image != null && ImageProcess.DetectTab(Image, out hasDefect, out hasTab, out ax, out ay1, out ay2)) {
 
                 if (hasTab) {
                     //极耳数据整理
@@ -87,9 +86,11 @@ namespace DetectCCD {
                         if (!System.IO.Directory.Exists(folder))
                             System.IO.Directory.CreateDirectory(folder);
 
+                        var img = Image.Clone();
                         new Thread(new ThreadStart((() => {
                             Static.SafeRun(() => {
-                                aimage.WriteImage("bmp", 0, filename);
+                                img.WriteImage("bmp", 0, filename);
+                                img.Dispose();
                             });
                         }))).Start();
                     }
@@ -301,20 +302,7 @@ Image           BLOB
                 return saveDatas;
 
             }
-
-            public DataGrab LastDataGrab = null;
-            public DataGrab GetFirstUnDetect() {
-
-                int min = Min;
-                int max = Max;
-                for(int i = min; i <= max; i++) {
-                    var obj = this[i];
-                    if (obj !=null && !obj.IsDetect)
-                        return obj;
-                }
-                return null;
-            }
-
+            
         }
         
     }
