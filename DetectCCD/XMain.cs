@@ -284,40 +284,39 @@ namespace DetectCCD {
 
             //线程：写数据库
             new Thread(new ThreadStart((Action)(() => {
+                
+                //do {
+                //    Thread.Sleep(100);
+                //    if (!isRollOk)
+                //        continue;
 
-                return;
-                do {
-                    Thread.Sleep(100);
-                    if (!isRollOk)
-                        continue;
+                //    if (!Static.App.RecordSaveImageEnable)
+                //        continue;
 
-                    if (!Static.App.RecordSaveImageEnable)
-                        continue;
+                //    Static.SafeRun(() => {
 
-                    Static.SafeRun(() => {
+                //        //
+                //        List<DataGrab> ret1 = null;
+                //        List<DataGrab> ret2 = null;
 
-                        //
-                        List<DataGrab> ret1 = null;
-                        List<DataGrab> ret2 = null;
+                //        //
+                //        if (record.Transaction(() => {
 
-                        //
-                        if (record.Transaction(() => {
+                //            ret1 = record.InnerGrab.Save();
+                //            ret2 = record.OuterGrab.Save();
 
-                            ret1 = record.InnerGrab.Save();
-                            ret2 = record.OuterGrab.Save();
+                //            record.InnerDetect.Save();
+                //            record.OuterDetect.Save();
 
-                            record.InnerDetect.Save();
-                            record.OuterDetect.Save();
+                //        })) {
 
-                        })) {
+                //            ret1.AsParallel().ForAll(x => x.IsStore = true);
+                //            ret2.AsParallel().ForAll(x => x.IsStore = true);
+                //        }
 
-                            ret1.AsParallel().ForAll(x => x.IsStore = true);
-                            ret2.AsParallel().ForAll(x => x.IsStore = true);
-                        }
+                //    });
 
-                    });
-
-                } while (!isQuit);
+                //} while (!isQuit);
 
             }))).Start();
 
