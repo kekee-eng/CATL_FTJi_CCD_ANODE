@@ -2,28 +2,11 @@
 using System;
 
 namespace DetectCCD {
-    public class ModRecord : TemplateDB {
-
-        public override bool Open(string path) {
-            
-            if (base.Open(path)) {
-
-                InnerDetect.CreateTable();
-                InnerGrab.DB.CreateTable();
-                InnerGrab.Cache.Dispose();
-
-                OuterDetect.CreateTable();
-                OuterGrab.DB.CreateTable();
-                OuterGrab.Cache.Dispose();
-
-                InnerGrab.Reload();
-                OuterGrab.Reload();
-
-                InnerDetect.Reload();
-                OuterDetect.Reload();
-                return true;
-            }
-            return false;
+    public class ModRecord :IDisposable{
+        
+        public void Dispose() {
+            InnerGrab.Cache.Dispose();
+            OuterGrab.Cache.Dispose();
         }
 
         public void Uninit() {
@@ -39,14 +22,14 @@ namespace DetectCCD {
         public void Init() {
 
             //
-            InnerGrab = new EntryGrab(this, "InnerGrab", Static.App.RecordCacheSize);
-            InnerDetect = new EntryDetect(this, "InnerDetect", InnerGrab, true);
+            InnerGrab = new EntryGrab(Static.App.RecordCacheSize);
+            InnerDetect = new EntryDetect(InnerGrab, true);
             InnerViewerImage = new ViewerImage(InnerGrab, InnerDetect);
             InnerViewerChart = new ViewerChart(InnerGrab, InnerDetect, InnerViewerImage);
 
             //
-            OuterGrab = new EntryGrab(this, "OuterGrab", Static.App.RecordCacheSize);
-            OuterDetect = new EntryDetect(this, "OuterDetect", OuterGrab, false);
+            OuterGrab = new EntryGrab(Static.App.RecordCacheSize);
+            OuterDetect = new EntryDetect(OuterGrab, false);
             OuterViewerImage = new ViewerImage(OuterGrab, OuterDetect);
             OuterViewerChart = new ViewerChart(OuterGrab, OuterDetect, OuterViewerImage);
             

@@ -69,10 +69,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.102.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\Bin\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
@@ -93,7 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authority.cs" />
-    <Compile Include="CameraDB.cs" />
     <Compile Include="CfgApp.cs" />
     <Compile Include="CfgParam.cs" />
     <Compile Include="CameraRealtime.cs" />
@@ -111,7 +106,6 @@
     <Compile Include="RemotePLC.cs" />
     <Compile Include="TemplateCamera.cs" />
     <Compile Include="TemplateConfig.cs" />
-    <Compile Include="TemplateDB.cs" />
     <Compile Include="UtilPerformance.cs" />
     <Compile Include="UtilSerialization.cs" />
     <Compile Include="UtilTool.cs" />

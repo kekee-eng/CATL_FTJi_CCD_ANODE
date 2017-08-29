@@ -140,11 +140,7 @@ namespace DetectCCD {
 
         }
         void init_device() {
-
-            //
-            device.GetInnerDb += () => record.InnerGrab.DB;
-            device.GetOuterDb += () => record.OuterGrab.DB;
-
+            
             //
             record.Init();
 
@@ -204,7 +200,7 @@ namespace DetectCCD {
                         if (Static.App.Is4K) {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
-                                lock (detect) {
+                                lock (record) {
                                     detect.TryAddTab(g.TabData);
                                 }
                             }
@@ -232,7 +228,7 @@ namespace DetectCCD {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
                                 if (detect.TryAddTab(g.TabData)) {
-                                    lock (detect) {
+                                    lock (record) {
                                         detect.TrySync(record.InnerDetect);
                                     }
                                 }
@@ -281,45 +277,7 @@ namespace DetectCCD {
                 };
 
             }))).Start();
-
-            //线程：写数据库
-            new Thread(new ThreadStart((Action)(() => {
-                
-                //do {
-                //    Thread.Sleep(100);
-                //    if (!isRollOk)
-                //        continue;
-
-                //    if (!Static.App.RecordSaveImageEnable)
-                //        continue;
-
-                //    Static.SafeRun(() => {
-
-                //        //
-                //        List<DataGrab> ret1 = null;
-                //        List<DataGrab> ret2 = null;
-
-                //        //
-                //        if (record.Transaction(() => {
-
-                //            ret1 = record.InnerGrab.Save();
-                //            ret2 = record.OuterGrab.Save();
-
-                //            record.InnerDetect.Save();
-                //            record.OuterDetect.Save();
-
-                //        })) {
-
-                //            ret1.AsParallel().ForAll(x => x.IsStore = true);
-                //            ret2.AsParallel().ForAll(x => x.IsStore = true);
-                //        }
-
-                //    });
-
-                //} while (!isQuit);
-
-            }))).Start();
-
+            
             //PLC操作
             record.InnerDetect.OnNewLabel += obj => {
                 new Thread(new ThreadStart(new Action(() => {
@@ -469,17 +427,10 @@ namespace DetectCCD {
 
         public void DeviceLoad() {
 
-            runAction("打开离线数据包", async () => {
+            runAction("打开离线数据包", () => {
                 if (openFileDialog1.ShowDialog() == DialogResult.OK) {
 
-                    UtilTool.XFWait.Open();
-                    await Task.Run(() => {
-
-                        record.Dispose();
-                        record.Open(openFileDialog1.FileName);
-
-                    });
-                    UtilTool.XFWait.Close();
+                    record.Dispose();
                     richTextBox1.Text = openFileDialog1.FileName;
 
                     //初始化

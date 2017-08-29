@@ -11,16 +11,13 @@ namespace DetectCCD {
 
     public class EntryDetect : IDisposable {
 
-        public EntryDetect(TemplateDB parent, string tableName, EntryGrab grab, bool isInner) {
+        public EntryDetect(EntryGrab grab, bool isInner) {
 
             //
-            this.db = parent;
-            this.tname = tableName;
             this.grab = grab;
             this.isinner = isInner;
 
         }
-
         public void Dispose() {
 
             _IN_8K_FROM_4K.Clear();
@@ -41,58 +38,8 @@ namespace DetectCCD {
             defectFrameCount = 0;
             posEAStart = -1;
         }
-
-        public void CreateTable() {
-
-            //
-            db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
-(
-ID              INTEGER   PRIMARY KEY, 
-Tabs            BLOB,
-Defects         BLOB,
-Labels          BLOB,
-CfgApp          BLOB,
-CfgParam        BLOB
-)", this.tname));
-
-        }
-        public void Save() {
-
-            if (!needSave)
-                return;
-
-            needSave = false;
-            db.Write(string.Format(@"REPLACE INTO {0} ( ID, Tabs, Defects, Labels, CfgApp, CfgParam ) VALUES (?,?,?,?,?,?,?) ", tname),
-                0,
-                UtilSerialization.obj2bytes(Tabs),
-                UtilSerialization.obj2bytes(Defects),
-                UtilSerialization.obj2bytes(Labels),
-                UtilSerialization.obj2bytes(Static.App),
-                UtilSerialization.obj2bytes(Static.Param)
-                );
-
-        }
-        public void Reload(bool useParam = false) {
-            Dispose();
-            var ret = db.Read(string.Format("SELECT * FROM {0} WHERE ID=\"0\"", tname));
-            if (ret.Count == 0)
-                return;
-
-            Tabs = UtilSerialization.bytes2obj((byte[])ret[0][1]) as List<DataTab>;
-            Defects = UtilSerialization.bytes2obj((byte[])ret[0][2]) as List<DataDefect>;
-            Labels = UtilSerialization.bytes2obj((byte[])ret[0][3]) as List<DataLabel>;
-
-            if (useParam) {
-                (UtilSerialization.bytes2obj((byte[])ret[0][4]) as CfgParam).CopyTo(Static.App);
-                (UtilSerialization.bytes2obj((byte[])ret[0][5]) as CfgParam).CopyTo(Static.Param);
-            }
-        }
-
-        bool needSave = false;
-
+        
         EntryGrab grab;
-        TemplateDB db;
-        string tname;
         bool isinner;
 
         public double Fx { get { return grab.Fx; } }

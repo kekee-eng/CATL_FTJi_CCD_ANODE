@@ -9,23 +9,12 @@ namespace DetectCCD {
     public class EntryGrab {
 
         //
-        public EntryGrab(TemplateDB parent, string tableName, int cache) {
-            DB = new DataGrab.GrabDB(parent, tableName);
+        public EntryGrab(int cache) {
             Cache = new DataGrab.GrabCache() { CountLimit = cache };
         }
-
-        public void Reload() {
-            DB.Count = DB.QueryCount;
-            if (DB.Count > 0) {
-                DB.Min = DB.QueryMin;
-                DB.Max = DB.QueryMax;
-                this[DB.Min] = DB[DB.Min];
-            }
-        }
-
+        
         //
         public DataGrab.GrabCache Cache;
-        public DataGrab.GrabDB DB;
 
         //
         public double Fx = -1;
@@ -37,12 +26,9 @@ namespace DetectCCD {
         public int Width = -1;
         public int Height = -1;
 
-        public int Min { get { return Math.Min(Cache.Min, DB.Min); } }
-        public int Max { get { return Math.Max(Cache.Max, DB.Max); } }
-
-        public bool LastLoadCache = false;
-        public bool LastLoadDB = false;
-
+        public int Min { get { return Cache.Min; } }
+        public int Max { get { return Cache.Max; } }
+        
         //
         public DataGrab this[int i] {
             set {
@@ -65,28 +51,10 @@ namespace DetectCCD {
 
             }
             get {
-                var ret1 = Cache[i];
-                if (ret1 != null) {
-                    LastLoadCache = true;
-                    LastLoadDB = false;
-                    return ret1;
-                }
-
-                var ret2 = DB[i];
-                if (ret2 != null) {
-                    LastLoadCache = false;
-                    LastLoadDB = true;
-                    this[i] = ret2;
-                    return ret2;
-                }
-
-                return null;
+                return Cache[i];
             }
         }
-        public List<DataGrab> Save() {
-            return Cache.SaveToDB(DB);
-        }
-
+        
         //
         public HImage GetImage(int i) {
             try { return this[i].Image; }

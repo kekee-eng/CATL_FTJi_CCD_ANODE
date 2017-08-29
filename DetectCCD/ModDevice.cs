@@ -102,11 +102,6 @@ namespace DetectCCD {
 
                 }
             }
-            else  {
-                //从数据库中取图
-                InnerCamera = new CameraDB(GetInnerDb());
-                OuterCamera = new CameraDB(GetOuterDb());
-            }
 
             //设置信息
             if(Static.App.Is4K) {
@@ -168,10 +163,6 @@ namespace DetectCCD {
 
         public Action<DataGrab> EventInnerCamera;
         public Action<DataGrab> EventOuterCamera;
-
-        public event Func<DataGrab.GrabDB> GetInnerDb;
-        public event Func<DataGrab.GrabDB> GetOuterDb;
-
-
+        
     }
 }

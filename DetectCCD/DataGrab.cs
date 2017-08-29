@@ -107,126 +107,7 @@ namespace DetectCCD {
         public static string GenTimeStamp(DateTime time) {
             return time.ToString("yyyy/MM/dd HH:mm:ss.fff");
         }
-
-        //数据库接口
-        public class GrabDB {
-            public GrabDB(TemplateDB parent, string tableName) {
-
-                //
-                db = parent;
-                this.tname = tableName;
-
-                //
-                Count = QueryCount;
-
-                //
-                if (Count != 0) {
-                    Min = QueryMin;
-                    Max = QueryMax;
-
-                    this[Min].Image.GetImageSize(out Width, out Height);
-                }
-            }
-
-            TemplateDB db;
-            string tname;
-
-            public int QueryMin { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MIN(Frame) FROM {0}", tname))[0][0]; } }
-            public int QueryMax { get { return Count == 0 ? 1 : (int)(long)db.Read(string.Format(@"SELECT MAX(Frame) FROM {0}", tname))[0][0]; } }
-            public int QueryCount { get { return db.Count(tname); } }
-
-            public int Min =1;
-            public int Max =1;
-            public int Count =0;
-
-            public int Width = -1;
-            public int Height = -1;
-
-            public DataGrab this[int i] {
-                get {
-                    var ret = db.Read(string.Format(@"SELECT * FROM {0} WHERE Frame=""{1}""", tname, i));
-                    if (ret == null || ret.Count == 0)
-                        return null;
-                    return FromDB(ret[0]);
-                }
-            }
-            public bool Save(DataGrab data) {
-
-                if (data == null)
-                    return false;
-
-                if (data.IsStore)
-                    return false;
-
-                if (db.Count(tname + " WHERE Frame=" + data.Frame) != 0) {
-                    data.IsStore = true;
-                    return false;
-                }
-
-                //
-                bool isSaveImage = (data.hasDefect && Static.App.RecordSaveImageNG) || (!data.hasDefect && Static.App.RecordSaveImageOK);
-                
-                //
-                db.Write(string.Format(@"INSERT INTO {0} ( Camera, Frame, Encoder, Timestamp, Image ) VALUES (  ?,?,?,?,? ) ", tname), ToDB(data, isSaveImage));
-
-                //
-                if (Count == 0) {
-
-                    int w, h;
-                    data.Image.GetImageSize(out w, out h);
-
-                    Width = w;
-                    Height = h;
-
-                    Min = data.Frame;
-                    Max = data.Frame;
-                }
-
-                //
-                Min = Math.Min(Min, data.Frame);
-                Max = Math.Max(Max, data.Frame);
-                Count++;
-
-                return true;
-            }
-            public void CreateTable() {
-
-                //
-                db.Write(string.Format(@"CREATE TABLE IF NOT EXISTS {0} 
-(
-ID              INTEGER     PRIMARY KEY     AUTOINCREMENT,
-Camera          TEXT,
-Frame           INTEGER,
-Encoder         INTEGER,
-Timestamp       TEXT,
-Image           BLOB
-)", this.tname));
-
-            }
-
-            static object[] ToDB(DataGrab data, bool saveImage) {
-                return new object[] { data.Camera, data.Frame, data.Encoder, data.Timestamp, saveImage ? UtilSerialization.obj2bytes(data.Image) : new byte[0] };
-            }
-            static DataGrab FromDB(object[] objs) {
-
-                System.Func<object, object, object> getDef = (obj, def) => obj is System.DBNull ? def : obj;
-
-                var data = new DataGrab() {
-                    Camera = (string)getDef(objs[1], ""),
-                    Frame = (int)(long)getDef(objs[2], 0),
-                    Encoder = (int)(long)getDef(objs[3], 0),
-                    Timestamp = (string)getDef(objs[4], ""),
-                    Image = (HImage)UtilSerialization.bytes2obj((byte[])getDef(objs[5], null)),
-                    IsCreated = true,
-                    IsCache = true,
-                    IsStore = true,
-                };
-                
-                return data;
-
-            }
-        }
-
+        
         //缓存接口
         public class GrabCache : IDisposable {
 
@@ -289,20 +170,7 @@ Image           BLOB
 
                 }
             }
-            public List<DataGrab> SaveToDB(GrabDB tg) {
 
-                //
-                List<DataGrab> saveDatas = new List<DataGrab>();
-                foreach (var val in store.Values) {
-                    if (tg.Save(val))
-                        saveDatas.Add(val);
-                }
-
-                //
-                return saveDatas;
-
-            }
-            
         }
         
     }
