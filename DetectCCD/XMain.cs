@@ -76,8 +76,7 @@ namespace DetectCCD {
                 Static.Log.Info(ex.StackTrace);
 
         }
-
-        public bool isOnline { get { return textMode.SelectedIndex == 0; } }
+        
         public bool isClear = false;
         bool isQuit = false;
         bool isRollOk = false;
@@ -354,10 +353,7 @@ namespace DetectCCD {
 
             //选定用户
             changeUser();
-
-            //
-            textMode.SelectedIndex = Static.App.RunningMode;
-
+            
             //全屏显示
             //selectFullScreen_ItemClick(null, null);
             //status_plc_ItemClick(null, null);
@@ -622,8 +618,6 @@ namespace DetectCCD {
                 }
 
                 //
-                textMode.BackColor = isOnline ? Color.LightGreen : Color.Pink;
-
                 textLabelDefectOffset.Enabled = checkEnableLabelDefect.Checked;
                 textLabelEAOffset.Enabled = checkEnableLabelEA.Checked;
                 textLabelEAForce.Enabled = checkEnableLabelEA.Checked && checkEnableLabelEAForce.Checked;
@@ -634,25 +628,16 @@ namespace DetectCCD {
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
 
                 xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
-                xtraTabControlRoll.SelectedTabPage = isOnline ? xtraTabPageRollOnline : xtraTabPageRollOffline;
 
                 groupRoll.Enabled = Static.App.Is4K && device.isOpen;
-                btnConnect.Enabled = isOnline;
-                btnDisconnect.Enabled = isOnline;
 
-                if (isOnline) {
-                    btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
-                    btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
-                }
-                else {
-                    btnStartGrab.Enabled = isClear && device.isOpen && !device.isGrabbing;
-                    btnStopGrab.Enabled = isClear && device.isOpen && device.isGrabbing;
-                }
+                btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
+                btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
 
                 checkSaveOK.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
-                
+
                 if (device.isOpen) {
                     //
                     _lc_inner_camera.Text = device.InnerCamera.Name;
@@ -686,7 +671,7 @@ namespace DetectCCD {
                 //状态栏
                 status_time.Caption = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                 status_device.ImageIndex = device.isOpen ? 5 : 4;
-                status_memory.Caption = string.Format("内存={0:0.0}M", UtilPerformance.GetMemoryLoad());
+                status_memory.Caption = string.Format("内存已使用={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
                 //更新表格
@@ -803,18 +788,7 @@ namespace DetectCCD {
         private void btnStopGrab_Click(object sender, EventArgs e) {
             DeviceStopGrab();
         }
-
-        private void textMode_SelectedIndexChanged(object sender, EventArgs e) {
-
-            device.Dispose();
-            if (isOnline) {
-                Static.App.RunningMode = 0;
-            }
-            else {
-                Static.App.RunningMode = 1;
-            }
-
-        }
+        
         private async void btnConnect_Click(object sender, EventArgs e) {
             UtilTool.XFWait.Open();
             await Task.Run(() => {

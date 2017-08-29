@@ -10,97 +10,98 @@ namespace DetectCCD {
                 return;
 
             //
-            if (Static.App.ModeByCamera) {
-                if (Static.App.CameraByRealtime) {
+            if (Static.App.CameraByRealtime) {
+                //使用实时相机取图
+
+                if (Static.App.Is4K) {
+                    InnerCamera = new CameraRealtime(
+                        Static.App.Camera4KInnerServer2,
+                        Static.App.Camera4KInnerResource2,
+                        Static.App.Camera4KInnerCCDFile);
+                    OuterCamera = new CameraRealtime(
+                        Static.App.Camera4KOuterServer2,
+                        Static.App.Camera4KOuterResource2,
+                        Static.App.Camera4KOuterCCDFile);
+
+                    //判断反向
+                    if ((InnerCamera.Name == Static.App.Camera4KOuterName) &&
+                        (OuterCamera.Name == Static.App.Camera4KInnerName)) {
+
+                        if (InnerCamera.Name == OuterCamera.Name)
+                            throw new Exception("两只相机请勿使用相同的名称");
+
+                        //交换参数
+                        var tmpServer2 = Static.App.Camera4KOuterServer2;
+                        Static.App.Camera4KOuterServer2 = Static.App.Camera4KInnerServer2;
+                        Static.App.Camera4KInnerServer2 = tmpServer2;
+
+                        //重新检测
+                        Open();
+                        return;
+                    }
+
+                    //确认
+                    if ((InnerCamera.Name != Static.App.Camera4KInnerName)
+                        || (OuterCamera.Name != Static.App.Camera4KOuterName))
+                        throw new Exception("相机名称与预设名称不一致");
+
+                }
+                else if (Static.App.Is8K) {
+
                     //使用实时相机取图
+                    InnerCamera = new CameraRealtime(
+                        Static.App.Camera8KInnerServer1,
+                        Static.App.Camera8KInnerResource1,
+                        Static.App.Camera8KInnerServer2,
+                        Static.App.Camera8KInnerResource2,
+                        Static.App.Camera8KInnerBoardFile,
+                        Static.App.Camera8KInnerCCDFile);
+                    OuterCamera = new CameraRealtime(
+                        Static.App.Camera8KOuterServer1,
+                        Static.App.Camera8KOuterResource1,
+                        Static.App.Camera8KOuterServer2,
+                        Static.App.Camera8KOuterResource2,
+                        Static.App.Camera8KOuterBoardFile,
+                        Static.App.Camera8KOuterCCDFile);
 
-                    if (Static.App.Is4K) {
-                        InnerCamera = new CameraRealtime(
-                            Static.App.Camera4KInnerServer2,
-                            Static.App.Camera4KInnerResource2,
-                            Static.App.Camera4KInnerCCDFile);
-                        OuterCamera = new CameraRealtime(
-                            Static.App.Camera4KOuterServer2,
-                            Static.App.Camera4KOuterResource2,
-                            Static.App.Camera4KOuterCCDFile);
+                    //判断反向
+                    if ((InnerCamera.Name == Static.App.Camera8KOuterName) &&
+                        (OuterCamera.Name == Static.App.Camera8KInnerName)) {
 
-                        //判断反向
-                        if ((InnerCamera.Name == Static.App.Camera4KOuterName) &&
-                            (OuterCamera.Name == Static.App.Camera4KInnerName)) {
+                        if (InnerCamera.Name == OuterCamera.Name)
+                            throw new Exception("两只相机请勿使用相同的名称");
 
-                            if (InnerCamera.Name == OuterCamera.Name)
-                                throw new Exception("两只相机请勿使用相同的名称");
+                        //交换参数
+                        var tmpServer1 = Static.App.Camera8KOuterServer1;
+                        var tmpServer2 = Static.App.Camera8KOuterServer2;
+                        Static.App.Camera8KOuterServer1 = Static.App.Camera8KInnerServer1;
+                        Static.App.Camera8KOuterServer2 = Static.App.Camera8KInnerServer2;
+                        Static.App.Camera8KInnerServer1 = tmpServer1;
+                        Static.App.Camera8KInnerServer2 = tmpServer2;
 
-                            //交换参数
-                            var tmpServer2 = Static.App.Camera4KOuterServer2;
-                            Static.App.Camera4KOuterServer2 = Static.App.Camera4KInnerServer2;
-                            Static.App.Camera4KInnerServer2 = tmpServer2;
-
-                            //重新检测
-                            Open();
-                            return;
-                        }
-
-                        //确认
-                        if ((InnerCamera.Name != Static.App.Camera4KInnerName)
-                            || (OuterCamera.Name != Static.App.Camera4KOuterName))
-                            throw new Exception("相机名称与预设名称不一致");
-
+                        //重新检测
+                        Open();
+                        return;
                     }
-                    else if (Static.App.Is8K) {
 
-                        //使用实时相机取图
-                        InnerCamera = new CameraRealtime(
-                            Static.App.Camera8KInnerServer1,
-                            Static.App.Camera8KInnerResource1,
-                            Static.App.Camera8KInnerServer2,
-                            Static.App.Camera8KInnerResource2,
-                            Static.App.Camera8KInnerBoardFile,
-                            Static.App.Camera8KInnerCCDFile);
-                        OuterCamera = new CameraRealtime(
-                            Static.App.Camera8KOuterServer1,
-                            Static.App.Camera8KOuterResource1,
-                            Static.App.Camera8KOuterServer2,
-                            Static.App.Camera8KOuterResource2,
-                            Static.App.Camera8KOuterBoardFile,
-                            Static.App.Camera8KOuterCCDFile);
-
-                        //判断反向
-                        if ((InnerCamera.Name == Static.App.Camera8KOuterName) &&
-                            (OuterCamera.Name == Static.App.Camera8KInnerName)) {
-
-                            if (InnerCamera.Name == OuterCamera.Name)
-                                throw new Exception("两只相机请勿使用相同的名称");
-
-                            //交换参数
-                            var tmpServer1 = Static.App.Camera8KOuterServer1;
-                            var tmpServer2 = Static.App.Camera8KOuterServer2;
-                            Static.App.Camera8KOuterServer1 = Static.App.Camera8KInnerServer1;
-                            Static.App.Camera8KOuterServer2 = Static.App.Camera8KInnerServer2;
-                            Static.App.Camera8KInnerServer1 = tmpServer1;
-                            Static.App.Camera8KInnerServer2 = tmpServer2;
-
-                            //重新检测
-                            Open();
-                            return;
-                        }
-
-                        //确认
-                        if ((InnerCamera.Name != Static.App.Camera8KInnerName)
-                            || (OuterCamera.Name != Static.App.Camera8KOuterName))
-                            throw new Exception("相机名称与预设名称不一致");
-
-                    }
-                    else
-                        throw new Exception("请在配置文件中选择：4K/8K");
+                    //确认
+                    if ((InnerCamera.Name != Static.App.Camera8KInnerName)
+                        || (OuterCamera.Name != Static.App.Camera8KOuterName))
+                        throw new Exception("相机名称与预设名称不一致");
 
                 }
-                else if (Static.App.CameraByZipFile) {
-                    //从Zip文件取图 
-                    InnerCamera = new CameraZipFile(Static.App.CameraFileInner);
-                    OuterCamera = new CameraZipFile(Static.App.CameraFileOuter);
+                else
+                    throw new Exception("请在配置文件中选择：4K/8K");
 
-                }
+            }
+            else if (Static.App.CameraByZipFile) {
+                //从Zip文件取图 
+                InnerCamera = new CameraZipFile(Static.App.CameraFileInner);
+                OuterCamera = new CameraZipFile(Static.App.CameraFileOuter);
+
+            }
+            else {
+                throw new Exception("请在配置文件中设置相机模式：Realtime/ZipFile");
             }
 
             //设置信息

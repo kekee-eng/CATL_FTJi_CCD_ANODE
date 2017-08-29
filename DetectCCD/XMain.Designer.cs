@@ -63,8 +63,6 @@
             this.btnConnect = new DevExpress.XtraEditors.SimpleButton();
             this.btnQuit = new DevExpress.XtraEditors.SimpleButton();
             this.btnStartGrab = new DevExpress.XtraEditors.SimpleButton();
-            this.textMode = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.groupRoll = new DevExpress.XtraEditors.GroupControl();
             this.xtraTabControlRoll = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPageRollOnline = new DevExpress.XtraTab.XtraTabPage();
@@ -198,7 +196,6 @@
             this.groupRemoteClient.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textMode.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).BeginInit();
@@ -562,17 +559,15 @@
             this.groupControl1.Controls.Add(this.btnConnect);
             this.groupControl1.Controls.Add(this.btnQuit);
             this.groupControl1.Controls.Add(this.btnStartGrab);
-            this.groupControl1.Controls.Add(this.textMode);
-            this.groupControl1.Controls.Add(this.labelControl3);
             this.groupControl1.Location = new System.Drawing.Point(39, 26);
             this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(279, 296);
+            this.groupControl1.Size = new System.Drawing.Size(279, 231);
             this.groupControl1.TabIndex = 0;
             this.groupControl1.Text = "初始化设置";
             // 
             // btnDisconnect
             // 
-            this.btnDisconnect.Location = new System.Drawing.Point(31, 139);
+            this.btnDisconnect.Location = new System.Drawing.Point(30, 81);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(101, 30);
             this.btnDisconnect.TabIndex = 29;
@@ -581,7 +576,7 @@
             // 
             // btnStopGrab
             // 
-            this.btnStopGrab.Location = new System.Drawing.Point(154, 139);
+            this.btnStopGrab.Location = new System.Drawing.Point(153, 81);
             this.btnStopGrab.Name = "btnStopGrab";
             this.btnStopGrab.Size = new System.Drawing.Size(101, 30);
             this.btnStopGrab.TabIndex = 27;
@@ -590,7 +585,7 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(31, 103);
+            this.btnConnect.Location = new System.Drawing.Point(30, 45);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(101, 30);
             this.btnConnect.TabIndex = 28;
@@ -599,7 +594,7 @@
             // 
             // btnQuit
             // 
-            this.btnQuit.Location = new System.Drawing.Point(31, 225);
+            this.btnQuit.Location = new System.Drawing.Point(30, 167);
             this.btnQuit.Name = "btnQuit";
             this.btnQuit.Size = new System.Drawing.Size(101, 30);
             this.btnQuit.TabIndex = 27;
@@ -608,38 +603,12 @@
             // 
             // btnStartGrab
             // 
-            this.btnStartGrab.Location = new System.Drawing.Point(154, 103);
+            this.btnStartGrab.Location = new System.Drawing.Point(153, 45);
             this.btnStartGrab.Name = "btnStartGrab";
             this.btnStartGrab.Size = new System.Drawing.Size(101, 30);
             this.btnStartGrab.TabIndex = 26;
             this.btnStartGrab.Text = "开始采图";
             this.btnStartGrab.Click += new System.EventHandler(this.btnStartGrab_Click);
-            // 
-            // textMode
-            // 
-            this.textMode.EditValue = "";
-            this.textMode.Location = new System.Drawing.Point(85, 40);
-            this.textMode.MenuManager = this.barManager1;
-            this.textMode.Name = "textMode";
-            this.textMode.Properties.AutoHeight = false;
-            this.textMode.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
-            this.textMode.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.textMode.Properties.Items.AddRange(new object[] {
-            "在线（实时检测）",
-            "离线（仿真）"});
-            this.textMode.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.textMode.Size = new System.Drawing.Size(161, 25);
-            this.textMode.TabIndex = 2;
-            this.textMode.SelectedIndexChanged += new System.EventHandler(this.textMode_SelectedIndexChanged);
-            // 
-            // labelControl3
-            // 
-            this.labelControl3.Location = new System.Drawing.Point(31, 45);
-            this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(48, 14);
-            this.labelControl3.TabIndex = 3;
-            this.labelControl3.Text = "运行模式";
             // 
             // groupRoll
             // 
@@ -2024,8 +1993,6 @@
             this.groupRemoteClient.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
-            this.groupControl1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textMode.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).EndInit();
@@ -2149,8 +2116,6 @@
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.ComboBoxEdit textRollType;
         private DevExpress.XtraEditors.TextEdit textRollRepeat;
-        public DevExpress.XtraEditors.ComboBoxEdit textMode;
-        private DevExpress.XtraEditors.LabelControl labelControl3;
         private DevExpress.XtraEditors.GroupControl groupRoll;
         private DevExpress.XtraEditors.SimpleButton btnRollSet;
         private System.Windows.Forms.RichTextBox richTextBox1;

@@ -72,13 +72,6 @@ namespace DetectCCD {
             return (eOutput);
         }
         
-        //运行模式：0=在线（实时检测）、1=离线（仿真）
-        public int RunningMode = 0;
-        public string RollName = "";
-
-        public bool ModeByRecord { get { return RunningMode == 1; } }
-        public bool ModeByCamera { get { return RunningMode != 1; } }
-
         //相机源：真实相机、Zip文件、文件夹、数据库
         public bool CameraByRealtime = false;
         public bool CameraByZipFile = true;
@@ -90,7 +83,6 @@ namespace DetectCCD {
 
         public string CameraFileInner = "D:/#DAT/[1B][20170806][102417-104740][245][F1-F245].zip";
         public string CameraFileOuter = "D:/#DAT/[1A][20170806][102417-104740][245][F1-F245].zip";
-        public string CameraFileDb = "";
 
         public int Camera4KInnerServer2 = 1;
         public int Camera4KInnerResource2 = 0;
