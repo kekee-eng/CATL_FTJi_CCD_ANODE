@@ -138,8 +138,7 @@ CfgParam        BLOB
             });
             
         }
-
-
+        
         public int ShowEACount =0;
         public int ShowEACountView {
             get {
@@ -574,7 +573,7 @@ CfgParam        BLOB
             TabsCache.Add(data);
             return data;
         }
-        DataEA getEA(int id) {
+        DataEA _get_ea(int id) {
 
             var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
             if (curEaTab == null)
@@ -634,7 +633,18 @@ CfgParam        BLOB
 
             return obj;
         }
-        
+        DataEA getEA(int id) {
+            for (int i = 0; i < 10; i++) {
+                try {
+                    return _get_ea(id);
+                }
+                catch (Exception ex) {
+                    Static.Log.Debug("[已处理]", ex);
+                    Thread.Sleep(10);
+                }
+            }
+            return null;
+        }
         double posEAStart = -1;
         void appendTab(DataTab data) {
             int ea = 0;
@@ -676,10 +686,12 @@ CfgParam        BLOB
 
                 //
                 ShowEACount++;
-                if (objEA.IsTabWidthFailCountFail)
+                if (objEA.IsTabWidthFailCountFail) {
                     ShowEAWidthNGCount++;
-                else if (objEA.IsDefectCountFail)
+                }
+                else if (objEA.IsDefectCountFail) {
                     ShowEADefectNGCount++;
+                }
 
                 //
                 EAs.Add(objEA);
