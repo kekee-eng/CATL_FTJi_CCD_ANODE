@@ -14,6 +14,14 @@ namespace DetectCCD {
         static HDevProgram m_program;
         public static string ErrorMessage;
         
+        public static void Init() {
+            m_program?.Dispose();
+            m_engine?.Dispose();
+
+            m_program = null;
+            m_engine = null;
+        }
+
         public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image, out int time) {
 
             Dictionary<string, HTuple> call = null;
@@ -157,7 +165,7 @@ namespace DetectCCD {
             //
             var data = TemplateProcess("DetectDefect", image, out TimeDetectDefect);
             if (data == null) return false;
-
+            
             //
             type = data["OutType"].ToIArr();
             x = data["OutX"].ToDArr();

@@ -131,7 +131,7 @@ namespace DetectCCD {
                         Static.App.FrameInnerToFront(isFront, isInner, y));
                 };
                 RemoteDefect._func_in_8k_init += () => {
-                    DeviceInit(true);
+                    DeviceInit();
                     DeviceStartGrab();
                 };
 
@@ -438,9 +438,12 @@ namespace DetectCCD {
             });
 
         }
-        public void DeviceInit(bool isClear = false) {
+        public void DeviceInit() {
 
             runAction("初始化设备", () => {
+
+                //
+                ImageProcess.Init();
 
                 //
                 device.Dispose();
@@ -463,20 +466,17 @@ namespace DetectCCD {
                 record.InnerViewerImage.SetUserEnable(true);
                 record.OuterViewerImage.SetUserEnable(true);
 
-                this.isClear = isClear;
-                if (isClear) {
-                    record.InnerGrab.Cache.Dispose();
-                    record.OuterGrab.Cache.Dispose();
+                record.InnerGrab.Cache.Dispose();
+                record.OuterGrab.Cache.Dispose();
 
-                    record.InnerDetect.Dispose();
-                    record.OuterDetect.Dispose();
+                record.InnerDetect.Dispose();
+                record.OuterDetect.Dispose();
 
-                    record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
-                    record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
 
-                    record.InnerViewerImage.MoveTargetDirect();
-                    record.OuterViewerImage.MoveTargetDirect();
-                }
+                record.InnerViewerImage.MoveTargetDirect();
+                record.OuterViewerImage.MoveTargetDirect();
 
             });
 
@@ -796,7 +796,7 @@ namespace DetectCCD {
                     Static.SafeRun(RemoteDefect.InitClient);
                     Static.SafeRun(RemotePLC.InitClient);
                 }
-                DeviceInit(true);
+                DeviceInit();
                 DeviceStartGrab();
                 UtilTool.XFWait.Close();
             });

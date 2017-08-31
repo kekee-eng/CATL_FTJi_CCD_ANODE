@@ -48,7 +48,7 @@ namespace DetectCCD {
             }
         }
         private void btnInit_Click(object sender, EventArgs e) {
-            main.DeviceInit(true);
+            main.DeviceInit();
         }
         private void btnStart_Click(object sender, EventArgs e) {
             main.DeviceStartGrab();
