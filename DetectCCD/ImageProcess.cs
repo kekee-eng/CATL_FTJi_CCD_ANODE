@@ -15,9 +15,10 @@ namespace DetectCCD {
         public static string ErrorMessage;
         
         public static void Init() {
+
             m_program?.Dispose();
             m_engine?.Dispose();
-
+            
             m_program = null;
             m_engine = null;
         }
@@ -69,6 +70,11 @@ namespace DetectCCD {
                     string name = procedure.GetOutputCtrlParamName(i);
                     dict[name] = call.GetOutputCtrlParamTuple(i);
                 }
+
+                //
+                call.Dispose();
+                procedure.Dispose();
+                
                 return dict;
             }
             catch (Exception ex) {
