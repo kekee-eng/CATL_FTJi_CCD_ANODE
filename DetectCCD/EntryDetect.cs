@@ -423,7 +423,9 @@ namespace DetectCCD {
                             defect.Height = defect.H * Fy;
                             defect.Area = earea[i] * Fx * Fy / w / h;
 
-                            Defects.Add(defect);
+                            lock (Defects) {
+                                Defects.Add(defect);
+                            }
 
                             //保存NG小图
                             if (Static.App.RecordSaveImageEnable) {
@@ -567,13 +569,13 @@ namespace DetectCCD {
                 if (remoteDefsFront != null) {
                     obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
                     obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
-                    obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 40);
+                    obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 2);
                 }
 
                 if (remoteDefsBack != null) {
                     obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.Type == 0);
                     obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
-                    obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 40);
+                    obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 2);
                 }
 
             }

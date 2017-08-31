@@ -408,15 +408,15 @@ namespace DetectCCD {
                 grid.Rows.Count + 1,
                 dt.EA,
                 dt.GetTypeCaption(),
-                dt.X.ToString("0.000"),
-                dt.Y.ToString("0.000"),
-                dt.W.ToString("0.000"),
-                dt.H.ToString("0.000"),
-                dt.Width.ToString("0.000"),
-                dt.Height.ToString("0.000"),
-                dt.Area.ToString("0.0")
+                dt.X,
+                dt.Y,
+                dt.W,
+                dt.H,
+                dt.Width,
+                dt.Height,
+                dt.Area
                 );
-
+            
         }
         public void InitDefectGrid(Control parent) {
 
@@ -430,11 +430,11 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)" }
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N3" } },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N3" } },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N1" } }
                 );
-
+            
             //
             gridEvent(grid, ImageViewer.MoveToDefect);
 

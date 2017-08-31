@@ -44,14 +44,18 @@ namespace DetectCCD {
         //
         public string GetTypeCaption() {
             switch (Type) {
-                default: return "UNKNOW";
+                default: return "[N]未分类";
+
                 case 0: return "[A]接头";
                 case 1: return "[B]标签";
+                case 2: return "[C]漏金属";
+
+                case 4: return "[U]待定";
+
                 case 10: return "[F]黑斑";
                 case 11: return "[G]白斑";
                 case 20: return "[E]脱碳";
                 case 30: return "[D]划痕";
-                case 40: return "[C]漏金属";
             }
 
         }
@@ -59,7 +63,7 @@ namespace DetectCCD {
         public bool IsTransLabel() {
             if (Static.App.LabelContextJoin && Type == 0) return true;
             if (Static.App.LabelContextTag && Type == 1) return true;
-            if (Static.App.LabelContextLeakMetal && Type == 40) return true;
+            if (Static.App.LabelContextLeakMetal && Type == 2) return true;
 
             return false;
         }
@@ -67,7 +71,7 @@ namespace DetectCCD {
         public bool IsCountEA() {
             if (Static.App.EAContextJoin && Type == 0) return true;
             if (Static.App.EAContextTag && Type == 1) return true;
-            if (Static.App.EAContextLeakMetal && Type == 40) return true;
+            if (Static.App.EAContextLeakMetal && Type == 2) return true;
 
             return false;
         }
