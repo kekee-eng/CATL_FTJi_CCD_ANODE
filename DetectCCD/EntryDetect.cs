@@ -38,7 +38,7 @@ namespace DetectCCD {
             defectFrameCount = 0;
             posEAStart = -1;
         }
-        
+
         EntryGrab grab;
         bool isinner;
 
@@ -54,7 +54,7 @@ namespace DetectCCD {
 
         public List<DataTab> TabsCache = new List<DataTab>();
         public List<DataLabel> LabelsCache = new List<DataLabel>();
-        
+
         void addLabel(DataLabel lab) {
             Static.SafeRun(() => {
 
@@ -81,12 +81,12 @@ namespace DetectCCD {
                             OnNewLabel?.Invoke(minLab);
                         }
                     }
-                } 
+                }
             });
-            
+
         }
-        
-        public int ShowEACount =0;
+
+        public int ShowEACount = 0;
         public int ShowEACountView {
             get {
                 var count1 = Tabs.Count / Static.Param.CheckTabCount;
@@ -98,12 +98,12 @@ namespace DetectCCD {
         }
         public int ShowEAWidthNGCount = 0;
         public int ShowEADefectNGCount = 0;
-        
+
         public event Action<DataLabel> OnNewLabel;
         public event Action<DataTab, DataTab> OnSyncTab;
-        
+
         int defectFrameCount = 0;
-        
+
         public void TryTransLabel(int frame) {
 
             //
@@ -186,7 +186,7 @@ namespace DetectCCD {
 
                 //补测宽度
                 var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
-                
+
                 //同步EA头
                 if (missER.IsNewEA || myMissER.IsNewEA) {
                     missER.IsNewEA = true;
@@ -219,7 +219,7 @@ namespace DetectCCD {
             int w = grab.Width;
             int h = grab.Height;
             bool isNewData = true;
-            if (Tabs.Count > 0 || TabsCache.Count>0) {
+            if (Tabs.Count > 0 || TabsCache.Count > 0) {
 
                 var nearTab = (TabsCache.Count > 0 ? TabsCache.Last() : Tabs.Last());
                 if (nearTab != null && Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Param.TabMergeDistance) {
@@ -336,13 +336,13 @@ namespace DetectCCD {
             TabsCache.Add(data);
 
             //
-            if(data.IsNewEA) {
+            if (data.IsNewEA) {
 
                 int ea = 0;
                 if (Tabs.Count != 0) {
                     ea = Tabs.Last().EA;
                 }
-                
+
                 var objEA = getEA(ea);
                 if (objEA != null) {
 
@@ -423,26 +423,42 @@ namespace DetectCCD {
                             defect.Height = defect.H * Fy;
                             defect.Area = earea[i] * Fx * Fy / w / h;
 
-                            lock (Defects) {
-                                Defects.Add(defect);
-                            }
-
                             //保存NG小图
                             if (Static.App.RecordSaveImageEnable) {
+
+                                var folder = Static.FolderTemp + "ImageNGPart/";
+                                if (!System.IO.Directory.Exists(folder))
+                                    System.IO.Directory.CreateDirectory(folder);
+
+                                string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+
                                 if (Static.App.RecordSaveImageNGSmall && defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
                                     Static.SafeRun(() => {
-                                        var img1 = eimage.ReduceDomain(new HalconDotNet.HRegion(ey[i] - eh[i] / 2, ex[i] - ew[i] / 2, ey[i] + eh[i] / 2, ex[i] + ew[i] / 2));
+
+                                        double h0 = Math.Max(eh[i], 450) + 50;
+                                        double w0 = Math.Max(ew[i], 450) + 50;
+
+                                        double y1 = ey[i] - h0 / 2;
+                                        double x1 = ex[i] - w0 / 2;
+                                        double y2 = ey[i] + h0 / 2;
+                                        double x2 = ex[i] + w0 / 2;
+
+                                        HalconDotNet.HTuple hmax, wmax;
+                                        eimage.GetImageSize(out wmax, out hmax);
+
+                                        y1 = Math.Max(0, y1);
+                                        x1 = Math.Max(0, x1);
+                                        y2 = Math.Min(hmax - 1, y2);
+                                        x2 = Math.Min(wmax - 1, x2);
+
+                                        var img1 = eimage.ReduceDomain(new HalconDotNet.HRegion(y1, x1, y2, x2));
                                         var saveimg = img1.CropDomain();
 
-                                        var folder = Static.FolderTemp + "ImageNGPart/";
-                                        var filename = string.Format("{0}{1}_{2}", folder, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff"), defect.GetTypeCaption());
-
-                                        if (!System.IO.Directory.Exists(folder))
-                                            System.IO.Directory.CreateDirectory(folder);
+                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame);
 
                                         new Thread(new ThreadStart(() => {
                                             Static.SafeRun(() => {
-                                                saveimg.WriteImage("bmp", 0, filename);
+                                                saveimg.WriteImage("png", 0, filename);
                                                 saveimg.Dispose();
                                                 img1.Dispose();
                                             });
@@ -450,6 +466,12 @@ namespace DetectCCD {
                                     });
                                 }
                             }
+
+                            //添加到列表中
+                            lock (Defects) {
+                                Defects.Add(defect);
+                            }
+
                         }
 
                     }
@@ -458,7 +480,7 @@ namespace DetectCCD {
 
             }
         }
-        
+
         DataTab findBind(double frame) {
             return TabsCache.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Param.TabMergeDistance);
         }
@@ -565,7 +587,7 @@ namespace DetectCCD {
 
                 var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, id);
                 var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, id);
-                
+
                 if (remoteDefsFront != null) {
                     obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
                     obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
@@ -647,7 +669,7 @@ namespace DetectCCD {
 
             }
         }
-        
+
         public List<DataEA_SyncFrom4K> _IN_8K_FROM_4K = new List<DataEA_SyncFrom4K>();
         public int AllocAndGetDefectCount(double start, double end, int ea) {
             int count = 0;
