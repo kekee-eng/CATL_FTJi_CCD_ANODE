@@ -435,7 +435,7 @@ namespace DetectCCD {
                         string name = sfd.FileName;
 
                         int start = (int)(Math.Floor(frameY1));
-                        int end = (int)(Math.Ceiling(frameY2));
+                        int end = (int)(Math.Ceiling(frameY2))-1;
 
                         //序列帧
                         for (int i = start; i <= end; i++) {
@@ -445,10 +445,12 @@ namespace DetectCCD {
                             }
                         }
 
-                        //合并图
-                        var img2 = Grab.GetImage(start, end);
-                        if (img2 != null) {
-                            img2.WriteImage("bmp", 0, name.ToLower().Replace(".bmp", string.Format("_Merge.bmp")));
+                        if (end != start) {
+                            //合并图
+                            var img2 = Grab.GetImage(start, end);
+                            if (img2 != null) {
+                                img2.WriteImage("bmp", 0, name.ToLower().Replace(".bmp", string.Format("_Merge.bmp")));
+                            }
                         }
                     }
                 });

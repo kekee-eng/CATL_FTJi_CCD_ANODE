@@ -402,6 +402,13 @@ namespace DetectCCD {
                 int efx2 = frame - 1;
                 defectFrameCount = 0;
 
+                //
+                string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+                var savefolder = Static.FolderTemp + "ImageNGPart/";
+                if (!System.IO.Directory.Exists(savefolder))
+                    System.IO.Directory.CreateDirectory(savefolder);
+
+                //多线程运算
                 Task.Run(() => {
                     var eimage = grab.GetImage(efx1, efx2);
                     int[] etype;
@@ -426,14 +433,10 @@ namespace DetectCCD {
                             //保存NG小图
                             if (Static.App.RecordSaveImageEnable) {
 
-                                var folder = Static.FolderTemp + "ImageNGPart/";
-                                if (!System.IO.Directory.Exists(folder))
-                                    System.IO.Directory.CreateDirectory(folder);
-
-                                string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
-
                                 if (Static.App.RecordSaveImageNGSmall && defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
                                     Static.SafeRun(() => {
+
+                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}", savefolder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame);
 
                                         double h0 = Math.Max(eh[i], 450) + 50;
                                         double w0 = Math.Max(ew[i], 450) + 50;
@@ -451,16 +454,17 @@ namespace DetectCCD {
                                         y2 = Math.Min(hmax - 1, y2);
                                         x2 = Math.Min(wmax - 1, x2);
 
-                                        var img1 = eimage.ReduceDomain(new HalconDotNet.HRegion(y1, x1, y2, x2));
+                                        var reg1 = new HalconDotNet.HRegion(y1, x1, y2, x2);
+                                        var img1 = eimage.ReduceDomain(reg1);
                                         var saveimg = img1.CropDomain();
-
-                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame);
 
                                         new Thread(new ThreadStart(() => {
                                             Static.SafeRun(() => {
                                                 saveimg.WriteImage("png", 0, filename);
+
                                                 saveimg.Dispose();
                                                 img1.Dispose();
+                                                reg1.Dispose();
                                             });
                                         })).Start();
                                     });

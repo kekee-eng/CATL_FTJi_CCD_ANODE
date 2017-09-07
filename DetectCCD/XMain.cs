@@ -83,7 +83,6 @@ namespace DetectCCD {
 
         string rollType = "";
         string rollName = "";
-        int rollRepeat = 0;
 
         public ModRecord record = new ModRecord();
         public ModDevice device = new ModDevice();
@@ -348,6 +347,8 @@ namespace DetectCCD {
             Static.Param.BindTextBox(textWidthMin, "TabWidthMin");
             Static.Param.BindTextBox(textWidthMax, "TabWidthMax");
             Static.Param.BindTextBox(textWidthStep, "TabWidthStep");
+            Static.Param.BindTextBox(textTabCount, "CheckTabCount");
+            
         }
         void init_status() {
 
@@ -742,21 +743,9 @@ namespace DetectCCD {
                         throw new Exception("膜卷号未设定!");
 
                     //
-                    rollRepeat++;
                     rollType = textRollType.SelectedItem.ToString();
                     rollName = textRollName.Text;
-                    textRollRepeat.Text = rollRepeat.ToString();
-
-                    //
-                    string rPath = Static.FolderRecord + string.Format("[{0}][{1}][{2}][{3}].db", Static.App.GetPrex(), rollType, rollName, rollRepeat);
-                    StringBuilder rBuilder = new StringBuilder(rPath);
-                    foreach (char rInvalidChar in Path.GetInvalidPathChars())
-                        rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
-
-                    //
-                    //record.Dispose();
-                    //record.Open(rPath);
-
+                    
                     //
                     textRollType.Enabled = false;
                     textRollName.Enabled = false;
@@ -764,10 +753,7 @@ namespace DetectCCD {
                     isRollOk = true;
                 }
                 else {
-
-                    //
-                    //record.Dispose();
-
+                    
                     //
                     textRollType.Enabled = true;
                     textRollName.Enabled = true;
@@ -791,6 +777,8 @@ namespace DetectCCD {
         
         private async void btnConnect_Click(object sender, EventArgs e) {
             UtilTool.XFWait.Open();
+            closeLabelCSV();
+            closeWidthCSV();
             await Task.Run(() => {
                 if (Static.App.Is4K) {
                     Static.SafeRun(RemoteDefect.InitClient);

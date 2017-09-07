@@ -70,7 +70,6 @@
             this.textRollType = new DevExpress.XtraEditors.ComboBoxEdit();
             this.textRollName = new DevExpress.XtraEditors.TextEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.textRollRepeat = new DevExpress.XtraEditors.TextEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabPageRollOffline = new DevExpress.XtraTab.XtraTabPage();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
@@ -136,9 +135,15 @@
             this.panelDefect1 = new System.Windows.Forms.Panel();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.groupWidth = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
+            this.textTabCount = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl29 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl31 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
             this.textWidthStep = new DevExpress.XtraEditors.TextEdit();
             this.labelControl32 = new DevExpress.XtraEditors.LabelControl();
+            this.textLabelEAForce = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
             this.textWidthMax = new DevExpress.XtraEditors.TextEdit();
             this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
@@ -151,13 +156,10 @@
             this.checkEAContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Tag = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Join = new DevExpress.XtraEditors.CheckEdit();
-            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
             this.groupLabelContext = new DevExpress.XtraEditors.GroupControl();
             this.checkLabelContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkLabelContext_Tag = new DevExpress.XtraEditors.CheckEdit();
             this.checkLabelContext_Join = new DevExpress.XtraEditors.CheckEdit();
-            this.textLabelEAForce = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
             this.checkEnableLabelEAForce = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl14 = new DevExpress.XtraEditors.LabelControl();
             this.textLabelEAOffset = new DevExpress.XtraEditors.TextEdit();
@@ -203,7 +205,6 @@
             this.xtraTabPageRollOnline.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textRollType.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textRollName.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textRollRepeat.Properties)).BeginInit();
             this.xtraTabPageRollOffline.SuspendLayout();
             this.xtraTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
@@ -239,7 +240,9 @@
             this.xtraTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).BeginInit();
             this.groupWidth.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).BeginInit();
@@ -255,7 +258,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_LeakMetal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Tag.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Join.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).BeginInit();
@@ -639,7 +641,6 @@
             this.xtraTabPageRollOnline.Controls.Add(this.textRollType);
             this.xtraTabPageRollOnline.Controls.Add(this.textRollName);
             this.xtraTabPageRollOnline.Controls.Add(this.labelControl2);
-            this.xtraTabPageRollOnline.Controls.Add(this.textRollRepeat);
             this.xtraTabPageRollOnline.Controls.Add(this.labelControl1);
             this.xtraTabPageRollOnline.Name = "xtraTabPageRollOnline";
             this.xtraTabPageRollOnline.Size = new System.Drawing.Size(274, 147);
@@ -647,7 +648,7 @@
             // 
             // btnRollSet
             // 
-            this.btnRollSet.Location = new System.Drawing.Point(136, 110);
+            this.btnRollSet.Location = new System.Drawing.Point(136, 90);
             this.btnRollSet.Name = "btnRollSet";
             this.btnRollSet.Size = new System.Drawing.Size(101, 30);
             this.btnRollSet.TabIndex = 6;
@@ -656,21 +657,23 @@
             // 
             // textRollType
             // 
-            this.textRollType.Location = new System.Drawing.Point(76, 17);
+            this.textRollType.EditValue = "TEST";
+            this.textRollType.Enabled = false;
+            this.textRollType.Location = new System.Drawing.Point(76, 28);
             this.textRollType.MenuManager = this.barManager1;
             this.textRollType.Name = "textRollType";
             this.textRollType.Properties.AutoHeight = false;
             this.textRollType.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.textRollType.Properties.Items.AddRange(new object[] {
-            "4EAL"});
+            "TEST"});
             this.textRollType.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.textRollType.Size = new System.Drawing.Size(161, 25);
             this.textRollType.TabIndex = 4;
             // 
             // textRollName
             // 
-            this.textRollName.Location = new System.Drawing.Point(76, 48);
+            this.textRollName.Location = new System.Drawing.Point(76, 59);
             this.textRollName.MenuManager = this.barManager1;
             this.textRollName.Name = "textRollName";
             this.textRollName.Properties.AutoHeight = false;
@@ -679,25 +682,15 @@
             // 
             // labelControl2
             // 
-            this.labelControl2.Location = new System.Drawing.Point(34, 53);
+            this.labelControl2.Location = new System.Drawing.Point(34, 64);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(36, 14);
             this.labelControl2.TabIndex = 2;
             this.labelControl2.Text = "膜卷号";
             // 
-            // textRollRepeat
-            // 
-            this.textRollRepeat.Enabled = false;
-            this.textRollRepeat.Location = new System.Drawing.Point(76, 79);
-            this.textRollRepeat.MenuManager = this.barManager1;
-            this.textRollRepeat.Name = "textRollRepeat";
-            this.textRollRepeat.Properties.AutoHeight = false;
-            this.textRollRepeat.Size = new System.Drawing.Size(161, 25);
-            this.textRollRepeat.TabIndex = 5;
-            // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(22, 22);
+            this.labelControl1.Location = new System.Drawing.Point(22, 33);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(48, 14);
             this.labelControl1.TabIndex = 0;
@@ -1503,9 +1496,15 @@
             // 
             // groupWidth
             // 
+            this.groupWidth.Controls.Add(this.labelControl3);
+            this.groupWidth.Controls.Add(this.textTabCount);
+            this.groupWidth.Controls.Add(this.labelControl29);
             this.groupWidth.Controls.Add(this.labelControl31);
+            this.groupWidth.Controls.Add(this.labelControl17);
             this.groupWidth.Controls.Add(this.textWidthStep);
             this.groupWidth.Controls.Add(this.labelControl32);
+            this.groupWidth.Controls.Add(this.textLabelEAForce);
+            this.groupWidth.Controls.Add(this.labelControl24);
             this.groupWidth.Controls.Add(this.labelControl25);
             this.groupWidth.Controls.Add(this.textWidthMax);
             this.groupWidth.Controls.Add(this.labelControl26);
@@ -1514,21 +1513,53 @@
             this.groupWidth.Controls.Add(this.labelControl28);
             this.groupWidth.Location = new System.Drawing.Point(486, 21);
             this.groupWidth.Name = "groupWidth";
-            this.groupWidth.Size = new System.Drawing.Size(281, 171);
+            this.groupWidth.Size = new System.Drawing.Size(281, 184);
             this.groupWidth.TabIndex = 20;
-            this.groupWidth.Text = "测宽设置";
+            this.groupWidth.Text = "参数设置";
+            // 
+            // labelControl3
+            // 
+            this.labelControl3.Location = new System.Drawing.Point(169, 149);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(12, 14);
+            this.labelControl3.TabIndex = 72;
+            this.labelControl3.Text = "个";
+            // 
+            // textTabCount
+            // 
+            this.textTabCount.Location = new System.Drawing.Point(63, 146);
+            this.textTabCount.MenuManager = this.barManager1;
+            this.textTabCount.Name = "textTabCount";
+            this.textTabCount.Size = new System.Drawing.Size(100, 20);
+            this.textTabCount.TabIndex = 73;
+            // 
+            // labelControl29
+            // 
+            this.labelControl29.Location = new System.Drawing.Point(21, 149);
+            this.labelControl29.Name = "labelControl29";
+            this.labelControl29.Size = new System.Drawing.Size(36, 14);
+            this.labelControl29.TabIndex = 71;
+            this.labelControl29.Text = "极耳数";
             // 
             // labelControl31
             // 
-            this.labelControl31.Location = new System.Drawing.Point(173, 98);
+            this.labelControl31.Location = new System.Drawing.Point(169, 85);
             this.labelControl31.Name = "labelControl31";
             this.labelControl31.Size = new System.Drawing.Size(20, 14);
             this.labelControl31.TabIndex = 23;
             this.labelControl31.Text = "mm";
             // 
+            // labelControl17
+            // 
+            this.labelControl17.Location = new System.Drawing.Point(169, 123);
+            this.labelControl17.Name = "labelControl17";
+            this.labelControl17.Size = new System.Drawing.Size(20, 14);
+            this.labelControl17.TabIndex = 18;
+            this.labelControl17.Text = "mm";
+            // 
             // textWidthStep
             // 
-            this.textWidthStep.Location = new System.Drawing.Point(67, 95);
+            this.textWidthStep.Location = new System.Drawing.Point(63, 82);
             this.textWidthStep.MenuManager = this.barManager1;
             this.textWidthStep.Name = "textWidthStep";
             this.textWidthStep.Size = new System.Drawing.Size(100, 20);
@@ -1536,15 +1567,31 @@
             // 
             // labelControl32
             // 
-            this.labelControl32.Location = new System.Drawing.Point(37, 98);
+            this.labelControl32.Location = new System.Drawing.Point(33, 85);
             this.labelControl32.Name = "labelControl32";
             this.labelControl32.Size = new System.Drawing.Size(24, 14);
             this.labelControl32.TabIndex = 21;
             this.labelControl32.Text = "步长";
             // 
+            // textLabelEAForce
+            // 
+            this.textLabelEAForce.Location = new System.Drawing.Point(63, 120);
+            this.textLabelEAForce.MenuManager = this.barManager1;
+            this.textLabelEAForce.Name = "textLabelEAForce";
+            this.textLabelEAForce.Size = new System.Drawing.Size(100, 20);
+            this.textLabelEAForce.TabIndex = 70;
+            // 
+            // labelControl24
+            // 
+            this.labelControl24.Location = new System.Drawing.Point(18, 123);
+            this.labelControl24.Name = "labelControl24";
+            this.labelControl24.Size = new System.Drawing.Size(39, 14);
+            this.labelControl24.TabIndex = 16;
+            this.labelControl24.Text = "EA长度";
+            // 
             // labelControl25
             // 
-            this.labelControl25.Location = new System.Drawing.Point(173, 72);
+            this.labelControl25.Location = new System.Drawing.Point(169, 59);
             this.labelControl25.Name = "labelControl25";
             this.labelControl25.Size = new System.Drawing.Size(20, 14);
             this.labelControl25.TabIndex = 20;
@@ -1552,7 +1599,7 @@
             // 
             // textWidthMax
             // 
-            this.textWidthMax.Location = new System.Drawing.Point(67, 44);
+            this.textWidthMax.Location = new System.Drawing.Point(63, 31);
             this.textWidthMax.MenuManager = this.barManager1;
             this.textWidthMax.Name = "textWidthMax";
             this.textWidthMax.Size = new System.Drawing.Size(100, 20);
@@ -1560,7 +1607,7 @@
             // 
             // labelControl26
             // 
-            this.labelControl26.Location = new System.Drawing.Point(37, 72);
+            this.labelControl26.Location = new System.Drawing.Point(33, 59);
             this.labelControl26.Name = "labelControl26";
             this.labelControl26.Size = new System.Drawing.Size(24, 14);
             this.labelControl26.TabIndex = 18;
@@ -1568,7 +1615,7 @@
             // 
             // labelControl27
             // 
-            this.labelControl27.Location = new System.Drawing.Point(173, 46);
+            this.labelControl27.Location = new System.Drawing.Point(169, 33);
             this.labelControl27.Name = "labelControl27";
             this.labelControl27.Size = new System.Drawing.Size(20, 14);
             this.labelControl27.TabIndex = 17;
@@ -1576,7 +1623,7 @@
             // 
             // textWidthMin
             // 
-            this.textWidthMin.Location = new System.Drawing.Point(67, 70);
+            this.textWidthMin.Location = new System.Drawing.Point(63, 57);
             this.textWidthMin.MenuManager = this.barManager1;
             this.textWidthMin.Name = "textWidthMin";
             this.textWidthMin.Size = new System.Drawing.Size(100, 20);
@@ -1584,7 +1631,7 @@
             // 
             // labelControl28
             // 
-            this.labelControl28.Location = new System.Drawing.Point(37, 46);
+            this.labelControl28.Location = new System.Drawing.Point(33, 33);
             this.labelControl28.Name = "labelControl28";
             this.labelControl28.Size = new System.Drawing.Size(24, 14);
             this.labelControl28.TabIndex = 15;
@@ -1593,10 +1640,7 @@
             // groupLabel
             // 
             this.groupLabel.Controls.Add(this.groupEAContext);
-            this.groupLabel.Controls.Add(this.labelControl17);
             this.groupLabel.Controls.Add(this.groupLabelContext);
-            this.groupLabel.Controls.Add(this.textLabelEAForce);
-            this.groupLabel.Controls.Add(this.labelControl24);
             this.groupLabel.Controls.Add(this.checkEnableLabelEAForce);
             this.groupLabel.Controls.Add(this.labelControl14);
             this.groupLabel.Controls.Add(this.textLabelEAOffset);
@@ -1661,14 +1705,6 @@
             this.checkEAContext_Join.Size = new System.Drawing.Size(87, 19);
             this.checkEAContext_Join.TabIndex = 10;
             // 
-            // labelControl17
-            // 
-            this.labelControl17.Location = new System.Drawing.Point(374, 123);
-            this.labelControl17.Name = "labelControl17";
-            this.labelControl17.Size = new System.Drawing.Size(20, 14);
-            this.labelControl17.TabIndex = 18;
-            this.labelControl17.Text = "mm";
-            // 
             // groupLabelContext
             // 
             this.groupLabelContext.Controls.Add(this.checkLabelContext_LeakMetal);
@@ -1706,22 +1742,6 @@
             this.checkLabelContext_Join.Properties.Caption = "接头";
             this.checkLabelContext_Join.Size = new System.Drawing.Size(87, 19);
             this.checkLabelContext_Join.TabIndex = 10;
-            // 
-            // textLabelEAForce
-            // 
-            this.textLabelEAForce.Location = new System.Drawing.Point(268, 120);
-            this.textLabelEAForce.MenuManager = this.barManager1;
-            this.textLabelEAForce.Name = "textLabelEAForce";
-            this.textLabelEAForce.Size = new System.Drawing.Size(100, 20);
-            this.textLabelEAForce.TabIndex = 70;
-            // 
-            // labelControl24
-            // 
-            this.labelControl24.Location = new System.Drawing.Point(223, 123);
-            this.labelControl24.Name = "labelControl24";
-            this.labelControl24.Size = new System.Drawing.Size(39, 14);
-            this.labelControl24.TabIndex = 16;
-            this.labelControl24.Text = "EA长度";
             // 
             // checkEnableLabelEAForce
             // 
@@ -1845,7 +1865,7 @@
             this.groupViewer.Controls.Add(this.ckViewLocal);
             this.groupViewer.Location = new System.Drawing.Point(786, 21);
             this.groupViewer.Name = "groupViewer";
-            this.groupViewer.Size = new System.Drawing.Size(298, 171);
+            this.groupViewer.Size = new System.Drawing.Size(298, 184);
             this.groupViewer.TabIndex = 40;
             this.groupViewer.Text = "同步视图";
             // 
@@ -2001,7 +2021,6 @@
             this.xtraTabPageRollOnline.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textRollType.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textRollName.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textRollRepeat.Properties)).EndInit();
             this.xtraTabPageRollOffline.ResumeLayout(false);
             this.xtraTabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
@@ -2038,7 +2057,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).EndInit();
             this.groupWidth.ResumeLayout(false);
             this.groupWidth.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).EndInit();
@@ -2055,7 +2076,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_LeakMetal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Tag.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Join.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).EndInit();
@@ -2115,7 +2135,6 @@
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.ComboBoxEdit textRollType;
-        private DevExpress.XtraEditors.TextEdit textRollRepeat;
         private DevExpress.XtraEditors.GroupControl groupRoll;
         private DevExpress.XtraEditors.SimpleButton btnRollSet;
         private System.Windows.Forms.RichTextBox richTextBox1;
@@ -2240,5 +2259,8 @@
         private DevExpress.XtraEditors.CheckEdit checkEAContext_Tag;
         private DevExpress.XtraEditors.CheckEdit checkEAContext_Join;
         private DevExpress.XtraEditors.CheckEdit checkEAContext_Width;
+        private DevExpress.XtraEditors.LabelControl labelControl3;
+        private DevExpress.XtraEditors.TextEdit textTabCount;
+        private DevExpress.XtraEditors.LabelControl labelControl29;
     }
 }
