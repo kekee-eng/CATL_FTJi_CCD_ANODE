@@ -421,83 +421,70 @@ namespace DetectCCD {
                     System.IO.Directory.CreateDirectory(savefolder4);
 
                 //多线程运算
-                Task.Run(() => {
-                    var eimage = grab.GetImage(efx1, efx2);
-                    int[] etype;
-                    double[] ex, ey, ew, eh, earea;
-                    if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
+                new Thread(new ThreadStart(() => {
 
-                        int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
-                        for (int i = 0; i < ecc; i++) {
-                            DataDefect defect = new DataDefect() {
-                                EA = -1,
-                                Type = etype[i],
-                                X = ex[i] / w,
-                                Y = efx1 + ey[i] / h,
-                                W = ew[i] / w,
-                                H = eh[i] / h
-                            };
+                    Static.SafeRun(() => {
+                        var eimage = grab.GetImage(efx1, efx2);
+                        int[] etype;
+                        double[] ex, ey, ew, eh, earea;
+                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
 
-                            defect.Width = defect.W * Fx;
-                            defect.Height = defect.H * Fy;
-                            defect.Area = earea[i] * Fx * Fy / w / h;
+                            int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
+                            var myDefects = new List<DataDefect>();
+                            for (int i = 0; i < ecc; i++) {
+                                DataDefect defect = new DataDefect() {
+                                    EA = -1,
+                                    Type = etype[i],
+                                    X = ex[i] / w,
+                                    Y = efx1 + ey[i] / h,
+                                    W = ew[i] / w,
+                                    H = eh[i] / h
+                                };
+
+                                defect.Width = defect.W * Fx;
+                                defect.Height = defect.H * Fy;
+                                defect.Area = earea[i] * Fx * Fy / w / h;
+
+                                myDefects.Add(defect);
+                            }
 
                             //添加到列表中
                             lock (Defects) {
-                                Defects.Add(defect);
+                                Defects.AddRange(myDefects);
                             }
 
                             //保存NG小图
-                            if (Static.App.RecordSaveImageEnable) {
-
-                                if (Static.App.RecordSaveImageNGSmall && defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
-                                    Static.SafeRun(() => {
+                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall) {
+                                for (int i = 0; i < ecc; i++) {
+                                    var defect = myDefects[i];
+                                    if (defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
 
                                         string folder = "";
                                         if (defect.Type == 0) folder = savefolder1;
                                         else if (defect.Type == 1) folder = savefolder2;
                                         else if (defect.Type == 2) folder = savefolder3;
                                         else folder = savefolder4;
-                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame);
+
+                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
 
                                         double h0 = Math.Max(eh[i], 450) + 50;
                                         double w0 = Math.Max(ew[i], 450) + 50;
 
-                                        double y1 = ey[i] - h0 / 2;
-                                        double x1 = ex[i] - w0 / 2;
-                                        double y2 = ey[i] + h0 / 2;
-                                        double x2 = ex[i] + w0 / 2;
+                                        var saveimg = eimage.CropPart(ey[i] - h0 / 2, ex[i] - w0 / 2, w0, h0);
+                                        saveimg?.WriteImage("png", 0, filename);
+                                        saveimg?.Dispose();
 
-                                        HalconDotNet.HTuple hmax, wmax;
-                                        eimage.GetImageSize(out wmax, out hmax);
-
-                                        y1 = Math.Max(0, y1);
-                                        x1 = Math.Max(0, x1);
-                                        y2 = Math.Min(hmax - 1, y2);
-                                        x2 = Math.Min(wmax - 1, x2);
-
-                                        var reg1 = new HalconDotNet.HRegion(y1, x1, y2, x2);
-                                        var img1 = eimage.ReduceDomain(reg1);
-                                        var saveimg = img1.CropDomain();
-
-                                        new Thread(new ThreadStart(() => {
-                                            Static.SafeRun(() => {
-                                                saveimg.WriteImage("png", 0, filename);
-
-                                                saveimg.Dispose();
-                                                img1.Dispose();
-                                                reg1.Dispose();
-                                            });
-                                        })).Start();
-                                    });
+                                    }
                                 }
+
                             }
 
                         }
 
-                    }
-                    eimage?.Dispose();
-                });
+                        //
+                        eimage?.Dispose();
+                    });
+                })).Start();
 
             }
         }
