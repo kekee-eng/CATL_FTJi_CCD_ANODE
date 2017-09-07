@@ -405,8 +405,20 @@ namespace DetectCCD {
                 //
                 string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
                 var savefolder = Static.FolderTemp + "ImageNGPart/";
-                if (!System.IO.Directory.Exists(savefolder))
-                    System.IO.Directory.CreateDirectory(savefolder);
+
+                var savefolder1 = savefolder + "接头/";
+                var savefolder2 = savefolder + "标签/";
+                var savefolder3 = savefolder + "漏金属/";
+                var savefolder4 = savefolder + "其它/";
+
+                if (!System.IO.Directory.Exists(savefolder1))
+                    System.IO.Directory.CreateDirectory(savefolder1);
+                if (!System.IO.Directory.Exists(savefolder2))
+                    System.IO.Directory.CreateDirectory(savefolder2);
+                if (!System.IO.Directory.Exists(savefolder3))
+                    System.IO.Directory.CreateDirectory(savefolder3);
+                if (!System.IO.Directory.Exists(savefolder4))
+                    System.IO.Directory.CreateDirectory(savefolder4);
 
                 //多线程运算
                 Task.Run(() => {
@@ -430,13 +442,23 @@ namespace DetectCCD {
                             defect.Height = defect.H * Fy;
                             defect.Area = earea[i] * Fx * Fy / w / h;
 
+                            //添加到列表中
+                            lock (Defects) {
+                                Defects.Add(defect);
+                            }
+
                             //保存NG小图
                             if (Static.App.RecordSaveImageEnable) {
 
                                 if (Static.App.RecordSaveImageNGSmall && defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
                                     Static.SafeRun(() => {
 
-                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}", savefolder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame);
+                                        string folder = "";
+                                        if (defect.Type == 0) folder = savefolder1;
+                                        else if (defect.Type == 1) folder = savefolder2;
+                                        else if (defect.Type == 2) folder = savefolder3;
+                                        else folder = savefolder4;
+                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame);
 
                                         double h0 = Math.Max(eh[i], 450) + 50;
                                         double w0 = Math.Max(ew[i], 450) + 50;
@@ -469,11 +491,6 @@ namespace DetectCCD {
                                         })).Start();
                                     });
                                 }
-                            }
-
-                            //添加到列表中
-                            lock (Defects) {
-                                Defects.Add(defect);
                             }
 
                         }

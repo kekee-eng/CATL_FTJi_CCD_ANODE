@@ -806,24 +806,26 @@ namespace DetectCCD {
         }
 
         private async void btnConnectRemote8K_Click(object sender, EventArgs e) {
-
-            UtilTool.XFWait.Open();
-            await Task.Run(() => {
-                runAction((sender as SimpleButton).Text, () => {
-                    RemoteDefect.InitClient();
+            if (!RemoteDefect.isConnect) {
+                UtilTool.XFWait.Open();
+                await Task.Run(() => {
+                    runAction((sender as SimpleButton).Text, () => {
+                        RemoteDefect.InitClient();
+                    });
+                    UtilTool.XFWait.Close();
                 });
-                UtilTool.XFWait.Close();
-            });
+            }
         }
         private async void btnConnectRemotePLC_Click(object sender, EventArgs e) {
-
-            UtilTool.XFWait.Open();
-            await Task.Run(() => {
-                runAction((sender as SimpleButton).Text, () => {
-                    RemotePLC.InitClient();
+            if (!RemotePLC.isConnect) {
+                UtilTool.XFWait.Open();
+                await Task.Run(() => {
+                    runAction((sender as SimpleButton).Text, () => {
+                        RemotePLC.InitClient();
+                    });
+                    UtilTool.XFWait.Close();
                 });
-                UtilTool.XFWait.Close();
-            });
+            }
         }
         
     }
