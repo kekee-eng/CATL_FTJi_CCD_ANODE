@@ -572,7 +572,6 @@ namespace DetectCCD {
                 csvWidthWriter.WriteLine();
             });
         }
-
         void saveLabelCSV(bool isInner, DataLabel label) {
             Static.SafeRun(() => {
                 if (csvLabelWriter == null) {
@@ -621,7 +620,6 @@ namespace DetectCCD {
                 //
                 textLabelDefectOffset.Enabled = checkEnableLabelDefect.Checked;
                 textLabelEAOffset.Enabled = checkEnableLabelEA.Checked;
-                textLabelEAForce.Enabled = checkEnableLabelEA.Checked && checkEnableLabelEAForce.Checked;
                 checkEnableLabelEAEveryOne.Enabled = checkEnableLabelEA.Checked;
                 checkEnableLabelEAForce.Enabled = checkEnableLabelEA.Checked;
 

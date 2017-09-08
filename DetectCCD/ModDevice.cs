@@ -17,11 +17,13 @@ namespace DetectCCD {
                     InnerCamera = new CameraRealtime(
                         Static.App.Camera4KInnerServer2,
                         Static.App.Camera4KInnerResource2,
-                        Static.App.Camera4KInnerCCDFile);
+                        Static.App.Camera4KInnerCCDFile,
+                        Static.App.Camera4KCache);
                     OuterCamera = new CameraRealtime(
                         Static.App.Camera4KOuterServer2,
                         Static.App.Camera4KOuterResource2,
-                        Static.App.Camera4KOuterCCDFile);
+                        Static.App.Camera4KOuterCCDFile,
+                        Static.App.Camera4KCache);
 
                     //判断反向
                     if ((InnerCamera.Name == Static.App.Camera4KOuterName) &&
@@ -55,14 +57,16 @@ namespace DetectCCD {
                         Static.App.Camera8KInnerServer2,
                         Static.App.Camera8KInnerResource2,
                         Static.App.Camera8KInnerBoardFile,
-                        Static.App.Camera8KInnerCCDFile);
+                        Static.App.Camera8KInnerCCDFile,
+                        Static.App.Camera8KCache);
                     OuterCamera = new CameraRealtime(
                         Static.App.Camera8KOuterServer1,
                         Static.App.Camera8KOuterResource1,
                         Static.App.Camera8KOuterServer2,
                         Static.App.Camera8KOuterResource2,
                         Static.App.Camera8KOuterBoardFile,
-                        Static.App.Camera8KOuterCCDFile);
+                        Static.App.Camera8KOuterCCDFile,
+                        Static.App.Camera8KCache);
 
                     //判断反向
                     if ((InnerCamera.Name == Static.App.Camera8KOuterName) &&
