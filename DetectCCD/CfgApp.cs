@@ -85,7 +85,7 @@ namespace DetectCCD {
         public string CameraFileInner = "D:/#DAT/[1B][20170806][102417-104740][245][F1-F245].zip";
         public string CameraFileOuter = "D:/#DAT/[1A][20170806][102417-104740][245][F1-F245].zip";
 
-        public int Camera4KCache = 1;
+        public int Camera4KCache = 2;
         public int Camera8KCache = 2;
 
         public int Camera4KInnerServer2 = 1;
