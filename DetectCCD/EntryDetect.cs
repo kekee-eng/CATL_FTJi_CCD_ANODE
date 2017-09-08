@@ -366,7 +366,11 @@ namespace DetectCCD {
             }
 
             //强制打标
-            if (Static.App.Is4K && Static.App.EnableLabelEA && Static.App.EnableLabelEA_Force) {
+            if (Static.App.Is4K 
+                && Static.App.EnableLabelEA 
+                && Static.App.EnableLabelEA_Force 
+                && Static.Param.LabelY_EA_Force > 100) {
+
                 if (posEAStart >= 0) {
                     var y0 = posEAStart + Static.Param.LabelY_EA_Force / Fy;
                     if (data.TabY1 > y0) {
