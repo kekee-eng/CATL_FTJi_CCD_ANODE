@@ -108,6 +108,7 @@ namespace DetectCCD {
         
         List<double> offsetList = new List<double>();
         void addOffset(double offset) {
+            
             offsetList.Add(offset);
             if (offsetList.Count > 10) {
                 offsetList.RemoveAt(0);
@@ -179,7 +180,10 @@ namespace DetectCCD {
             else {
 
                 //纠偏
-                addOffset(myER.TabY1 - bindER.TabY1);
+                var offset = myER.TabY1 - bindER.TabY1;
+                if (Math.Abs(offset - diffFrame) < 1.2) {
+                    addOffset(offset);
+                }
             }
 
             //找到：标记已同步
