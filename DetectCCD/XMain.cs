@@ -132,6 +132,7 @@ namespace DetectCCD {
                 RemoteDefect._func_in_8k_init += () => {
                     DeviceInit();
                     DeviceStartGrab();
+                    groupDevice.Enabled = false;
                 };
 
             }
@@ -235,8 +236,9 @@ namespace DetectCCD {
                         else {
                             detect.TryAddDefect(g.hasDefect, frame);
                         }
+
                         record.OuterViewerImage.SetBottomTarget(frame);
-                        record.InnerViewerImage.SetBottomTarget(frame - Static.App.FixFrameOuterOrBackOffset);
+                        record.InnerViewerImage.SetBottomTarget(frame - detect.DiffFrame);
                         detect.m_frame++;
                     });
                 };
@@ -781,6 +783,8 @@ namespace DetectCCD {
                 if (Static.App.Is4K) {
                     Static.SafeRun(RemoteDefect.InitClient);
                     Static.SafeRun(RemotePLC.InitClient);
+
+                    Static.SafeRun(RemoteDefect.In4KCall8K_Init);
                 }
                 DeviceInit();
                 DeviceStartGrab();

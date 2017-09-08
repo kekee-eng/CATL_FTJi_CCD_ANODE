@@ -37,6 +37,8 @@ namespace DetectCCD {
             m_frame = 1;
             defectFrameCount = 0;
             posEAStart = -1;
+            
+            offsetList.Clear();
         }
 
         EntryGrab grab;
@@ -103,6 +105,23 @@ namespace DetectCCD {
         public event Action<DataTab, DataTab> OnSyncTab;
 
         int defectFrameCount = 0;
+        
+        List<double> offsetList = new List<double>();
+        void addOffset(double offset) {
+            offsetList.Add(offset);
+            if (offsetList.Count > 10) {
+                offsetList.RemoveAt(0);
+            }
+        }
+        public double DiffFrame {
+            get {
+                if (offsetList.Count < 10)
+                    return Static.App.FixFrameOuterOrBackOffset;
+                else {
+                    return offsetList.Average();
+                }
+            }
+        }
 
         public void TryTransLabel(int frame) {
 
@@ -143,7 +162,7 @@ namespace DetectCCD {
             // diff = this - partner
             // this = partner + diff
             // partner = this - diff
-            var diffFrame = Static.App.FixFrameOuterOrBackOffset;
+            var diffFrame = DiffFrame;
 
             //需要同步的对象
             var myER = TabsCache.Last();
@@ -156,6 +175,11 @@ namespace DetectCCD {
 
                 //未找到：对方补测一个宽度
                 bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
+            }
+            else {
+
+                //纠偏
+                addOffset(myER.TabY1 - bindER.TabY1);
             }
 
             //找到：标记已同步

@@ -31,7 +31,12 @@ namespace DetectCCD {
             }
 
             //测试连接
-            try { client._in_8k_init(); }
+            try {
+                client._in_8k_viewer(true, true, 0,
+                    Static.App.DiffFrameInnerOuter,
+                    Static.App.DiffFrameFrontBack,
+                    Static.App.DiffFrameInnerFront);
+            }
             catch (Exception ex) {
                 Static.Log.Error("RemoteDefect:", ex);
                 client = null;

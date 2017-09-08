@@ -57,7 +57,7 @@
             this._lc_remote_8k = new DevExpress.XtraEditors.LabelControl();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
-            this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
+            this.groupDevice = new DevExpress.XtraEditors.GroupControl();
             this.btnDisconnect = new DevExpress.XtraEditors.SimpleButton();
             this.btnStopGrab = new DevExpress.XtraEditors.SimpleButton();
             this.btnConnect = new DevExpress.XtraEditors.SimpleButton();
@@ -196,8 +196,8 @@
             this.xtraTabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).BeginInit();
             this.groupRemoteClient.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
-            this.groupControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupDevice)).BeginInit();
+            this.groupDevice.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).BeginInit();
@@ -482,7 +482,7 @@
             // xtraTabPage1
             // 
             this.xtraTabPage1.Controls.Add(this.groupRemoteClient);
-            this.xtraTabPage1.Controls.Add(this.groupControl1);
+            this.xtraTabPage1.Controls.Add(this.groupDevice);
             this.xtraTabPage1.Controls.Add(this.groupRoll);
             this.xtraTabPage1.ImageIndex = 0;
             this.xtraTabPage1.MaxTabPageWidth = 100;
@@ -556,16 +556,16 @@
             // 
             // groupControl1
             // 
-            this.groupControl1.Controls.Add(this.btnDisconnect);
-            this.groupControl1.Controls.Add(this.btnStopGrab);
-            this.groupControl1.Controls.Add(this.btnConnect);
-            this.groupControl1.Controls.Add(this.btnQuit);
-            this.groupControl1.Controls.Add(this.btnStartGrab);
-            this.groupControl1.Location = new System.Drawing.Point(39, 26);
-            this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(279, 231);
-            this.groupControl1.TabIndex = 0;
-            this.groupControl1.Text = "初始化设置";
+            this.groupDevice.Controls.Add(this.btnDisconnect);
+            this.groupDevice.Controls.Add(this.btnStopGrab);
+            this.groupDevice.Controls.Add(this.btnConnect);
+            this.groupDevice.Controls.Add(this.btnQuit);
+            this.groupDevice.Controls.Add(this.btnStartGrab);
+            this.groupDevice.Location = new System.Drawing.Point(39, 26);
+            this.groupDevice.Name = "groupControl1";
+            this.groupDevice.Size = new System.Drawing.Size(279, 231);
+            this.groupDevice.TabIndex = 0;
+            this.groupDevice.Text = "初始化设置";
             // 
             // btnDisconnect
             // 
@@ -2011,8 +2011,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).EndInit();
             this.groupRemoteClient.ResumeLayout(false);
             this.groupRemoteClient.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
-            this.groupControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupDevice)).EndInit();
+            this.groupDevice.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).EndInit();
@@ -2130,7 +2130,7 @@
         private DevExpress.XtraBars.BarStaticItem barStaticItem2;
         private DevExpress.XtraBars.BarStaticItem status_diskspace;
         private DevExpress.XtraBars.BarStaticItem status_memory;
-        private DevExpress.XtraEditors.GroupControl groupControl1;
+        private DevExpress.XtraEditors.GroupControl groupDevice;
         private DevExpress.XtraEditors.TextEdit textRollName;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.LabelControl labelControl1;
