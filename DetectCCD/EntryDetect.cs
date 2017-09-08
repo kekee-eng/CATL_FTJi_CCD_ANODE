@@ -230,12 +230,29 @@ namespace DetectCCD {
                         myMissER.MarkY = missER.MarkY + diffFrame;
                     }
                 }
+                
+                //Fix: 宽度值为0
+                if (myMissER.ValWidth == 0 && missER.ValWidth != 0) {
+                    myMissER.ValWidth = missER.ValWidth;
+                }
+                if (myMissER.ValWidth != 0 && missER.ValWidth == 0) {
+                    missER.ValWidth = myMissER.ValWidth;
+                }
 
+                //
                 appendTab(myMissER);
                 partner.appendTab(missER);
             } while (true);
 
-            //重置序号
+            //Fix: 宽度值为0
+            if(myER.ValWidth ==0 && bindER.ValWidth!=0) {
+                myER.ValWidth = bindER.ValWidth;
+            }
+            if(myER.ValWidth!=0 && bindER.ValWidth ==0) {
+                bindER.ValWidth = myER.ValWidth;
+            }
+
+            //添加到列表
             appendTab(myER);
             partner.appendTab(bindER);
             OnSyncTab?.Invoke(myER, bindER);
