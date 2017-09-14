@@ -66,9 +66,9 @@
             this.groupRoll = new DevExpress.XtraEditors.GroupControl();
             this.btnRollSet = new DevExpress.XtraEditors.SimpleButton();
             this.textRollType = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.textRollName = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
+            this.textRollName = new DevExpress.XtraEditors.TextEdit();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -642,14 +642,13 @@
             this.textRollType.Size = new System.Drawing.Size(161, 25);
             this.textRollType.TabIndex = 4;
             // 
-            // textRollName
+            // labelControl1
             // 
-            this.textRollName.Location = new System.Drawing.Point(87, 79);
-            this.textRollName.MenuManager = this.barManager1;
-            this.textRollName.Name = "textRollName";
-            this.textRollName.Properties.AutoHeight = false;
-            this.textRollName.Size = new System.Drawing.Size(161, 25);
-            this.textRollName.TabIndex = 3;
+            this.labelControl1.Location = new System.Drawing.Point(33, 53);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(48, 14);
+            this.labelControl1.TabIndex = 0;
+            this.labelControl1.Text = "应用料号";
             // 
             // labelControl2
             // 
@@ -659,13 +658,14 @@
             this.labelControl2.TabIndex = 2;
             this.labelControl2.Text = "膜卷号";
             // 
-            // labelControl1
+            // textRollName
             // 
-            this.labelControl1.Location = new System.Drawing.Point(33, 53);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(48, 14);
-            this.labelControl1.TabIndex = 0;
-            this.labelControl1.Text = "应用料号";
+            this.textRollName.Location = new System.Drawing.Point(87, 79);
+            this.textRollName.MenuManager = this.barManager1;
+            this.textRollName.Name = "textRollName";
+            this.textRollName.Properties.AutoHeight = false;
+            this.textRollName.Size = new System.Drawing.Size(161, 25);
+            this.textRollName.TabIndex = 3;
             // 
             // xtraTabPage2
             // 
@@ -1777,7 +1777,7 @@
             this.checkEnableLabelDefect.Location = new System.Drawing.Point(22, 43);
             this.checkEnableLabelDefect.MenuManager = this.barManager1;
             this.checkEnableLabelDefect.Name = "checkEnableLabelDefect";
-            this.checkEnableLabelDefect.Properties.Caption = "启用“接头标签转标”";
+            this.checkEnableLabelDefect.Properties.Caption = "启用“转标”";
             this.checkEnableLabelDefect.Size = new System.Drawing.Size(160, 19);
             this.checkEnableLabelDefect.TabIndex = 10;
             // 
