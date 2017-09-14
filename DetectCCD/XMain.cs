@@ -430,7 +430,6 @@ namespace DetectCCD {
                 if (openFileDialog1.ShowDialog() == DialogResult.OK) {
 
                     record.Dispose();
-                    richTextBox1.Text = openFileDialog1.FileName;
 
                     //初始化
                     DeviceInit();
@@ -628,9 +627,7 @@ namespace DetectCCD {
 
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
-
-                xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.False;
-
+                
                 groupRoll.Enabled = Static.App.Is4K && device.isOpen;
 
                 btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;

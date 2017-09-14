@@ -64,15 +64,11 @@
             this.btnQuit = new DevExpress.XtraEditors.SimpleButton();
             this.btnStartGrab = new DevExpress.XtraEditors.SimpleButton();
             this.groupRoll = new DevExpress.XtraEditors.GroupControl();
-            this.xtraTabControlRoll = new DevExpress.XtraTab.XtraTabControl();
-            this.xtraTabPageRollOnline = new DevExpress.XtraTab.XtraTabPage();
             this.btnRollSet = new DevExpress.XtraEditors.SimpleButton();
             this.textRollType = new DevExpress.XtraEditors.ComboBoxEdit();
             this.textRollName = new DevExpress.XtraEditors.TextEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.xtraTabPageRollOffline = new DevExpress.XtraTab.XtraTabPage();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -200,12 +196,8 @@
             this.groupDevice.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).BeginInit();
-            this.xtraTabControlRoll.SuspendLayout();
-            this.xtraTabPageRollOnline.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textRollType.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textRollName.Properties)).BeginInit();
-            this.xtraTabPageRollOffline.SuspendLayout();
             this.xtraTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             this.splitContainerControl1.SuspendLayout();
@@ -554,7 +546,7 @@
             this.labelControl4.TabIndex = 0;
             this.labelControl4.Text = "8K";
             // 
-            // groupControl1
+            // groupDevice
             // 
             this.groupDevice.Controls.Add(this.btnDisconnect);
             this.groupDevice.Controls.Add(this.btnStopGrab);
@@ -562,7 +554,7 @@
             this.groupDevice.Controls.Add(this.btnQuit);
             this.groupDevice.Controls.Add(this.btnStartGrab);
             this.groupDevice.Location = new System.Drawing.Point(39, 26);
-            this.groupDevice.Name = "groupControl1";
+            this.groupDevice.Name = "groupDevice";
             this.groupDevice.Size = new System.Drawing.Size(279, 231);
             this.groupDevice.TabIndex = 0;
             this.groupDevice.Text = "初始化设置";
@@ -614,41 +606,20 @@
             // 
             // groupRoll
             // 
-            this.groupRoll.Controls.Add(this.xtraTabControlRoll);
+            this.groupRoll.Controls.Add(this.btnRollSet);
+            this.groupRoll.Controls.Add(this.textRollType);
+            this.groupRoll.Controls.Add(this.labelControl1);
+            this.groupRoll.Controls.Add(this.labelControl2);
+            this.groupRoll.Controls.Add(this.textRollName);
             this.groupRoll.Location = new System.Drawing.Point(351, 26);
             this.groupRoll.Name = "groupRoll";
             this.groupRoll.Size = new System.Drawing.Size(284, 199);
             this.groupRoll.TabIndex = 6;
             this.groupRoll.Text = "膜卷记录";
             // 
-            // xtraTabControlRoll
-            // 
-            this.xtraTabControlRoll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControlRoll.HeaderLocation = DevExpress.XtraTab.TabHeaderLocation.Bottom;
-            this.xtraTabControlRoll.Location = new System.Drawing.Point(2, 21);
-            this.xtraTabControlRoll.Name = "xtraTabControlRoll";
-            this.xtraTabControlRoll.SelectedTabPage = this.xtraTabPageRollOnline;
-            this.xtraTabControlRoll.ShowTabHeader = DevExpress.Utils.DefaultBoolean.True;
-            this.xtraTabControlRoll.Size = new System.Drawing.Size(280, 176);
-            this.xtraTabControlRoll.TabIndex = 0;
-            this.xtraTabControlRoll.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
-            this.xtraTabPageRollOnline,
-            this.xtraTabPageRollOffline});
-            // 
-            // xtraTabPageRollOnline
-            // 
-            this.xtraTabPageRollOnline.Controls.Add(this.btnRollSet);
-            this.xtraTabPageRollOnline.Controls.Add(this.textRollType);
-            this.xtraTabPageRollOnline.Controls.Add(this.textRollName);
-            this.xtraTabPageRollOnline.Controls.Add(this.labelControl2);
-            this.xtraTabPageRollOnline.Controls.Add(this.labelControl1);
-            this.xtraTabPageRollOnline.Name = "xtraTabPageRollOnline";
-            this.xtraTabPageRollOnline.Size = new System.Drawing.Size(274, 147);
-            this.xtraTabPageRollOnline.Text = "在线";
-            // 
             // btnRollSet
             // 
-            this.btnRollSet.Location = new System.Drawing.Point(136, 90);
+            this.btnRollSet.Location = new System.Drawing.Point(147, 110);
             this.btnRollSet.Name = "btnRollSet";
             this.btnRollSet.Size = new System.Drawing.Size(101, 30);
             this.btnRollSet.TabIndex = 6;
@@ -659,7 +630,7 @@
             // 
             this.textRollType.EditValue = "TEST";
             this.textRollType.Enabled = false;
-            this.textRollType.Location = new System.Drawing.Point(76, 28);
+            this.textRollType.Location = new System.Drawing.Point(87, 48);
             this.textRollType.MenuManager = this.barManager1;
             this.textRollType.Name = "textRollType";
             this.textRollType.Properties.AutoHeight = false;
@@ -673,7 +644,7 @@
             // 
             // textRollName
             // 
-            this.textRollName.Location = new System.Drawing.Point(76, 59);
+            this.textRollName.Location = new System.Drawing.Point(87, 79);
             this.textRollName.MenuManager = this.barManager1;
             this.textRollName.Name = "textRollName";
             this.textRollName.Properties.AutoHeight = false;
@@ -682,7 +653,7 @@
             // 
             // labelControl2
             // 
-            this.labelControl2.Location = new System.Drawing.Point(34, 64);
+            this.labelControl2.Location = new System.Drawing.Point(45, 84);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(36, 14);
             this.labelControl2.TabIndex = 2;
@@ -690,28 +661,11 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(22, 33);
+            this.labelControl1.Location = new System.Drawing.Point(33, 53);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(48, 14);
             this.labelControl1.TabIndex = 0;
             this.labelControl1.Text = "应用料号";
-            // 
-            // xtraTabPageRollOffline
-            // 
-            this.xtraTabPageRollOffline.Controls.Add(this.richTextBox1);
-            this.xtraTabPageRollOffline.Name = "xtraTabPageRollOffline";
-            this.xtraTabPageRollOffline.Size = new System.Drawing.Size(274, 147);
-            this.xtraTabPageRollOffline.Text = "离线";
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Enabled = false;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(274, 147);
-            this.richTextBox1.TabIndex = 7;
-            this.richTextBox1.Text = "";
             // 
             // xtraTabPage2
             // 
@@ -2015,13 +1969,9 @@
             this.groupDevice.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControlRoll)).EndInit();
-            this.xtraTabControlRoll.ResumeLayout(false);
-            this.xtraTabPageRollOnline.ResumeLayout(false);
-            this.xtraTabPageRollOnline.PerformLayout();
+            this.groupRoll.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textRollType.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textRollName.Properties)).EndInit();
-            this.xtraTabPageRollOffline.ResumeLayout(false);
             this.xtraTabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
             this.splitContainerControl1.ResumeLayout(false);
@@ -2137,7 +2087,6 @@
         private DevExpress.XtraEditors.ComboBoxEdit textRollType;
         private DevExpress.XtraEditors.GroupControl groupRoll;
         private DevExpress.XtraEditors.SimpleButton btnRollSet;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private DevExpress.XtraEditors.LabelControl _lc_outer_defectCount;
@@ -2190,9 +2139,6 @@
         private System.Windows.Forms.SplitContainer splitContainerInner;
         private DevExpress.XtraEditors.SimpleButton btnDisconnect;
         private DevExpress.XtraEditors.SimpleButton btnConnect;
-        private DevExpress.XtraTab.XtraTabControl xtraTabControlRoll;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPageRollOnline;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPageRollOffline;
         private DevExpress.XtraEditors.GroupControl groupCtrl;
         private DevExpress.XtraEditors.GroupControl groupRemoteClient;
         private DevExpress.XtraEditors.LabelControl _lc_remote_plc;
