@@ -242,6 +242,7 @@ namespace DetectCCD {
                 //
                 appendTab(myMissER);
                 partner.appendTab(missER);
+
             } while (true);
 
             //Fix: 宽度值为0
@@ -389,6 +390,12 @@ namespace DetectCCD {
                 }
 
                 var objEA = getEA(ea);
+
+                //FIX: 外侧相机前贴标机不打标
+                if (objEA != null && !objEA.IsFail && objEA.TabCount < 5) {
+                    objEA = getEA(ea - 1);
+                }
+
                 if (objEA != null) {
 
                     //添加标签
@@ -723,7 +730,6 @@ namespace DetectCCD {
 
                 //
                 EAs.Add(objEA);
-
             }
         }
 
