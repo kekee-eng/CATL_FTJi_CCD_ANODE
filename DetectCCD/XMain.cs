@@ -142,11 +142,6 @@ namespace DetectCCD {
                 RemoteDefect._func_in_8k_uninit += () => {
                     DeviceStopGrab();
                     DeviceClose();
-
-                    isQuit = true;
-                    this.Invoke(new Action(() => {
-                        Application.Restart();
-                    }));
                 };
 
             }
@@ -813,7 +808,6 @@ namespace DetectCCD {
             await Task.Run(() => {
                 if (Static.App.Is4K) {
                     Static.SafeRun(RemoteDefect.In4KCall8K_Uninit);
-                    Thread.Sleep(5000);
                 }
 
                 UtilTool.XFWait.Close();
