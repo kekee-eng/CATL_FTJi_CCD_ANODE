@@ -31,7 +31,7 @@ namespace DetectCCD {
         }
         private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
 
-            if (XtraMessageBox.Show("当前操作将退出视觉检测系统，请确认是否退出？", "退出确认", MessageBoxButtons.OKCancel) != DialogResult.OK) {
+            if (!isQuit && XtraMessageBox.Show("当前操作将退出视觉检测系统，请确认是否退出？", "退出确认", MessageBoxButtons.OKCancel) != DialogResult.OK) {
                 e.Cancel = true;
                 return;
             }
@@ -130,9 +130,23 @@ namespace DetectCCD {
                         Static.App.FrameInnerToFront(isFront, isInner, y));
                 };
                 RemoteDefect._func_in_8k_init += () => {
+
                     DeviceInit();
                     DeviceStartGrab();
-                    groupDevice.Enabled = false;
+
+                    this.Invoke(new Action(() => {
+                        groupDevice.Enabled = false;
+                        xtraTabControl1.SelectedTabPageIndex = 1;
+                    }));
+                };
+                RemoteDefect._func_in_8k_uninit += () => {
+                    DeviceStopGrab();
+                    DeviceClose();
+
+                    isQuit = true;
+                    this.Invoke(new Action(() => {
+                        Application.Restart();
+                    }));
                 };
 
             }
@@ -519,7 +533,8 @@ namespace DetectCCD {
             runAction("停止设备", () => {
                 device?.Dispose();
                 record?.Dispose();
-                RemotePLC.In4KCallPLC_ClearEncoder();
+                if (Static.App.Is4K)
+                    RemotePLC.In4KCallPLC_ClearEncoder();
             });
         }
 
@@ -789,10 +804,20 @@ namespace DetectCCD {
                 UtilTool.XFWait.Close();
             });
         }
-        private void btnDisconnect_Click(object sender, EventArgs e) {
+        private async void btnDisconnect_Click(object sender, EventArgs e) {
+            UtilTool.XFWait.Open();
             DeviceClose();
             closeLabelCSV();
             closeWidthCSV();
+
+            await Task.Run(() => {
+                if (Static.App.Is4K) {
+                    Static.SafeRun(RemoteDefect.In4KCall8K_Uninit);
+                    Thread.Sleep(5000);
+                }
+
+                UtilTool.XFWait.Close();
+            });
         }
         private void btnQuit_Click(object sender, EventArgs e) {
             this.Close();

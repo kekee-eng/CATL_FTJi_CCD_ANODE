@@ -1953,7 +1953,7 @@
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.Name = "XMain";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "CATL 分条机视觉检测系统";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XFMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();

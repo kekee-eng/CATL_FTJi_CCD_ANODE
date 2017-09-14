@@ -139,5 +139,26 @@ namespace DetectCCD {
             }
         }
 
+        public static void In4KCall8K_Uninit() {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            try {
+                if (client == null) return;
+                client._in_8k_uninit();
+            }
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
+                client = null;
+            }
+        }
+        public static event Action _func_in_8k_uninit;
+        public void _in_8k_uninit() {
+            try { _func_in_8k_uninit(); }
+            catch (Exception ex) {
+                Static.Log.Error("RemoteDefect:", ex);
+            }
+        }
+
     }
 }
