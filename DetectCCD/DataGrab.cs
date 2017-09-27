@@ -70,28 +70,6 @@ namespace DetectCCD {
                     }
                 }
 
-                if (Static.App.RecordSaveImageEnable) {
-                    bool isSaveImage = false;
-                    if (hasDefect) {
-                        isSaveImage = Static.App.RecordSaveImageNG;
-                    }
-
-                    if (isSaveImage) {
-                        var folder = Static.FolderTemp + "ImageBig/";
-                        var filename = string.Format("{0}{1}_F{2}", folder, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff"), Frame);
-
-                        if (!System.IO.Directory.Exists(folder))
-                            System.IO.Directory.CreateDirectory(folder);
-
-                        var img = Image.Clone();
-                        new Thread(new ThreadStart((() => {
-                            Static.SafeRun(() => {
-                                img.WriteImage("bmp", 0, filename);
-                                img.Dispose();
-                            });
-                        }))).Start();
-                    }
-                }
             }
 
             isDetectTab = true;

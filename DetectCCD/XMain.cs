@@ -361,7 +361,7 @@ namespace DetectCCD {
 
             Static.App.BindTextBox(textRollName, "RollName");
             
-            Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNG");
+            Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
             
             Static.App.BindCheckBox(checkEnableLabelEA, "EnableLabelEA");

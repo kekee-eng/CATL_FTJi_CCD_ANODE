@@ -449,7 +449,8 @@ namespace DetectCCD {
                 defectFrameCount++;
             }
 
-            if (defectFrameCount >= 10 || (!hasDefect && defectFrameCount > 0)) {
+            if (defectFrameCount >= 10 || (!hasDefect && defectFrameCount > 0))
+            {
 
                 //拼成大图进行瑕疵检测
                 int w = grab.Width;
@@ -477,18 +478,23 @@ namespace DetectCCD {
                     System.IO.Directory.CreateDirectory(savefolder4);
 
                 //多线程运算
-                new Thread(new ThreadStart(() => {
+                new Thread(new ThreadStart(() =>
+                {
 
-                    Static.SafeRun(() => {
+                    Static.SafeRun(() =>
+                    {
                         var eimage = grab.GetImage(efx1, efx2);
                         int[] etype;
                         double[] ex, ey, ew, eh, earea;
-                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
+                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea))
+                        {
 
                             int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
                             var myDefects = new List<DataDefect>();
-                            for (int i = 0; i < ecc; i++) {
-                                DataDefect defect = new DataDefect() {
+                            for (int i = 0; i < ecc; i++)
+                            {
+                                DataDefect defect = new DataDefect()
+                                {
                                     EA = -1,
                                     Type = etype[i],
                                     X = ex[i] / w,
@@ -505,15 +511,19 @@ namespace DetectCCD {
                             }
 
                             //添加到列表中
-                            lock (Defects) {
+                            lock (Defects)
+                            {
                                 Defects.AddRange(myDefects);
                             }
 
                             //保存NG小图
-                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall) {
-                                for (int i = 0; i < ecc; i++) {
+                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall)
+                            {
+                                for (int i = 0; i < ecc; i++)
+                                {
                                     var defect = myDefects[i];
-                                    if (defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
+                                    if (defect.Type < Static.App.RecordSaveImageNGSmallMaxType)
+                                    {
 
                                         string folder = "";
                                         if (defect.Type == 0) folder = savefolder1;
@@ -535,6 +545,16 @@ namespace DetectCCD {
 
                             }
 
+                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
+                            {
+                                var folder = Static.FolderTemp + "ImageNGBig/";
+                                var filename = string.Format("{0}{1}_F{2}-{3}", folder, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff"), efx1, efx2);
+
+                                if (!System.IO.Directory.Exists(folder))
+                                    System.IO.Directory.CreateDirectory(folder);
+
+                                eimage.WriteImage("png", 0, filename);
+                            }
                         }
 
                         //
