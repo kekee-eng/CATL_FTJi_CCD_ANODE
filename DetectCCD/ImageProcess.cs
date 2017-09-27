@@ -10,18 +10,12 @@ namespace DetectCCD {
 
     class ImageProcess {
 
-        static HDevEngine m_engine = null;
+        static HDevEngine m_engine = new HDevEngine();
         static HDevProgram m_program = null;
         public static string ErrorMessage;
         
         public static void Init() {
-
-            //
-            if(m_engine == null)
-            {
-                m_engine = new HDevEngine();
-            }
-
+            
             //
             m_program?.Dispose();
             m_program = new HDevProgram(Static.PathImageProcess);
