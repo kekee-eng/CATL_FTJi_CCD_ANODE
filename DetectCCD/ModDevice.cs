@@ -139,9 +139,11 @@ namespace DetectCCD {
             }
 
             //
-            InnerCamera.OnImageReady += EventInnerCamera;
-            OuterCamera.OnImageReady += EventOuterCamera;
+            InnerCamera.OnImageReady += EventInnerCameraGrab;
+            OuterCamera.OnImageReady += EventOuterCameraGrab;
 
+            InnerCamera.OnComplete += EventInnerCameraComplete;
+            OuterCamera.OnComplete += EventOuterCameraComplete;
 
             //
             if (Static.App.Is4K) {
@@ -166,8 +168,11 @@ namespace DetectCCD {
         public TemplateCamera InnerCamera;
         public TemplateCamera OuterCamera;
 
-        public Action<DataGrab> EventInnerCamera;
-        public Action<DataGrab> EventOuterCamera;
-        
+        public Action<DataGrab> EventInnerCameraGrab;
+        public Action<DataGrab> EventOuterCameraGrab;
+
+        public Action EventInnerCameraComplete;
+        public Action EventOuterCameraComplete;
+
     }
 }

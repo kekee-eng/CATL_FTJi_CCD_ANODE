@@ -154,14 +154,14 @@ namespace DetectCCD {
 
             //线程：采图
             record.InnerViewerImage.Init(hwinInner);
-            device.EventInnerCamera = obj => {
+            device.EventInnerCameraGrab = obj => {
                 Static.SafeRun(() => {
                     record.InnerGrab[obj.Frame] = obj;
                     Static.SafeRunThread(obj.DetectTab);
                 });
             };
             record.OuterViewerImage.Init(hwinOuter);
-            device.EventOuterCamera = obj => {
+            device.EventOuterCameraGrab = obj => {
                 Static.SafeRun(() => {
                     record.OuterGrab[obj.Frame] = obj;
                     Static.SafeRunThread(obj.DetectTab);
@@ -328,6 +328,34 @@ namespace DetectCCD {
                 }))).Start();
 
             };
+
+            //
+
+            new Thread(new ThreadStart(new Action(() => {
+
+                bool b1 = false;
+                bool b2 = false;
+
+                device.EventInnerCameraComplete += () => b1 = true;
+                device.EventOuterCameraComplete += () => b2 = true;
+                while (!isQuit)
+                {
+                    b1 = false;
+                    b2 = false;
+
+                    while (!(b1 && b2))
+                    {
+                        if (isQuit) return;
+                        Thread.Sleep(1000);
+                    }
+
+                    Thread.Sleep(3000);
+                    DeviceInit();
+                    
+                    Thread.Sleep(3000);
+                    DeviceStartGrab();
+                }
+            }))).Start();
         }
         void init_teston() {
 

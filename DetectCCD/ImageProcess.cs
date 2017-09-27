@@ -10,17 +10,22 @@ namespace DetectCCD {
 
     class ImageProcess {
 
-        static HDevEngine m_engine;
-        static HDevProgram m_program;
+        static HDevEngine m_engine = null;
+        static HDevProgram m_program = null;
         public static string ErrorMessage;
         
         public static void Init() {
 
+            //
+            if(m_engine == null)
+            {
+                m_engine = new HDevEngine();
+            }
+
+            //
             m_program?.Dispose();
-            m_engine?.Dispose();
-            
-            m_program = null;
-            m_engine = null;
+            m_program = new HDevProgram(Static.PathImageProcess);
+
         }
 
         public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image, out int time) {
@@ -30,33 +35,30 @@ namespace DetectCCD {
             return call;
 
         }
-        public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image) {
+        public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image)
+        {
 
-            try {
+            try
+            {
 
                 //
-                if (m_engine == null)
-                    m_engine = new HDevEngine();
-
-                if (m_program == null)
-                    m_program = new HDevProgram(Static.PathImageProcess);
-
-                HDevProcedure procedure = new HDevProcedure();
-                if (Static.App.ImageProcessReload) {
+                if (Static.App.ImageProcessReload)
+                {
                     Static.App.ImageProcessReload = false;
-                    lock (m_program) {
-                        m_program.Dispose();
-                        m_program = new HDevProgram(Static.PathImageProcess);
-                        procedure.LoadProcedure(m_program, process);
-                    }
-                }
-                else {
-                    procedure.LoadProcedure(m_program, process);
+                    Init();
                 }
 
                 //
-                var call = procedure.CreateCall();
-                call.SetInputIconicParamObject("Image", image);
+                HDevProcedure procedure;
+                HDevProcedureCall call;
+                lock (m_engine)
+                {
+                    procedure = new HDevProcedure(m_program, process);
+                    call = procedure.CreateCall();
+                    call.SetInputIconicParamObject("Image", image);
+                }
+
+                //
                 call.Execute();
 
                 //
@@ -65,7 +67,8 @@ namespace DetectCCD {
 
                 //
                 Dictionary<string, HTuple> dict = new Dictionary<string, HTuple>();
-                for (int i = 1; i <= procedure.GetOutputCtrlParamCount(); i++) {
+                for (int i = 1; i <= procedure.GetOutputCtrlParamCount(); i++)
+                {
 
                     string name = procedure.GetOutputCtrlParamName(i);
                     dict[name] = call.GetOutputCtrlParamTuple(i);
@@ -74,10 +77,11 @@ namespace DetectCCD {
                 //
                 call.Dispose();
                 procedure.Dispose();
-                
+
                 return dict;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 //
                 ErrorMessage = string.Format("ImageProcess: {0}: {1}\n{2}", process, ex.Message, ex.StackTrace);
