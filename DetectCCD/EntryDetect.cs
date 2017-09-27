@@ -442,10 +442,12 @@ namespace DetectCCD {
 
             return true;
         }
-        public void TryAddDefect(bool hasDefect, int frame) {
+        public void TryAddDefect(bool hasDefect, int frame)
+        {
 
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
-            if (hasDefect) {
+            if (hasDefect)
+            {
                 defectFrameCount++;
             }
 
@@ -477,10 +479,16 @@ namespace DetectCCD {
                 if (!System.IO.Directory.Exists(savefolder4))
                     System.IO.Directory.CreateDirectory(savefolder4);
 
+                //
+                var savefolderBig = Static.FolderTemp + "ImageNGBig/";
+                var saveBigFilename = string.Format("{0}{1}_F{2}-{3}", savefolderBig, timestamp, efx1, efx2);
+                
+                if (!System.IO.Directory.Exists(savefolderBig))
+                    System.IO.Directory.CreateDirectory(savefolderBig);
+
                 //多线程运算
                 new Thread(new ThreadStart(() =>
                 {
-
                     Static.SafeRun(() =>
                     {
                         var eimage = grab.GetImage(efx1, efx2);
@@ -547,18 +555,13 @@ namespace DetectCCD {
 
                             if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
                             {
-                                var folder = Static.FolderTemp + "ImageNGBig/";
-                                var filename = string.Format("{0}{1}_F{2}-{3}", folder, DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff"), efx1, efx2);
-
-                                if (!System.IO.Directory.Exists(folder))
-                                    System.IO.Directory.CreateDirectory(folder);
-
-                                eimage.WriteImage("png", 0, filename);
+                                eimage.WriteImage("png", 0, saveBigFilename);
                             }
                         }
 
                         //
                         eimage?.Dispose();
+
                     });
                 })).Start();
 
