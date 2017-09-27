@@ -179,7 +179,6 @@
             this.groupTest = new DevExpress.XtraEditors.GroupControl();
             this.checkSaveNGSmall = new DevExpress.XtraEditors.CheckEdit();
             this.checkSaveNG = new DevExpress.XtraEditors.CheckEdit();
-            this.checkSaveOK = new DevExpress.XtraEditors.CheckEdit();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -270,7 +269,6 @@
             this.groupTest.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -1886,7 +1884,6 @@
             // 
             this.groupTest.Controls.Add(this.checkSaveNGSmall);
             this.groupTest.Controls.Add(this.checkSaveNG);
-            this.groupTest.Controls.Add(this.checkSaveOK);
             this.groupTest.Location = new System.Drawing.Point(486, 211);
             this.groupTest.Name = "groupTest";
             this.groupTest.Size = new System.Drawing.Size(281, 183);
@@ -1895,7 +1892,7 @@
             // 
             // checkSaveNGSmall
             // 
-            this.checkSaveNGSmall.Location = new System.Drawing.Point(22, 94);
+            this.checkSaveNGSmall.Location = new System.Drawing.Point(21, 66);
             this.checkSaveNGSmall.MenuManager = this.barManager1;
             this.checkSaveNGSmall.Name = "checkSaveNGSmall";
             this.checkSaveNGSmall.Properties.Caption = "保存NG小图";
@@ -1904,21 +1901,12 @@
             // 
             // checkSaveNG
             // 
-            this.checkSaveNG.Location = new System.Drawing.Point(22, 69);
+            this.checkSaveNG.Location = new System.Drawing.Point(21, 41);
             this.checkSaveNG.MenuManager = this.barManager1;
             this.checkSaveNG.Name = "checkSaveNG";
             this.checkSaveNG.Properties.Caption = "保存NG大图";
             this.checkSaveNG.Size = new System.Drawing.Size(109, 19);
             this.checkSaveNG.TabIndex = 20;
-            // 
-            // checkSaveOK
-            // 
-            this.checkSaveOK.Location = new System.Drawing.Point(22, 44);
-            this.checkSaveOK.MenuManager = this.barManager1;
-            this.checkSaveOK.Name = "checkSaveOK";
-            this.checkSaveOK.Properties.Caption = "保存OK大图";
-            this.checkSaveOK.Size = new System.Drawing.Size(113, 19);
-            this.checkSaveOK.TabIndex = 10;
             // 
             // xtraTabPage4
             // 
@@ -2046,7 +2034,6 @@
             this.groupTest.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkSaveOK.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2157,7 +2144,6 @@
         private DevExpress.XtraEditors.CheckEdit ckViewLocal;
         private DevExpress.XtraEditors.GroupControl groupTest;
         private DevExpress.XtraEditors.CheckEdit checkSaveNG;
-        private DevExpress.XtraEditors.CheckEdit checkSaveOK;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl2;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage5;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage6;

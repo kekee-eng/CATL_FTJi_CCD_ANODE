@@ -30,7 +30,6 @@ namespace DetectCCD {
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordSaveImageEnable = false;
-        public bool RecordSaveImageOK = false;
         public bool RecordSaveImageNG = false;
         public bool RecordSaveImageNGSmall = false;
         public int RecordSaveImageNGSmallMaxType = 5;

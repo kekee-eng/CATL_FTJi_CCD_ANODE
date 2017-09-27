@@ -360,8 +360,7 @@ namespace DetectCCD {
         void init_teston() {
 
             Static.App.BindTextBox(textRollName, "RollName");
-
-            Static.App.BindCheckBox(checkSaveOK, "RecordSaveImageOK");
+            
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNG");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
             
@@ -670,8 +669,7 @@ namespace DetectCCD {
 
                 btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
                 btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
-
-                checkSaveOK.Enabled = Static.App.RecordSaveImageEnable;
+                
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
 

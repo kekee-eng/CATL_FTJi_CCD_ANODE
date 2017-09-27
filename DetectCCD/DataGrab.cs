@@ -75,9 +75,6 @@ namespace DetectCCD {
                     if (hasDefect) {
                         isSaveImage = Static.App.RecordSaveImageNG;
                     }
-                    else {
-                        isSaveImage = Static.App.RecordSaveImageOK;
-                    }
 
                     if (isSaveImage) {
                         var folder = Static.FolderTemp + "ImageBig/";
