@@ -169,13 +169,6 @@
             this.groupCtrl = new DevExpress.XtraEditors.GroupControl();
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
-            this.groupViewer = new DevExpress.XtraEditors.GroupControl();
-            this.checkDisableView = new DevExpress.XtraEditors.CheckEdit();
-            this.ckViewOuterBack = new DevExpress.XtraEditors.CheckEdit();
-            this.ckViewOuterFront = new DevExpress.XtraEditors.CheckEdit();
-            this.ckViewInnerBack = new DevExpress.XtraEditors.CheckEdit();
-            this.ckViewInnerFront = new DevExpress.XtraEditors.CheckEdit();
-            this.ckViewLocal = new DevExpress.XtraEditors.CheckEdit();
             this.groupTest = new DevExpress.XtraEditors.GroupControl();
             this.checkSaveNGSmall = new DevExpress.XtraEditors.CheckEdit();
             this.checkSaveNG = new DevExpress.XtraEditors.CheckEdit();
@@ -257,14 +250,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).BeginInit();
             this.groupCtrl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupViewer)).BeginInit();
-            this.groupViewer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterBack.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterFront.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewInnerBack.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewInnerFront.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewLocal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).BeginInit();
             this.groupTest.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).BeginInit();
@@ -1439,7 +1424,6 @@
             this.xtraTabPage3.Controls.Add(this.groupWidth);
             this.xtraTabPage3.Controls.Add(this.groupLabel);
             this.xtraTabPage3.Controls.Add(this.groupCtrl);
-            this.xtraTabPage3.Controls.Add(this.groupViewer);
             this.xtraTabPage3.Controls.Add(this.groupTest);
             this.xtraTabPage3.ImageIndex = 2;
             this.xtraTabPage3.Name = "xtraTabPage3";
@@ -1783,7 +1767,7 @@
             // 
             this.groupCtrl.Controls.Add(this.btnOpenViewerChart);
             this.groupCtrl.Controls.Add(this.btnOfflineControl);
-            this.groupCtrl.Location = new System.Drawing.Point(786, 211);
+            this.groupCtrl.Location = new System.Drawing.Point(783, 22);
             this.groupCtrl.Name = "groupCtrl";
             this.groupCtrl.Size = new System.Drawing.Size(298, 183);
             this.groupCtrl.TabIndex = 50;
@@ -1806,79 +1790,6 @@
             this.btnOfflineControl.TabIndex = 19;
             this.btnOfflineControl.Text = "离线控制台";
             this.btnOfflineControl.Click += new System.EventHandler(this.btnOfflineControl_Click);
-            // 
-            // groupViewer
-            // 
-            this.groupViewer.Controls.Add(this.checkDisableView);
-            this.groupViewer.Controls.Add(this.ckViewOuterBack);
-            this.groupViewer.Controls.Add(this.ckViewOuterFront);
-            this.groupViewer.Controls.Add(this.ckViewInnerBack);
-            this.groupViewer.Controls.Add(this.ckViewInnerFront);
-            this.groupViewer.Controls.Add(this.ckViewLocal);
-            this.groupViewer.Location = new System.Drawing.Point(786, 21);
-            this.groupViewer.Name = "groupViewer";
-            this.groupViewer.Size = new System.Drawing.Size(298, 184);
-            this.groupViewer.TabIndex = 40;
-            this.groupViewer.Text = "同步视图";
-            // 
-            // checkDisableView
-            // 
-            this.checkDisableView.Location = new System.Drawing.Point(186, 31);
-            this.checkDisableView.MenuManager = this.barManager1;
-            this.checkDisableView.Name = "checkDisableView";
-            this.checkDisableView.Properties.Caption = "禁用显示";
-            this.checkDisableView.Size = new System.Drawing.Size(87, 19);
-            this.checkDisableView.TabIndex = 11;
-            // 
-            // ckViewOuterBack
-            // 
-            this.ckViewOuterBack.EditValue = true;
-            this.ckViewOuterBack.Location = new System.Drawing.Point(15, 131);
-            this.ckViewOuterBack.MenuManager = this.barManager1;
-            this.ckViewOuterBack.Name = "ckViewOuterBack";
-            this.ckViewOuterBack.Properties.Caption = "Outer->Back";
-            this.ckViewOuterBack.Size = new System.Drawing.Size(113, 19);
-            this.ckViewOuterBack.TabIndex = 10;
-            // 
-            // ckViewOuterFront
-            // 
-            this.ckViewOuterFront.EditValue = true;
-            this.ckViewOuterFront.Location = new System.Drawing.Point(15, 106);
-            this.ckViewOuterFront.MenuManager = this.barManager1;
-            this.ckViewOuterFront.Name = "ckViewOuterFront";
-            this.ckViewOuterFront.Properties.Caption = "Outer->Front";
-            this.ckViewOuterFront.Size = new System.Drawing.Size(113, 19);
-            this.ckViewOuterFront.TabIndex = 9;
-            // 
-            // ckViewInnerBack
-            // 
-            this.ckViewInnerBack.EditValue = true;
-            this.ckViewInnerBack.Location = new System.Drawing.Point(15, 81);
-            this.ckViewInnerBack.MenuManager = this.barManager1;
-            this.ckViewInnerBack.Name = "ckViewInnerBack";
-            this.ckViewInnerBack.Properties.Caption = "Inner->Back";
-            this.ckViewInnerBack.Size = new System.Drawing.Size(113, 19);
-            this.ckViewInnerBack.TabIndex = 8;
-            // 
-            // ckViewInnerFront
-            // 
-            this.ckViewInnerFront.EditValue = true;
-            this.ckViewInnerFront.Location = new System.Drawing.Point(15, 56);
-            this.ckViewInnerFront.MenuManager = this.barManager1;
-            this.ckViewInnerFront.Name = "ckViewInnerFront";
-            this.ckViewInnerFront.Properties.Caption = "Inner->Front";
-            this.ckViewInnerFront.Size = new System.Drawing.Size(113, 19);
-            this.ckViewInnerFront.TabIndex = 7;
-            // 
-            // ckViewLocal
-            // 
-            this.ckViewLocal.EditValue = true;
-            this.ckViewLocal.Location = new System.Drawing.Point(15, 31);
-            this.ckViewLocal.MenuManager = this.barManager1;
-            this.ckViewLocal.Name = "ckViewLocal";
-            this.ckViewLocal.Properties.Caption = "本地同步";
-            this.ckViewLocal.Size = new System.Drawing.Size(87, 19);
-            this.ckViewLocal.TabIndex = 6;
             // 
             // groupTest
             // 
@@ -2022,14 +1933,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).EndInit();
             this.groupCtrl.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupViewer)).EndInit();
-            this.groupViewer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkDisableView.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterBack.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewOuterFront.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewInnerBack.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewInnerFront.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ckViewLocal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).EndInit();
             this.groupTest.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).EndInit();
@@ -2135,13 +2038,6 @@
         private DevExpress.XtraEditors.SimpleButton btnConnectRemotePLC;
         private DevExpress.XtraEditors.SimpleButton btnConnectRemote8K;
         private DevExpress.XtraEditors.LabelControl _lc_inner_frame;
-        private DevExpress.XtraEditors.GroupControl groupViewer;
-        private DevExpress.XtraEditors.CheckEdit checkDisableView;
-        private DevExpress.XtraEditors.CheckEdit ckViewOuterBack;
-        private DevExpress.XtraEditors.CheckEdit ckViewOuterFront;
-        private DevExpress.XtraEditors.CheckEdit ckViewInnerBack;
-        private DevExpress.XtraEditors.CheckEdit ckViewInnerFront;
-        private DevExpress.XtraEditors.CheckEdit ckViewLocal;
         private DevExpress.XtraEditors.GroupControl groupTest;
         private DevExpress.XtraEditors.CheckEdit checkSaveNG;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl2;

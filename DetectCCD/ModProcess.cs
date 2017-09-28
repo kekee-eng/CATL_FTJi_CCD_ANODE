@@ -2,7 +2,7 @@
 using System;
 
 namespace DetectCCD {
-    public class ModRecord :IDisposable{
+    public class ModProcess :IDisposable{
         
         public void Dispose() {
             InnerGrab.Cache.Dispose();

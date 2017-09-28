@@ -11,7 +11,7 @@ using DevExpress.XtraEditors;
 
 namespace DetectCCD {
     partial class XFViewerChart : DevExpress.XtraEditors.XtraForm {
-        public XFViewerChart(ModDevice device, ModRecord record) {
+        public XFViewerChart(ModDevice device, ModProcess record) {
             InitializeComponent();
 
             this.record = record;
@@ -26,7 +26,7 @@ namespace DetectCCD {
 
         }
 
-        ModRecord record;
+        ModProcess record;
         ModDevice device;
 
         Action<Control> bindInit;

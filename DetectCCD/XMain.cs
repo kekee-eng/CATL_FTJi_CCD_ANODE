@@ -41,7 +41,7 @@ namespace DetectCCD {
 
             //
             isQuit = true;
-            record?.Dispose();
+            process?.Dispose();
             device?.Dispose();
 
             closeLabelCSV();
@@ -84,7 +84,7 @@ namespace DetectCCD {
         string rollType = "";
         string rollName = "";
 
-        public ModRecord record = new ModRecord();
+        public ModProcess process = new ModProcess();
         public ModDevice device = new ModDevice();
 
         void init_server() {
@@ -97,13 +97,13 @@ namespace DetectCCD {
                     start = Static.App.FrameInnerToFront(isFront, isInner, start);
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
 
-                    var ret = (isFront ? record.InnerDetect : record.OuterDetect).AllocAndGetDefectCount(start, end, id);
+                    var ret = (isFront ? process.InnerDetect : process.OuterDetect).AllocAndGetDefectCount(start, end, id);
                     return ret;
 
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, ea) => {
                     
-                    var defs = (isFront ? record.InnerDetect : record.OuterDetect).Defects;
+                    var defs = (isFront ? process.InnerDetect : process.OuterDetect).Defects;
                     var outdefs = new List<DataDefect>();
                     for (int i = 0; i < defs.Count; i++) {
 
@@ -126,7 +126,7 @@ namespace DetectCCD {
                     Static.App.DiffFrameInnerOuter = diffInnerOuter;
                     Static.App.DiffFrameFrontBack = diffFrontBack;
                     Static.App.DiffFrameInnerFront = diffInnerFront;
-                    (isFront ? record.InnerViewerImage : record.OuterViewerImage).MoveToFrame(
+                    (isFront ? process.InnerViewerImage : process.OuterViewerImage).MoveToFrame(
                         Static.App.FrameInnerToFront(isFront, isInner, y));
                 };
                 RemoteDefect._func_in_8k_init += () => {
@@ -149,50 +149,45 @@ namespace DetectCCD {
         }
         void init_device() {
 
-            //
-            record.Init();
+            //初始化
+            process.Init();
+            process.InnerViewerImage.Init(hwinInner);
+            process.OuterViewerImage.Init(hwinOuter);
 
-            //线程：采图
-            record.InnerViewerImage.Init(hwinInner);
-            device.EventInnerCameraGrab = obj => {
-                Log.Record(() => {
-                    record.InnerGrab[obj.Frame] = obj;
-                    Log.RecordAsThread(obj.DetectTab);
-                });
-            };
-            record.OuterViewerImage.Init(hwinOuter);
+            //线程：采集图像
+            device.EventInnerCameraGrab = obj => Log.Record(() => {
+                process.InnerGrab[obj.Frame] = obj;
+                Log.RecordAsThread(obj.DetectTab);
+            });
             device.EventOuterCameraGrab = obj => Log.Record(() => {
-                record.OuterGrab[obj.Frame] = obj;
+                process.OuterGrab[obj.Frame] = obj;
                 Log.RecordAsThread(obj.DetectTab);
             });
 
-            record.InnerViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
-                if (ckViewLocal.Checked)
-                    record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
-
+            //线程：手动拖动图像
+            process.InnerViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
+                process.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
                 if (Static.App.Is4K) {
-                    if (ckViewInnerFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, true, y);
-                    if (ckViewInnerBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, true, y);
+                    RemoteDefect.In4KCall8K_Viewer(true, true, y);
+                    RemoteDefect.In4KCall8K_Viewer(false, true, y);
                 }
             });
-            record.OuterViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
-                if (ckViewLocal.Checked)
-                    record.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
-
+            process.OuterViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
+                process.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
                 if (Static.App.Is4K) {
-                    if (ckViewOuterFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, false, y);
-                    if (ckViewOuterBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, false, y);
+                    RemoteDefect.In4KCall8K_Viewer(true, false, y);
+                    RemoteDefect.In4KCall8K_Viewer(false, false, y);
                 }
             });
 
             //线程：图像处理
             Log.RecordAsThread(() => {
-                var detect = record.InnerDetect;
+                var detect = process.InnerDetect;
                 while (!isQuit) {
                     Thread.Sleep(1);
 
                     var frame = detect.m_frame;
-                    var g = record.InnerGrab.Cache[frame];
+                    var g = process.InnerGrab.Cache[frame];
                     if (g == null || !g.isDetectTab)
                         continue;
 
@@ -200,7 +195,7 @@ namespace DetectCCD {
                         if (Static.App.Is4K) {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
-                                lock (record) {
+                                lock (process) {
                                     detect.TryAddTab(g.TabData);
                                 }
                             }
@@ -212,14 +207,13 @@ namespace DetectCCD {
                     });
                 };
             });
-
             Log.RecordAsThread(() => {
 
-                var detect = record.OuterDetect;
+                var detect = process.OuterDetect;
                 while (!isQuit) {
                     Thread.Sleep(1);
                     var frame = detect.m_frame;
-                    var g = record.OuterGrab.Cache[frame];
+                    var g = process.OuterGrab.Cache[frame];
                     if (g == null || !g.isDetectTab)
                         continue;
 
@@ -228,8 +222,8 @@ namespace DetectCCD {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
                                 if (detect.TryAddTab(g.TabData)) {
-                                    lock (record) {
-                                        detect.TrySync(record.InnerDetect);
+                                    lock (process) {
+                                        detect.TrySync(process.InnerDetect);
                                     }
                                 }
                             }
@@ -238,8 +232,8 @@ namespace DetectCCD {
                             detect.TryAddDefect(g.hasDefect, frame);
                         }
 
-                        record.OuterViewerImage.SetBottomTarget(frame);
-                        record.InnerViewerImage.SetBottomTarget(frame - detect.DiffFrame);
+                        process.OuterViewerImage.SetBottomTarget(frame);
+                        process.InnerViewerImage.SetBottomTarget(frame - detect.DiffFrame);
                         detect.m_frame++;
                     });
                 };
@@ -248,33 +242,31 @@ namespace DetectCCD {
             //线程：更新显示
             Log.RecordAsThread(() => {
                 while (!isQuit) {
-                    Thread.Sleep(1);
-                    if (checkDisableView.Checked) continue;
-                    record.InnerViewerImage.MoveTargetSync();
+                    Thread.Sleep(10);
+                    process.InnerViewerImage.MoveTargetSync();
                 };
             });
             Log.RecordAsThread(() => {
                 while (!isQuit) {
-                    Thread.Sleep(1);
-                    if (checkDisableView.Checked) continue;
-                    record.OuterViewerImage.MoveTargetSync();
+                    Thread.Sleep(10);
+                    process.OuterViewerImage.MoveTargetSync();
                 };
             });
 
-            //PLC操作
-            record.InnerDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
+            //PLC交互操作
+            process.InnerDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
                 if (obj.Encoder != 0)
                     RemotePLC.In4KCallPLC_SendLabel(true, obj.Encoder);
 
                 saveLabelCSV(true, obj);
             });
-            record.OuterDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
+            process.OuterDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
                 if (obj.Encoder != 0)
                     RemotePLC.In4KCallPLC_SendLabel(false, obj.Encoder);
 
                 saveLabelCSV(false, obj);
             });
-            record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => Log.RecordAsThread(() => {
+            process.OuterDetect.OnSyncTab += (tabOuter, tabInner) => Log.RecordAsThread(() => {
                 RemotePLC.In4KCallPLC_ForWidth(
                     tabOuter.EA,
                     tabOuter.TAB,
@@ -285,7 +277,7 @@ namespace DetectCCD {
                 saveWidthCSV(tabInner, tabOuter);
             });
 
-            //
+            //线程：离线循环测试
             Log.RecordAsThread(new Action(() => {
                 bool b1 = false;
                 bool b2 = false;
@@ -350,12 +342,12 @@ namespace DetectCCD {
             //status_plc_ItemClick(null, null);
 
             //
-            ViewerChart.InitMergeTabChart(panelTabMergeChart, record.InnerViewerImage, record.OuterViewerImage);
-            ViewerChart.InitMergeTabGrid(panelTabMergeGrid, record.InnerViewerImage, record.OuterViewerImage);
-            record.InnerViewerChart.InitLabelGrid(panelLabel1);
-            record.OuterViewerChart.InitLabelGrid(panelLabel2);
-            record.InnerViewerChart.InitDefectGrid(panelDefect1);
-            record.OuterViewerChart.InitDefectGrid(panelDefect2);
+            ViewerChart.InitMergeTabChart(panelTabMergeChart, process.InnerViewerImage, process.OuterViewerImage);
+            ViewerChart.InitMergeTabGrid(panelTabMergeGrid, process.InnerViewerImage, process.OuterViewerImage);
+            process.InnerViewerChart.InitLabelGrid(panelLabel1);
+            process.OuterViewerChart.InitLabelGrid(panelLabel2);
+            process.InnerViewerChart.InitDefectGrid(panelDefect1);
+            process.OuterViewerChart.InitDefectGrid(panelDefect2);
 
             //定时器
             timer1.Tag = true;
@@ -417,7 +409,7 @@ namespace DetectCCD {
             runAction("打开离线数据包", () => {
                 if (openFileDialog1.ShowDialog() == DialogResult.OK) {
 
-                    record.Dispose();
+                    process.Dispose();
 
                     //初始化
                     DeviceInit();
@@ -439,10 +431,10 @@ namespace DetectCCD {
                 device.Dispose();
 
                 //
-                record.InnerViewerImage.SetBottomTarget(0);
-                record.OuterViewerImage.SetBottomTarget(0);
-                record.InnerViewerImage.MoveTargetDirect();
-                record.OuterViewerImage.MoveTargetDirect();
+                process.InnerViewerImage.SetBottomTarget(0);
+                process.OuterViewerImage.SetBottomTarget(0);
+                process.InnerViewerImage.MoveTargetDirect();
+                process.OuterViewerImage.MoveTargetDirect();
 
                 //
                 device.Open();
@@ -453,20 +445,20 @@ namespace DetectCCD {
                 device.InnerCamera.Reset();
                 device.OuterCamera.Reset();
 
-                record.InnerViewerImage.SetUserEnable(true);
-                record.OuterViewerImage.SetUserEnable(true);
+                process.InnerViewerImage.SetUserEnable(true);
+                process.OuterViewerImage.SetUserEnable(true);
 
-                record.InnerGrab.Cache.Dispose();
-                record.OuterGrab.Cache.Dispose();
+                process.InnerGrab.Cache.Dispose();
+                process.OuterGrab.Cache.Dispose();
 
-                record.InnerDetect.Dispose();
-                record.OuterDetect.Dispose();
+                process.InnerDetect.Dispose();
+                process.OuterDetect.Dispose();
 
-                record.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
-                record.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                process.InnerViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
+                process.OuterViewerImage.SetBottomTarget(device.InnerCamera.m_frame);
 
-                record.InnerViewerImage.MoveTargetDirect();
-                record.OuterViewerImage.MoveTargetDirect();
+                process.InnerViewerImage.MoveTargetDirect();
+                process.OuterViewerImage.MoveTargetDirect();
 
             });
 
@@ -477,8 +469,8 @@ namespace DetectCCD {
                 device.InnerCamera.Grab();
                 device.OuterCamera.Grab();
 
-                record.InnerViewerImage.SetUserEnable(false);
-                record.OuterViewerImage.SetUserEnable(false);
+                process.InnerViewerImage.SetUserEnable(false);
+                process.OuterViewerImage.SetUserEnable(false);
             });
         }
         public void DeviceStopGrab() {
@@ -486,8 +478,8 @@ namespace DetectCCD {
                 device.InnerCamera.Freeze();
                 device.OuterCamera.Freeze();
 
-                record.InnerViewerImage.SetUserEnable(true);
-                record.OuterViewerImage.SetUserEnable(true);
+                process.InnerViewerImage.SetUserEnable(true);
+                process.OuterViewerImage.SetUserEnable(true);
             });
         }
         public void DeviceOpen() {
@@ -506,7 +498,7 @@ namespace DetectCCD {
         public void DeviceClose() {
             runAction("停止设备", () => {
                 device?.Dispose();
-                record?.Dispose();
+                process?.Dispose();
                 if (Static.App.Is4K)
                     RemotePLC.In4KCallPLC_ClearEncoder();
             });
@@ -636,9 +628,9 @@ namespace DetectCCD {
                     _lc_inner_isopen.ForeColor = device.InnerCamera.isOpen ? Color.Green : Color.Red;
 
                     _lc_inner_caption.Text = device.InnerCamera.Caption;
-                    _lc_inner_eaCount.Text = record.InnerDetect.ShowEACountView.ToString();
-                    _lc_inner_widthCount.Text = record.InnerDetect.ShowEAWidthNGCount.ToString();
-                    _lc_inner_defectCount.Text = record.InnerDetect.ShowEADefectNGCount.ToString();
+                    _lc_inner_eaCount.Text = process.InnerDetect.ShowEACountView.ToString();
+                    _lc_inner_widthCount.Text = process.InnerDetect.ShowEAWidthNGCount.ToString();
+                    _lc_inner_defectCount.Text = process.InnerDetect.ShowEADefectNGCount.ToString();
 
                     //
                     _lc_outer_camera.Text = device.OuterCamera.Name;
@@ -650,9 +642,9 @@ namespace DetectCCD {
                     _lc_outer_isopen.ForeColor = device.OuterCamera.isOpen ? Color.Green : Color.Red;
 
                     _lc_outer_caption.Text = device.OuterCamera.Caption;
-                    _lc_outer_eaCount.Text = record.OuterDetect.ShowEACountView.ToString();
-                    _lc_outer_widthCount.Text = record.OuterDetect.ShowEAWidthNGCount.ToString();
-                    _lc_outer_defectCount.Text = record.OuterDetect.ShowEADefectNGCount.ToString();
+                    _lc_outer_eaCount.Text = process.OuterDetect.ShowEACountView.ToString();
+                    _lc_outer_widthCount.Text = process.OuterDetect.ShowEAWidthNGCount.ToString();
+                    _lc_outer_defectCount.Text = process.OuterDetect.ShowEADefectNGCount.ToString();
                 }
 
                 //状态栏
@@ -662,12 +654,12 @@ namespace DetectCCD {
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
 
                 //更新表格
-                ViewerChart.SyncMergeTabChart(panelTabMergeChart, record.InnerDetect, record.OuterDetect, 0);
-                ViewerChart.SyncMergeTabGrid(panelTabMergeGrid, record.InnerDetect, record.OuterDetect);
-                record.InnerViewerChart.SyncLabelGrid(panelLabel1);
-                record.OuterViewerChart.SyncLabelGrid(panelLabel2);
-                record.InnerViewerChart.SyncDefectGrid(panelDefect1);
-                record.OuterViewerChart.SyncDefectGrid(panelDefect2);
+                ViewerChart.SyncMergeTabChart(panelTabMergeChart, process.InnerDetect, process.OuterDetect, 0);
+                ViewerChart.SyncMergeTabGrid(panelTabMergeGrid, process.InnerDetect, process.OuterDetect);
+                process.InnerViewerChart.SyncLabelGrid(panelLabel1);
+                process.OuterViewerChart.SyncLabelGrid(panelLabel2);
+                process.InnerViewerChart.SyncDefectGrid(panelDefect1);
+                process.OuterViewerChart.SyncDefectGrid(panelDefect2);
 
             });
         }
@@ -749,7 +741,7 @@ namespace DetectCCD {
             });
         }
         private void btnOpenViewerChart_Click(object sender, EventArgs e) {
-            new XFViewerChart(device, record).Show();
+            new XFViewerChart(device, process).Show();
         }
         private void btnOfflineControl_Click(object sender, EventArgs e) {
             new XFCameraControl(this).Show();

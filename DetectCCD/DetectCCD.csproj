@@ -111,7 +111,7 @@
     <Compile Include="UtilSerialization.cs" />
     <Compile Include="UtilTool.cs" />
     <Compile Include="ViewerImage.cs" />
-    <Compile Include="ModRecord.cs" />
+    <Compile Include="ModProcess.cs" />
     <Compile Include="ModDevice.cs" />
     <Compile Include="XFCameraControl.cs">
       <SubType>Form</SubType>
