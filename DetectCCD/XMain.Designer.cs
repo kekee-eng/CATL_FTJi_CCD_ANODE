@@ -136,14 +136,12 @@
             this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
             this.xtraTabControl3 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage8 = new DevExpress.XtraTab.XtraTabPage();
-            this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.textEALength = new DevExpress.XtraEditors.TextEdit();
             this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl29 = new DevExpress.XtraEditors.LabelControl();
             this.textTabCount = new DevExpress.XtraEditors.TextEdit();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
-            this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.textWidthMax = new DevExpress.XtraEditors.TextEdit();
             this.labelControl32 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
@@ -189,6 +187,8 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.textRecipeName = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl30 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -245,12 +245,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).BeginInit();
             this.xtraTabControl3.SuspendLayout();
             this.xtraTabPage8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
-            this.groupControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEALength.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
-            this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).BeginInit();
@@ -281,6 +277,7 @@
             this.groupTest.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textRecipeName.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -1523,37 +1520,38 @@
             // 
             // xtraTabPage8
             // 
-            this.xtraTabPage8.Controls.Add(this.groupControl2);
-            this.xtraTabPage8.Controls.Add(this.groupControl1);
+            this.xtraTabPage8.Controls.Add(this.textRecipeName);
+            this.xtraTabPage8.Controls.Add(this.labelControl30);
+            this.xtraTabPage8.Controls.Add(this.textEALength);
+            this.xtraTabPage8.Controls.Add(this.labelControl24);
+            this.xtraTabPage8.Controls.Add(this.textWidthMax);
+            this.xtraTabPage8.Controls.Add(this.labelControl17);
+            this.xtraTabPage8.Controls.Add(this.labelControl32);
+            this.xtraTabPage8.Controls.Add(this.labelControl29);
+            this.xtraTabPage8.Controls.Add(this.textTabCount);
+            this.xtraTabPage8.Controls.Add(this.labelControl25);
+            this.xtraTabPage8.Controls.Add(this.labelControl3);
+            this.xtraTabPage8.Controls.Add(this.textWidthStep);
+            this.xtraTabPage8.Controls.Add(this.labelControl28);
+            this.xtraTabPage8.Controls.Add(this.labelControl26);
+            this.xtraTabPage8.Controls.Add(this.textWidthMin);
+            this.xtraTabPage8.Controls.Add(this.labelControl27);
+            this.xtraTabPage8.Controls.Add(this.labelControl31);
             this.xtraTabPage8.Name = "xtraTabPage8";
             this.xtraTabPage8.Size = new System.Drawing.Size(463, 315);
             this.xtraTabPage8.Text = "常用参数";
             // 
-            // groupControl2
+            // textEALength
             // 
-            this.groupControl2.Controls.Add(this.textEALength);
-            this.groupControl2.Controls.Add(this.labelControl24);
-            this.groupControl2.Controls.Add(this.labelControl17);
-            this.groupControl2.Controls.Add(this.labelControl29);
-            this.groupControl2.Controls.Add(this.textTabCount);
-            this.groupControl2.Controls.Add(this.labelControl3);
-            this.groupControl2.Location = new System.Drawing.Point(18, 165);
-            this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(200, 128);
-            this.groupControl2.TabIndex = 81;
-            this.groupControl2.Text = "产品特征";
-            // 
-            // textLabelEAForce
-            // 
-            this.textEALength.Location = new System.Drawing.Point(59, 33);
+            this.textEALength.Location = new System.Drawing.Point(76, 126);
             this.textEALength.MenuManager = this.barManager1;
-            this.textEALength.Name = "textLabelEAForce";
+            this.textEALength.Name = "textEALength";
             this.textEALength.Size = new System.Drawing.Size(100, 20);
             this.textEALength.TabIndex = 70;
             // 
             // labelControl24
             // 
-            this.labelControl24.Location = new System.Drawing.Point(14, 36);
+            this.labelControl24.Location = new System.Drawing.Point(31, 129);
             this.labelControl24.Name = "labelControl24";
             this.labelControl24.Size = new System.Drawing.Size(39, 14);
             this.labelControl24.TabIndex = 16;
@@ -1561,7 +1559,7 @@
             // 
             // labelControl17
             // 
-            this.labelControl17.Location = new System.Drawing.Point(165, 36);
+            this.labelControl17.Location = new System.Drawing.Point(182, 129);
             this.labelControl17.Name = "labelControl17";
             this.labelControl17.Size = new System.Drawing.Size(20, 14);
             this.labelControl17.TabIndex = 18;
@@ -1569,7 +1567,7 @@
             // 
             // labelControl29
             // 
-            this.labelControl29.Location = new System.Drawing.Point(17, 62);
+            this.labelControl29.Location = new System.Drawing.Point(34, 155);
             this.labelControl29.Name = "labelControl29";
             this.labelControl29.Size = new System.Drawing.Size(36, 14);
             this.labelControl29.TabIndex = 71;
@@ -1577,7 +1575,7 @@
             // 
             // textTabCount
             // 
-            this.textTabCount.Location = new System.Drawing.Point(59, 59);
+            this.textTabCount.Location = new System.Drawing.Point(76, 152);
             this.textTabCount.MenuManager = this.barManager1;
             this.textTabCount.Name = "textTabCount";
             this.textTabCount.Size = new System.Drawing.Size(100, 20);
@@ -1585,32 +1583,15 @@
             // 
             // labelControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(165, 62);
+            this.labelControl3.Location = new System.Drawing.Point(182, 155);
             this.labelControl3.Name = "labelControl3";
             this.labelControl3.Size = new System.Drawing.Size(12, 14);
             this.labelControl3.TabIndex = 72;
             this.labelControl3.Text = "个";
             // 
-            // groupControl1
-            // 
-            this.groupControl1.Controls.Add(this.textWidthMax);
-            this.groupControl1.Controls.Add(this.labelControl32);
-            this.groupControl1.Controls.Add(this.labelControl25);
-            this.groupControl1.Controls.Add(this.textWidthStep);
-            this.groupControl1.Controls.Add(this.labelControl26);
-            this.groupControl1.Controls.Add(this.labelControl27);
-            this.groupControl1.Controls.Add(this.labelControl31);
-            this.groupControl1.Controls.Add(this.textWidthMin);
-            this.groupControl1.Controls.Add(this.labelControl28);
-            this.groupControl1.Location = new System.Drawing.Point(18, 24);
-            this.groupControl1.Name = "groupControl1";
-            this.groupControl1.Size = new System.Drawing.Size(200, 128);
-            this.groupControl1.TabIndex = 80;
-            this.groupControl1.Text = "测宽参数";
-            // 
             // textWidthMax
             // 
-            this.textWidthMax.Location = new System.Drawing.Point(59, 34);
+            this.textWidthMax.Location = new System.Drawing.Point(76, 49);
             this.textWidthMax.MenuManager = this.barManager1;
             this.textWidthMax.Name = "textWidthMax";
             this.textWidthMax.Size = new System.Drawing.Size(100, 20);
@@ -1618,7 +1599,7 @@
             // 
             // labelControl32
             // 
-            this.labelControl32.Location = new System.Drawing.Point(29, 88);
+            this.labelControl32.Location = new System.Drawing.Point(46, 103);
             this.labelControl32.Name = "labelControl32";
             this.labelControl32.Size = new System.Drawing.Size(24, 14);
             this.labelControl32.TabIndex = 21;
@@ -1626,7 +1607,7 @@
             // 
             // labelControl25
             // 
-            this.labelControl25.Location = new System.Drawing.Point(165, 62);
+            this.labelControl25.Location = new System.Drawing.Point(182, 77);
             this.labelControl25.Name = "labelControl25";
             this.labelControl25.Size = new System.Drawing.Size(20, 14);
             this.labelControl25.TabIndex = 20;
@@ -1634,7 +1615,7 @@
             // 
             // textWidthStep
             // 
-            this.textWidthStep.Location = new System.Drawing.Point(59, 85);
+            this.textWidthStep.Location = new System.Drawing.Point(76, 100);
             this.textWidthStep.MenuManager = this.barManager1;
             this.textWidthStep.Name = "textWidthStep";
             this.textWidthStep.Size = new System.Drawing.Size(100, 20);
@@ -1642,7 +1623,7 @@
             // 
             // labelControl26
             // 
-            this.labelControl26.Location = new System.Drawing.Point(29, 62);
+            this.labelControl26.Location = new System.Drawing.Point(46, 77);
             this.labelControl26.Name = "labelControl26";
             this.labelControl26.Size = new System.Drawing.Size(24, 14);
             this.labelControl26.TabIndex = 18;
@@ -1650,7 +1631,7 @@
             // 
             // labelControl27
             // 
-            this.labelControl27.Location = new System.Drawing.Point(165, 36);
+            this.labelControl27.Location = new System.Drawing.Point(182, 51);
             this.labelControl27.Name = "labelControl27";
             this.labelControl27.Size = new System.Drawing.Size(20, 14);
             this.labelControl27.TabIndex = 17;
@@ -1658,7 +1639,7 @@
             // 
             // labelControl31
             // 
-            this.labelControl31.Location = new System.Drawing.Point(165, 88);
+            this.labelControl31.Location = new System.Drawing.Point(182, 103);
             this.labelControl31.Name = "labelControl31";
             this.labelControl31.Size = new System.Drawing.Size(20, 14);
             this.labelControl31.TabIndex = 23;
@@ -1666,7 +1647,7 @@
             // 
             // textWidthMin
             // 
-            this.textWidthMin.Location = new System.Drawing.Point(59, 60);
+            this.textWidthMin.Location = new System.Drawing.Point(76, 75);
             this.textWidthMin.MenuManager = this.barManager1;
             this.textWidthMin.Name = "textWidthMin";
             this.textWidthMin.Size = new System.Drawing.Size(100, 20);
@@ -1674,7 +1655,7 @@
             // 
             // labelControl28
             // 
-            this.labelControl28.Location = new System.Drawing.Point(29, 36);
+            this.labelControl28.Location = new System.Drawing.Point(46, 51);
             this.labelControl28.Name = "labelControl28";
             this.labelControl28.Size = new System.Drawing.Size(24, 14);
             this.labelControl28.TabIndex = 15;
@@ -1695,7 +1676,6 @@
             this.dataRecipe.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataRecipe.Location = new System.Drawing.Point(0, 0);
             this.dataRecipe.Name = "dataRecipe";
-            this.dataRecipe.ReadOnly = true;
             this.dataRecipe.Size = new System.Drawing.Size(463, 315);
             this.dataRecipe.TabIndex = 0;
             // 
@@ -2005,6 +1985,22 @@
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
+            // textRecipeName
+            // 
+            this.textRecipeName.Location = new System.Drawing.Point(76, 23);
+            this.textRecipeName.MenuManager = this.barManager1;
+            this.textRecipeName.Name = "textRecipeName";
+            this.textRecipeName.Size = new System.Drawing.Size(100, 20);
+            this.textRecipeName.TabIndex = 8;
+            // 
+            // labelControl30
+            // 
+            this.labelControl30.Location = new System.Drawing.Point(22, 25);
+            this.labelControl30.Name = "labelControl30";
+            this.labelControl30.Size = new System.Drawing.Size(48, 14);
+            this.labelControl30.TabIndex = 75;
+            this.labelControl30.Text = "配方名称";
+            // 
             // XMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -2077,14 +2073,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).EndInit();
             this.xtraTabControl3.ResumeLayout(false);
             this.xtraTabPage8.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
-            this.groupControl2.ResumeLayout(false);
-            this.groupControl2.PerformLayout();
+            this.xtraTabPage8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textEALength.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
-            this.groupControl1.ResumeLayout(false);
-            this.groupControl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).EndInit();
@@ -2116,6 +2107,7 @@
             this.groupTest.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textRecipeName.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2271,8 +2263,6 @@
         private DevExpress.XtraEditors.ListBoxControl listBoxControl1;
         private DevExpress.XtraEditors.SimpleButton btnRemoveRecipe;
         private DevExpress.XtraEditors.SimpleButton btnAddRecipe;
-        private DevExpress.XtraEditors.GroupControl groupControl1;
-        private DevExpress.XtraEditors.GroupControl groupControl2;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl3;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl4;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl3;
@@ -2282,5 +2272,7 @@
         private DevExpress.XtraEditors.SimpleButton btnApplyRecipe;
         private DevExpress.XtraEditors.SimpleButton btnSelectRecipe;
         private DevExpress.XtraEditors.SimpleButton btnApplyTiebiao;
+        private DevExpress.XtraEditors.TextEdit textRecipeName;
+        private DevExpress.XtraEditors.LabelControl labelControl30;
     }
 }

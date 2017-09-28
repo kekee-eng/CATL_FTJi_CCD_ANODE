@@ -11,7 +11,7 @@ namespace DetectCCD {
         public CfgRecipe(string path) : base(path) { }
 
         //
-        public string RecpieName = "";
+        public string RecipeName = "";
 
         //EA起始Mark孔判定位置
         public double EAStart = -40;

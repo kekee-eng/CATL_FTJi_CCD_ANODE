@@ -22,7 +22,7 @@ namespace DetectCCD {
             init_server();
             init_device();
             init_status();
-            init_teston();
+            init_param();
 
             //
             UtilTool.AddBuildTag(this);
@@ -302,15 +302,16 @@ namespace DetectCCD {
                 }
             }));
         }
-        void init_teston() {
+        void init_param() {
 
-            tmpRecipe = new CfgRecipe(Static.PathCfgRecipe);
-            tmpTiebiao = new CfgTiebiao(Static.PathCfgTiebiao);
-
+            //公用变量
             Static.App.BindTextBox(textRollName, "RollName");
-            
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
+
+            //设置参数
+            tmpRecipe = new CfgRecipe(Static.PathCfgRecipe);
+            tmpTiebiao = new CfgTiebiao(Static.PathCfgTiebiao);
 
             tmpTiebiao.BindCheckBox(checkEnableLabelEA, "EnableLabelEA");
             tmpTiebiao.BindCheckBox(checkEnableLabelEAForce, "EnableLabelEA_Force");
@@ -328,12 +329,16 @@ namespace DetectCCD {
             tmpTiebiao.BindTextBox(textLabelEAOffset, "LabelY_EA");
             tmpTiebiao.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
 
+            tmpRecipe.BindTextBox(textRecipeName, "RecipeName");
             tmpRecipe.BindTextBox(textWidthMin, "TabWidthMin");
             tmpRecipe.BindTextBox(textWidthMax, "TabWidthMax");
             tmpRecipe.BindTextBox(textWidthStep, "TabWidthStep");
             tmpRecipe.BindTextBox(textTabCount, "CheckTabCount");
             tmpRecipe.BindTextBox(textEALength, "EALength");
 
+            tmpRecipe.BindDataGridView(dataRecipe);
+
+            //初始化
         }
         void init_status() {
 
@@ -796,6 +801,7 @@ namespace DetectCCD {
 
         CfgRecipe tmpRecipe;
         CfgTiebiao tmpTiebiao;
+
         private void btnApplyTiebiao_Click(object sender, EventArgs e) {
 
             //确认内容
@@ -823,7 +829,7 @@ namespace DetectCCD {
         private void btnApplyRecipe_Click(object sender, EventArgs e) {
 
         }
-
+        
     }
 
 }
