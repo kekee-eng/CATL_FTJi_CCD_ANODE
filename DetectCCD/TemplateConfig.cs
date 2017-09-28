@@ -154,6 +154,7 @@ namespace DetectCCD {
                     if (name == field.Name) {
                         setValueFromField(field, Convert.ToString(cb.Checked));
                         OnValueChanged?.Invoke();
+                        cb.BackColor = Color.LightGreen;
                         break;
                     }
                 }
@@ -174,7 +175,6 @@ namespace DetectCCD {
                 foreach (var field in fields) {
                     if (name == field.Name) {
                         tb.Text = getValueFromField(field);
-                        tb.ForeColor = Color.Black;
                         findIt = true;
                         break;
                     }
@@ -319,7 +319,7 @@ namespace DetectCCD {
                 string newValue = newCfg.getValueFromField(field);
 
                 if(oldValue!=newValue) {
-                    diffContext += string.Format("-> Param:{0}   Old:{1}   New:{2}\n", field.Name, oldValue, newValue);
+                    diffContext += string.Format("-> {0}\r\n\tOld:{1}\r\n\tNew:{2}\r\n", field.Name, oldValue, newValue);
                 }
             }
             

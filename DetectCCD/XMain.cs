@@ -823,12 +823,13 @@ namespace DetectCCD {
         private void btnApplyTiebiao_Click(object sender, EventArgs e) {
 
             //确认内容
-            string changeCheck = Static.Tiebiao.GetDiff(tmpTiebiao);
-            if (changeCheck == null)
+            string msg = Static.Tiebiao.GetDiff(tmpTiebiao);
+            if (msg == "")
                 return;
 
             //
-            if( DialogResult.Yes == XtraMessageBox.Show(changeCheck,"修改确认", MessageBoxButtons.YesNo)) {
+            string changeCheck = "修改贴标参数\r\n" + msg;
+            if (DialogResult.Yes == XtraMessageBox.Show(changeCheck, "修改确认", MessageBoxButtons.YesNo)) {
                 Log.Operate(changeCheck);
                 tmpTiebiao.Save();
                 Static.Tiebiao.Load();
