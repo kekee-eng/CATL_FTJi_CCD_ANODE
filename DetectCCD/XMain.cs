@@ -537,7 +537,7 @@ namespace DetectCCD {
         void saveWidthCSV(DataTab inner, DataTab outer) {
             Log.Record(() => {
                 if (csvWidthWriter == null) {
-                    var folder = Static.FolderRecord + "\\测宽数据";
+                    var folder = Static.FolderRecord;
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
                     var path = string.Format("{0}\\极耳对应后数据-{1:D2}-{2:D2}_{3:D2}-{4:D2}-{5:D2}.csv",
@@ -571,7 +571,7 @@ namespace DetectCCD {
         void saveLabelCSV(bool isInner, DataLabel label) {
             Log.Record(() => {
                 if (csvLabelWriter == null) {
-                    var folder = Static.FolderRecord + "\\贴标数据";
+                    var folder = Static.FolderRecord;
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
                     var path = string.Format("{0}\\贴标数据-{1:D2}-{2:D2}_{3:D2}-{4:D2}-{5:D2}.csv",
