@@ -53,6 +53,7 @@ namespace DetectCCD {
                 appendLog(String.Format("正在{0}...", actName));
                 act();
                 appendLog(String.Format("{0}成功", actName));
+                Log.Operate(actName);
             }
             catch (Exception ex) {
                 appendLog(String.Format("{0}失败: \r\n{1}", actName, ex.Message), -1, ex);
@@ -141,7 +142,7 @@ namespace DetectCCD {
                 };
                 RemoteDefect._func_in_8k_uninit += () => {
                     DeviceStopGrab();
-                    DeviceClose();
+                    DeviceUninit();
                 };
 
             }
@@ -405,26 +406,10 @@ namespace DetectCCD {
                 selectFullScreen.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             }
         }
-
-        public void DeviceLoad() {
-
-            runAction("打开离线数据包", () => {
-                if (openFileDialog1.ShowDialog() == DialogResult.OK) {
-
-                    process.Dispose();
-
-                    //初始化
-                    DeviceInit();
-
-                    //打开设备
-                    DeviceOpen();
-                }
-            });
-
-        }
+        
         public void DeviceInit() {
 
-            runAction("初始化设备", () => {
+            runAction("开启设备", () => {
 
                 //
                 ImageProcess.Init();
@@ -468,6 +453,13 @@ namespace DetectCCD {
         public void DeviceStartGrab() {
 
             runAction("开启采图", () => {
+
+                if (Static.App.Is4K) {
+                    if (!isRollOk) {
+                        throw new Exception("请先设置膜卷！");
+                    }
+                }
+
                 device.InnerCamera.Grab();
                 device.OuterCamera.Grab();
 
@@ -484,21 +476,8 @@ namespace DetectCCD {
                 process.OuterViewerImage.SetUserEnable(true);
             });
         }
-        public void DeviceOpen() {
-
-            runAction("开启设备", async () => {
-
-                UtilTool.XFWait.Open();
-                await Task.Run(() => {
-
-                    device.Open();
-                    UtilTool.XFWait.Close();
-
-                });
-            });
-        }
-        public void DeviceClose() {
-            runAction("停止设备", () => {
+        public void DeviceUninit() {
+            runAction("关闭设备", () => {
                 device?.Dispose();
                 process?.Dispose();
                 if (Static.App.Is4K)
@@ -610,8 +589,6 @@ namespace DetectCCD {
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
                 
-                groupRoll.Enabled = Static.App.Is4K && device.isOpen;
-
                 btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
                 btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
                 
@@ -762,7 +739,6 @@ namespace DetectCCD {
                 if (Static.App.Is4K) {
                     Log.Record(RemoteDefect.InitClient);
                     Log.Record(RemotePLC.InitClient);
-
                     Log.Record(RemoteDefect.In4KCall8K_Init);
                 }
                 DeviceInit();
@@ -772,7 +748,7 @@ namespace DetectCCD {
         }
         private async void btnDisconnect_Click(object sender, EventArgs e) {
             UtilTool.XFWait.Open();
-            DeviceClose();
+            DeviceUninit();
             closeLabelCSV();
             closeWidthCSV();
 
@@ -847,6 +823,7 @@ namespace DetectCCD {
         private void btnApplyRecipe_Click(object sender, EventArgs e) {
 
         }
+
     }
 
 }
