@@ -218,24 +218,24 @@ namespace DetectCCD {
 
             double min, max, step;
             if (select == 0) {
-                min = Static.Param.TabWidthMin;
-                max = Static.Param.TabWidthMax;
-                step = Static.Param.TabWidthStep;
+                min = Static.Recipe.TabWidthMin;
+                max = Static.Recipe.TabWidthMax;
+                step = Static.Recipe.TabWidthStep;
             }
             else if (select == 1) {
-                min = Static.Param.TabHeightMin;
-                max = Static.Param.TabHeightMax;
-                step = Static.Param.TabHeightStep;
+                min = Static.Recipe.TabHeightMin;
+                max = Static.Recipe.TabHeightMax;
+                step = Static.Recipe.TabHeightStep;
             }
             else if (select == 2) {
-                min = Static.Param.TabDistMin;
-                max = Static.Param.TabDistMax;
-                step = Static.Param.TabDistStep;
+                min = Static.Recipe.TabDistMin;
+                max = Static.Recipe.TabDistMax;
+                step = Static.Recipe.TabDistStep;
             }
             else if (select == 3) {
-                min = Static.Param.TabDistDiffMin;
-                max = Static.Param.TabDistDiffMax;
-                step = Static.Param.TabDistDiffStep;
+                min = Static.Recipe.TabDistDiffMin;
+                max = Static.Recipe.TabDistDiffMax;
+                step = Static.Recipe.TabDistDiffStep;
             }
             else {
                 return;
@@ -729,16 +729,16 @@ namespace DetectCCD {
             var g = chart.GraphPane;
             chart.Tag = false;
             //上下限
-            var diff = (Static.Param.TabWidthMax - Static.Param.TabWidthMin);
-            g.YAxis.Scale.Min = Static.Param.TabWidthMin - Math.Ceiling(diff * 0.1 * 2)/2;
-            g.YAxis.Scale.Max = Static.Param.TabWidthMax + Math.Ceiling(diff * 0.1 * 2)/2;
-            g.YAxis.Scale.MajorStep = Static.Param.TabWidthStep;
+            var diff = (Static.Recipe.TabWidthMax - Static.Recipe.TabWidthMin);
+            g.YAxis.Scale.Min = Static.Recipe.TabWidthMin - Math.Ceiling(diff * 0.1 * 2)/2;
+            g.YAxis.Scale.Max = Static.Recipe.TabWidthMax + Math.Ceiling(diff * 0.1 * 2)/2;
+            g.YAxis.Scale.MajorStep = Static.Recipe.TabWidthStep;
 
             //
-            chart.GraphPane.CurveList[2].Points[0].Y = Static.Param.TabWidthMin;
-            chart.GraphPane.CurveList[2].Points[1].Y = Static.Param.TabWidthMin;
-            chart.GraphPane.CurveList[3].Points[0].Y = Static.Param.TabWidthMax;
-            chart.GraphPane.CurveList[3].Points[1].Y = Static.Param.TabWidthMax;
+            chart.GraphPane.CurveList[2].Points[0].Y = Static.Recipe.TabWidthMin;
+            chart.GraphPane.CurveList[2].Points[1].Y = Static.Recipe.TabWidthMin;
+            chart.GraphPane.CurveList[3].Points[0].Y = Static.Recipe.TabWidthMax;
+            chart.GraphPane.CurveList[3].Points[1].Y = Static.Recipe.TabWidthMax;
  
             //
             chart.GraphPane.AxisChange();

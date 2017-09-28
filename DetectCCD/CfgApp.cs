@@ -124,11 +124,11 @@ namespace DetectCCD {
         public string ExpertViewstyle = "Money Twins";
 
         public int SelectUserId = 0;
+        public string SelectUserName { get { return GetUsernameList()[SelectUserId]; } }
 
         public string[] GetUsernameList() { return new string[] { OperatorUsername, EngineerUsername, ExpertUsername }; }
         public string[] GetPasswordList() { return new string[] { OperatorPassword, EngineerPassword, ExpertPassword }; }
         public string[] GetViewstyleList() { return new string[] { OperatorViewstyle, EngineerViewstyle, ExpertViewstyle }; }
-        public string GetUserName() { return GetUsernameList()[SelectUserId]; }
         
     }
 

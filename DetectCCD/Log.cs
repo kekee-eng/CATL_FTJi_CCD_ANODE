@@ -30,5 +30,12 @@ namespace DetectCCD
         {
             Record(() => new Thread(new ThreadStart(() => Record(act))).Start());
         }
+
+        public static void Operate(string context) {
+            OperateLog.Info(string.Format(@"
+操作人：{0}
+执行操作：{1}",Static.App.SelectUserName, context));
+
+        }
     }
 }

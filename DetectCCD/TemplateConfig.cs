@@ -301,6 +301,30 @@ namespace DetectCCD {
         [NonSerialized]
         DataGridView m_grid;
 
+
+        //Fix: 查看修改内容
+        public string GetDiff(TemplateConfig newCfg) {
+
+            //
+            if (this.GetType() != newCfg.GetType())
+                throw new Exception("TemplateConfig: GetDiff: 只能比较相同的类型");
+
+            //
+            string diffContext="";
+
+            //遍历所有公共字段
+            var fields = this.GetType().GetFields();
+            foreach (var field in fields) {
+                string oldValue = getValueFromField(field);
+                string newValue = newCfg.getValueFromField(field);
+
+                if(oldValue!=newValue) {
+                    diffContext += string.Format("-> Param:{0}   Old:{1}   New:{2}\n", field.Name, oldValue, newValue);
+                }
+            }
+            
+            return diffContext;
+        }
     }
 
 }

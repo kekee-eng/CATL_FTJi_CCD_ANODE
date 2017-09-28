@@ -20,11 +20,11 @@ namespace DetectCCD {
         public int DefectCountBack_Tag;
         public int DefectCountBack_LeakMetal;
 
-        public bool IsTabCountFail { get { return TabCount != Static.Param.CheckTabCount; } }
+        public bool IsTabCountFail { get { return TabCount != Static.Recipe.CheckTabCount; } }
         public bool IsTabWidthFailCountFail {
             get {
                 if (Static.Tiebiao.EAContextWidth) {
-                    if (TabWidthFailCount > Static.Param.CheckTabWidthCount) {
+                    if (TabWidthFailCount > Static.Recipe.CheckTabWidthCount) {
                         return true;
                     }
                 }

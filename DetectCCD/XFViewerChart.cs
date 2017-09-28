@@ -22,7 +22,7 @@ namespace DetectCCD {
         private void XFViewerChart_FormClosing(object sender, FormClosingEventArgs e) {
 
             Static.App.Save();
-            Static.Param.Save();
+            Static.Recipe.Save();
 
         }
 
@@ -262,7 +262,7 @@ namespace DetectCCD {
             viewerInit(x => Static.App.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
         }
         private void rtParamShare_Click(object sender, EventArgs e) {
-            viewerInit(x => Static.Param.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
+            viewerInit(x => Static.Recipe.BindDataGridView(ViewerChart.parentInitGrid(x)), null);
         }
 
         private void rtInnerTab_Click(object sender, EventArgs e) {

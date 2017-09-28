@@ -303,34 +303,36 @@ namespace DetectCCD {
         }
         void init_teston() {
 
-            return;
+            tmpRecipe = new CfgRecipe(Static.PathCfgRecipe);
+            tmpTiebiao = new CfgTiebiao(Static.PathCfgTiebiao);
+
             Static.App.BindTextBox(textRollName, "RollName");
             
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
-            
-            Static.App.BindCheckBox(checkEnableLabelEA, "EnableLabelEA");
-            Static.App.BindCheckBox(checkEnableLabelEAForce, "EnableLabelEA_Force");
-            Static.App.BindCheckBox(checkEnableLabelDefect, "EnableLabelDefect");
 
-            Static.App.BindCheckBox(checkLabelContext_Join, "LabelContextJoin");
-            Static.App.BindCheckBox(checkLabelContext_Tag, "LabelContextTag");
-            Static.App.BindCheckBox(checkLabelContext_LeakMetal, "LabelContextLeakMetal");
+            tmpTiebiao.BindCheckBox(checkEnableLabelEA, "EnableLabelEA");
+            tmpTiebiao.BindCheckBox(checkEnableLabelEAForce, "EnableLabelEA_Force");
+            tmpTiebiao.BindCheckBox(checkEnableLabelDefect, "EnableLabelDefect");
 
-            Static.App.BindCheckBox(checkEAContext_Join, "EAContextJoin");
-            Static.App.BindCheckBox(checkEAContext_Tag, "EAContextTag");
-            Static.App.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
-            Static.App.BindCheckBox(checkEAContext_Width, "EAContextWidth");
+            tmpTiebiao.BindCheckBox(checkLabelContext_Join, "LabelContextJoin");
+            tmpTiebiao.BindCheckBox(checkLabelContext_Tag, "LabelContextTag");
+            tmpTiebiao.BindCheckBox(checkLabelContext_LeakMetal, "LabelContextLeakMetal");
 
-            Static.Param.BindTextBox(textLabelEAOffset, "LabelY_EA");
-            Static.Param.BindTextBox(textLabelEAForce, "LabelY_EA_Force");
-            Static.Param.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
+            tmpTiebiao.BindCheckBox(checkEAContext_Join, "EAContextJoin");
+            tmpTiebiao.BindCheckBox(checkEAContext_Tag, "EAContextTag");
+            tmpTiebiao.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
+            tmpTiebiao.BindCheckBox(checkEAContext_Width, "EAContextWidth");
 
-            Static.Param.BindTextBox(textWidthMin, "TabWidthMin");
-            Static.Param.BindTextBox(textWidthMax, "TabWidthMax");
-            Static.Param.BindTextBox(textWidthStep, "TabWidthStep");
-            Static.Param.BindTextBox(textTabCount, "CheckTabCount");
-            
+            tmpTiebiao.BindTextBox(textLabelEAOffset, "LabelY_EA");
+            tmpTiebiao.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
+
+            tmpRecipe.BindTextBox(textWidthMin, "TabWidthMin");
+            tmpRecipe.BindTextBox(textWidthMax, "TabWidthMax");
+            tmpRecipe.BindTextBox(textWidthStep, "TabWidthStep");
+            tmpRecipe.BindTextBox(textTabCount, "CheckTabCount");
+            tmpRecipe.BindTextBox(textEALength, "EALength");
+
         }
         void init_status() {
 
@@ -547,8 +549,8 @@ namespace DetectCCD {
                 appendItem(outer.ValWidth);
                 appendItem(inner.ValWidth - outer.ValWidth);
                 appendItem(inner.ValWidth + outer.ValWidth);
-                appendItem(inner.ValWidth - Static.Param.TabWidthTarget);
-                appendItem(outer.ValWidth - Static.Param.TabWidthTarget);
+                appendItem(inner.ValWidth - Static.Recipe.TabWidthTarget);
+                appendItem(outer.ValWidth - Static.Recipe.TabWidthTarget);
                 appendItem(inner.ValWidth);
                 appendItem(outer.ValWidth);
                 csvWidthWriter.WriteLine();
@@ -815,7 +817,35 @@ namespace DetectCCD {
                 });
             }
         }
-        
+
+        CfgRecipe tmpRecipe;
+        CfgTiebiao tmpTiebiao;
+        private void btnApplyTiebiao_Click(object sender, EventArgs e) {
+
+            //确认内容
+            string changeCheck = Static.Tiebiao.GetDiff(tmpTiebiao);
+            if (changeCheck == null)
+                return;
+
+            //
+            if( DialogResult.Yes == XtraMessageBox.Show(changeCheck,"修改确认", MessageBoxButtons.YesNo)) {
+                Log.Operate(changeCheck);
+                tmpTiebiao.Save();
+                Static.Tiebiao.Load();
+            }
+        }
+        private void btnAddRecipe_Click(object sender, EventArgs e) {
+
+        }
+        private void btnRemoveRecipe_Click(object sender, EventArgs e) {
+
+        }
+        private void btnSelectRecipe_Click(object sender, EventArgs e) {
+
+        }
+        private void btnApplyRecipe_Click(object sender, EventArgs e) {
+
+        }
     }
 
 }

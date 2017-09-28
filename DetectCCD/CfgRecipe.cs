@@ -10,6 +10,9 @@ namespace DetectCCD {
     public class CfgRecipe : TemplateConfig {
         public CfgRecipe(string path) : base(path) { }
 
+        //
+        public string RecpieName = "";
+
         //EA起始Mark孔判定位置
         public double EAStart = -40;
         public double EAEnd = -10;
@@ -42,6 +45,9 @@ namespace DetectCCD {
         //计数
         public int CheckTabCount = 33;
         public int CheckTabWidthCount = 10;
+
+        //
+        public double EALength = 0;
 
     }
 }

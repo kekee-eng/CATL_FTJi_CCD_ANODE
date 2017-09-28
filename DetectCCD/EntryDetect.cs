@@ -91,7 +91,7 @@ namespace DetectCCD {
         public int ShowEACount = 0;
         public int ShowEACountView {
             get {
-                var count1 = Tabs.Count / Static.Param.CheckTabCount;
+                var count1 = Tabs.Count / Static.Recipe.CheckTabCount;
                 if (Math.Abs(count1 - ShowEACount) < 3)
                     return ShowEACount;
                 else
@@ -285,7 +285,7 @@ namespace DetectCCD {
             if (Tabs.Count > 0 || TabsCache.Count > 0) {
 
                 var nearTab = (TabsCache.Count > 0 ? TabsCache.Last() : Tabs.Last());
-                if (nearTab != null && Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Param.TabMergeDistance) {
+                if (nearTab != null && Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Recipe.TabMergeDistance) {
 
                     //更新极耳大小
                     double dist = 30 / Fx;
@@ -353,8 +353,8 @@ namespace DetectCCD {
 
             //宽度检测
             double[] bx1, bx2;
-            double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
-            double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
+            double bfy1 = data.TabY1 + Static.Recipe.TabWidthStart / Fy;
+            double bfy2 = data.TabY1 + Static.Recipe.TabWidthEnd / Fy;
 
             var bimage = grab.GetImage(bfy1, bfy2);
             if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
@@ -371,8 +371,8 @@ namespace DetectCCD {
 
             //EA头部Mark检测
             double[] cx, cy;
-            double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
-            double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
+            double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
+            double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
 
             //
             data.MarkImageStart = cfy1;
@@ -438,10 +438,10 @@ namespace DetectCCD {
             if (Static.App.Is4K 
                 && Static.Tiebiao.EnableLabelEA 
                 && Static.Tiebiao.EnableLabelEA_Force 
-                && Static.Tiebiao.LabelY_EA_Force > 100) {
+                && Static.Recipe.EALength > 100) {
 
                 if (posEAStart >= 0) {
-                    var y0 = posEAStart + Static.Tiebiao.LabelY_EA_Force / Fy;
+                    var y0 = posEAStart + Static.Recipe.EALength / Fy;
                     if (data.TabY1 > y0) {
                         posEAStart = -1;
 
@@ -586,7 +586,7 @@ namespace DetectCCD {
         }
 
         DataTab findBind(double frame) {
-            return TabsCache.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Param.TabMergeDistance);
+            return TabsCache.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Recipe.TabMergeDistance);
         }
         DataTab fixER(double x, double y1, double y2) {
 
@@ -601,8 +601,8 @@ namespace DetectCCD {
 
             //宽度检测
             double[] bx1, bx2;
-            double bfy1 = data.TabY1 + Static.Param.TabWidthStart / Fy;
-            double bfy2 = data.TabY1 + Static.Param.TabWidthEnd / Fy;
+            double bfy1 = data.TabY1 + Static.Recipe.TabWidthStart / Fy;
+            double bfy2 = data.TabY1 + Static.Recipe.TabWidthEnd / Fy;
 
             var bimage = grab.GetImage(bfy1, bfy2);
             if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
@@ -619,8 +619,8 @@ namespace DetectCCD {
 
             //EA头部Mark检测
             double[] cx, cy;
-            double cfy1 = data.TabY1 + Static.Param.EAStart / Fy;
-            double cfy2 = data.TabY1 + Static.Param.EAEnd / Fy;
+            double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
+            double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
 
             //
             data.MarkImageStart = cfy1;

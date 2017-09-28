@@ -20,30 +20,33 @@ namespace DetectCCD {
         public static string FolderTemp { get { return Root + "../Temp/"; } }
 
         public static string PathCfgApp { get { return FolderCfg + "cfg_app.xml"; } }
-        public static string PathCfgParam { get { return FolderCfg + "cfg_param.xml"; } }
+        public static string PathCfgRecipe { get { return FolderCfg + "cfg_param.xml"; } }
+        public static string PathCfgTiebiao { get { return FolderCfg + "cfg_tiebiao.xml"; } }
         public static string PathImageProcess { get { return FolderCfg + "image_process.hdev"; } }
 
         public static CfgApp App;
-        public static CfgRecipe Param;
+        public static CfgRecipe Recipe;
         public static CfgTiebiao Tiebiao;
         
         public static void Init() {
             
             //
             App = new CfgApp(PathCfgApp);
-            Param = new CfgRecipe(PathCfgParam);
-         
+            Recipe = new CfgRecipe(PathCfgRecipe);
+            Tiebiao = new CfgTiebiao(PathCfgTiebiao);
+
             //
             App.Save();
-            Param.Save();
-            
+            Recipe.Save();
+            Tiebiao.Save();
+
             //
-            App.SelectUserId = 0;
+            App.SelectUserId = 2;
         }
         public static void Uninit() {
 
             App.Save();
-            Param.Save();
+            Recipe.Save();
 
         }
         
