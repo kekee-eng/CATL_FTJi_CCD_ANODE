@@ -14,9 +14,18 @@ namespace DetectCCD {
    public class Static {
 
         public static string Root { get { return AppDomain.CurrentDomain.BaseDirectory; } }
-
+        
         public static string FolderCfg { get { return Root + "../Config/"; } }
-        public static string FolderRecord { get { return Root + "../Record/"; } }
+        public static string FolderRecord {
+            get {
+                //保存路径结构修改为：日期 ->品种 ->膜卷号 ->分类 ->大图 /小图
+                Func<string, string> fixPath = (s) => s == "" ? "[UNKNOW]" : s;
+                return string.Format("../Record/{0}/{1}/{2}",
+                    DateTime.Now.ToString("yyyy-MM-dd"),
+                    fixPath(Static.Recipe.RecipeName),
+                    fixPath(Static.App.RollName));
+            }
+        }
         public static string FolderTemp { get { return Root + "../Temp/"; } }
 
         public static string PathCfgApp { get { return FolderCfg + "cfg_app.xml"; } }

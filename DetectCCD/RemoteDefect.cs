@@ -85,7 +85,7 @@ namespace DetectCCD {
             }
             return null;
         }
-        public static event Func<bool, bool,int, DataDefect[]> _func_in_8k_getDefectList;
+        public static event Func<bool, bool, int, DataDefect[]> _func_in_8k_getDefectList;
         public DataDefect[] _in_8k_return_4k_getDefectList(bool isFront, bool isInner, int ea) {
             try { return _func_in_8k_getDefectList(isFront, isInner, ea); }
             catch (Exception ex) {
@@ -139,6 +139,48 @@ namespace DetectCCD {
             }
         }
 
+        public static void In4KCall8K_StartGrab() {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            try {
+                if (client == null) return;
+                client._in_8k_startGrab();
+            }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+            }
+        }
+        public static event Action _func_in_8k_startGrab;
+        public void _in_8k_startGrab() {
+            try { _func_in_8k_startGrab(); }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+            }
+        }
+
+        public static void In4KCall8K_StopGrab() {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            try {
+                if (client == null) return;
+                client._in_8k_stopGrab();
+            }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+            }
+        }
+        public static event Action _func_in_8k_stopGrab;
+        public void _in_8k_stopGrab() {
+            try { _func_in_8k_stopGrab(); }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+            }
+        }
+
         public static void In4KCall8K_Uninit() {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -155,6 +197,28 @@ namespace DetectCCD {
         public static event Action _func_in_8k_uninit;
         public void _in_8k_uninit() {
             try { _func_in_8k_uninit(); }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+            }
+        }
+
+        public static void In4KCall8K_SetRoll(string recipe, string roll) {
+
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            try {
+                if (client == null) return;
+                client._in_8k_setRoll(recipe, roll);
+            }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+            }
+        }
+        public static event Action<string, string> _func_in_8k_setRoll;
+        public void _in_8k_setRoll(string recipe, string roll) {
+            try { _func_in_8k_setRoll(recipe, roll); }
             catch (Exception ex) {
                 Log.AppLog.Error("RemoteDefect:", ex);
             }

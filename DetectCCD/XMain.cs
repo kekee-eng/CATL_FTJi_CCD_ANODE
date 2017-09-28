@@ -137,9 +137,15 @@ namespace DetectCCD {
                         xtraTabControl1.SelectedTabPageIndex = 1;
                     }));
                 };
-                RemoteDefect._func_in_8k_uninit += () => {
-                    DeviceStopGrab();
-                    DeviceUninit();
+                RemoteDefect._func_in_8k_startGrab += DeviceStartGrab;
+                RemoteDefect._func_in_8k_stopGrab += DeviceStopGrab;
+                RemoteDefect._func_in_8k_uninit += DeviceUninit;
+
+                RemoteDefect._func_in_8k_setRoll += (recipe, roll) => {
+                    Static.Recipe.RecipeName = recipe;
+                    Static.App.RollName = roll;
+
+                    mainRollName.Text = roll;
                 };
 
             }
@@ -291,11 +297,13 @@ namespace DetectCCD {
                         Thread.Sleep(1000);
                     }
 
-                    Thread.Sleep(3000);
-                    DeviceInit();
+                    if (Static.App.TestZipFileCircle) {
+                        Thread.Sleep(3000);
+                        DeviceInit();
 
-                    Thread.Sleep(3000);
-                    DeviceStartGrab();
+                        Thread.Sleep(3000);
+                        DeviceStartGrab();
+                    }
                 }
             }));
         }
@@ -414,6 +422,16 @@ namespace DetectCCD {
 
             runAction("开启设备", () => {
 
+                if (Static.App.Is4K) {
+
+                    closeLabelCSV();
+                    closeWidthCSV();
+
+                    Log.Record(RemoteDefect.InitClient);
+                    Log.Record(RemotePLC.InitClient);
+                    Log.Record(RemoteDefect.In4KCall8K_Init);
+                }
+
                 //
                 ImageProcess.Init();
 
@@ -468,6 +486,10 @@ namespace DetectCCD {
 
                 process.InnerViewerImage.SetUserEnable(false);
                 process.OuterViewerImage.SetUserEnable(false);
+
+                if (Static.App.Is4K) {
+                    Log.Record(RemoteDefect.In4KCall8K_StartGrab);
+                }
             });
         }
         public void DeviceStopGrab() {
@@ -477,14 +499,22 @@ namespace DetectCCD {
 
                 process.InnerViewerImage.SetUserEnable(true);
                 process.OuterViewerImage.SetUserEnable(true);
+
+                if (Static.App.Is4K) {
+                    Log.Record(RemoteDefect.In4KCall8K_StopGrab);
+                }
             });
         }
         public void DeviceUninit() {
             runAction("关闭设备", () => {
+                
                 device?.Dispose();
                 process?.Dispose();
-                if (Static.App.Is4K)
-                    RemotePLC.In4KCallPLC_ClearEncoder();
+
+                if (Static.App.Is4K) {
+                    Log.Record(RemoteDefect.In4KCall8K_Uninit);
+                    Log.Record(RemotePLC.In4KCallPLC_ClearEncoder);
+                }
             });
         }
 
@@ -507,7 +537,7 @@ namespace DetectCCD {
         void saveWidthCSV(DataTab inner, DataTab outer) {
             Log.Record(() => {
                 if (csvWidthWriter == null) {
-                    var folder = Static.FolderTemp + "csv";
+                    var folder = Static.FolderRecord + "\\测宽数据";
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
                     var path = string.Format("{0}\\极耳对应后数据-{1:D2}-{2:D2}_{3:D2}-{4:D2}-{5:D2}.csv",
@@ -541,7 +571,7 @@ namespace DetectCCD {
         void saveLabelCSV(bool isInner, DataLabel label) {
             Log.Record(() => {
                 if (csvLabelWriter == null) {
-                    var folder = Static.FolderTemp + "csv";
+                    var folder = Static.FolderRecord + "\\贴标数据";
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
                     var path = string.Format("{0}\\贴标数据-{1:D2}-{2:D2}_{3:D2}-{4:D2}-{5:D2}.csv",
@@ -700,20 +730,20 @@ namespace DetectCCD {
 
                     if (mainRollName.Text == "")
                         throw new Exception("膜卷号未设定!");
-
+                    
                     //
-                    Static.Recipe.RecipeName = mainRecipeName.Text;
-                   
-                    //
-                    mainRecipeName.Enabled = false;
                     mainRollName.Enabled = false;
                     btnRollSet.Text = "结束膜卷";
+
+                    //
+                    RemoteDefect.In4KCall8K_SetRoll(Static.Recipe.RecipeName, Static.App.RollName);
+
+                    //
                     isRollOk = true;
                 }
                 else {
 
                     //
-                    mainRecipeName.Enabled = true;
                     mainRollName.Enabled = true;
                     btnRollSet.Text = "设置膜卷";
                     isRollOk = false;
@@ -732,17 +762,9 @@ namespace DetectCCD {
         private void btnStopGrab_Click(object sender, EventArgs e) {
             DeviceStopGrab();
         }
-
         private async void btnConnect_Click(object sender, EventArgs e) {
             UtilTool.XFWait.Open();
-            closeLabelCSV();
-            closeWidthCSV();
             await Task.Run(() => {
-                if (Static.App.Is4K) {
-                    Log.Record(RemoteDefect.InitClient);
-                    Log.Record(RemotePLC.InitClient);
-                    Log.Record(RemoteDefect.In4KCall8K_Init);
-                }
                 DeviceInit();
                 DeviceStartGrab();
                 UtilTool.XFWait.Close();

@@ -480,8 +480,7 @@ namespace DetectCCD {
 
                 //
                 string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
-                var savefolder = Static.FolderTemp + "ImageNGPart/";
-
+                var savefolder = Static.FolderRecord + "/瑕疵小图/";
                 var savefolder1 = savefolder + "接头/";
                 var savefolder2 = savefolder + "标签/";
                 var savefolder3 = savefolder + "漏金属/";
@@ -497,7 +496,7 @@ namespace DetectCCD {
                     System.IO.Directory.CreateDirectory(savefolder4);
 
                 //
-                var savefolderBig = Static.FolderTemp + "ImageNGBig/";
+                var savefolderBig = Static.FolderRecord + "/瑕疵大图/";
                 var saveBigFilename = string.Format("{0}{1}_F{2}-{3}", savefolderBig, timestamp, efx1, efx2);
                 
                 if (!System.IO.Directory.Exists(savefolderBig))
