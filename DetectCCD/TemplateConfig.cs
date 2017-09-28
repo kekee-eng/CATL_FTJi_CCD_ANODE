@@ -120,6 +120,16 @@ namespace DetectCCD {
                     setValueFromField(field, node.InnerText);
             }
         }
+        public void Delete() {
+            System.IO.File.Delete(m_config_path);
+        }
+
+        public void SaveAs(TemplateConfig cfg) {
+            SaveAs(cfg.m_config_path);
+        }
+        public void LoadAs(TemplateConfig cfg) {
+            LoadAs(cfg.m_config_path);
+        }
 
         //绑定界面操作
         public void BindCheckBox(CheckBox cb, string name) {
@@ -210,30 +220,6 @@ namespace DetectCCD {
                 }
             };
         }
-        public void UpdateBind() {
-
-            var fields = this.GetType().GetFields();
-            foreach (var tb in m_tbs) {
-                if (tb != null && tb.IsHandleCreated) {
-                    foreach (var field in fields) {
-                        if ((string)tb.Tag == field.Name) {
-                            tb.Text = getValueFromField(field);
-                            break;
-                        }
-                    }
-                }
-            }
-            foreach (var cb in m_cbs) {
-                if (cb != null && cb.IsHandleCreated) {
-                    foreach (var field in fields) {
-                        if ((string)cb.Tag == field.Name) {
-                            cb.Checked = Convert.ToBoolean(getValueFromField(field));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
         public void BindDataGridView(DataGridView _grid) {
 
             //保存对象
@@ -286,6 +272,39 @@ namespace DetectCCD {
             };
 
         }
+        public void UpdateBind() {
+
+            var fields = this.GetType().GetFields();
+
+            if (m_tbs != null) {
+                foreach (var tb in m_tbs) {
+                    if (tb != null && tb.IsHandleCreated) {
+                        foreach (var field in fields) {
+                            if ((string)tb.Tag == field.Name) {
+                                tb.Text = getValueFromField(field);
+                                tb.BackColor = Color.White;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (m_cbs != null) {
+                foreach (var cb in m_cbs) {
+                    if (cb != null && cb.IsHandleCreated) {
+                        foreach (var field in fields) {
+                            if ((string)cb.Tag == field.Name) {
+                                cb.Checked = Convert.ToBoolean(getValueFromField(field));
+                                cb.BackColor = Color.White;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
 
         //界面操作反馈事件
         public event Action OnValueChanged;
@@ -299,7 +318,7 @@ namespace DetectCCD {
         [NonSerialized]
         List<CheckBox> m_cbs = null;
         [NonSerialized]
-        DataGridView m_grid;
+        DataGridView m_grid = null;
 
 
         //Fix: 查看修改内容

@@ -22,7 +22,7 @@ namespace DetectCCD {
             init_server();
             init_device();
             init_status();
-            init_param();
+            init_recipe();
 
             //
             UtilTool.AddBuildTag(this);
@@ -77,13 +77,10 @@ namespace DetectCCD {
                 Log.AppLog.Info(ex.StackTrace);
 
         }
-        
+
         public bool isClear = false;
         bool isQuit = false;
         bool isRollOk = false;
-
-        string rollType = "";
-        string rollName = "";
 
         public ModProcess process = new ModProcess();
         public ModDevice device = new ModDevice();
@@ -94,7 +91,7 @@ namespace DetectCCD {
 
                 RemoteDefect.InitServer();
                 RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) => {
-                    
+
                     start = Static.App.FrameInnerToFront(isFront, isInner, start);
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
 
@@ -103,7 +100,7 @@ namespace DetectCCD {
 
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, ea) => {
-                    
+
                     var defs = (isFront ? process.InnerDetect : process.OuterDetect).Defects;
                     var outdefs = new List<DataDefect>();
                     for (int i = 0; i < defs.Count; i++) {
@@ -302,13 +299,13 @@ namespace DetectCCD {
                 }
             }));
         }
-        void init_param() {
+        void init_recipe() {
 
             //公用变量
-            Static.App.BindTextBox(textRollName, "RollName");
+            Static.App.BindTextBox(mainRollName, "RollName");
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
-
+            
             //设置参数
             tmpRecipe = new CfgRecipe(Static.PathCfgRecipe);
             tmpTiebiao = new CfgTiebiao(Static.PathCfgTiebiao);
@@ -339,12 +336,13 @@ namespace DetectCCD {
             tmpRecipe.BindDataGridView(dataRecipe);
 
             //初始化
+            updateRecipes();
         }
         void init_status() {
 
             //选定用户
             changeUser();
-            
+
             //全屏显示
             //selectFullScreen_ItemClick(null, null);
             //status_plc_ItemClick(null, null);
@@ -411,7 +409,7 @@ namespace DetectCCD {
                 selectFullScreen.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             }
         }
-        
+
         public void DeviceInit() {
 
             runAction("开启设备", () => {
@@ -490,8 +488,8 @@ namespace DetectCCD {
             });
         }
 
-        StreamWriter csvWidthWriter =null;
-        StreamWriter csvLabelWriter =null;
+        StreamWriter csvWidthWriter = null;
+        StreamWriter csvLabelWriter = null;
         void closeWidthCSV() {
             if (csvWidthWriter != null) {
                 csvWidthWriter.Flush();
@@ -561,7 +559,7 @@ namespace DetectCCD {
                 csvLabelWriter.Write(DateTime.Now.ToString() + ",");
                 csvLabelWriter.Write(label.EA + ",");
                 csvLabelWriter.Write((isInner ? "内侧" : "外侧") + ",");
-                csvLabelWriter.Write(label.Comment.Replace(",","|") + ",");
+                csvLabelWriter.Write(label.Comment.Replace(",", "|") + ",");
                 csvLabelWriter.WriteLine();
             });
         }
@@ -569,7 +567,7 @@ namespace DetectCCD {
         private void timer1_Tick(object sender, EventArgs e) {
 
             Log.Record(() => {
-                
+
                 groupRecipeManage.Enabled = Static.App.Is4K;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
@@ -593,10 +591,10 @@ namespace DetectCCD {
 
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
-                
+
                 btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
                 btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
-                
+
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
 
@@ -697,27 +695,27 @@ namespace DetectCCD {
 
                 if (!isRollOk) {
 
-                    if (textRollType.SelectedIndex == -1)
-                        throw new Exception("料号未设定！");
+                    if (mainRecipeName.Text == "")
+                        throw new Exception("料号未设定!");
 
-                    if (textRollName.Text == "")
+                    if (mainRollName.Text == "")
                         throw new Exception("膜卷号未设定!");
 
                     //
-                    rollType = textRollType.SelectedItem.ToString();
-                    rollName = textRollName.Text;
-                    
+                    Static.Recipe.RecipeName = mainRecipeName.Text;
+                    Static.Recipe.RollName = mainRollName.Text;
+
                     //
-                    textRollType.Enabled = false;
-                    textRollName.Enabled = false;
+                    mainRecipeName.Enabled = false;
+                    mainRollName.Enabled = false;
                     btnRollSet.Text = "结束膜卷";
                     isRollOk = true;
                 }
                 else {
-                    
+
                     //
-                    textRollType.Enabled = true;
-                    textRollName.Enabled = true;
+                    mainRecipeName.Enabled = true;
+                    mainRollName.Enabled = true;
                     btnRollSet.Text = "设置膜卷";
                     isRollOk = false;
                 }
@@ -735,7 +733,7 @@ namespace DetectCCD {
         private void btnStopGrab_Click(object sender, EventArgs e) {
             DeviceStopGrab();
         }
-        
+
         private async void btnConnect_Click(object sender, EventArgs e) {
             UtilTool.XFWait.Open();
             closeLabelCSV();
@@ -801,6 +799,22 @@ namespace DetectCCD {
 
         CfgRecipe tmpRecipe;
         CfgTiebiao tmpTiebiao;
+        List<CfgRecipe> getAllRecipe() {
+            List<CfgRecipe> cfgs = new List<CfgRecipe>();
+            var files = new System.IO.DirectoryInfo(Static.FolderCfg).GetFiles("recipe_*");
+            foreach (var fi in files) {
+                cfgs.Add(new CfgRecipe(fi.FullName));
+            }
+            return cfgs;
+        }
+        void updateRecipes() {
+            listBoxRecipe.Items.Clear();
+            listBoxRecipe.Items.AddRange(getAllRecipe().Select(x => x.RecipeName).ToArray());
+
+            groupRecipeManage.Text = $"配方管理[当前：{Static.Recipe.RecipeName}]";
+            mainRecipeName.Text = Static.Recipe.RecipeName;
+
+        }
 
         private void btnApplyTiebiao_Click(object sender, EventArgs e) {
 
@@ -818,18 +832,98 @@ namespace DetectCCD {
             }
         }
         private void btnAddRecipe_Click(object sender, EventArgs e) {
+            runAction((sender as SimpleButton).Text, () => {
 
+                if (tmpRecipe.RecipeName == "")
+                    throw new Exception("请输入配方名称");
+
+                var recipes = getAllRecipe();
+                if (recipes.Select(x => x.RecipeName).Contains(tmpRecipe.RecipeName))
+                    throw new Exception("配方已存在");
+
+                string newFilePath = "";
+                int id = recipes.Count + 1;
+                while (true) {
+                    newFilePath = Static.FolderCfg + "recipe_" + id;
+                    if (!System.IO.File.Exists(newFilePath))
+                        break;
+                    id++;
+                }
+                tmpRecipe.SaveAs(newFilePath);
+
+                updateRecipes();
+            });
         }
         private void btnRemoveRecipe_Click(object sender, EventArgs e) {
 
+            runAction((sender as SimpleButton).Text, () => {
+
+                if (tmpRecipe.RecipeName == "")
+                    throw new Exception("请输入配方名称");
+
+                if (tmpRecipe.RecipeName == Static.Recipe.RecipeName)
+                    throw new Exception("无法删除当前配方");
+
+                var recipes = getAllRecipe();
+                var removeRecipe = recipes.Find(x => x.RecipeName == tmpRecipe.RecipeName);
+                if (removeRecipe == null)
+                    throw new Exception("配方不存在，无法删除");
+
+                removeRecipe.Delete();
+                updateRecipes();
+            });
         }
         private void btnSelectRecipe_Click(object sender, EventArgs e) {
 
+            runAction((sender as SimpleButton).Text, () => {
+
+                if (listBoxRecipe.SelectedIndex == -1)
+                    throw new Exception("请先选择配方");
+
+                var recipes = getAllRecipe();
+                var select = recipes.Find(x => x.RecipeName == tmpRecipe.RecipeName);
+                if (select == null)
+                    throw new Exception("配方不存在");
+
+                select.SaveAs(Static.Recipe);
+                Static.Recipe.Load();
+                Static.Recipe.UpdateBind();
+
+                updateRecipes();
+            });
         }
         private void btnApplyRecipe_Click(object sender, EventArgs e) {
 
+            runAction((sender as SimpleButton).Text, () => {
+
+                var recipes = getAllRecipe();
+                var select = recipes.Find(x => x.RecipeName == tmpRecipe.RecipeName);
+                if (select == null)
+                    throw new Exception("配方不存在");
+
+                Log.Operate("修改配方[" + tmpRecipe.RecipeName + "]参数\r\n" + tmpRecipe.GetDiff(Static.Recipe));
+                tmpRecipe.SaveAs(select);
+
+            });
         }
-        
+        private void listBoxRecipe_SelectedIndexChanged(object sender, EventArgs e) {
+
+            Log.Record(() => {
+
+                if (listBoxRecipe.SelectedIndex < 0)
+                    return;
+
+                var recipes = getAllRecipe();
+                var select = recipes.Find(x => x.RecipeName == listBoxRecipe.SelectedItem.ToString());
+                if (select == null)
+                    return;
+
+                tmpRecipe.LoadAs(select);
+                tmpRecipe.UpdateBind();
+                tmpRecipe.BindDataGridView(dataRecipe);
+
+            });
+        }
     }
 
 }
