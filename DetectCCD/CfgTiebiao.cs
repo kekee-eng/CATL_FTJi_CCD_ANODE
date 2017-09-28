@@ -26,11 +26,11 @@ namespace DetectCCD {
         public bool EAContextWidth = false;
 
         //
-        public double LabelY_Defect = 0;
+        public double LabelY_Defect = -400;
         public double LabelY_EA = 0;
-        public double LabelShowX = 0.5;
-        public double LabelShowW = 0.05;
-        public double LabelShowH = 0.05;
+        public double LabelShowX = 0.95;
+        public double LabelShowW = 0.08;
+        public double LabelShowH = 0.3;
 
     }
 }

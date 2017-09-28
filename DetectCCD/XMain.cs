@@ -571,6 +571,7 @@ namespace DetectCCD {
                 groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
+                groupRoll.Enabled = Static.App.Is4K;
 
                 if (Static.App.Is4K) {
                     _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";
