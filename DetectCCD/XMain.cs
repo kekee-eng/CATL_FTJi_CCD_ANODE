@@ -568,7 +568,7 @@ namespace DetectCCD {
 
             Log.Record(() => {
 
-                groupRecipeManage.Enabled = Static.App.Is4K;
+                groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
 
@@ -703,8 +703,7 @@ namespace DetectCCD {
 
                     //
                     Static.Recipe.RecipeName = mainRecipeName.Text;
-                    Static.Recipe.RollName = mainRollName.Text;
-
+                   
                     //
                     mainRecipeName.Enabled = false;
                     mainRollName.Enabled = false;
@@ -901,7 +900,7 @@ namespace DetectCCD {
                 if (select == null)
                     throw new Exception("配方不存在");
 
-                Log.Operate("修改配方[" + tmpRecipe.RecipeName + "]参数\r\n" + tmpRecipe.GetDiff(Static.Recipe));
+                Log.Operate("修改配方[" + tmpRecipe.RecipeName + "]参数\r\n" + select.GetDiff(tmpRecipe));
                 tmpRecipe.SaveAs(select);
 
             });

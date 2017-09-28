@@ -12,7 +12,7 @@ namespace DetectCCD {
 
         //
         public string RecipeName = "";
-        public string RollName = "";
+        public string RollName { get { return Static.App.RollName; } }
 
         //EA起始Mark孔判定位置
         public double EAStart = -40;
