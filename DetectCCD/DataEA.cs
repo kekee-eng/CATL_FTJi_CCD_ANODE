@@ -23,7 +23,7 @@ namespace DetectCCD {
         public bool IsTabCountFail { get { return TabCount != Static.Param.CheckTabCount; } }
         public bool IsTabWidthFailCountFail {
             get {
-                if (Static.App.EAContextWidth) {
+                if (Static.Tiebiao.EAContextWidth) {
                     if (TabWidthFailCount > Static.Param.CheckTabWidthCount) {
                         return true;
                     }
@@ -33,15 +33,15 @@ namespace DetectCCD {
         }
         public bool IsDefectCountFail {
             get {
-                if (Static.App.EAContextJoin) {
+                if (Static.Tiebiao.EAContextJoin) {
                     if (DefectCountFront_Join > 0) return true;
                     if (DefectCountBack_Join > 0) return true;
                 }
-                if (Static.App.EAContextTag) {
+                if (Static.Tiebiao.EAContextTag) {
                     if (DefectCountFront_Tag > 0) return true;
                     if (DefectCountBack_Tag > 0) return true;
                 }
-                if (Static.App.EAContextLeakMetal) {
+                if (Static.Tiebiao.EAContextLeakMetal) {
                     if (DefectCountFront_LeakMetal > 0) return true;
                     if (DefectCountBack_LeakMetal > 0) return true;
                 }
@@ -60,13 +60,13 @@ namespace DetectCCD {
 
             if (IsDefectCountFail) {
 
-                if (Static.App.EAContextJoin) {
+                if (Static.Tiebiao.EAContextJoin) {
                     if (DefectCountFront_Join > 0)
                         text += string.Format("正面接头[{0}], ", DefectCountFront_Join);
                     if (DefectCountBack_Join > 0)
                         text += string.Format("背面接头[{0}], ", DefectCountBack_Join);
                 }
-                if (Static.App.EAContextTag) {
+                if (Static.Tiebiao.EAContextTag) {
                     if (DefectCountFront_Tag > 0)
                         text += string.Format("正面标签[{0}], ", DefectCountFront_Tag);
 
@@ -74,7 +74,7 @@ namespace DetectCCD {
                         text += string.Format("背面标签[{0}], ", DefectCountBack_Tag);
 
                 }
-                if (Static.App.EAContextLeakMetal) {
+                if (Static.Tiebiao.EAContextLeakMetal) {
                     if (DefectCountFront_LeakMetal > 0)
                         text += string.Format("正面漏金属[{0}], ", DefectCountFront_LeakMetal);
 

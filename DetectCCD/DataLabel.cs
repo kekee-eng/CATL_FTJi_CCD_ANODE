@@ -11,10 +11,10 @@ namespace DetectCCD {
 
         public int EA = -100;
         public int Encoder;
-        public double X { get { return Static.Param.LabelShowX; } }
+        public double X { get { return Static.Tiebiao.LabelShowX; } }
         public double Y;
-        public double W { get { return Static.Param.LabelShowW; } }
-        public double H { get { return Static.Param.LabelShowH;}}
+        public double W { get { return Static.Tiebiao.LabelShowW; } }
+        public double H { get { return Static.Tiebiao.LabelShowH;}}
         public string Comment;
 
         public bool IsSend = false;

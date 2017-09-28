@@ -61,17 +61,17 @@ namespace DetectCCD {
         }
 
         public bool IsTransLabel() {
-            if (Static.App.LabelContextJoin && Type == 0) return true;
-            if (Static.App.LabelContextTag && Type == 1) return true;
-            if (Static.App.LabelContextLeakMetal && Type == 2) return true;
+            if (Static.Tiebiao.LabelContextJoin && Type == 0) return true;
+            if (Static.Tiebiao.LabelContextTag && Type == 1) return true;
+            if (Static.Tiebiao.LabelContextLeakMetal && Type == 2) return true;
 
             return false;
         }
 
         public bool IsCountEA() {
-            if (Static.App.EAContextJoin && Type == 0) return true;
-            if (Static.App.EAContextTag && Type == 1) return true;
-            if (Static.App.EAContextLeakMetal && Type == 2) return true;
+            if (Static.Tiebiao.EAContextJoin && Type == 0) return true;
+            if (Static.Tiebiao.EAContextTag && Type == 1) return true;
+            if (Static.Tiebiao.EAContextLeakMetal && Type == 2) return true;
 
             return false;
         }

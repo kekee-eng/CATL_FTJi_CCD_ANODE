@@ -303,13 +303,13 @@ namespace DetectCCD {
         }
         void init_teston() {
 
+            return;
             Static.App.BindTextBox(textRollName, "RollName");
             
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
             
             Static.App.BindCheckBox(checkEnableLabelEA, "EnableLabelEA");
-            Static.App.BindCheckBox(checkEnableLabelEAEveryOne, "EnableLabelEA_EveryOne");
             Static.App.BindCheckBox(checkEnableLabelEAForce, "EnableLabelEA_Force");
             Static.App.BindCheckBox(checkEnableLabelDefect, "EnableLabelDefect");
 
@@ -583,8 +583,8 @@ namespace DetectCCD {
         private void timer1_Tick(object sender, EventArgs e) {
 
             Log.Record(() => {
-
-                groupWidth.Enabled = Static.App.Is4K;
+                
+                groupRecipeManage.Enabled = Static.App.Is4K;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
 
@@ -603,7 +603,6 @@ namespace DetectCCD {
                 //
                 textLabelDefectOffset.Enabled = checkEnableLabelDefect.Checked;
                 textLabelEAOffset.Enabled = checkEnableLabelEA.Checked;
-                checkEnableLabelEAEveryOne.Enabled = checkEnableLabelEA.Checked;
                 checkEnableLabelEAForce.Enabled = checkEnableLabelEA.Checked;
 
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;

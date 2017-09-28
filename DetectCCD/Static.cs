@@ -24,13 +24,14 @@ namespace DetectCCD {
         public static string PathImageProcess { get { return FolderCfg + "image_process.hdev"; } }
 
         public static CfgApp App;
-        public static CfgParam Param;
+        public static CfgRecipe Param;
+        public static CfgTiebiao Tiebiao;
         
         public static void Init() {
             
             //
             App = new CfgApp(PathCfgApp);
-            Param = new CfgParam(PathCfgParam);
+            Param = new CfgRecipe(PathCfgParam);
          
             //
             App.Save();

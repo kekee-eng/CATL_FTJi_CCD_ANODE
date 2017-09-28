@@ -130,22 +130,36 @@
             this.panelDefect2 = new System.Windows.Forms.Panel();
             this.panelDefect1 = new System.Windows.Forms.Panel();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
-            this.groupWidth = new DevExpress.XtraEditors.GroupControl();
-            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
-            this.textTabCount = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl29 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl31 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
-            this.textWidthStep = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl32 = new DevExpress.XtraEditors.LabelControl();
+            this.groupRecipeManage = new DevExpress.XtraEditors.GroupControl();
+            this.splitContainerControl3 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.listBoxControl1 = new DevExpress.XtraEditors.ListBoxControl();
+            this.splitContainerControl4 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.xtraTabControl3 = new DevExpress.XtraTab.XtraTabControl();
+            this.xtraTabPage8 = new DevExpress.XtraTab.XtraTabPage();
+            this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.textLabelEAForce = new DevExpress.XtraEditors.TextEdit();
             this.labelControl24 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl29 = new DevExpress.XtraEditors.LabelControl();
+            this.textTabCount = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
+            this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.textWidthMax = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl32 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
+            this.textWidthStep = new DevExpress.XtraEditors.TextEdit();
             this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl27 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl31 = new DevExpress.XtraEditors.LabelControl();
             this.textWidthMin = new DevExpress.XtraEditors.TextEdit();
             this.labelControl28 = new DevExpress.XtraEditors.LabelControl();
+            this.xtraTabPage9 = new DevExpress.XtraTab.XtraTabPage();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.simpleButton5 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton4 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton3 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.groupLabel = new DevExpress.XtraEditors.GroupControl();
             this.groupEAContext = new DevExpress.XtraEditors.GroupControl();
             this.checkEAContext_Width = new DevExpress.XtraEditors.CheckEdit();
@@ -163,19 +177,20 @@
             this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
             this.textLabelDefectOffset = new DevExpress.XtraEditors.TextEdit();
             this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
-            this.checkEnableLabelEAEveryOne = new DevExpress.XtraEditors.CheckEdit();
             this.checkEnableLabelEA = new DevExpress.XtraEditors.CheckEdit();
             this.checkEnableLabelDefect = new DevExpress.XtraEditors.CheckEdit();
+            this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
             this.groupCtrl = new DevExpress.XtraEditors.GroupControl();
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
             this.groupTest = new DevExpress.XtraEditors.GroupControl();
             this.checkSaveNGSmall = new DevExpress.XtraEditors.CheckEdit();
             this.checkSaveNG = new DevExpress.XtraEditors.CheckEdit();
-            this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.simpleButton6 = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButton7 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -222,13 +237,27 @@
             this.xtraTabPage7.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.xtraTabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).BeginInit();
-            this.groupWidth.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupRecipeManage)).BeginInit();
+            this.groupRecipeManage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl3)).BeginInit();
+            this.splitContainerControl3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.listBoxControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl4)).BeginInit();
+            this.splitContainerControl4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).BeginInit();
+            this.xtraTabControl3.SuspendLayout();
+            this.xtraTabPage8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
+            this.groupControl2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
+            this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).BeginInit();
+            this.xtraTabPage9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).BeginInit();
             this.groupLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).BeginInit();
@@ -245,9 +274,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAEveryOne.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEA.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).BeginInit();
+            this.xtraTabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).BeginInit();
             this.groupCtrl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).BeginInit();
@@ -1421,97 +1450,105 @@
             // 
             // xtraTabPage3
             // 
-            this.xtraTabPage3.Controls.Add(this.groupWidth);
+            this.xtraTabPage3.Controls.Add(this.groupRecipeManage);
             this.xtraTabPage3.Controls.Add(this.groupLabel);
-            this.xtraTabPage3.Controls.Add(this.groupCtrl);
-            this.xtraTabPage3.Controls.Add(this.groupTest);
             this.xtraTabPage3.ImageIndex = 2;
             this.xtraTabPage3.Name = "xtraTabPage3";
             this.xtraTabPage3.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage3.Text = "参数配置";
             // 
-            // groupWidth
+            // groupRecipeManage
             // 
-            this.groupWidth.Controls.Add(this.labelControl3);
-            this.groupWidth.Controls.Add(this.textTabCount);
-            this.groupWidth.Controls.Add(this.labelControl29);
-            this.groupWidth.Controls.Add(this.labelControl31);
-            this.groupWidth.Controls.Add(this.labelControl17);
-            this.groupWidth.Controls.Add(this.textWidthStep);
-            this.groupWidth.Controls.Add(this.labelControl32);
-            this.groupWidth.Controls.Add(this.textLabelEAForce);
-            this.groupWidth.Controls.Add(this.labelControl24);
-            this.groupWidth.Controls.Add(this.labelControl25);
-            this.groupWidth.Controls.Add(this.textWidthMax);
-            this.groupWidth.Controls.Add(this.labelControl26);
-            this.groupWidth.Controls.Add(this.labelControl27);
-            this.groupWidth.Controls.Add(this.textWidthMin);
-            this.groupWidth.Controls.Add(this.labelControl28);
-            this.groupWidth.Location = new System.Drawing.Point(486, 21);
-            this.groupWidth.Name = "groupWidth";
-            this.groupWidth.Size = new System.Drawing.Size(281, 184);
-            this.groupWidth.TabIndex = 20;
-            this.groupWidth.Text = "参数设置";
+            this.groupRecipeManage.Controls.Add(this.splitContainerControl3);
+            this.groupRecipeManage.Location = new System.Drawing.Point(15, 11);
+            this.groupRecipeManage.Name = "groupRecipeManage";
+            this.groupRecipeManage.Size = new System.Drawing.Size(613, 461);
+            this.groupRecipeManage.TabIndex = 51;
+            this.groupRecipeManage.Text = "配方管理";
             // 
-            // labelControl3
+            // splitContainerControl3
             // 
-            this.labelControl3.Location = new System.Drawing.Point(169, 149);
-            this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(12, 14);
-            this.labelControl3.TabIndex = 72;
-            this.labelControl3.Text = "个";
+            this.splitContainerControl3.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            this.splitContainerControl3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerControl3.Location = new System.Drawing.Point(2, 21);
+            this.splitContainerControl3.Name = "splitContainerControl3";
+            this.splitContainerControl3.Panel1.Controls.Add(this.listBoxControl1);
+            this.splitContainerControl3.Panel1.Text = "Panel1";
+            this.splitContainerControl3.Panel2.Controls.Add(this.splitContainerControl4);
+            this.splitContainerControl3.Panel2.Text = "Panel2";
+            this.splitContainerControl3.Size = new System.Drawing.Size(609, 438);
+            this.splitContainerControl3.SplitterPosition = 130;
+            this.splitContainerControl3.TabIndex = 0;
+            this.splitContainerControl3.Text = "splitContainerControl3";
             // 
-            // textTabCount
+            // listBoxControl1
             // 
-            this.textTabCount.Location = new System.Drawing.Point(63, 146);
-            this.textTabCount.MenuManager = this.barManager1;
-            this.textTabCount.Name = "textTabCount";
-            this.textTabCount.Size = new System.Drawing.Size(100, 20);
-            this.textTabCount.TabIndex = 73;
+            this.listBoxControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxControl1.Location = new System.Drawing.Point(0, 0);
+            this.listBoxControl1.Name = "listBoxControl1";
+            this.listBoxControl1.Size = new System.Drawing.Size(130, 438);
+            this.listBoxControl1.TabIndex = 0;
             // 
-            // labelControl29
+            // splitContainerControl4
             // 
-            this.labelControl29.Location = new System.Drawing.Point(21, 149);
-            this.labelControl29.Name = "labelControl29";
-            this.labelControl29.Size = new System.Drawing.Size(36, 14);
-            this.labelControl29.TabIndex = 71;
-            this.labelControl29.Text = "极耳数";
+            this.splitContainerControl4.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            this.splitContainerControl4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerControl4.FixedPanel = DevExpress.XtraEditors.SplitFixedPanel.Panel2;
+            this.splitContainerControl4.Horizontal = false;
+            this.splitContainerControl4.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerControl4.Name = "splitContainerControl4";
+            this.splitContainerControl4.Panel1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            this.splitContainerControl4.Panel1.Controls.Add(this.xtraTabControl3);
+            this.splitContainerControl4.Panel1.Text = "Panel1";
+            this.splitContainerControl4.Panel2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
+            this.splitContainerControl4.Panel2.Controls.Add(this.simpleButton5);
+            this.splitContainerControl4.Panel2.Controls.Add(this.simpleButton4);
+            this.splitContainerControl4.Panel2.Controls.Add(this.simpleButton3);
+            this.splitContainerControl4.Panel2.Controls.Add(this.simpleButton2);
+            this.splitContainerControl4.Panel2.Controls.Add(this.simpleButton1);
+            this.splitContainerControl4.Panel2.Text = "Panel2";
+            this.splitContainerControl4.Size = new System.Drawing.Size(473, 438);
+            this.splitContainerControl4.SplitterPosition = 84;
+            this.splitContainerControl4.TabIndex = 0;
+            this.splitContainerControl4.Text = "splitContainerControl4";
             // 
-            // labelControl31
+            // xtraTabControl3
             // 
-            this.labelControl31.Location = new System.Drawing.Point(169, 85);
-            this.labelControl31.Name = "labelControl31";
-            this.labelControl31.Size = new System.Drawing.Size(20, 14);
-            this.labelControl31.TabIndex = 23;
-            this.labelControl31.Text = "mm";
+            this.xtraTabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xtraTabControl3.Location = new System.Drawing.Point(0, 0);
+            this.xtraTabControl3.Name = "xtraTabControl3";
+            this.xtraTabControl3.SelectedTabPage = this.xtraTabPage8;
+            this.xtraTabControl3.Size = new System.Drawing.Size(469, 344);
+            this.xtraTabControl3.TabIndex = 0;
+            this.xtraTabControl3.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
+            this.xtraTabPage8,
+            this.xtraTabPage9});
             // 
-            // labelControl17
+            // xtraTabPage8
             // 
-            this.labelControl17.Location = new System.Drawing.Point(169, 123);
-            this.labelControl17.Name = "labelControl17";
-            this.labelControl17.Size = new System.Drawing.Size(20, 14);
-            this.labelControl17.TabIndex = 18;
-            this.labelControl17.Text = "mm";
+            this.xtraTabPage8.Controls.Add(this.groupControl2);
+            this.xtraTabPage8.Controls.Add(this.groupControl1);
+            this.xtraTabPage8.Name = "xtraTabPage8";
+            this.xtraTabPage8.Size = new System.Drawing.Size(463, 315);
+            this.xtraTabPage8.Text = "常用参数";
             // 
-            // textWidthStep
+            // groupControl2
             // 
-            this.textWidthStep.Location = new System.Drawing.Point(63, 82);
-            this.textWidthStep.MenuManager = this.barManager1;
-            this.textWidthStep.Name = "textWidthStep";
-            this.textWidthStep.Size = new System.Drawing.Size(100, 20);
-            this.textWidthStep.TabIndex = 30;
-            // 
-            // labelControl32
-            // 
-            this.labelControl32.Location = new System.Drawing.Point(33, 85);
-            this.labelControl32.Name = "labelControl32";
-            this.labelControl32.Size = new System.Drawing.Size(24, 14);
-            this.labelControl32.TabIndex = 21;
-            this.labelControl32.Text = "步长";
+            this.groupControl2.Controls.Add(this.textLabelEAForce);
+            this.groupControl2.Controls.Add(this.labelControl24);
+            this.groupControl2.Controls.Add(this.labelControl17);
+            this.groupControl2.Controls.Add(this.labelControl29);
+            this.groupControl2.Controls.Add(this.textTabCount);
+            this.groupControl2.Controls.Add(this.labelControl3);
+            this.groupControl2.Location = new System.Drawing.Point(18, 165);
+            this.groupControl2.Name = "groupControl2";
+            this.groupControl2.Size = new System.Drawing.Size(200, 128);
+            this.groupControl2.TabIndex = 81;
+            this.groupControl2.Text = "产品特征";
             // 
             // textLabelEAForce
             // 
-            this.textLabelEAForce.Location = new System.Drawing.Point(63, 120);
+            this.textLabelEAForce.Location = new System.Drawing.Point(59, 33);
             this.textLabelEAForce.MenuManager = this.barManager1;
             this.textLabelEAForce.Name = "textLabelEAForce";
             this.textLabelEAForce.Size = new System.Drawing.Size(100, 20);
@@ -1519,31 +1556,96 @@
             // 
             // labelControl24
             // 
-            this.labelControl24.Location = new System.Drawing.Point(18, 123);
+            this.labelControl24.Location = new System.Drawing.Point(14, 36);
             this.labelControl24.Name = "labelControl24";
             this.labelControl24.Size = new System.Drawing.Size(39, 14);
             this.labelControl24.TabIndex = 16;
             this.labelControl24.Text = "EA长度";
             // 
-            // labelControl25
+            // labelControl17
             // 
-            this.labelControl25.Location = new System.Drawing.Point(169, 59);
-            this.labelControl25.Name = "labelControl25";
-            this.labelControl25.Size = new System.Drawing.Size(20, 14);
-            this.labelControl25.TabIndex = 20;
-            this.labelControl25.Text = "mm";
+            this.labelControl17.Location = new System.Drawing.Point(165, 36);
+            this.labelControl17.Name = "labelControl17";
+            this.labelControl17.Size = new System.Drawing.Size(20, 14);
+            this.labelControl17.TabIndex = 18;
+            this.labelControl17.Text = "mm";
+            // 
+            // labelControl29
+            // 
+            this.labelControl29.Location = new System.Drawing.Point(17, 62);
+            this.labelControl29.Name = "labelControl29";
+            this.labelControl29.Size = new System.Drawing.Size(36, 14);
+            this.labelControl29.TabIndex = 71;
+            this.labelControl29.Text = "极耳数";
+            // 
+            // textTabCount
+            // 
+            this.textTabCount.Location = new System.Drawing.Point(59, 59);
+            this.textTabCount.MenuManager = this.barManager1;
+            this.textTabCount.Name = "textTabCount";
+            this.textTabCount.Size = new System.Drawing.Size(100, 20);
+            this.textTabCount.TabIndex = 73;
+            // 
+            // labelControl3
+            // 
+            this.labelControl3.Location = new System.Drawing.Point(165, 62);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(12, 14);
+            this.labelControl3.TabIndex = 72;
+            this.labelControl3.Text = "个";
+            // 
+            // groupControl1
+            // 
+            this.groupControl1.Controls.Add(this.textWidthMax);
+            this.groupControl1.Controls.Add(this.labelControl32);
+            this.groupControl1.Controls.Add(this.labelControl25);
+            this.groupControl1.Controls.Add(this.textWidthStep);
+            this.groupControl1.Controls.Add(this.labelControl26);
+            this.groupControl1.Controls.Add(this.labelControl27);
+            this.groupControl1.Controls.Add(this.labelControl31);
+            this.groupControl1.Controls.Add(this.textWidthMin);
+            this.groupControl1.Controls.Add(this.labelControl28);
+            this.groupControl1.Location = new System.Drawing.Point(18, 24);
+            this.groupControl1.Name = "groupControl1";
+            this.groupControl1.Size = new System.Drawing.Size(200, 128);
+            this.groupControl1.TabIndex = 80;
+            this.groupControl1.Text = "测宽参数";
             // 
             // textWidthMax
             // 
-            this.textWidthMax.Location = new System.Drawing.Point(63, 31);
+            this.textWidthMax.Location = new System.Drawing.Point(59, 34);
             this.textWidthMax.MenuManager = this.barManager1;
             this.textWidthMax.Name = "textWidthMax";
             this.textWidthMax.Size = new System.Drawing.Size(100, 20);
             this.textWidthMax.TabIndex = 10;
             // 
+            // labelControl32
+            // 
+            this.labelControl32.Location = new System.Drawing.Point(29, 88);
+            this.labelControl32.Name = "labelControl32";
+            this.labelControl32.Size = new System.Drawing.Size(24, 14);
+            this.labelControl32.TabIndex = 21;
+            this.labelControl32.Text = "步长";
+            // 
+            // labelControl25
+            // 
+            this.labelControl25.Location = new System.Drawing.Point(165, 62);
+            this.labelControl25.Name = "labelControl25";
+            this.labelControl25.Size = new System.Drawing.Size(20, 14);
+            this.labelControl25.TabIndex = 20;
+            this.labelControl25.Text = "mm";
+            // 
+            // textWidthStep
+            // 
+            this.textWidthStep.Location = new System.Drawing.Point(59, 85);
+            this.textWidthStep.MenuManager = this.barManager1;
+            this.textWidthStep.Name = "textWidthStep";
+            this.textWidthStep.Size = new System.Drawing.Size(100, 20);
+            this.textWidthStep.TabIndex = 30;
+            // 
             // labelControl26
             // 
-            this.labelControl26.Location = new System.Drawing.Point(33, 59);
+            this.labelControl26.Location = new System.Drawing.Point(29, 62);
             this.labelControl26.Name = "labelControl26";
             this.labelControl26.Size = new System.Drawing.Size(24, 14);
             this.labelControl26.TabIndex = 18;
@@ -1551,15 +1653,23 @@
             // 
             // labelControl27
             // 
-            this.labelControl27.Location = new System.Drawing.Point(169, 33);
+            this.labelControl27.Location = new System.Drawing.Point(165, 36);
             this.labelControl27.Name = "labelControl27";
             this.labelControl27.Size = new System.Drawing.Size(20, 14);
             this.labelControl27.TabIndex = 17;
             this.labelControl27.Text = "mm";
             // 
+            // labelControl31
+            // 
+            this.labelControl31.Location = new System.Drawing.Point(165, 88);
+            this.labelControl31.Name = "labelControl31";
+            this.labelControl31.Size = new System.Drawing.Size(20, 14);
+            this.labelControl31.TabIndex = 23;
+            this.labelControl31.Text = "mm";
+            // 
             // textWidthMin
             // 
-            this.textWidthMin.Location = new System.Drawing.Point(63, 57);
+            this.textWidthMin.Location = new System.Drawing.Point(59, 60);
             this.textWidthMin.MenuManager = this.barManager1;
             this.textWidthMin.Name = "textWidthMin";
             this.textWidthMin.Size = new System.Drawing.Size(100, 20);
@@ -1567,14 +1677,75 @@
             // 
             // labelControl28
             // 
-            this.labelControl28.Location = new System.Drawing.Point(33, 33);
+            this.labelControl28.Location = new System.Drawing.Point(29, 36);
             this.labelControl28.Name = "labelControl28";
             this.labelControl28.Size = new System.Drawing.Size(24, 14);
             this.labelControl28.TabIndex = 15;
             this.labelControl28.Text = "上限";
             // 
+            // xtraTabPage9
+            // 
+            this.xtraTabPage9.Controls.Add(this.dataGridView1);
+            this.xtraTabPage9.Name = "xtraTabPage9";
+            this.xtraTabPage9.Size = new System.Drawing.Size(463, 315);
+            this.xtraTabPage9.Text = "高级参数";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(463, 315);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // simpleButton5
+            // 
+            this.simpleButton5.Location = new System.Drawing.Point(143, 5);
+            this.simpleButton5.Name = "simpleButton5";
+            this.simpleButton5.Size = new System.Drawing.Size(177, 66);
+            this.simpleButton5.TabIndex = 23;
+            this.simpleButton5.Text = "使用当前配方";
+            // 
+            // simpleButton4
+            // 
+            this.simpleButton4.Location = new System.Drawing.Point(356, 5);
+            this.simpleButton4.Name = "simpleButton4";
+            this.simpleButton4.Size = new System.Drawing.Size(101, 30);
+            this.simpleButton4.TabIndex = 22;
+            this.simpleButton4.Text = "取消修改";
+            // 
+            // simpleButton3
+            // 
+            this.simpleButton3.Location = new System.Drawing.Point(356, 41);
+            this.simpleButton3.Name = "simpleButton3";
+            this.simpleButton3.Size = new System.Drawing.Size(101, 30);
+            this.simpleButton3.TabIndex = 21;
+            this.simpleButton3.Text = "确认修改";
+            // 
+            // simpleButton2
+            // 
+            this.simpleButton2.Location = new System.Drawing.Point(3, 41);
+            this.simpleButton2.Name = "simpleButton2";
+            this.simpleButton2.Size = new System.Drawing.Size(101, 30);
+            this.simpleButton2.TabIndex = 20;
+            this.simpleButton2.Text = "删除配方";
+            // 
+            // simpleButton1
+            // 
+            this.simpleButton1.Location = new System.Drawing.Point(3, 5);
+            this.simpleButton1.Name = "simpleButton1";
+            this.simpleButton1.Size = new System.Drawing.Size(101, 30);
+            this.simpleButton1.TabIndex = 19;
+            this.simpleButton1.Text = "新增配方";
+            // 
             // groupLabel
             // 
+            this.groupLabel.Controls.Add(this.simpleButton6);
+            this.groupLabel.Controls.Add(this.simpleButton7);
             this.groupLabel.Controls.Add(this.groupEAContext);
             this.groupLabel.Controls.Add(this.groupLabelContext);
             this.groupLabel.Controls.Add(this.checkEnableLabelEAForce);
@@ -1584,12 +1755,11 @@
             this.groupLabel.Controls.Add(this.labelControl13);
             this.groupLabel.Controls.Add(this.textLabelDefectOffset);
             this.groupLabel.Controls.Add(this.labelControl9);
-            this.groupLabel.Controls.Add(this.checkEnableLabelEAEveryOne);
             this.groupLabel.Controls.Add(this.checkEnableLabelEA);
             this.groupLabel.Controls.Add(this.checkEnableLabelDefect);
-            this.groupLabel.Location = new System.Drawing.Point(20, 21);
+            this.groupLabel.Location = new System.Drawing.Point(643, 11);
             this.groupLabel.Name = "groupLabel";
-            this.groupLabel.Size = new System.Drawing.Size(446, 373);
+            this.groupLabel.Size = new System.Drawing.Size(446, 461);
             this.groupLabel.TabIndex = 10;
             this.groupLabel.Text = "贴标设置";
             // 
@@ -1601,7 +1771,7 @@
             this.groupEAContext.Controls.Add(this.checkEAContext_Join);
             this.groupEAContext.Location = new System.Drawing.Point(177, 178);
             this.groupEAContext.Name = "groupEAContext";
-            this.groupEAContext.Size = new System.Drawing.Size(131, 162);
+            this.groupEAContext.Size = new System.Drawing.Size(131, 184);
             this.groupEAContext.TabIndex = 90;
             this.groupEAContext.Text = "末端贴标项";
             // 
@@ -1648,7 +1818,7 @@
             this.groupLabelContext.Controls.Add(this.checkLabelContext_Join);
             this.groupLabelContext.Location = new System.Drawing.Point(22, 178);
             this.groupLabelContext.Name = "groupLabelContext";
-            this.groupLabelContext.Size = new System.Drawing.Size(131, 162);
+            this.groupLabelContext.Size = new System.Drawing.Size(131, 184);
             this.groupLabelContext.TabIndex = 80;
             this.groupLabelContext.Text = "转标项";
             // 
@@ -1681,7 +1851,7 @@
             // 
             // checkEnableLabelEAForce
             // 
-            this.checkEnableLabelEAForce.Location = new System.Drawing.Point(49, 120);
+            this.checkEnableLabelEAForce.Location = new System.Drawing.Point(43, 97);
             this.checkEnableLabelEAForce.MenuManager = this.barManager1;
             this.checkEnableLabelEAForce.Name = "checkEnableLabelEAForce";
             this.checkEnableLabelEAForce.Properties.Caption = "EA超长强制打标";
@@ -1736,15 +1906,6 @@
             this.labelControl9.TabIndex = 9;
             this.labelControl9.Text = "偏移";
             // 
-            // checkEnableLabelEAEveryOne
-            // 
-            this.checkEnableLabelEAEveryOne.Location = new System.Drawing.Point(49, 95);
-            this.checkEnableLabelEAEveryOne.MenuManager = this.barManager1;
-            this.checkEnableLabelEAEveryOne.Name = "checkEnableLabelEAEveryOne";
-            this.checkEnableLabelEAEveryOne.Properties.Caption = "[测试]每个EA都贴标";
-            this.checkEnableLabelEAEveryOne.Size = new System.Drawing.Size(147, 19);
-            this.checkEnableLabelEAEveryOne.TabIndex = 30;
-            // 
             // checkEnableLabelEA
             // 
             this.checkEnableLabelEA.Location = new System.Drawing.Point(22, 70);
@@ -1763,11 +1924,20 @@
             this.checkEnableLabelDefect.Size = new System.Drawing.Size(160, 19);
             this.checkEnableLabelDefect.TabIndex = 10;
             // 
+            // xtraTabPage4
+            // 
+            this.xtraTabPage4.Controls.Add(this.groupCtrl);
+            this.xtraTabPage4.Controls.Add(this.groupTest);
+            this.xtraTabPage4.ImageIndex = 3;
+            this.xtraTabPage4.Name = "xtraTabPage4";
+            this.xtraTabPage4.Size = new System.Drawing.Size(1142, 620);
+            this.xtraTabPage4.Text = "测试工具";
+            // 
             // groupCtrl
             // 
             this.groupCtrl.Controls.Add(this.btnOpenViewerChart);
             this.groupCtrl.Controls.Add(this.btnOfflineControl);
-            this.groupCtrl.Location = new System.Drawing.Point(783, 22);
+            this.groupCtrl.Location = new System.Drawing.Point(25, 19);
             this.groupCtrl.Name = "groupCtrl";
             this.groupCtrl.Size = new System.Drawing.Size(298, 183);
             this.groupCtrl.TabIndex = 50;
@@ -1795,9 +1965,9 @@
             // 
             this.groupTest.Controls.Add(this.checkSaveNGSmall);
             this.groupTest.Controls.Add(this.checkSaveNG);
-            this.groupTest.Location = new System.Drawing.Point(486, 211);
+            this.groupTest.Location = new System.Drawing.Point(351, 19);
             this.groupTest.Name = "groupTest";
-            this.groupTest.Size = new System.Drawing.Size(281, 183);
+            this.groupTest.Size = new System.Drawing.Size(298, 183);
             this.groupTest.TabIndex = 30;
             this.groupTest.Text = "检测开关";
             // 
@@ -1819,13 +1989,6 @@
             this.checkSaveNG.Size = new System.Drawing.Size(109, 19);
             this.checkSaveNG.TabIndex = 20;
             // 
-            // xtraTabPage4
-            // 
-            this.xtraTabPage4.ImageIndex = 3;
-            this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(1142, 620);
-            this.xtraTabPage4.Text = "测试工具";
-            // 
             // timer1
             // 
             this.timer1.Interval = 500;
@@ -1840,6 +2003,22 @@
             // 
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
+            // 
+            // simpleButton6
+            // 
+            this.simpleButton6.Location = new System.Drawing.Point(327, 382);
+            this.simpleButton6.Name = "simpleButton6";
+            this.simpleButton6.Size = new System.Drawing.Size(101, 30);
+            this.simpleButton6.TabIndex = 92;
+            this.simpleButton6.Text = "取消修改";
+            // 
+            // simpleButton7
+            // 
+            this.simpleButton7.Location = new System.Drawing.Point(327, 418);
+            this.simpleButton7.Name = "simpleButton7";
+            this.simpleButton7.Size = new System.Drawing.Size(101, 30);
+            this.simpleButton7.TabIndex = 91;
+            this.simpleButton7.Text = "确认修改";
             // 
             // XMain
             // 
@@ -1903,14 +2082,29 @@
             this.xtraTabPage7.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
             this.xtraTabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.groupWidth)).EndInit();
-            this.groupWidth.ResumeLayout(false);
-            this.groupWidth.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupRecipeManage)).EndInit();
+            this.groupRecipeManage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl3)).EndInit();
+            this.splitContainerControl3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.listBoxControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl4)).EndInit();
+            this.splitContainerControl4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).EndInit();
+            this.xtraTabControl3.ResumeLayout(false);
+            this.xtraTabPage8.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
+            this.groupControl2.ResumeLayout(false);
+            this.groupControl2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAForce.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textTabCount.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
+            this.groupControl1.ResumeLayout(false);
+            this.groupControl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMax.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textWidthStep.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textWidthMin.Properties)).EndInit();
+            this.xtraTabPage9.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupLabel)).EndInit();
             this.groupLabel.ResumeLayout(false);
             this.groupLabel.PerformLayout();
@@ -1928,9 +2122,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAForce.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelEAOffset.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textLabelDefectOffset.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEAEveryOne.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEA.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).EndInit();
+            this.xtraTabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).EndInit();
             this.groupCtrl.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).EndInit();
@@ -2056,7 +2250,6 @@
         private DevExpress.XtraEditors.GroupControl groupLabel;
         private DevExpress.XtraEditors.CheckEdit checkEnableLabelEA;
         private DevExpress.XtraEditors.CheckEdit checkEnableLabelDefect;
-        private DevExpress.XtraEditors.CheckEdit checkEnableLabelEAEveryOne;
         private DevExpress.XtraEditors.LabelControl labelControl14;
         private DevExpress.XtraEditors.TextEdit textLabelEAOffset;
         private DevExpress.XtraEditors.LabelControl labelControl16;
@@ -2067,7 +2260,6 @@
         private DevExpress.XtraEditors.TextEdit textLabelEAForce;
         private DevExpress.XtraEditors.LabelControl labelControl24;
         private DevExpress.XtraEditors.CheckEdit checkEnableLabelEAForce;
-        private DevExpress.XtraEditors.GroupControl groupWidth;
         private DevExpress.XtraEditors.LabelControl labelControl31;
         private DevExpress.XtraEditors.TextEdit textWidthStep;
         private DevExpress.XtraEditors.LabelControl labelControl32;
@@ -2090,5 +2282,22 @@
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private DevExpress.XtraEditors.TextEdit textTabCount;
         private DevExpress.XtraEditors.LabelControl labelControl29;
+        private DevExpress.XtraEditors.GroupControl groupRecipeManage;
+        private DevExpress.XtraEditors.ListBoxControl listBoxControl1;
+        private DevExpress.XtraEditors.SimpleButton simpleButton2;
+        private DevExpress.XtraEditors.SimpleButton simpleButton1;
+        private DevExpress.XtraEditors.GroupControl groupControl1;
+        private DevExpress.XtraEditors.GroupControl groupControl2;
+        private DevExpress.XtraEditors.SplitContainerControl splitContainerControl3;
+        private DevExpress.XtraEditors.SplitContainerControl splitContainerControl4;
+        private DevExpress.XtraTab.XtraTabControl xtraTabControl3;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPage9;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPage8;
+        private DevExpress.XtraEditors.SimpleButton simpleButton3;
+        private DevExpress.XtraEditors.SimpleButton simpleButton4;
+        private DevExpress.XtraEditors.SimpleButton simpleButton5;
+        private DevExpress.XtraEditors.SimpleButton simpleButton6;
+        private DevExpress.XtraEditors.SimpleButton simpleButton7;
     }
 }

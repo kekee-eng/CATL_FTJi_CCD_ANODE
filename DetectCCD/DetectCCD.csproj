@@ -90,8 +90,9 @@
   <ItemGroup>
     <Compile Include="Authority.cs" />
     <Compile Include="CfgApp.cs" />
-    <Compile Include="CfgParam.cs" />
+    <Compile Include="CfgRecipe.cs" />
     <Compile Include="CameraRealtime.cs" />
+    <Compile Include="CfgTiebiao.cs" />
     <Compile Include="DataEA_SyncFrom4K.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="RemoteDefect.cs" />

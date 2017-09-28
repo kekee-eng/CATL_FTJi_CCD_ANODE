@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace DetectCCD {
 
     [Serializable]
-    public class CfgParam : TemplateConfig {
-        public CfgParam(string path) : base(path) { }
+    public class CfgRecipe : TemplateConfig {
+        public CfgRecipe(string path) : base(path) { }
 
         //EA起始Mark孔判定位置
         public double EAStart = -40;
@@ -42,14 +42,6 @@ namespace DetectCCD {
         //计数
         public int CheckTabCount = 33;
         public int CheckTabWidthCount = 10;
-
-        //
-        public double LabelY_Defect = 0;
-        public double LabelY_EA = 0;
-        public double LabelY_EA_Force = 0;
-        public double LabelShowX = 0.5;
-        public double LabelShowW = 0.05;
-        public double LabelShowH = 0.05;
 
     }
 }

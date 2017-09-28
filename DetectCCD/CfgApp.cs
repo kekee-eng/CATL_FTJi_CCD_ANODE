@@ -12,21 +12,6 @@ namespace DetectCCD {
         //
         public bool ImageProcessReload = false;
 
-        //
-        public bool EnableLabelEA = false;
-        public bool EnableLabelEA_Force = false;
-        public bool EnableLabelEA_EveryOne = false;
-        public bool EnableLabelDefect = false;
-
-        public bool LabelContextJoin = false;
-        public bool LabelContextTag = false;
-        public bool LabelContextLeakMetal = false;
-
-        public bool EAContextJoin = false;
-        public bool EAContextTag = false;
-        public bool EAContextLeakMetal = false;
-        public bool EAContextWidth = false;
-
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordSaveImageEnable = false;

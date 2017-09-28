@@ -130,26 +130,26 @@ namespace DetectCCD {
             checkLabel(frame);
 
             //转标签
-            if (Static.App.EnableLabelDefect) {
+            if (Static.Tiebiao.EnableLabelDefect) {
                 var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, -1);
                 if (remoteDefs != null) {
                     foreach (var rl in remoteDefs) {
                         if (rl.IsTransLabel()) {
                             addLabel(new DataLabel() {
-                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                Y = rl.Y + Static.Tiebiao.LabelY_Defect / Fy,
                                 Comment = string.Format("转标[正面][{0}]", rl.GetTypeCaption())
                             });
                         }
                     }
                 }
             }
-            if (Static.App.EnableLabelDefect) {
+            if (Static.Tiebiao.EnableLabelDefect) {
                 var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, -1);
                 if (remoteDefs != null) {
                     foreach (var rl in remoteDefs) {
                         if (rl.IsTransLabel()) {
                             addLabel(new DataLabel() {
-                                Y = rl.Y + Static.Param.LabelY_Defect / Fy,
+                                Y = rl.Y + Static.Tiebiao.LabelY_Defect / Fy,
                                 Comment = string.Format("转标[背面][{0}]", rl.GetTypeCaption())
                             });
                         }
@@ -416,12 +416,12 @@ namespace DetectCCD {
                 if (objEA != null) {
 
                     //添加标签
-                    if (Static.App.Is4K && Static.App.EnableLabelEA) {
-                        if (objEA.IsFail || Static.App.EnableLabelEA_EveryOne) {
+                    if (Static.App.Is4K && Static.Tiebiao.EnableLabelEA) {
+                        if (objEA.IsFail || Static.Tiebiao.EnableLabelEA_EveryOne) {
                             var objLab = new DataLabel() {
                                 EA = ea,
-                                Y = data.MarkY + Static.Param.LabelY_EA / Fy,
-                                Comment = (Static.App.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
+                                Y = data.MarkY + Static.Tiebiao.LabelY_EA / Fy,
+                                Comment = (Static.Tiebiao.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
                             };
                             objLab.Encoder = grab.GetEncoder(objLab.Y);
                             addLabel(objLab);
@@ -436,12 +436,12 @@ namespace DetectCCD {
 
             //强制打标
             if (Static.App.Is4K 
-                && Static.App.EnableLabelEA 
-                && Static.App.EnableLabelEA_Force 
-                && Static.Param.LabelY_EA_Force > 100) {
+                && Static.Tiebiao.EnableLabelEA 
+                && Static.Tiebiao.EnableLabelEA_Force 
+                && Static.Tiebiao.LabelY_EA_Force > 100) {
 
                 if (posEAStart >= 0) {
-                    var y0 = posEAStart + Static.Param.LabelY_EA_Force / Fy;
+                    var y0 = posEAStart + Static.Tiebiao.LabelY_EA_Force / Fy;
                     if (data.TabY1 > y0) {
                         posEAStart = -1;
 
