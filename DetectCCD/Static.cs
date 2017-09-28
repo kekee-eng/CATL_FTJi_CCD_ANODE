@@ -50,7 +50,7 @@ namespace DetectCCD {
             Tiebiao.Save();
 
             //
-            App.SelectUserId = 2;
+            App.SelectUserId = 0;
         }
         public static void Uninit() {
 
