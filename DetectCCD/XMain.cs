@@ -615,7 +615,6 @@ namespace DetectCCD {
 
                     //
                     _lc_outer_camera.Text = device.OuterCamera.Name;
-                    //_lc_outer_fps.Text = device.OuterCamera.m_fpsRealtime.ToString("0.000");
                     _lc_outer_frame.Text = device.OuterCamera.m_frame.ToString();
                     _lc_outer_isgrabbing.Text = device.OuterCamera.isGrabbing ? "On" : "Off";
                     _lc_outer_isopen.Text = device.OuterCamera.isOpen ? "On" : "Off";
@@ -817,7 +816,7 @@ namespace DetectCCD {
 
         private void btnApplyTiebiao_Click(object sender, EventArgs e) {
 
-            //确认内容
+            //
             string msg = Static.Tiebiao.GetDiff(tmpTiebiao);
             if (msg == "")
                 return;
