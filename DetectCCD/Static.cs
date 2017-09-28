@@ -9,7 +9,6 @@ using log4net.Config;
 using System.IO;
 using System.Threading;
 
-[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace DetectCCD {
 
    public class Static {
@@ -26,9 +25,7 @@ namespace DetectCCD {
 
         public static CfgApp App;
         public static CfgParam Param;
-
-        public static ILog Log;
-
+        
         public static void Init() {
             
             //
@@ -38,11 +35,7 @@ namespace DetectCCD {
             //
             App.Save();
             Param.Save();
-
-            //
-            Log = LogManager.GetLogger(System.Windows.Forms.Application.ProductName);
-            Log.Info("打开应用程序");
-
+            
             //
             App.SelectUserId = 0;
         }
@@ -52,19 +45,6 @@ namespace DetectCCD {
             Param.Save();
 
         }
-
-        public static void SafeRun(Action act) {
-
-            try {
-                act();
-            }
-            catch (Exception ex) {
-                Log.Error(string.Format("->"),ex);
-            }
-        }
-        public static void SafeRunThread(Action act) {
-            new Thread(new ThreadStart(() => SafeRun(act))).Start();
-        }
-
+        
     }
 }

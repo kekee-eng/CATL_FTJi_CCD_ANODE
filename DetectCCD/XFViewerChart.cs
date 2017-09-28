@@ -33,7 +33,7 @@ namespace DetectCCD {
         Action<Control> bindUpdate;
         void viewerInit(Action<Control> init, Action<Control> update) {
 
-            Static.SafeRun(() => {
+            Log.Record(() => {
                 //
                 bindInit = init;
                 bindUpdate = null;

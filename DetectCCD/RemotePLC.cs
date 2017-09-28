@@ -15,7 +15,7 @@ public class RemotePLC : MarshalByRefObject {
                 act();
         }
         catch (Exception ex) {
-            DetectCCD.Static.Log.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
+            DetectCCD.Log.AppLog.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
             client = null;
         }
 
@@ -31,7 +31,7 @@ public class RemotePLC : MarshalByRefObject {
         //测试连接
         try { client._IN_PLC_Call_clearEncoder(); }
         catch (Exception ex) {
-            DetectCCD.Static.Log.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
+            DetectCCD.Log.AppLog.Error(string.Format("PLC: {0}\n{1}", ex.Message, ex.StackTrace));
             client = null;
             throw;
         }

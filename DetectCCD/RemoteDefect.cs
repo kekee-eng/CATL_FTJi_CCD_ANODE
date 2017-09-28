@@ -38,7 +38,7 @@ namespace DetectCCD {
                     Static.App.DiffFrameInnerFront);
             }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
                 client = null;
                 throw;
             }
@@ -53,7 +53,7 @@ namespace DetectCCD {
                 return client._in_8k_return_4k_getDefectCount(isFront, isInner, start, end, ea);
             }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
                 client = null;
             }
             return -2;
@@ -66,7 +66,7 @@ namespace DetectCCD {
 
             try { return _func_in_8k_getDefectCount(isFront, isInner, start, end, ea); }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
             }
             return -4; //Master函数有问题
         }
@@ -80,7 +80,7 @@ namespace DetectCCD {
                 return client._in_8k_return_4k_getDefectList(isFront, isInner, ea);
             }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
                 client = null;
             }
             return null;
@@ -89,7 +89,7 @@ namespace DetectCCD {
         public DataDefect[] _in_8k_return_4k_getDefectList(bool isFront, bool isInner, int ea) {
             try { return _func_in_8k_getDefectList(isFront, isInner, ea); }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
                 return null;
             }
         }
@@ -106,7 +106,7 @@ namespace DetectCCD {
                     Static.App.DiffFrameInnerFront);
             }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
                 client = null;
             }
         }
@@ -114,7 +114,7 @@ namespace DetectCCD {
         public void _in_8k_viewer(bool isFront, bool isInner, double y, double diffInnerOuter, double diffFrontBack, double diffInnerFront) {
             try { _func_in_8k_viewer(isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront); }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
             }
         }
 
@@ -127,7 +127,7 @@ namespace DetectCCD {
                 client._in_8k_init();
             }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
                 client = null;
             }
         }
@@ -135,7 +135,7 @@ namespace DetectCCD {
         public void _in_8k_init() {
             try { _func_in_8k_init(); }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
             }
         }
 
@@ -148,7 +148,7 @@ namespace DetectCCD {
                 client._in_8k_uninit();
             }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
                 client = null;
             }
         }
@@ -156,7 +156,7 @@ namespace DetectCCD {
         public void _in_8k_uninit() {
             try { _func_in_8k_uninit(); }
             catch (Exception ex) {
-                Static.Log.Error("RemoteDefect:", ex);
+                Log.AppLog.Error("RemoteDefect:", ex);
             }
         }
 

@@ -46,7 +46,7 @@ namespace DetectCCD {
             rtEnableUser.Checked = allow;
         }
 
-        public void MoveTargetSync(double refFps) {
+        public void MoveTargetSync() {
 
             double fpsNow = fpsControl;
             if (!fpsWatch.IsRunning || fpsWatch.ElapsedMilliseconds > 1000 / fpsNow) {
@@ -71,7 +71,7 @@ namespace DetectCCD {
                 frameVy = targetVy;
                 frameVs = targetVs;
 
-                Static.SafeRun(() => updateView(false));
+                Log.Record(() => updateView(false));
             }
         }
         public void MoveTargetDirect() {
@@ -135,7 +135,7 @@ namespace DetectCCD {
         public void MoveToTAB(int idEa, int idTab) {
             if (!mouseAllow) return;
 
-            Static.SafeRun(() => {
+            Log.Record(() => {
                 var obj = Detect.Tabs.Find(x => x.EA == idEa && x.TAB == idTab);
                 if (obj != null) MoveToFrame(obj.TabY1);
             });
@@ -143,7 +143,7 @@ namespace DetectCCD {
         public void MoveToTAB(int id) {
             if (!mouseAllow) return;
 
-            Static.SafeRun(() => {
+            Log.Record(() => {
                 var obj = Detect.Tabs.Find(x => x.ID == id);
                 if (obj != null) MoveToFrame(obj.TabY1);
             });
@@ -152,7 +152,7 @@ namespace DetectCCD {
         public void MoveToDefect(int id) {
             if (!mouseAllow) return;
 
-            Static.SafeRun(() => {
+            Log.Record(() => {
                 id = id - 1;
                 if (id >= 0 && id <= Detect.Defects.Count - 1) {
                     var obj = Detect.Defects[id];
@@ -164,7 +164,7 @@ namespace DetectCCD {
         public void MoveToLabel(int id) {
             if (!mouseAllow) return;
 
-            Static.SafeRun(() => {
+            Log.Record(() => {
                 id = id - 1;
                 if (id >= 0 && id <= Detect.Labels.Count - 1) {
                     var obj = Detect.Labels[id];
@@ -427,7 +427,7 @@ namespace DetectCCD {
             };
 
             rtSaveImage.Click += (o, e) => {
-                Static.SafeRun(() => {
+                Log.Record(() => {
                     SaveFileDialog sfd = new SaveFileDialog();
                     sfd.Filter = "BMP文件|*.bmp";
                     sfd.FileName = string.Format("IMG_{0}.bmp", DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss"));
@@ -473,7 +473,7 @@ namespace DetectCCD {
             g.ClearWindow();
 
             //
-            hwindow.SizeChanged += (o, e) => Static.SafeRun(()=>updateView());
+            hwindow.SizeChanged += (o, e) => Log.Record(()=>updateView());
 
             //
             hwindow.PreviewKeyDown += (o, e) => {

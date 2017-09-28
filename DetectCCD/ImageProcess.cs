@@ -81,7 +81,7 @@ namespace DetectCCD {
                 ErrorMessage = string.Format("ImageProcess: {0}: {1}\n{2}", process, ex.Message, ex.StackTrace);
 
                 //
-                Static.Log.Error(ErrorMessage);
+                Log.AppLog.Error(ErrorMessage);
                 return null;
             }
 

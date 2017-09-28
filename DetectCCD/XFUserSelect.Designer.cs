@@ -51,7 +51,6 @@
             this.picEdit1.Properties.ShowMenu = false;
             this.picEdit1.Size = new System.Drawing.Size(151, 165);
             this.picEdit1.TabIndex = 0;
-            this.picEdit1.ToolTip = "操作员可以进行以下操作：\r\n1. 设备开启，停止，复位\r\n2. 设备状态监控\r\n3. 可选择“人工复判”模式";
             this.picEdit1.ToolTipController = this.defaultToolTipController1.DefaultController;
             this.picEdit1.ToolTipTitle = "操作员";
             // 
@@ -71,7 +70,6 @@
             this.picEdit2.Properties.ShowMenu = false;
             this.picEdit2.Size = new System.Drawing.Size(151, 165);
             this.picEdit2.TabIndex = 1;
-            this.picEdit2.ToolTip = "工程师可以进行以下操作：\r\n1. 配方载入、保存及修改（含检测规格）";
             this.picEdit2.ToolTipTitle = "工程师";
             // 
             // picEdit3
@@ -83,7 +81,6 @@
             this.picEdit3.Properties.ShowMenu = false;
             this.picEdit3.Size = new System.Drawing.Size(151, 165);
             this.picEdit3.TabIndex = 2;
-            this.picEdit3.ToolTip = "专家可以进行以下操作：\r\n1. 图像采集测试\r\n2. PLC交互测试\r\n3. 数据库测试";
             this.picEdit3.ToolTipTitle = "专家";
             // 
             // label1

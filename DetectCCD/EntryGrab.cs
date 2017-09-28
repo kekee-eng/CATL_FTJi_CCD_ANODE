@@ -157,7 +157,7 @@ namespace DetectCCD {
         public int GetEncoder(double frame) {
 
             int encoder = 0;
-            Static.SafeRun(() => {
+            Log.Record(() => {
 
                 int p1 = (int)Math.Floor(frame) -1;
                 int p2 = p1 + 1;

@@ -18,7 +18,7 @@ namespace DetectCCD {
         public CameraZipFile(string filename) {
             m_filename = filename;
             prepareFile(filename);
-            new Thread(new ThreadStart(threadProcess)).Start();
+            Log.RecordAsThread(threadProcess);
 
             m_frame = Static.App.CameraFrameStart;
             m_frameStart = Static.App.CameraFrameStart;

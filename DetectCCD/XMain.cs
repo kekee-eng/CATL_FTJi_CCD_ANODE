@@ -70,10 +70,10 @@ namespace DetectCCD {
             status_info.ItemAppearance.Normal.ForeColor = msgStatus == 0 ? Color.Black : msgStatus > 0 ? Color.Green : Color.Red;
 
             //添加到日志文件中
-            Static.Log.Info(msg);
+            Log.AppLog.Info(msg);
 
             if (ex != null)
-                Static.Log.Info(ex.StackTrace);
+                Log.AppLog.Info(ex.StackTrace);
 
         }
         
@@ -148,63 +148,55 @@ namespace DetectCCD {
 
         }
         void init_device() {
-            
+
             //
             record.Init();
 
             //线程：采图
             record.InnerViewerImage.Init(hwinInner);
             device.EventInnerCameraGrab = obj => {
-                Static.SafeRun(() => {
+                Log.Record(() => {
                     record.InnerGrab[obj.Frame] = obj;
-                    Static.SafeRunThread(obj.DetectTab);
+                    Log.RecordAsThread(obj.DetectTab);
                 });
             };
             record.OuterViewerImage.Init(hwinOuter);
-            device.EventOuterCameraGrab = obj => {
-                Static.SafeRun(() => {
-                    record.OuterGrab[obj.Frame] = obj;
-                    Static.SafeRunThread(obj.DetectTab);
-                });
-            };
+            device.EventOuterCameraGrab = obj => Log.Record(() => {
+                record.OuterGrab[obj.Frame] = obj;
+                Log.RecordAsThread(obj.DetectTab);
+            });
 
-            record.InnerViewerImage.OnViewUpdate += (y, x, s) => {
+            record.InnerViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
+                if (ckViewLocal.Checked)
+                    record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
 
-                Static.SafeRun(() => {
-                    if (ckViewLocal.Checked)
-                        record.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
+                if (Static.App.Is4K) {
+                    if (ckViewInnerFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, true, y);
+                    if (ckViewInnerBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, true, y);
+                }
+            });
+            record.OuterViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
+                if (ckViewLocal.Checked)
+                    record.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
 
-                    if (Static.App.Is4K) {
-                        if (ckViewInnerFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, true, y);
-                        if (ckViewInnerBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, true, y);
-                    }
-                });
-            };
-            record.OuterViewerImage.OnViewUpdate += (y, x, s) => {
-
-                Static.SafeRun(() => {
-                    if (ckViewLocal.Checked)
-                        record.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
-
-                    if (Static.App.Is4K) {
-                        if (ckViewOuterFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, false, y);
-                        if (ckViewOuterBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, false, y);
-                    }
-                });
-            };
+                if (Static.App.Is4K) {
+                    if (ckViewOuterFront.Checked) RemoteDefect.In4KCall8K_Viewer(true, false, y);
+                    if (ckViewOuterBack.Checked) RemoteDefect.In4KCall8K_Viewer(false, false, y);
+                }
+            });
 
             //线程：图像处理
-            new Thread(new ThreadStart(() => {
+            Log.RecordAsThread(() => {
                 var detect = record.InnerDetect;
                 while (!isQuit) {
                     Thread.Sleep(1);
 
-                        var frame = detect.m_frame;
-                        var g = record.InnerGrab.Cache[frame];
-                        if (g == null || !g.isDetectTab)
-                            continue;
+                    var frame = detect.m_frame;
+                    var g = record.InnerGrab.Cache[frame];
+                    if (g == null || !g.isDetectTab)
+                        continue;
 
-                    Static.SafeRun(() => {
+                    Log.Record(() => {
                         if (Static.App.Is4K) {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
@@ -219,9 +211,9 @@ namespace DetectCCD {
                         detect.m_frame++;
                     });
                 };
-            })).Start();
+            });
 
-            new Thread(new ThreadStart(() => {
+            Log.RecordAsThread(() => {
 
                 var detect = record.OuterDetect;
                 while (!isQuit) {
@@ -231,7 +223,7 @@ namespace DetectCCD {
                     if (g == null || !g.isDetectTab)
                         continue;
 
-                    Static.SafeRun(() => {
+                    Log.Record(() => {
                         if (Static.App.Is4K) {
                             if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
@@ -251,111 +243,71 @@ namespace DetectCCD {
                         detect.m_frame++;
                     });
                 };
-            })).Start();
-            
+            });
+
             //线程：更新显示
-            new Thread(new ThreadStart((Action)(() => {
-
+            Log.RecordAsThread(() => {
                 while (!isQuit) {
                     Thread.Sleep(1);
                     if (checkDisableView.Checked) continue;
-
-                    Static.SafeRun(() => {
-                        double refFps = 10.0;
-                        if (device.isOpen && device.InnerCamera.isGrabbing)
-                            refFps = device.InnerCamera.m_fpsRealtime;
-
-                        record.InnerViewerImage.MoveTargetSync(refFps);
-                    });
+                    record.InnerViewerImage.MoveTargetSync();
                 };
-
-            }))).Start();
-            new Thread(new ThreadStart((Action)(() => {
-
+            });
+            Log.RecordAsThread(() => {
                 while (!isQuit) {
                     Thread.Sleep(1);
                     if (checkDisableView.Checked) continue;
-
-                    Static.SafeRun(() => {
-                        double refFps = 10.0;
-                        if (device.isOpen && device.OuterCamera.isGrabbing)
-                            refFps = device.OuterCamera.m_fpsRealtime;
-
-                        record.OuterViewerImage.MoveTargetSync(refFps);
-                    });
+                    record.OuterViewerImage.MoveTargetSync();
                 };
+            });
 
-            }))).Start();
-            
             //PLC操作
-            record.InnerDetect.OnNewLabel += obj => {
-                new Thread(new ThreadStart(new Action(() => {
-                    Static.SafeRun(() => {
-                        if (obj.Encoder != 0)
-                            RemotePLC.In4KCallPLC_SendLabel(true, obj.Encoder);
-                        saveLabelCSV( true, obj);
-                    });
-                }))).Start();
-            };
-            record.OuterDetect.OnNewLabel += obj => {
+            record.InnerDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
+                if (obj.Encoder != 0)
+                    RemotePLC.In4KCallPLC_SendLabel(true, obj.Encoder);
 
-                new Thread(new ThreadStart(new Action(() => {
-                    Static.SafeRun(() => {
-                        if (obj.Encoder != 0) {
-                            RemotePLC.In4KCallPLC_SendLabel(false, obj.Encoder);
-                        }
-                        saveLabelCSV( false, obj);
-                    });
-                }))).Start();
-                
-            };
-            record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => {
-                
-                if (tabOuter.ValWidth == 0 || tabInner.ValWidth == 0)
-                    return;
+                saveLabelCSV(true, obj);
+            });
+            record.OuterDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
+                if (obj.Encoder != 0)
+                    RemotePLC.In4KCallPLC_SendLabel(false, obj.Encoder);
 
-                new Thread(new ThreadStart(new Action(() => {
-                    Static.SafeRun(() => {
-                        RemotePLC.In4KCallPLC_ForWidth(
-                            tabOuter.EA,
-                            tabOuter.TAB,
-                            !tabOuter.IsWidthFail && !tabInner.IsWidthFail,
-                            tabInner.ValWidth,
-                            tabOuter.ValWidth
-                            );
-                        saveWidthCSV( tabInner, tabOuter);
-                    });
-                }))).Start();
-
-            };
+                saveLabelCSV(false, obj);
+            });
+            record.OuterDetect.OnSyncTab += (tabOuter, tabInner) => Log.RecordAsThread(() => {
+                RemotePLC.In4KCallPLC_ForWidth(
+                    tabOuter.EA,
+                    tabOuter.TAB,
+                    !tabOuter.IsWidthFail && !tabInner.IsWidthFail,
+                    tabInner.ValWidth,
+                    tabOuter.ValWidth
+                    );
+                saveWidthCSV(tabInner, tabOuter);
+            });
 
             //
-
-            new Thread(new ThreadStart(new Action(() => {
-
+            Log.RecordAsThread(new Action(() => {
                 bool b1 = false;
                 bool b2 = false;
 
                 device.EventInnerCameraComplete += () => b1 = true;
                 device.EventOuterCameraComplete += () => b2 = true;
-                while (!isQuit)
-                {
+                while (!isQuit) {
                     b1 = false;
                     b2 = false;
 
-                    while (!(b1 && b2))
-                    {
+                    while (!(b1 && b2)) {
                         if (isQuit) return;
                         Thread.Sleep(1000);
                     }
 
                     Thread.Sleep(3000);
                     DeviceInit();
-                    
+
                     Thread.Sleep(3000);
                     DeviceStartGrab();
                 }
-            }))).Start();
+            }));
         }
         void init_teston() {
 
@@ -577,7 +529,7 @@ namespace DetectCCD {
             }
         }
         void saveWidthCSV(DataTab inner, DataTab outer) {
-            Static.SafeRun(() => {
+            Log.Record(() => {
                 if (csvWidthWriter == null) {
                     var folder = Static.FolderTemp + "csv";
                     if (!Directory.Exists(folder))
@@ -611,7 +563,7 @@ namespace DetectCCD {
             });
         }
         void saveLabelCSV(bool isInner, DataLabel label) {
-            Static.SafeRun(() => {
+            Log.Record(() => {
                 if (csvLabelWriter == null) {
                     var folder = Static.FolderTemp + "csv";
                     if (!Directory.Exists(folder))
@@ -638,7 +590,7 @@ namespace DetectCCD {
 
         private void timer1_Tick(object sender, EventArgs e) {
 
-            Static.SafeRun(() => {
+            Log.Record(() => {
 
                 groupWidth.Enabled = Static.App.Is4K;
                 groupLabel.Enabled = Static.App.Is4K;
@@ -815,10 +767,10 @@ namespace DetectCCD {
             closeWidthCSV();
             await Task.Run(() => {
                 if (Static.App.Is4K) {
-                    Static.SafeRun(RemoteDefect.InitClient);
-                    Static.SafeRun(RemotePLC.InitClient);
+                    Log.Record(RemoteDefect.InitClient);
+                    Log.Record(RemotePLC.InitClient);
 
-                    Static.SafeRun(RemoteDefect.In4KCall8K_Init);
+                    Log.Record(RemoteDefect.In4KCall8K_Init);
                 }
                 DeviceInit();
                 DeviceStartGrab();
@@ -833,7 +785,7 @@ namespace DetectCCD {
 
             await Task.Run(() => {
                 if (Static.App.Is4K) {
-                    Static.SafeRun(RemoteDefect.In4KCall8K_Uninit);
+                    Log.Record(RemoteDefect.In4KCall8K_Uninit);
                 }
 
                 UtilTool.XFWait.Close();
