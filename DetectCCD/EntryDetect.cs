@@ -802,25 +802,28 @@ namespace DetectCCD {
                     Defects[i].EA = ea;
                     count++;
 
+                    //Fix:保存图片分EA
+                    string ngPartPath = Defects[i].NGPartPath;
+                    string ngBigPath = Defects[i].NGBigPath;
                     Log.RecordAsThread(() => {
-                        //Fix:保存图片分EA
+
                         Log.Record(() => {
-                            if (Defects[i].NGPartPath == "")
+                            if (ngPartPath == "")
                                 return;
 
-                            string oldFile = Defects[i].NGPartPath + ".png";
-                            string newFile = Defects[i].NGPartPath + $"_EA{ea}.png";
+                            string oldFile = ngPartPath + ".png";
+                            string newFile = ngPartPath + $"_EA{ea}.png";
 
                             if (System.IO.File.Exists(oldFile))
                                 System.IO.File.Move(oldFile, newFile);
                         });
 
                         Log.Record(() => {
-                            if (Defects[i].NGBigPath == "")
+                            if (ngBigPath == "")
                                 return;
 
-                            string oldFile = Defects[i].NGBigPath + ".png";
-                            string newFile = Defects[i].NGBigPath + $"_EA{ea}.png";
+                            string oldFile = ngBigPath + ".png";
+                            string newFile = ngBigPath + $"_EA{ea}.png";
 
                             if (System.IO.File.Exists(oldFile))
                                 System.IO.File.Move(oldFile, newFile);
