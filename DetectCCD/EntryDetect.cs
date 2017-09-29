@@ -782,27 +782,29 @@ namespace DetectCCD {
                     Defects[i].EA = ea;
                     count++;
 
-                    //Fix:保存图片分EA
-                    Log.Record(() => {
-                        if (Defects[i].NGPartPath == "")
-                            return;
+                    Log.RecordAsThread(() => {
+                        //Fix:保存图片分EA
+                        Log.Record(() => {
+                            if (Defects[i].NGPartPath == "")
+                                return;
 
-                        string oldFile = Defects[i].NGPartPath + ".png";
-                        string newFile = Defects[i].NGPartPath + $"_EA{ea}.png";
+                            string oldFile = Defects[i].NGPartPath + ".png";
+                            string newFile = Defects[i].NGPartPath + $"_EA{ea}.png";
 
-                        if (System.IO.File.Exists(oldFile))
-                            System.IO.File.Move(oldFile, newFile);
-                    });
+                            if (System.IO.File.Exists(oldFile))
+                                System.IO.File.Move(oldFile, newFile);
+                        });
 
-                    Log.Record(() => {
-                        if (Defects[i].NGBigPath == "")
-                            return;
+                        Log.Record(() => {
+                            if (Defects[i].NGBigPath == "")
+                                return;
 
-                        string oldFile = Defects[i].NGBigPath + ".png";
-                        string newFile = Defects[i].NGBigPath + $"_EA{ea}.png";
+                            string oldFile = Defects[i].NGBigPath + ".png";
+                            string newFile = Defects[i].NGBigPath + $"_EA{ea}.png";
 
-                        if (System.IO.File.Exists(oldFile))
-                            System.IO.File.Move(oldFile, newFile);
+                            if (System.IO.File.Exists(oldFile))
+                                System.IO.File.Move(oldFile, newFile);
+                        });
                     });
                 }
             }
