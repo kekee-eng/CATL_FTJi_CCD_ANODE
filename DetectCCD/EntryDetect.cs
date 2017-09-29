@@ -556,6 +556,7 @@ namespace DetectCCD {
                                         else folder = savefolder4;
 
                                         var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
+                                        defect.NGPartPath = filename;
 
                                         double h0 = Math.Max(eh[i], 450) + 50;
                                         double w0 = Math.Max(ew[i], 450) + 50;
@@ -572,6 +573,7 @@ namespace DetectCCD {
                             if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
                             {
                                 eimage.WriteImage("png", 0, saveBigFilename);
+                                myDefects[0].NGBigPath = saveBigFilename;
                             }
                         }
 
@@ -779,6 +781,29 @@ namespace DetectCCD {
                 if (Defects[i].InRange(start, end)) {
                     Defects[i].EA = ea;
                     count++;
+
+                    //Fix:保存图片分EA
+                    Log.Record(() => {
+                        if (Defects[i].NGPartPath == "")
+                            return;
+
+                        string oldFile = Defects[i].NGPartPath + ".png";
+                        string newFile = Defects[i].NGPartPath + $"_EA{ea}.png";
+
+                        if (System.IO.File.Exists(oldFile))
+                            System.IO.File.Move(oldFile, newFile);
+                    });
+
+                    Log.Record(() => {
+                        if (Defects[i].NGBigPath == "")
+                            return;
+
+                        string oldFile = Defects[i].NGBigPath + ".png";
+                        string newFile = Defects[i].NGBigPath + $"_EA{ea}.png";
+
+                        if (System.IO.File.Exists(oldFile))
+                            System.IO.File.Move(oldFile, newFile);
+                    });
                 }
             }
 

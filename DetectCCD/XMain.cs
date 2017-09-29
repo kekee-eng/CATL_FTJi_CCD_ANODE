@@ -430,6 +430,8 @@ namespace DetectCCD {
                     Log.Record(RemoteDefect.InitClient);
                     Log.Record(RemotePLC.InitClient);
                     Log.Record(RemoteDefect.In4KCall8K_Init);
+                    Log.Record(() => RemoteDefect.In4KCall8K_SetRoll(Static.Recipe.RecipeName, Static.App.RollName));
+
                 }
 
                 //
@@ -489,6 +491,7 @@ namespace DetectCCD {
 
                 if (Static.App.Is4K) {
                     Log.Record(RemoteDefect.In4KCall8K_StartGrab);
+                    Log.Record(() => RemoteDefect.In4KCall8K_SetRoll(Static.Recipe.RecipeName, Static.App.RollName));
                 }
             });
         }

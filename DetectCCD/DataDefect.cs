@@ -21,6 +21,9 @@ namespace DetectCCD {
         public double Height;
         public double Area;
 
+        public string NGPartPath = "";
+        public string NGBigPath = "";
+
         //
         public bool InRange(double start, double end) {
             var list = new double[] { Y - H / 2, Y + H / 2 }.TakeWhile(x => x > 0);
