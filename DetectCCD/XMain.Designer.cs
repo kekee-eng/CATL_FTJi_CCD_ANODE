@@ -184,6 +184,7 @@
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
             this.groupTest = new DevExpress.XtraEditors.GroupControl();
+            this.checkSaveMark = new DevExpress.XtraEditors.CheckEdit();
             this.checkSaveNGSmall = new DevExpress.XtraEditors.CheckEdit();
             this.checkSaveNG = new DevExpress.XtraEditors.CheckEdit();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -276,6 +277,7 @@
             this.groupCtrl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).BeginInit();
             this.groupTest.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
             this.SuspendLayout();
@@ -649,22 +651,22 @@
             this.labelControl2.TabIndex = 2;
             this.labelControl2.Text = "膜卷号";
             // 
-            // textRollName
+            // mainRollName
             // 
             this.mainRollName.Location = new System.Drawing.Point(87, 79);
             this.mainRollName.MenuManager = this.barManager1;
-            this.mainRollName.Name = "textRollName";
+            this.mainRollName.Name = "mainRollName";
             this.mainRollName.Properties.AutoHeight = false;
             this.mainRollName.Size = new System.Drawing.Size(161, 25);
             this.mainRollName.TabIndex = 3;
             // 
-            // textRollType
+            // mainRecipeName
             // 
             this.mainRecipeName.EditValue = "";
             this.mainRecipeName.Enabled = false;
             this.mainRecipeName.Location = new System.Drawing.Point(87, 48);
             this.mainRecipeName.MenuManager = this.barManager1;
-            this.mainRecipeName.Name = "textRollType";
+            this.mainRecipeName.Name = "mainRecipeName";
             this.mainRecipeName.Properties.AutoHeight = false;
             this.mainRecipeName.Size = new System.Drawing.Size(161, 25);
             this.mainRecipeName.TabIndex = 4;
@@ -1956,6 +1958,7 @@
             // 
             // groupTest
             // 
+            this.groupTest.Controls.Add(this.checkSaveMark);
             this.groupTest.Controls.Add(this.checkSaveNGSmall);
             this.groupTest.Controls.Add(this.checkSaveNG);
             this.groupTest.Location = new System.Drawing.Point(351, 19);
@@ -1963,6 +1966,15 @@
             this.groupTest.Size = new System.Drawing.Size(298, 183);
             this.groupTest.TabIndex = 30;
             this.groupTest.Text = "检测开关";
+            // 
+            // checkSaveMark
+            // 
+            this.checkSaveMark.Location = new System.Drawing.Point(21, 91);
+            this.checkSaveMark.MenuManager = this.barManager1;
+            this.checkSaveMark.Name = "checkSaveMark";
+            this.checkSaveMark.Properties.Caption = "保存Mark孔图";
+            this.checkSaveMark.Size = new System.Drawing.Size(109, 19);
+            this.checkSaveMark.TabIndex = 31;
             // 
             // checkSaveNGSmall
             // 
@@ -2102,6 +2114,7 @@
             this.groupCtrl.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).EndInit();
             this.groupTest.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
             this.ResumeLayout(false);
@@ -2270,5 +2283,6 @@
         private DevExpress.XtraEditors.TextEdit textRecipeName;
         private DevExpress.XtraEditors.LabelControl labelControl30;
         private DevExpress.XtraEditors.TextEdit mainRecipeName;
+        private DevExpress.XtraEditors.CheckEdit checkSaveMark;
     }
 }

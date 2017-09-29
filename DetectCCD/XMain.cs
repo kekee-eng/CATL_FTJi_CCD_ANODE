@@ -313,7 +313,8 @@ namespace DetectCCD {
             Static.App.BindTextBox(mainRollName, "RollName");
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
-            
+            Static.App.BindCheckBox(checkSaveMark, "RecordSaveImageMark");
+
             //设置参数
             tmpRecipe = new CfgRecipe(Static.PathCfgRecipe);
             tmpTiebiao = new CfgTiebiao(Static.PathCfgTiebiao);

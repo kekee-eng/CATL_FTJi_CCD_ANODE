@@ -380,8 +380,7 @@ namespace DetectCCD {
 
             var cimage = grab.GetImage(cfy1, cfy2);
             if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
-
-                //将最后一个极耳放到下个EA中
+                
                 data.IsNewEA = true;
                 data.MarkX = data.MarkX_P = cx[0] / w;
                 data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
@@ -390,6 +389,27 @@ namespace DetectCCD {
                     data.HasTwoMark = true;
                     data.MarkX_P = cx[1] / w;
                     data.MarkY_P = cfy1 + cy[1] / h;
+                }
+
+                //Fix: 保存Mark孔图
+                if(Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageMark ) {
+
+                    string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+                    var savefolder = Static.FolderRecord + "/Mark孔/";
+
+                    if (!System.IO.Directory.Exists(savefolder))
+                        System.IO.Directory.CreateDirectory(savefolder);
+
+                    string filename = $"{savefolder}{timestamp}_F{Convert.ToInt32(data.MarkY)}";
+
+                    int w0 = 300;
+                    int h0 = 100;
+                    var saveimg = cimage.CropPart(cy[0] - h0 / 2, cx[0] - w0 / 2, w0, h0);
+
+                    Log.RecordAsThread(() => {
+                        saveimg?.WriteImage("png", 0, filename);
+                        saveimg?.Dispose();
+                    });
                 }
 
             }

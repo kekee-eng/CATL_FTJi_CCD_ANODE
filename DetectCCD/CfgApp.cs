@@ -18,6 +18,7 @@ namespace DetectCCD {
         public bool RecordSaveImageNGBig = false;
         public bool RecordSaveImageNGSmall = false;
         public int RecordSaveImageNGSmallMaxType = 5;
+        public bool RecordSaveImageMark = false;
         
         //显示参数
         public double CameraFpsControl = 10;
