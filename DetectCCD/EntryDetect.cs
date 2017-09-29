@@ -807,27 +807,24 @@ namespace DetectCCD {
                     string ngBigPath = Defects[i].NGBigPath;
                     Log.RecordAsThread(() => {
 
-                        Log.Record(() => {
-                            if (ngPartPath == "")
-                                return;
+                        //
+                        Action<string> moveFile = path => {
+                            Log.Record(() => {
+                                if (path == "")
+                                    return;
 
-                            string oldFile = ngPartPath + ".png";
-                            string newFile = ngPartPath + $"_EA{ea}.png";
+                                string oldFile = path + ".png";
+                                string newFile = path + $"_EA{ea}.png";
 
-                            if (System.IO.File.Exists(oldFile))
-                                System.IO.File.Move(oldFile, newFile);
-                        });
+                                if (System.IO.File.Exists(oldFile))
+                                    System.IO.File.Move(oldFile, newFile);
+                            });
+                        };
 
-                        Log.Record(() => {
-                            if (ngBigPath == "")
-                                return;
+                        //
+                        moveFile(ngPartPath);
+                        moveFile(ngBigPath);
 
-                            string oldFile = ngBigPath + ".png";
-                            string newFile = ngBigPath + $"_EA{ea}.png";
-
-                            if (System.IO.File.Exists(oldFile))
-                                System.IO.File.Move(oldFile, newFile);
-                        });
                     });
                 }
             }
