@@ -37,7 +37,7 @@ namespace DetectCCD {
             m_frame = 1;
             defectFrameCount = 0;
             posEAStart = -1;
-            
+
             offsetList.Clear();
         }
 
@@ -105,10 +105,10 @@ namespace DetectCCD {
         public event Action<DataTab, DataTab> OnSyncTab;
 
         int defectFrameCount = 0;
-        
+
         List<double> offsetList = new List<double>();
         void addOffset(double offset) {
-            
+
             offsetList.Add(offset);
             if (offsetList.Count > 10) {
                 offsetList.RemoveAt(0);
@@ -380,7 +380,7 @@ namespace DetectCCD {
 
             var cimage = grab.GetImage(cfy1, cfy2);
             if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
-                
+
                 data.IsNewEA = true;
                 data.MarkX = data.MarkX_P = cx[0] / w;
                 data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
@@ -395,12 +395,13 @@ namespace DetectCCD {
                 if(Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageMark ) {
 
                     string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+                    string pos = isinner ? "内侧" : "外侧";
                     var savefolder = Static.FolderRecord + "/Mark孔/";
 
                     if (!System.IO.Directory.Exists(savefolder))
                         System.IO.Directory.CreateDirectory(savefolder);
-
-                    string filename = $"{savefolder}{timestamp}_F{Convert.ToInt32(data.MarkY)}";
+                    
+                    string filename = $"{savefolder}{timestamp}_{pos}_F{Convert.ToInt32(data.MarkY)}";
 
                     int w0 = 300;
                     int h0 = 100;
@@ -455,9 +456,9 @@ namespace DetectCCD {
             }
 
             //强制打标
-            if (Static.App.Is4K 
-                && Static.Tiebiao.EnableLabelEA 
-                && Static.Tiebiao.EnableLabelEA_Force 
+            if (Static.App.Is4K
+                && Static.Tiebiao.EnableLabelEA
+                && Static.Tiebiao.EnableLabelEA_Force
                 && Static.Recipe.EALength > 100) {
 
                 if (posEAStart >= 0) {
@@ -517,8 +518,8 @@ namespace DetectCCD {
 
                 //
                 var savefolderBig = Static.FolderRecord + "/瑕疵大图/";
-                var saveBigFilename = string.Format("{0}{1}_F{2}-{3}", savefolderBig, timestamp, efx1, efx2);
-                
+                var saveBigFilename = string.Format("{0}{1}_{2}_F{3}", savefolderBig, timestamp, isinner ? "正面" : "背面", frame);
+
                 if (!System.IO.Directory.Exists(savefolderBig))
                     System.IO.Directory.CreateDirectory(savefolderBig);
 
@@ -590,7 +591,7 @@ namespace DetectCCD {
 
                             }
 
-                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
+                            if (myDefects.Count>0 && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
                             {
                                 eimage.WriteImage("png", 0, saveBigFilename);
                                 myDefects[0].NGBigPath = saveBigFilename;
