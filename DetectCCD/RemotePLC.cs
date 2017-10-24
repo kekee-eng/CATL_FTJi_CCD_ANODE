@@ -69,7 +69,7 @@ public class RemotePLC : MarshalByRefObject {
 
     }
 
-    public static event Action<int, int, bool, double, double> WidthProcess;
+    public static event Action<string,int, int, bool, double, double> WidthProcess;
     public static event Action<bool, int> ReciveLabelProcess;
     public static event Func<bool, int> EncoderProvider;
     public static event Action ClearEncoder;
@@ -90,7 +90,7 @@ public class RemotePLC : MarshalByRefObject {
     }
 
     public void _IN_PLC_Call_widthProcess(int idEA, int idTab, bool isOK, double widthInner, double widthOuter) {
-        WidthProcess?.Invoke(idEA, idTab, isOK, widthInner, widthOuter);
+        WidthProcess?.Invoke(DetectCCD.Static.App.RollName, idEA, idTab, isOK, widthInner, widthOuter);
     }
     public void _IN_PLC_Call_reciveLabelProcess(bool isInner, int encoder) {
         ReciveLabelProcess?.Invoke(isInner, encoder);
