@@ -38,7 +38,7 @@ public class RemotePLC : MarshalByRefObject {
     }
 
     public static void In4KCallPLC_ForWidth(int idEA, int idTab, bool isOK, double widthInner, double widthOuter) {
-        RunAction(() => client._IN_PLC_Call_widthProcess(idEA, idTab, isOK, widthInner, widthOuter));
+        RunAction(() => client._IN_PLC_Call_widthProcess(DetectCCD.Static.App.RollName, idEA, idTab, isOK, widthInner, widthOuter));
     }
     public static void In4KCallPLC_SendLabel(bool isInner, int encoder) {
         RunAction(() => client._IN_PLC_Call_reciveLabelProcess(isInner, encoder));
@@ -89,8 +89,8 @@ public class RemotePLC : MarshalByRefObject {
         grabbingWatchDogPrev = grabbingWatchDog;
     }
 
-    public void _IN_PLC_Call_widthProcess(int idEA, int idTab, bool isOK, double widthInner, double widthOuter) {
-        WidthProcess?.Invoke(DetectCCD.Static.App.RollName, idEA, idTab, isOK, widthInner, widthOuter);
+    public void _IN_PLC_Call_widthProcess(string rollname, int idEA, int idTab, bool isOK, double widthInner, double widthOuter) {
+        WidthProcess?.Invoke(rollname, idEA, idTab, isOK, widthInner, widthOuter);
     }
     public void _IN_PLC_Call_reciveLabelProcess(bool isInner, int encoder) {
         ReciveLabelProcess?.Invoke(isInner, encoder);
