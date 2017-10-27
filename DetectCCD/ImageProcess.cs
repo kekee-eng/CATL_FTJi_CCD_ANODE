@@ -19,7 +19,7 @@ namespace DetectCCD {
             //
             m_program?.Dispose();
             m_program = new HDevProgram(Static.PathImageProcess);
-
+            
         }
 
         public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image, out int time) {

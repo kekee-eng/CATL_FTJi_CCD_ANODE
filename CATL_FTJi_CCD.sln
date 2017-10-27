@@ -9,10 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZedGraph", "ZedGraph\ZedGra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetectCCD", "DetectCCD\DetectCCD.csproj", "{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPLC", "TestPLC\TestPLC.csproj", "{FDC01A99-6B20-429F-A541-6A17D6B5E70A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDBOnce", "TestDBOnce\TestDBOnce.csproj", "{AB804D22-7679-4AED-AF71-F8C7194ED600}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,22 +31,6 @@ Global
 		{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}.Release|x64.ActiveCfg = Release|Any CPU
 		{DBC8B4E2-7933-4A4D-BF07-10B0BDF19535}.Release|x64.Build.0 = Release|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Debug|x64.Build.0 = Debug|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|x64.ActiveCfg = Release|Any CPU
-		{FDC01A99-6B20-429F-A541-6A17D6B5E70A}.Release|x64.Build.0 = Release|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Debug|x64.Build.0 = Debug|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Release|x64.ActiveCfg = Release|Any CPU
-		{AB804D22-7679-4AED-AF71-F8C7194ED600}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
