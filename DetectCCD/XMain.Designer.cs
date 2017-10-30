@@ -39,6 +39,7 @@
             this.barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
             this.selectSkin = new DevExpress.XtraBars.SkinBarSubItem();
             this.selectFullScreen = new DevExpress.XtraBars.BarButtonItem();
+            this.status_OpenTiebiao = new DevExpress.XtraBars.BarStaticItem();
             this.status_diskspace = new DevExpress.XtraBars.BarStaticItem();
             this.status_memory = new DevExpress.XtraBars.BarStaticItem();
             this.status_time = new DevExpress.XtraBars.BarStaticItem();
@@ -192,7 +193,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.status_OpenTiebiao = new DevExpress.XtraBars.BarStaticItem();
+            this.btnReturnAll = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -394,6 +395,13 @@
             this.selectFullScreen.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F));
             this.selectFullScreen.Name = "selectFullScreen";
             this.selectFullScreen.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.selectFullScreen_ItemClick);
+            // 
+            // status_OpenTiebiao
+            // 
+            this.status_OpenTiebiao.Caption = "贴标开启状态";
+            this.status_OpenTiebiao.Id = 27;
+            this.status_OpenTiebiao.Name = "status_OpenTiebiao";
+            this.status_OpenTiebiao.TextAlignment = System.Drawing.StringAlignment.Near;
             // 
             // status_diskspace
             // 
@@ -1973,6 +1981,7 @@
             // 
             // groupTest
             // 
+            this.groupTest.Controls.Add(this.btnReturnAll);
             this.groupTest.Controls.Add(this.btnBackupALL);
             this.groupTest.Controls.Add(this.checkSaveMark);
             this.groupTest.Controls.Add(this.checkSaveNGSmall);
@@ -1985,7 +1994,7 @@
             // 
             // btnBackupALL
             // 
-            this.btnBackupALL.Location = new System.Drawing.Point(103, 136);
+            this.btnBackupALL.Location = new System.Drawing.Point(136, 135);
             this.btnBackupALL.Name = "btnBackupALL";
             this.btnBackupALL.Size = new System.Drawing.Size(101, 30);
             this.btnBackupALL.TabIndex = 93;
@@ -2034,12 +2043,14 @@
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
-            // status_OpenTiebiao
+            // btnReturnAll
             // 
-            this.status_OpenTiebiao.Caption = "贴标开启状态";
-            this.status_OpenTiebiao.Id = 27;
-            this.status_OpenTiebiao.Name = "status_OpenTiebiao";
-            this.status_OpenTiebiao.TextAlignment = System.Drawing.StringAlignment.Near;
+            this.btnReturnAll.Location = new System.Drawing.Point(136, 62);
+            this.btnReturnAll.Name = "btnReturnAll";
+            this.btnReturnAll.Size = new System.Drawing.Size(101, 30);
+            this.btnReturnAll.TabIndex = 94;
+            this.btnReturnAll.Text = " 还原所有参数";
+            this.btnReturnAll.Click += new System.EventHandler(this.btnReturnAll_Click);
             // 
             // XMain
             // 
@@ -2319,5 +2330,6 @@
         private DevExpress.XtraEditors.SimpleButton btnBackup;
         private DevExpress.XtraEditors.SimpleButton btnBackupALL;
         private DevExpress.XtraBars.BarStaticItem status_OpenTiebiao;
+        private DevExpress.XtraEditors.SimpleButton btnReturnAll;
     }
 }

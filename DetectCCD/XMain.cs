@@ -809,11 +809,12 @@ namespace DetectCCD {
                 if (checkBackup() == 2)
                 {
                     XtraMessageBox.Show(string.Format("参数{0}与备份不一致，请进入专家模式“备份所有参数”", checkBackupResult), "参数确认", MessageBoxButtons.OK);
-
+                    UtilTool.XFWait.Close();
                 }
                 else if (checkBackup() == 1)
                 {
                     XtraMessageBox.Show(string.Format("参数{0}与备份不一致，请进入工程师模式“备份参数”", checkBackupResult), "参数确认", MessageBoxButtons.OK);
+                    UtilTool.XFWait.Close();
                 }
                 else
                 {
@@ -828,7 +829,7 @@ namespace DetectCCD {
         {
             string s1, s2, s3, s4, s5;
             int checkOK = 0;
-            if (!Static.CompareFile(Static.PathCfgApp, Static.PathCfgAppBackup))
+            if (!Static.CompareFile(Static.PathCfgApp, Static.PathCfgAppBackup)&&false)
             {
                 s1 = "cfg_app,";
                 checkOK = 1;
@@ -1057,13 +1058,16 @@ namespace DetectCCD {
         {
             Log.Record(() =>
             {
-                if (Static.CopyDir(Static.FolderCfg, Static.FolderCfgBackup))
+                if (XtraMessageBox.Show("备份参数，请确认是否备份？", "备份确认", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
-                    XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
-                }
-                else
-                {
-                    XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
+                    if (Static.CopyDir(Static.FolderCfg, Static.FolderCfgBackup))
+                    {
+                        XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
+                    }
+                    else
+                    {
+                        XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
+                    }
                 }
             });
            
@@ -1073,15 +1077,39 @@ namespace DetectCCD {
         {
             Log.Record(() =>
             {
-                if (Static.CopyDirAll(Static.FolderCfg, Static.FolderCfgBackup))
+                if (XtraMessageBox.Show("备份所有参数，请确认是否备份？", "备份确认", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
-                    XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
+                    if (Static.CopyDirAll(Static.FolderCfg, Static.FolderCfgBackup))
+                    {
+                        XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
+                    }
+                    else
+                    {
+                        XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
+                    }
+                }
+            });
+        }
+
+        private void btnReturnAll_Click(object sender, EventArgs e)
+        {
+            Log.Record(() =>
+            {
+            if (XtraMessageBox.Show("还原所有参数，请确认是否还原？", "还原确认", MessageBoxButtons.OKCancel) == DialogResult.OK) 
+              {
+                   
+               if (Static.CopyDirAll(Static.FolderCfgBackup, Static.FolderCfg))
+                {
+                        Static.Init();
+                        XtraMessageBox.Show("还原参数成功", "还原确认", MessageBoxButtons.OK);
                 }
                 else
                 {
-                    XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
+                    XtraMessageBox.Show("还原参数失败", "还原确认", MessageBoxButtons.OK);
                 }
-            });
+            }
+
+        });
         }
     }
 
