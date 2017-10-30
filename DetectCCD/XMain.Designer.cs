@@ -160,6 +160,7 @@
             this.btnSelectRecipe = new DevExpress.XtraEditors.SimpleButton();
             this.btnAddRecipe = new DevExpress.XtraEditors.SimpleButton();
             this.groupLabel = new DevExpress.XtraEditors.GroupControl();
+            this.btnBackup = new DevExpress.XtraEditors.SimpleButton();
             this.btnApplyTiebiao = new DevExpress.XtraEditors.SimpleButton();
             this.groupEAContext = new DevExpress.XtraEditors.GroupControl();
             this.checkEAContext_Width = new DevExpress.XtraEditors.CheckEdit();
@@ -184,12 +185,14 @@
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
             this.groupTest = new DevExpress.XtraEditors.GroupControl();
+            this.btnBackupALL = new DevExpress.XtraEditors.SimpleButton();
             this.checkSaveMark = new DevExpress.XtraEditors.CheckEdit();
             this.checkSaveNGSmall = new DevExpress.XtraEditors.CheckEdit();
             this.checkSaveNG = new DevExpress.XtraEditors.CheckEdit();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.status_OpenTiebiao = new DevExpress.XtraBars.BarStaticItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -303,8 +306,9 @@
             this.status_time,
             this.barStaticItem2,
             this.status_diskspace,
-            this.status_memory});
-            this.barManager1.MaxItemId = 27;
+            this.status_memory,
+            this.status_OpenTiebiao});
+            this.barManager1.MaxItemId = 28;
             this.barManager1.StatusBar = this.bar3;
             // 
             // bar3
@@ -322,6 +326,7 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.barStaticItem1),
             new DevExpress.XtraBars.LinkPersistInfo(this.selectSkin),
             new DevExpress.XtraBars.LinkPersistInfo(this.selectFullScreen),
+            new DevExpress.XtraBars.LinkPersistInfo(this.status_OpenTiebiao),
             new DevExpress.XtraBars.LinkPersistInfo(this.status_diskspace),
             new DevExpress.XtraBars.LinkPersistInfo(this.status_memory),
             new DevExpress.XtraBars.LinkPersistInfo(this.status_time)});
@@ -708,7 +713,7 @@
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(544, 616);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(545, 616);
             this.tableLayoutPanel8.TabIndex = 29;
             // 
             // groupStatuOuter
@@ -717,7 +722,7 @@
             this.groupStatuOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupStatuOuter.Location = new System.Drawing.Point(275, 3);
             this.groupStatuOuter.Name = "groupStatuOuter";
-            this.groupStatuOuter.Size = new System.Drawing.Size(266, 610);
+            this.groupStatuOuter.Size = new System.Drawing.Size(267, 610);
             this.groupStatuOuter.TabIndex = 1;
             this.groupStatuOuter.Text = "Camera2";
             this.groupStatuOuter.DoubleClick += new System.EventHandler(this.groupStatuOuter_DoubleClick);
@@ -738,7 +743,7 @@
             // splitContainerOuter.Panel2
             // 
             this.splitContainerOuter.Panel2.Controls.Add(this.hwinOuter);
-            this.splitContainerOuter.Size = new System.Drawing.Size(262, 587);
+            this.splitContainerOuter.Size = new System.Drawing.Size(263, 587);
             this.splitContainerOuter.SplitterDistance = 120;
             this.splitContainerOuter.TabIndex = 0;
             // 
@@ -754,7 +759,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(262, 120);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(263, 120);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -900,7 +905,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(125, 114);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(126, 114);
             this.tableLayoutPanel4.TabIndex = 27;
             // 
             // _lc_outer_defectCount
@@ -911,7 +916,7 @@
             this._lc_outer_defectCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_defectCount.Location = new System.Drawing.Point(66, 88);
             this._lc_outer_defectCount.Name = "_lc_outer_defectCount";
-            this._lc_outer_defectCount.Size = new System.Drawing.Size(55, 22);
+            this._lc_outer_defectCount.Size = new System.Drawing.Size(56, 22);
             this._lc_outer_defectCount.TabIndex = 34;
             this._lc_outer_defectCount.Text = "-";
             // 
@@ -935,7 +940,7 @@
             this._lc_outer_widthCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_widthCount.Location = new System.Drawing.Point(66, 60);
             this._lc_outer_widthCount.Name = "_lc_outer_widthCount";
-            this._lc_outer_widthCount.Size = new System.Drawing.Size(55, 21);
+            this._lc_outer_widthCount.Size = new System.Drawing.Size(56, 21);
             this._lc_outer_widthCount.TabIndex = 32;
             this._lc_outer_widthCount.Text = "-";
             // 
@@ -959,7 +964,7 @@
             this._lc_outer_eaCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_eaCount.Location = new System.Drawing.Point(66, 32);
             this._lc_outer_eaCount.Name = "_lc_outer_eaCount";
-            this._lc_outer_eaCount.Size = new System.Drawing.Size(55, 21);
+            this._lc_outer_eaCount.Size = new System.Drawing.Size(56, 21);
             this._lc_outer_eaCount.TabIndex = 30;
             this._lc_outer_eaCount.Text = "-";
             // 
@@ -995,7 +1000,7 @@
             this._lc_outer_caption.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_caption.Location = new System.Drawing.Point(66, 4);
             this._lc_outer_caption.Name = "_lc_outer_caption";
-            this._lc_outer_caption.Size = new System.Drawing.Size(55, 21);
+            this._lc_outer_caption.Size = new System.Drawing.Size(56, 21);
             this._lc_outer_caption.TabIndex = 29;
             this._lc_outer_caption.Text = "-";
             // 
@@ -1007,9 +1012,9 @@
             this.hwinOuter.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwinOuter.Location = new System.Drawing.Point(0, 0);
             this.hwinOuter.Name = "hwinOuter";
-            this.hwinOuter.Size = new System.Drawing.Size(262, 463);
+            this.hwinOuter.Size = new System.Drawing.Size(263, 463);
             this.hwinOuter.TabIndex = 30;
-            this.hwinOuter.WindowSize = new System.Drawing.Size(262, 463);
+            this.hwinOuter.WindowSize = new System.Drawing.Size(263, 463);
             // 
             // groupStatuInner
             // 
@@ -1361,7 +1366,7 @@
             this.panelTabMergeGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTabMergeGrid.Location = new System.Drawing.Point(0, 0);
             this.panelTabMergeGrid.Name = "panelTabMergeGrid";
-            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 153);
+            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 154);
             this.panelTabMergeGrid.TabIndex = 1;
             // 
             // xtraTabPage6
@@ -1499,7 +1504,7 @@
             this.splitContainerControl4.Panel2.Controls.Add(this.btnSelectRecipe);
             this.splitContainerControl4.Panel2.Controls.Add(this.btnAddRecipe);
             this.splitContainerControl4.Panel2.Text = "Panel2";
-            this.splitContainerControl4.Size = new System.Drawing.Size(473, 438);
+            this.splitContainerControl4.Size = new System.Drawing.Size(474, 438);
             this.splitContainerControl4.SplitterPosition = 84;
             this.splitContainerControl4.TabIndex = 0;
             this.splitContainerControl4.Text = "splitContainerControl4";
@@ -1510,7 +1515,7 @@
             this.xtraTabControl3.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl3.Name = "xtraTabControl3";
             this.xtraTabControl3.SelectedTabPage = this.xtraTabPage8;
-            this.xtraTabControl3.Size = new System.Drawing.Size(469, 344);
+            this.xtraTabControl3.Size = new System.Drawing.Size(470, 345);
             this.xtraTabControl3.TabIndex = 0;
             this.xtraTabControl3.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage8,
@@ -1536,7 +1541,7 @@
             this.xtraTabPage8.Controls.Add(this.labelControl27);
             this.xtraTabPage8.Controls.Add(this.labelControl31);
             this.xtraTabPage8.Name = "xtraTabPage8";
-            this.xtraTabPage8.Size = new System.Drawing.Size(463, 315);
+            this.xtraTabPage8.Size = new System.Drawing.Size(464, 316);
             this.xtraTabPage8.Text = "常用参数";
             // 
             // textRecipeName
@@ -1679,7 +1684,7 @@
             // 
             this.xtraTabPage9.Controls.Add(this.dataRecipe);
             this.xtraTabPage9.Name = "xtraTabPage9";
-            this.xtraTabPage9.Size = new System.Drawing.Size(463, 315);
+            this.xtraTabPage9.Size = new System.Drawing.Size(464, 316);
             this.xtraTabPage9.Text = "高级参数";
             // 
             // dataRecipe
@@ -1690,7 +1695,7 @@
             this.dataRecipe.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataRecipe.Location = new System.Drawing.Point(0, 0);
             this.dataRecipe.Name = "dataRecipe";
-            this.dataRecipe.Size = new System.Drawing.Size(463, 315);
+            this.dataRecipe.Size = new System.Drawing.Size(464, 316);
             this.dataRecipe.TabIndex = 0;
             // 
             // btnApplyRecipe
@@ -1731,6 +1736,7 @@
             // 
             // groupLabel
             // 
+            this.groupLabel.Controls.Add(this.btnBackup);
             this.groupLabel.Controls.Add(this.btnApplyTiebiao);
             this.groupLabel.Controls.Add(this.groupEAContext);
             this.groupLabel.Controls.Add(this.groupLabelContext);
@@ -1748,6 +1754,15 @@
             this.groupLabel.Size = new System.Drawing.Size(446, 461);
             this.groupLabel.TabIndex = 10;
             this.groupLabel.Text = "贴标设置";
+            // 
+            // btnBackup
+            // 
+            this.btnBackup.Location = new System.Drawing.Point(44, 403);
+            this.btnBackup.Name = "btnBackup";
+            this.btnBackup.Size = new System.Drawing.Size(101, 30);
+            this.btnBackup.TabIndex = 92;
+            this.btnBackup.Text = "备份参数";
+            this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
             // 
             // btnApplyTiebiao
             // 
@@ -1958,6 +1973,7 @@
             // 
             // groupTest
             // 
+            this.groupTest.Controls.Add(this.btnBackupALL);
             this.groupTest.Controls.Add(this.checkSaveMark);
             this.groupTest.Controls.Add(this.checkSaveNGSmall);
             this.groupTest.Controls.Add(this.checkSaveNG);
@@ -1966,6 +1982,15 @@
             this.groupTest.Size = new System.Drawing.Size(298, 183);
             this.groupTest.TabIndex = 30;
             this.groupTest.Text = "检测开关";
+            // 
+            // btnBackupALL
+            // 
+            this.btnBackupALL.Location = new System.Drawing.Point(103, 136);
+            this.btnBackupALL.Name = "btnBackupALL";
+            this.btnBackupALL.Size = new System.Drawing.Size(101, 30);
+            this.btnBackupALL.TabIndex = 93;
+            this.btnBackupALL.Text = "备份所有参数";
+            this.btnBackupALL.Click += new System.EventHandler(this.btnBackupALL_Click);
             // 
             // checkSaveMark
             // 
@@ -2008,6 +2033,13 @@
             // 
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
+            // 
+            // status_OpenTiebiao
+            // 
+            this.status_OpenTiebiao.Caption = "贴标开启状态";
+            this.status_OpenTiebiao.Id = 27;
+            this.status_OpenTiebiao.Name = "status_OpenTiebiao";
+            this.status_OpenTiebiao.TextAlignment = System.Drawing.StringAlignment.Near;
             // 
             // XMain
             // 
@@ -2284,5 +2316,8 @@
         private DevExpress.XtraEditors.LabelControl labelControl30;
         private DevExpress.XtraEditors.TextEdit mainRecipeName;
         private DevExpress.XtraEditors.CheckEdit checkSaveMark;
+        private DevExpress.XtraEditors.SimpleButton btnBackup;
+        private DevExpress.XtraEditors.SimpleButton btnBackupALL;
+        private DevExpress.XtraBars.BarStaticItem status_OpenTiebiao;
     }
 }

@@ -597,7 +597,44 @@ namespace DetectCCD {
                 csvLabelWriter.WriteLine();
             });
         }
-
+        public string tiebiao()
+        {
+            string tt = "";
+            string t1, t2, t3, t4;
+            if (tmpTiebiao.EAContextJoin == true)
+            {
+                t1 = "接头，";
+            }
+            else
+            {
+                t1 = "";
+            }
+            if (tmpTiebiao.EAContextTag == true)
+            {
+                t2 = "标签，";
+            }
+            else
+            {
+                t2 = "";
+            }
+            if (tmpTiebiao.EAContextLeakMetal == true)
+            {
+                t3 = "漏金属，";
+            }
+            else
+            {
+                t3 = "";
+            }
+            if (tmpTiebiao.EAContextWidth == true)
+            {
+                t4 = "宽度不良，";
+            }
+            else
+            {
+                t4 = "";
+            }
+            return tt = string.Format("末尾贴标项启用:{0}{1}{2}{3}", t1, t2, t3, t4);
+        }
         private void timer1_Tick(object sender, EventArgs e) {
 
             Log.Record(() => {
@@ -667,7 +704,7 @@ namespace DetectCCD {
                 status_device.ImageIndex = device.isOpen ? 5 : 4;
                 status_memory.Caption = string.Format("内存已使用={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
-
+                status_OpenTiebiao.Caption = tiebiao();
                 //更新表格
                 ViewerChart.SyncMergeTabChart(panelTabMergeChart, process.InnerDetect, process.OuterDetect, 0);
                 ViewerChart.SyncMergeTabGrid(panelTabMergeGrid, process.InnerDetect, process.OuterDetect);
@@ -769,10 +806,76 @@ namespace DetectCCD {
         private async void btnConnect_Click(object sender, EventArgs e) {
             UtilTool.XFWait.Open();
             await Task.Run(() => {
-                DeviceInit();
-                DeviceStartGrab();
-                UtilTool.XFWait.Close();
+                if (checkBackup() == 2)
+                {
+                    XtraMessageBox.Show(string.Format("参数{0}与备份不一致，请进入专家模式“备份所有参数”", checkBackupResult), "参数确认", MessageBoxButtons.OK);
+
+                }
+                else if (checkBackup() == 1)
+                {
+                    XtraMessageBox.Show(string.Format("参数{0}与备份不一致，请进入工程师模式“备份参数”", checkBackupResult), "参数确认", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    DeviceInit();
+                    DeviceStartGrab();
+                    UtilTool.XFWait.Close();
+                }
             });
+        }
+        string checkBackupResult = "";
+        public int checkBackup()
+        {
+            string s1, s2, s3, s4, s5;
+            int checkOK = 0;
+            if (!Static.CompareFile(Static.PathCfgApp, Static.PathCfgAppBackup))
+            {
+                s1 = "cfg_app,";
+                checkOK = 1;
+            }
+            else
+            {
+                s1 = "";
+            }
+            if (!Static.CompareFile(Static.PathCfgTiebiao, Static.PathCfgTiebiaoBackup))
+            {
+                s2 = "cfg_tiebiao,";
+                checkOK = 1;
+            }
+            else
+            {
+                s2 = "";
+            }
+            if (!Static.CompareFile(Static.PathCfgRecipe, Static.PathCfgRecipeBackup))
+            {
+                s3 = "cfg_param,";
+                checkOK = 1;
+            }
+            else
+            {
+                s3 = "";
+            }
+            if (!Static.CompareFile(Static.PathImageProcess, Static.PathImageProcessBackup))
+            {
+                s4 = "image_process,";
+                checkOK = 2;
+            }
+            else
+            {
+                s4 = "";
+            }
+            if (!Static.CompareFile(Static.PathCamera, Static.PathCameraBackup))
+            {
+                s5 = "card,";
+                checkOK = 2;
+            }
+            else
+            {
+                s5 = "";
+            }
+            checkBackupResult = string.Format("{0}{1}{2}{3}{4}", s1, s2, s3, s4, s5);
+            return checkOK;
+
         }
         private async void btnDisconnect_Click(object sender, EventArgs e) {
             UtilTool.XFWait.Open();
@@ -947,6 +1050,37 @@ namespace DetectCCD {
                 tmpRecipe.UpdateBind();
                 tmpRecipe.BindDataGridView(dataRecipe);
 
+            });
+        }
+
+        private void btnBackup_Click(object sender, EventArgs e)
+        {
+            Log.Record(() =>
+            {
+                if (Static.CopyDir(Static.FolderCfg, Static.FolderCfgBackup))
+                {
+                    XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
+                }
+            });
+           
+        }
+
+        private void btnBackupALL_Click(object sender, EventArgs e)
+        {
+            Log.Record(() =>
+            {
+                if (Static.CopyDirAll(Static.FolderCfg, Static.FolderCfgBackup))
+                {
+                    XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
+                }
             });
         }
     }
