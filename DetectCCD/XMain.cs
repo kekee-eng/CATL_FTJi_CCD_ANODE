@@ -704,7 +704,15 @@ namespace DetectCCD {
                 status_device.ImageIndex = device.isOpen ? 5 : 4;
                 status_memory.Caption = string.Format("内存已使用={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
-                status_OpenTiebiao.Caption = tiebiao();
+                if (tmpTiebiao.EnableLabelEA)
+                {
+                    status_OpenTiebiao.Caption = tiebiao();
+                }
+                else
+                {
+                    status_OpenTiebiao.Caption = "末尾贴标未启用";
+                }
+                
                 //更新表格
                 ViewerChart.SyncMergeTabChart(panelTabMergeChart, process.InnerDetect, process.OuterDetect, 0);
                 ViewerChart.SyncMergeTabGrid(panelTabMergeGrid, process.InnerDetect, process.OuterDetect);
