@@ -11,10 +11,10 @@ using System.Threading;
 
 namespace DetectCCD {
 
-   public class Static {
+    public class Static {
 
         public static string Root { get { return AppDomain.CurrentDomain.BaseDirectory; } }
-        
+
         public static string FolderCfg { get { return Root + "../Config/"; } }
         public static string FolderCfgBackup { get { return "D:\\Backup\\"; } }
         public static string FolderRecord {
@@ -45,9 +45,9 @@ namespace DetectCCD {
         public static CfgApp App;
         public static CfgRecipe Recipe;
         public static CfgTiebiao Tiebiao;
-        
+
         public static void Init() {
-            
+
             //
             App = new CfgApp(PathCfgApp);
             Recipe = new CfgRecipe(PathCfgRecipe);
@@ -68,117 +68,115 @@ namespace DetectCCD {
 
         }
 
-        public static bool CompareFile(string p_1, string p_2)
-        {
-            try
-            {
+        public static bool CompareFile(string p_1, string p_2) {
+            bool ret = false;
+            Log.Record(() => {
+
                 //计算第一个文件的哈希值
                 var hash = System.Security.Cryptography.HashAlgorithm.Create();
                 var stream_1 = new System.IO.FileStream(p_1, System.IO.FileMode.Open);
                 byte[] hashByte_1 = hash.ComputeHash(stream_1);
                 stream_1.Close();
+
                 //计算第二个文件的哈希值
                 var stream_2 = new System.IO.FileStream(p_2, System.IO.FileMode.Open);
                 byte[] hashByte_2 = hash.ComputeHash(stream_2);
                 stream_2.Close();
 
                 //比较两个哈希值
-                if (BitConverter.ToString(hashByte_1) == BitConverter.ToString(hashByte_2))
-                    return true;
-                else
-                    return false;
-            }
-            catch (System.Exception ex)
-            {
-                return false;
-            }
+                ret = (BitConverter.ToString(hashByte_1) == BitConverter.ToString(hashByte_2));
 
+            });
+            return ret;
 
         }
 
-        public static bool CopyDirAll(string srcPath, string aimPath)
-        {
-            try
-            {
+        public static bool CopyDirAll(string srcPath, string aimPath) {
+
+            bool ret = false;
+            Log.Record(() => {
+
                 // 检查目标目录是否以目录分割字符结束如果不是则添加
-                if (aimPath[aimPath.Length - 1] != System.IO.Path.DirectorySeparatorChar)
-                {
+                if (aimPath[aimPath.Length - 1] != System.IO.Path.DirectorySeparatorChar) {
                     aimPath += System.IO.Path.DirectorySeparatorChar;
                 }
+
                 // 判断目标目录是否存在如果不存在则新建
-                if (!System.IO.Directory.Exists(aimPath))
-                {
+                if (!System.IO.Directory.Exists(aimPath)) {
                     System.IO.Directory.CreateDirectory(aimPath);
                 }
+
                 // 得到源目录的文件列表，该里面是包含文件以及目录路径的一个数组
                 // 如果你指向copy目标文件下面的文件而不包含目录请使用下面的方法
                 // string[] fileList = Directory.GetFiles（srcPath）；
                 string[] fileList = System.IO.Directory.GetFileSystemEntries(srcPath);
+
                 // 遍历所有的文件和目录
-                foreach (string file in fileList)
-                {
+                foreach (string file in fileList) {
+
                     // 先当作目录处理如果存在这个目录就递归Copy该目录下面的文件
-                    if (System.IO.Directory.Exists(file))
-                    {
+                    if (System.IO.Directory.Exists(file)) {
                         CopyDir(file, aimPath + System.IO.Path.GetFileName(file));
                     }
                     // 否则直接Copy文件
-                    else
-                    {
-
+                    else {
                         System.IO.File.Copy(file, aimPath + System.IO.Path.GetFileName(file), true);
                     }
                 }
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
+
+                ret = true;
+            });
+            return ret;
+
         }
 
-        public static bool CopyDir(string srcPath, string aimPath)
-        {
-            try
-            {
+        public static bool CopyDir(string srcPath, string aimPath) {
+
+            bool ret = false;
+            Log.Record(() => {
+
                 // 检查目标目录是否以目录分割字符结束如果不是则添加
-                if (aimPath[aimPath.Length - 1] != System.IO.Path.DirectorySeparatorChar)
-                {
+                if (aimPath[aimPath.Length - 1] != System.IO.Path.DirectorySeparatorChar) {
                     aimPath += System.IO.Path.DirectorySeparatorChar;
                 }
+
                 // 判断目标目录是否存在如果不存在则新建
-                if (!System.IO.Directory.Exists(aimPath))
-                {
+                if (!System.IO.Directory.Exists(aimPath)) {
                     System.IO.Directory.CreateDirectory(aimPath);
                 }
+
                 // 得到源目录的文件列表，该里面是包含文件以及目录路径的一个数组
                 // 如果你指向copy目标文件下面的文件而不包含目录请使用下面的方法
                 // string[] fileList = Directory.GetFiles（srcPath）；
                 string[] fileList = System.IO.Directory.GetFileSystemEntries(srcPath);
+
+                // 只复制这几个文件
+                List<string> checkFiles = new List<string>();
+                checkFiles.Add("cfg_param.xml");
+                checkFiles.Add("cfg_app.xml");
+                checkFiles.Add("cfg_tiebiao.xml");
+
                 // 遍历所有的文件和目录
-                foreach (string file in fileList)
-                {
+                foreach (string file in fileList) {
                     // 先当作目录处理如果存在这个目录就递归Copy该目录下面的文件
-                    if (System.IO.Directory.Exists(file))
-                    {
+                    if (System.IO.Directory.Exists(file)) {
                         CopyDir(file, aimPath + System.IO.Path.GetFileName(file));
                     }
+
                     // 否则直接Copy文件
-                    else
-                    {
-                        if (string.Equals(System.IO.Path.GetFileName(file), "cfg_param.xml") || string.Equals(System.IO.Path.GetFileName(file), "cfg_app.xml") || string.Equals(System.IO.Path.GetFileName(file), "cfg_tiebiao.xml"))
-                        {
+                    else {
+
+                        if ( checkFiles.Contains(System.IO.Path.GetFileName(file) )) {
                             System.IO.File.Copy(file, aimPath + System.IO.Path.GetFileName(file), true);
                         }
 
                     }
                 }
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
+
+                ret = true;
+            });
+            return ret;
+
         }
     }
 }
