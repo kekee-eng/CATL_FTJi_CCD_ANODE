@@ -61,7 +61,11 @@ namespace DetectCCD {
         public bool CameraByRealtime = false;
         public bool CameraByZipFile = true;
         public bool TestZipFileCircle = false;
+
+        //
         public string RollName = "";
+        public string MachineNum = "";
+        public string EmployeeNum = "";
 
         //
         public bool Is4K = false;

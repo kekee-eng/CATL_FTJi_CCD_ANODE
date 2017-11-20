@@ -65,6 +65,10 @@
             this.btnQuit = new DevExpress.XtraEditors.SimpleButton();
             this.btnStartGrab = new DevExpress.XtraEditors.SimpleButton();
             this.groupRoll = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl33 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl34 = new DevExpress.XtraEditors.LabelControl();
+            this.mainEmployeeNum = new DevExpress.XtraEditors.TextEdit();
+            this.mainMachineNum = new DevExpress.XtraEditors.TextEdit();
             this.btnRollSet = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
@@ -206,6 +210,8 @@
             this.groupDevice.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainEmployeeNum.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mainMachineNum.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainRollName.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainRecipeName.Properties)).BeginInit();
             this.xtraTabPage2.SuspendLayout();
@@ -628,6 +634,10 @@
             // 
             // groupRoll
             // 
+            this.groupRoll.Controls.Add(this.labelControl33);
+            this.groupRoll.Controls.Add(this.labelControl34);
+            this.groupRoll.Controls.Add(this.mainEmployeeNum);
+            this.groupRoll.Controls.Add(this.mainMachineNum);
             this.groupRoll.Controls.Add(this.btnRollSet);
             this.groupRoll.Controls.Add(this.labelControl1);
             this.groupRoll.Controls.Add(this.labelControl2);
@@ -635,13 +645,48 @@
             this.groupRoll.Controls.Add(this.mainRecipeName);
             this.groupRoll.Location = new System.Drawing.Point(351, 26);
             this.groupRoll.Name = "groupRoll";
-            this.groupRoll.Size = new System.Drawing.Size(284, 199);
+            this.groupRoll.Size = new System.Drawing.Size(284, 231);
             this.groupRoll.TabIndex = 6;
             this.groupRoll.Text = "膜卷记录";
             // 
+            // labelControl33
+            // 
+            this.labelControl33.Location = new System.Drawing.Point(44, 53);
+            this.labelControl33.Name = "labelControl33";
+            this.labelControl33.Size = new System.Drawing.Size(36, 14);
+            this.labelControl33.TabIndex = 7;
+            this.labelControl33.Text = "机台号";
+            // 
+            // labelControl34
+            // 
+            this.labelControl34.Location = new System.Drawing.Point(45, 84);
+            this.labelControl34.Name = "labelControl34";
+            this.labelControl34.Size = new System.Drawing.Size(36, 14);
+            this.labelControl34.TabIndex = 8;
+            this.labelControl34.Text = "员工号";
+            // 
+            // mainEmployeeNum
+            // 
+            this.mainEmployeeNum.Location = new System.Drawing.Point(87, 79);
+            this.mainEmployeeNum.MenuManager = this.barManager1;
+            this.mainEmployeeNum.Name = "mainEmployeeNum";
+            this.mainEmployeeNum.Properties.AutoHeight = false;
+            this.mainEmployeeNum.Size = new System.Drawing.Size(161, 25);
+            this.mainEmployeeNum.TabIndex = 9;
+            // 
+            // mainMachineNum
+            // 
+            this.mainMachineNum.EditValue = "";
+            this.mainMachineNum.Location = new System.Drawing.Point(87, 48);
+            this.mainMachineNum.MenuManager = this.barManager1;
+            this.mainMachineNum.Name = "mainMachineNum";
+            this.mainMachineNum.Properties.AutoHeight = false;
+            this.mainMachineNum.Size = new System.Drawing.Size(161, 25);
+            this.mainMachineNum.TabIndex = 10;
+            // 
             // btnRollSet
             // 
-            this.btnRollSet.Location = new System.Drawing.Point(147, 110);
+            this.btnRollSet.Location = new System.Drawing.Point(147, 174);
             this.btnRollSet.Name = "btnRollSet";
             this.btnRollSet.Size = new System.Drawing.Size(101, 30);
             this.btnRollSet.TabIndex = 6;
@@ -650,7 +695,7 @@
             // 
             // labelControl1
             // 
-            this.labelControl1.Location = new System.Drawing.Point(33, 53);
+            this.labelControl1.Location = new System.Drawing.Point(33, 117);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(48, 14);
             this.labelControl1.TabIndex = 0;
@@ -658,7 +703,7 @@
             // 
             // labelControl2
             // 
-            this.labelControl2.Location = new System.Drawing.Point(45, 84);
+            this.labelControl2.Location = new System.Drawing.Point(45, 148);
             this.labelControl2.Name = "labelControl2";
             this.labelControl2.Size = new System.Drawing.Size(36, 14);
             this.labelControl2.TabIndex = 2;
@@ -666,7 +711,7 @@
             // 
             // mainRollName
             // 
-            this.mainRollName.Location = new System.Drawing.Point(87, 79);
+            this.mainRollName.Location = new System.Drawing.Point(87, 143);
             this.mainRollName.MenuManager = this.barManager1;
             this.mainRollName.Name = "mainRollName";
             this.mainRollName.Properties.AutoHeight = false;
@@ -677,7 +722,7 @@
             // 
             this.mainRecipeName.EditValue = "";
             this.mainRecipeName.Enabled = false;
-            this.mainRecipeName.Location = new System.Drawing.Point(87, 48);
+            this.mainRecipeName.Location = new System.Drawing.Point(87, 112);
             this.mainRecipeName.MenuManager = this.barManager1;
             this.mainRecipeName.Name = "mainRecipeName";
             this.mainRecipeName.Properties.AutoHeight = false;
@@ -721,7 +766,7 @@
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(544, 616);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(545, 616);
             this.tableLayoutPanel8.TabIndex = 29;
             // 
             // groupStatuOuter
@@ -730,7 +775,7 @@
             this.groupStatuOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupStatuOuter.Location = new System.Drawing.Point(275, 3);
             this.groupStatuOuter.Name = "groupStatuOuter";
-            this.groupStatuOuter.Size = new System.Drawing.Size(266, 610);
+            this.groupStatuOuter.Size = new System.Drawing.Size(267, 610);
             this.groupStatuOuter.TabIndex = 1;
             this.groupStatuOuter.Text = "Camera2";
             this.groupStatuOuter.DoubleClick += new System.EventHandler(this.groupStatuOuter_DoubleClick);
@@ -751,7 +796,7 @@
             // splitContainerOuter.Panel2
             // 
             this.splitContainerOuter.Panel2.Controls.Add(this.hwinOuter);
-            this.splitContainerOuter.Size = new System.Drawing.Size(262, 587);
+            this.splitContainerOuter.Size = new System.Drawing.Size(263, 587);
             this.splitContainerOuter.SplitterDistance = 120;
             this.splitContainerOuter.TabIndex = 0;
             // 
@@ -767,7 +812,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(262, 120);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(263, 120);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -913,7 +958,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(125, 114);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(126, 114);
             this.tableLayoutPanel4.TabIndex = 27;
             // 
             // _lc_outer_defectCount
@@ -924,7 +969,7 @@
             this._lc_outer_defectCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_defectCount.Location = new System.Drawing.Point(66, 88);
             this._lc_outer_defectCount.Name = "_lc_outer_defectCount";
-            this._lc_outer_defectCount.Size = new System.Drawing.Size(55, 22);
+            this._lc_outer_defectCount.Size = new System.Drawing.Size(56, 22);
             this._lc_outer_defectCount.TabIndex = 34;
             this._lc_outer_defectCount.Text = "-";
             // 
@@ -948,7 +993,7 @@
             this._lc_outer_widthCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_widthCount.Location = new System.Drawing.Point(66, 60);
             this._lc_outer_widthCount.Name = "_lc_outer_widthCount";
-            this._lc_outer_widthCount.Size = new System.Drawing.Size(55, 21);
+            this._lc_outer_widthCount.Size = new System.Drawing.Size(56, 21);
             this._lc_outer_widthCount.TabIndex = 32;
             this._lc_outer_widthCount.Text = "-";
             // 
@@ -972,7 +1017,7 @@
             this._lc_outer_eaCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_eaCount.Location = new System.Drawing.Point(66, 32);
             this._lc_outer_eaCount.Name = "_lc_outer_eaCount";
-            this._lc_outer_eaCount.Size = new System.Drawing.Size(55, 21);
+            this._lc_outer_eaCount.Size = new System.Drawing.Size(56, 21);
             this._lc_outer_eaCount.TabIndex = 30;
             this._lc_outer_eaCount.Text = "-";
             // 
@@ -1008,7 +1053,7 @@
             this._lc_outer_caption.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_caption.Location = new System.Drawing.Point(66, 4);
             this._lc_outer_caption.Name = "_lc_outer_caption";
-            this._lc_outer_caption.Size = new System.Drawing.Size(55, 21);
+            this._lc_outer_caption.Size = new System.Drawing.Size(56, 21);
             this._lc_outer_caption.TabIndex = 29;
             this._lc_outer_caption.Text = "-";
             // 
@@ -1020,9 +1065,9 @@
             this.hwinOuter.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwinOuter.Location = new System.Drawing.Point(0, 0);
             this.hwinOuter.Name = "hwinOuter";
-            this.hwinOuter.Size = new System.Drawing.Size(262, 463);
+            this.hwinOuter.Size = new System.Drawing.Size(263, 463);
             this.hwinOuter.TabIndex = 30;
-            this.hwinOuter.WindowSize = new System.Drawing.Size(262, 463);
+            this.hwinOuter.WindowSize = new System.Drawing.Size(263, 463);
             // 
             // groupStatuInner
             // 
@@ -1374,7 +1419,7 @@
             this.panelTabMergeGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTabMergeGrid.Location = new System.Drawing.Point(0, 0);
             this.panelTabMergeGrid.Name = "panelTabMergeGrid";
-            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 153);
+            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 154);
             this.panelTabMergeGrid.TabIndex = 1;
             // 
             // xtraTabPage6
@@ -1512,7 +1557,7 @@
             this.splitContainerControl4.Panel2.Controls.Add(this.btnSelectRecipe);
             this.splitContainerControl4.Panel2.Controls.Add(this.btnAddRecipe);
             this.splitContainerControl4.Panel2.Text = "Panel2";
-            this.splitContainerControl4.Size = new System.Drawing.Size(473, 438);
+            this.splitContainerControl4.Size = new System.Drawing.Size(474, 438);
             this.splitContainerControl4.SplitterPosition = 84;
             this.splitContainerControl4.TabIndex = 0;
             this.splitContainerControl4.Text = "splitContainerControl4";
@@ -1523,7 +1568,7 @@
             this.xtraTabControl3.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl3.Name = "xtraTabControl3";
             this.xtraTabControl3.SelectedTabPage = this.xtraTabPage8;
-            this.xtraTabControl3.Size = new System.Drawing.Size(469, 344);
+            this.xtraTabControl3.Size = new System.Drawing.Size(470, 345);
             this.xtraTabControl3.TabIndex = 0;
             this.xtraTabControl3.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage8,
@@ -1549,7 +1594,7 @@
             this.xtraTabPage8.Controls.Add(this.labelControl27);
             this.xtraTabPage8.Controls.Add(this.labelControl31);
             this.xtraTabPage8.Name = "xtraTabPage8";
-            this.xtraTabPage8.Size = new System.Drawing.Size(463, 315);
+            this.xtraTabPage8.Size = new System.Drawing.Size(464, 316);
             this.xtraTabPage8.Text = "常用参数";
             // 
             // textRecipeName
@@ -1692,7 +1737,7 @@
             // 
             this.xtraTabPage9.Controls.Add(this.dataRecipe);
             this.xtraTabPage9.Name = "xtraTabPage9";
-            this.xtraTabPage9.Size = new System.Drawing.Size(463, 315);
+            this.xtraTabPage9.Size = new System.Drawing.Size(464, 316);
             this.xtraTabPage9.Text = "高级参数";
             // 
             // dataRecipe
@@ -1703,7 +1748,7 @@
             this.dataRecipe.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataRecipe.Location = new System.Drawing.Point(0, 0);
             this.dataRecipe.Name = "dataRecipe";
-            this.dataRecipe.Size = new System.Drawing.Size(463, 315);
+            this.dataRecipe.Size = new System.Drawing.Size(464, 316);
             this.dataRecipe.TabIndex = 0;
             // 
             // btnApplyRecipe
@@ -2080,6 +2125,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
             this.groupRoll.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainEmployeeNum.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mainMachineNum.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainRollName.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainRecipeName.Properties)).EndInit();
             this.xtraTabPage2.ResumeLayout(false);
@@ -2331,5 +2378,9 @@
         private DevExpress.XtraEditors.SimpleButton btnBackupALL;
         private DevExpress.XtraBars.BarStaticItem status_OpenTiebiao;
         private DevExpress.XtraEditors.SimpleButton btnReturnAll;
+        private DevExpress.XtraEditors.LabelControl labelControl33;
+        private DevExpress.XtraEditors.LabelControl labelControl34;
+        private DevExpress.XtraEditors.TextEdit mainEmployeeNum;
+        private DevExpress.XtraEditors.TextEdit mainMachineNum;
     }
 }
