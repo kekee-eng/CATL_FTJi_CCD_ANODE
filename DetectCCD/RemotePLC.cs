@@ -164,7 +164,7 @@ using static DetectCCD.UtilSerialization;
         public double COATED_SUMWIDTH_S;
 
         public string FilePathWidth;
-        public string FilePathLabel;
+        public string FilePathSendToMes;
 
         public double FilmWidthMin;
         public double FilmWidthMax;
@@ -173,6 +173,8 @@ using static DetectCCD.UtilSerialization;
 
         public int EaOkNum;
         public int EaNgNum;
+        public int InnerLableNum=0;
+        public int OuterLableNum=0;
         public int EAContextJoin;
         public int EAContextTag;
         public int EAContextLeakMetal;
