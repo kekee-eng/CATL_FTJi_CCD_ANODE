@@ -152,11 +152,13 @@ using static DetectCCD.UtilSerialization;
         public double FILM_WIDTH_LEFT_S;
         public double FILM_WIDTH_RIGHT_M;
         public double FILM_WIDTH_RIGHT_S;
+        public double FILM_WIDTH_LRIGHT_S;
 
         public double COATED_WIDTH_LEFT_M;
         public double COATED_WIDTH_LEFT_S;
         public double COATED_WIDTH_RIGHT_M;
         public double COATED_WIDTH_RIGHT_S;
+        public double COATED_WIDTH_LRIGHT_S;
 
         public double FILM_SUMWIDTH_M;
         public double FILM_SUMWIDTH_S;

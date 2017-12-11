@@ -1050,6 +1050,10 @@ namespace DetectCCD
                             var FilmOuterWidthMean = FilmOuterWidthList.Average();
                             var FilmOuterWidthSigma = Math.Sqrt(FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Average());
 
+                            var FilmInOuterWidthSigma = Math.Sqrt((FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Sum()+ FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Sum())/ (FilmOuterWidthList.Count()+ FilmInnerWidthList.Count()));
+
+
+
                             var CoatedInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 20);
                             var CoatedInnerWidthMean = CoatedInnerWidthList.Average();
                             var CoatedInnerWidthSigma = Math.Sqrt(CoatedInnerWidthList.Select(x => (x - CoatedInnerWidthMean) * (x - CoatedInnerWidthMean)).Average());
@@ -1058,7 +1062,7 @@ namespace DetectCCD
                             var CoatedOuterWidthMean = CoatedOuterWidthList.Average();
                             var CoatedOuterWidthSigma = Math.Sqrt(CoatedOuterWidthList.Select(x => (x - CoatedOuterWidthMean) * (x - CoatedOuterWidthMean)).Average());
 
-
+                            var CoatedInOuterWidthSigma = Math.Sqrt((CoatedOuterWidthList.Select(x => (x - CoatedOuterWidthMean) * (x - CoatedOuterWidthMean)).Sum() + CoatedInnerWidthList.Select(x => (x - CoatedInnerWidthMean) * (x - CoatedInnerWidthMean)).Sum()) / (CoatedOuterWidthList.Count() + CoatedInnerWidthList.Count()));
 
                             var totalWidth =
                                 from x in process.InnerDetect.Tabs
@@ -1091,10 +1095,12 @@ namespace DetectCCD
                             FilmData.FILM_WIDTH_LEFT_S = FilmInnerWidthSigma;
                             FilmData.FILM_WIDTH_RIGHT_M = FilmOuterWidthMean;
                             FilmData.FILM_WIDTH_RIGHT_S = FilmOuterWidthSigma;
+                            FilmData.FILM_WIDTH_LRIGHT_S = FilmInOuterWidthSigma;
                             FilmData.COATED_WIDTH_LEFT_M = CoatedInnerWidthMean;
                             FilmData.COATED_WIDTH_LEFT_S = CoatedInnerWidthSigma;
                             FilmData.COATED_WIDTH_RIGHT_M = CoatedOuterWidthMean;
                             FilmData.COATED_WIDTH_RIGHT_S = CoatedOuterWidthSigma;
+                            FilmData.COATED_WIDTH_LRIGHT_S = CoatedInOuterWidthSigma;
                             FilmData.FILM_SUMWIDTH_M = FilmWidthMean;
                             FilmData.FILM_SUMWIDTH_S = FilmWidthSigma;
                             FilmData.COATED_SUMWIDTH_M = FilmWidthMean;
