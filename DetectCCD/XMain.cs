@@ -861,7 +861,7 @@ namespace DetectCCD
             Log.Record(() =>
             {
 
-                groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;
+                groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && isRollOk;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
                 groupRoll.Enabled = Static.App.Is4K;
@@ -890,7 +890,15 @@ namespace DetectCCD
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
 
-                btnStartGrab.Enabled = device.isOpen && !device.isGrabbing;
+                if (isRollOk)
+                {
+                    btnStartGrab.Enabled = device.isOpen && !device.isGrabbing&&!isRepeatRoll;
+                }
+                else
+                {
+                    btnStartGrab.Enabled = false;
+                }
+               
                 btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
 
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
@@ -996,7 +1004,8 @@ namespace DetectCCD
                 selectFullScreen.ImageIndex = 6;
             }
         }
-        FilmLevel FilmData;       
+        FilmLevel FilmData;
+        bool isRepeatRoll = false;     
         private void btnRollSet_Click(object sender, EventArgs e)
         {
             runAction((sender as SimpleButton).Text, () =>
@@ -1039,7 +1048,7 @@ namespace DetectCCD
                     //
                     try
                     {
-                        if(process.InnerDetect.Tabs.Count>0&&process.OuterDetect.Tabs.Count>0)
+                        if(!isRepeatRoll && process.InnerDetect.Tabs.Count>0&&process.OuterDetect.Tabs.Count>0)
                         {
                             FilmData.StopTime = DateTime.Now;
                             var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 20);
@@ -1131,6 +1140,7 @@ namespace DetectCCD
                     mainMachineNum.Enabled = true;
                     btnRollSet.Text = "设置膜卷";
                     isRollOk = false;
+                    isRepeatRoll = true;
                 }
             });
         }
@@ -1170,6 +1180,7 @@ namespace DetectCCD
                     DeviceInit();
                     DeviceStartGrab();
                     UtilTool.XFWait.Close();
+                    isRepeatRoll = false;
                 }
             });
         }
