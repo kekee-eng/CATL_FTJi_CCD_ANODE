@@ -267,7 +267,7 @@ namespace DetectCCD
                                 {
                                     lock (process)
                                     {
-                                        detect.TrySync(process.InnerDetect);
+                                        detect.TrySync(process.InnerDetect,process.OuterDetect);
                                     }
                                 }
                             }

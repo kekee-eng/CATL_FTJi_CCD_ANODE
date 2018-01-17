@@ -634,7 +634,7 @@ namespace DetectCCD {
                         g.WriteString(string.Format("#{0}.#{1}", tab.EA, tab.TAB));
 
                     }
-                    if (showContextWidth) {
+                    if (showContextWidth&&!tab.IsFail) {
 
                         //测宽
                         g.SetDraw("margin");
@@ -686,7 +686,8 @@ namespace DetectCCD {
                         g.DispLine(getPixRow(tab.WidthY2), getPixCol(0), getPixRow(tab.WidthY2), getPixCol(1));
 
                         double dx = (tab.WidthY2 - tab.WidthY1) * grabHeight / grabWidth;
-                        for (double xp = 0; xp < 1 + dx; xp += 0.05) {
+                        for (double xp = 0; xp < 1 + dx; xp += 0.05)
+                        {
                             g.DispLine(getPixRow(tab.WidthY1), getPixCol(xp), getPixRow(tab.WidthY2), getPixCol(xp - dx));
                         }
                     }
@@ -700,7 +701,8 @@ namespace DetectCCD {
                         g.DispLine(getPixRow(tab.MarkImageEnd), getPixCol(0), getPixRow(tab.MarkImageEnd), getPixCol(1));
 
                         double dx = (tab.MarkImageEnd - tab.MarkImageStart) * grabHeight / grabWidth;
-                        for (double xp = -dx; xp < 1; xp += 0.05) {
+                        for (double xp = -dx; xp < 1; xp += 0.05)
+                        {
                             g.DispLine(getPixRow(tab.MarkImageStart), getPixCol(xp), getPixRow(tab.MarkImageEnd), getPixCol(xp + dx));
                         }
                     }

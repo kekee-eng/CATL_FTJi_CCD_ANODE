@@ -158,9 +158,9 @@ namespace DetectCCD {
             }
 
         }
-        public void TrySync(EntryDetect partner)
+        public void TrySync(EntryDetect partner, EntryDetect partner2)
         {
-
+           
             // diff = this - partner
             // this = partner + diff
             // partner = this - diff
@@ -177,7 +177,7 @@ namespace DetectCCD {
             {
 
                 //未找到：对方补测一个宽度
-                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
+                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame, partner);
             }
             else
             {
@@ -221,7 +221,7 @@ namespace DetectCCD {
                     break;
 
                 //补测宽度
-                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
+                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame, partner2);
 
                 //同步EA头
                 if (missER.IsNewEA || myMissER.IsNewEA)
@@ -610,7 +610,7 @@ namespace DetectCCD {
         DataTab findBind(double frame) {
             return TabsCache.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Recipe.TabMergeDistance);
         }
-        DataTab fixER(double x, double y1, double y2) {
+        DataTab fixER(double x, double y1, double y2, EntryDetect partner) {
 
             int w = grab.Width;
             int h = grab.Height;
@@ -627,13 +627,30 @@ namespace DetectCCD {
             double bfy2 = data.TabY1 + Static.Recipe.TabWidthEnd / Fy;
 
             var bimage = grab.GetImage(bfy1, bfy2);
-            if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
-                data.WidthY1 = bfy1;
-                data.WidthY2 = bfy2;
-                data.WidthX1 = bx1[0] / w;
-                data.WidthX2 = bx2[0] / w;
+        //    if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {    bimage?.Dispose();}
+          if(bimage != null)
+            {
+                DataTab dataCopy = new DataTab();
+                for (int a = partner.Tabs.Count; a > 0; a--)
+                {
+                    dataCopy = partner.Tabs[a - 1];
+                    if (!dataCopy.IsFix)
+                    {
+                        data.WidthY1 = dataCopy.WidthY1;
+                        data.WidthY2 = dataCopy.WidthY2;
+                        data.WidthX1 = dataCopy.WidthX1;
+                        data.WidthX2 = dataCopy.WidthX2;
+                        break;
+                    }
+                }
+              
             }
             bimage?.Dispose();
+            //data.WidthY1 = bfy1;
+            //data.WidthY2 = bfy2;
+            //data.WidthX1 = bx1[0] / w;
+            //data.WidthX2 = bx2[0] / w;
+
 
             //
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
@@ -666,7 +683,7 @@ namespace DetectCCD {
 
             data.IsFix = true;
             data.IsSync = true;
-
+           
             TabsCache.Add(data);
             return data;
         }
