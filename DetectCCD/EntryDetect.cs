@@ -551,7 +551,9 @@ namespace DetectCCD {
                                 defect.Width = defect.W * Fx;
                                 defect.Height = defect.H * Fy;
                                 defect.Area = earea[i] * Fx * Fy / w / h;
-
+                                //判断膜漏金属和AT9漏金属的规格
+                                if (defect.Type == 2 && defect.Area <= Static.Recipe.FilmLeakMetalArea)
+                                    continue;
                                 myDefects.Add(defect);
                             }
 

@@ -652,8 +652,8 @@ namespace DetectCCD
                         DateTime.Now.Second
                         );
 
-                    FilmData.FilePathWidth = path.Replace("..", System.Windows.Forms.Application.StartupPath).Replace("\\Bin","");
-                    csvWidthWriter = new StreamWriter(path);                    
+                    FilmData.FilePathWidth = path.Replace("..", System.Windows.Forms.Application.StartupPath).Replace("\\Bin", "");
+                    csvWidthWriter = new StreamWriter(path);
                     csvWidthWriter.WriteLine("膜卷号," + FilmData.FilmNum);
                     csvWidthWriter.WriteLine("品种," + "NA");
                     csvWidthWriter.WriteLine("分条机号," + FilmData.MachineNum);
@@ -662,30 +662,34 @@ namespace DetectCCD
                     csvWidthWriter.WriteLine("分条膜宽目标," + Static.Recipe.TabWidthTarget);
                     csvWidthWriter.WriteLine("膜宽上限," + Static.Recipe.TabWidthMax);
                     csvWidthWriter.WriteLine("膜宽下限," + Static.Recipe.TabWidthMin);
-                    csvWidthWriter.WriteLine("分条极宽目标," + "NA");
-                    csvWidthWriter.WriteLine("极宽上限," +"NA");
+                    csvWidthWriter.WriteLine("极宽上限," + "NA");
                     csvWidthWriter.WriteLine("极宽下限," + "NA");
+                    csvWidthWriter.WriteLine("分条极宽目标," + "NA");
                     csvWidthWriter.WriteLine("优率," + "正在计算");
                     csvWidthWriter.WriteLine("EA总数," + "正在计算");
                     csvWidthWriter.WriteLine("内打标数," + "正在计算");
                     csvWidthWriter.WriteLine("外打标数," + "正在计算");
                     csvWidthWriter.WriteLine("");
-                    csvWidthWriter.WriteLine("EA数序号,外膜宽,外极宽,内膜宽,内极宽,总膜宽,总极宽,缺陷类型,打标数目,");
+                    csvWidthWriter.WriteLine("时间,EA数序号,极耳序号,内膜宽,外膜宽,内AT9,外AT9,内极宽,外极宽,总膜宽,总极宽,缺陷类型,打标数目,");
 
                 }
 
                 Action<double> appendItem = val => csvWidthWriter.Write(val.ToString("0.000") + ",");
 
                 //csvWidthWriter.Write(DateTime.Now.ToString() + ",");
-                csvWidthWriter.Write(inner.EA + ",");              
-                appendItem(outer.ValWidth);
-                appendItem(outer.ValWidth);
+                csvWidthWriter.Write(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ",");
+                appendItem(inner.EA);
+                appendItem(inner.TAB);
                 appendItem(inner.ValWidth);
-                appendItem(inner.ValWidth);               
+                appendItem(outer.ValWidth);
+                csvWidthWriter.Write("NA" + ",");
+                csvWidthWriter.Write("NA" + ",");
+                csvWidthWriter.Write("NA" + ",");
+                csvWidthWriter.Write("NA" + ",");
                 appendItem(inner.ValWidth + outer.ValWidth);
-                appendItem(inner.ValWidth + outer.ValWidth);                         
+                csvWidthWriter.Write("NA" + ",");
                 csvWidthWriter.WriteLine();
-                
+
             });
         }
         void saveLablCountCsv(DataEA inner, DataEA outer)
@@ -708,7 +712,7 @@ namespace DetectCCD
                         DateTime.Now.Second
                         );
                     FilmData.FilePathWidth = path;
-                    csvWidthWriter = new StreamWriter(path);                   
+                    csvWidthWriter = new StreamWriter(path);
                     csvWidthWriter.WriteLine("膜卷号," + FilmData.FilmNum);
                     csvWidthWriter.WriteLine("品种," + "NA");
                     csvWidthWriter.WriteLine("分条机号," + FilmData.MachineNum);
@@ -717,36 +721,44 @@ namespace DetectCCD
                     csvWidthWriter.WriteLine("分条膜宽目标," + Static.Recipe.TabWidthTarget);
                     csvWidthWriter.WriteLine("膜宽上限," + Static.Recipe.TabWidthMax);
                     csvWidthWriter.WriteLine("膜宽下限," + Static.Recipe.TabWidthMin);
-                    csvWidthWriter.WriteLine("分条极宽目标," + "NA");
                     csvWidthWriter.WriteLine("极宽上限," + "NA");
                     csvWidthWriter.WriteLine("极宽下限," + "NA");
+                    csvWidthWriter.WriteLine("分条极宽目标," + "NA");
                     csvWidthWriter.WriteLine("优率," + "正在计算");
                     csvWidthWriter.WriteLine("EA总数," + "正在计算");
                     csvWidthWriter.WriteLine("内打标数," + "正在计算");
                     csvWidthWriter.WriteLine("外打标数," + "正在计算");
                     csvWidthWriter.WriteLine("");
-                    csvWidthWriter.WriteLine("EA数序号,外膜宽,外极宽，内膜宽,内极宽，总膜宽,总极宽，缺陷类型，打标数目,");
-                }               
+                    csvWidthWriter.WriteLine("时间,EA数序号,极耳序号,内膜宽,外膜宽,内AT9,外AT9,内极宽,外极宽,总膜宽,总极宽,缺陷类型,打标数目,");
+                }
 
+                csvWidthWriter.Write(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ",");
                 csvWidthWriter.Write(inner.EA + ",");
                 csvWidthWriter.Write("内侧" + ",");
-                csvWidthWriter.Write("标签"+ (inner.DefectCountBack_Tag+ inner.DefectCountFront_Tag).ToString() + ",");
+                csvWidthWriter.Write("标签" + (inner.DefectCountBack_Tag + inner.DefectCountFront_Tag).ToString() + ",");
                 csvWidthWriter.Write("漏金属" + (inner.DefectCountBack_LeakMetal + inner.DefectCountFront_LeakMetal).ToString() + ",");
                 csvWidthWriter.Write("接带" + (inner.DefectCountBack_Join + inner.DefectCountFront_Join).ToString() + ",");
                 csvWidthWriter.Write("宽度不良" + inner.TabWidthFailCount + ",");
                 csvWidthWriter.Write(",");
                 csvWidthWriter.Write(",");
+                csvWidthWriter.Write(",");
+                csvWidthWriter.Write(",");
+                csvWidthWriter.Write(",");
                 csvWidthWriter.Write((outer.IsFail ? "1" : "0") + ",");
                 csvWidthWriter.WriteLine();
-                csvWidthWriter.Write(outer.EA + ",");
+                csvWidthWriter.Write(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ",");
+                csvWidthWriter.Write(inner.EA + ",");
                 csvWidthWriter.Write("外侧" + ",");
                 csvWidthWriter.Write("标签" + (outer.DefectCountBack_Tag + outer.DefectCountFront_Tag).ToString() + ",");
                 csvWidthWriter.Write("漏金属" + (outer.DefectCountBack_LeakMetal + outer.DefectCountFront_LeakMetal).ToString() + ",");
                 csvWidthWriter.Write("接带" + (outer.DefectCountBack_Join + outer.DefectCountFront_Join).ToString() + ",");
                 csvWidthWriter.Write("宽度不良" + outer.TabWidthFailCount.ToString() + ",");
-                csvWidthWriter.Write( ",");
                 csvWidthWriter.Write(",");
-                csvWidthWriter.Write(( outer.IsFail?"1":"0") + ",");
+                csvWidthWriter.Write(",");
+                csvWidthWriter.Write(",");
+                csvWidthWriter.Write(",");
+                csvWidthWriter.Write(",");
+                csvWidthWriter.Write((outer.IsFail ? "1" : "0") + ",");
                 csvWidthWriter.WriteLine();
 
             });
@@ -1051,11 +1063,11 @@ namespace DetectCCD
                         if(!isRepeatRoll && process.InnerDetect.Tabs.Count>0&&process.OuterDetect.Tabs.Count>0)
                         {
                             FilmData.StopTime = DateTime.Now;
-                            var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 20);
+                            var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
                             var FilmInnerWidthMean = FilmInnerWidthList.Average();
                             var FilmInnerWidthSigma = Math.Sqrt(FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Average());
 
-                            var FilmOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 20);
+                            var FilmOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
                             var FilmOuterWidthMean = FilmOuterWidthList.Average();
                             var FilmOuterWidthSigma = Math.Sqrt(FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Average());
 
@@ -1063,11 +1075,11 @@ namespace DetectCCD
 
 
 
-                            var CoatedInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 20);
+                            var CoatedInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
                             var CoatedInnerWidthMean = CoatedInnerWidthList.Average();
                             var CoatedInnerWidthSigma = Math.Sqrt(CoatedInnerWidthList.Select(x => (x - CoatedInnerWidthMean) * (x - CoatedInnerWidthMean)).Average());
 
-                            var CoatedOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 20);
+                            var CoatedOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
                             var CoatedOuterWidthMean = CoatedOuterWidthList.Average();
                             var CoatedOuterWidthSigma = Math.Sqrt(CoatedOuterWidthList.Select(x => (x - CoatedOuterWidthMean) * (x - CoatedOuterWidthMean)).Average());
 
@@ -1082,8 +1094,8 @@ namespace DetectCCD
                             //  Enumerable.Range(0, 100).Select(x => process.InnerDetect.Tabs[x].ValWidth);
 
 
-                            var FilmWidthList = totalWidth.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 10);
-                            var FilmWidthMean = FilmWidthList.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 10).Average();
+                            var FilmWidthList = totalWidth.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 2);
+                            var FilmWidthMean = FilmWidthList.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 2).Average();
                             var FilmWidthSigma = Math.Sqrt(FilmWidthList.Select(x => (x - FilmWidthMean) * (x - FilmWidthMean)).Average());
 
                             var InnerEaOk = process.InnerDetect.EAs.Count(x => !x.IsFail);

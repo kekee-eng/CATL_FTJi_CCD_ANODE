@@ -49,5 +49,6 @@ namespace DetectCCD {
         //
         public double EALength = 0;
 
+        public double FilmLeakMetalArea = 0.1;
     }
 }

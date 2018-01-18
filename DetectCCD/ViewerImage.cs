@@ -634,7 +634,7 @@ namespace DetectCCD {
                         g.WriteString(string.Format("#{0}.#{1}", tab.EA, tab.TAB));
 
                     }
-                    if (showContextWidth&&!tab.IsFail) {
+                    if (showContextWidth&&!tab.IsFix) {
 
                         //测宽
                         g.SetDraw("margin");
