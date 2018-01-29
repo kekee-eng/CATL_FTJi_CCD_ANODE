@@ -566,7 +566,7 @@ namespace DetectCCD {
                             //保存NG小图
                             if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall)
                             {
-                                for (int i = 0; i < ecc; i++)
+                                for (int i = 0; i < myDefects.Count; i++)
                                 {
                                     var defect = myDefects[i];
                                     if (defect.Type < Static.App.RecordSaveImageNGSmallMaxType)

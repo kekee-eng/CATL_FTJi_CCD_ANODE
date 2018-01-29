@@ -120,6 +120,7 @@ namespace DetectCCD {
                     }
                     // 否则直接Copy文件
                     else {
+                        System.IO.File.Delete(aimPath + System.IO.Path.GetFileName(file));
                         System.IO.File.Copy(file, aimPath + System.IO.Path.GetFileName(file), true);
                     }
                 }
@@ -167,6 +168,7 @@ namespace DetectCCD {
                     else {
 
                         if ( checkFiles.Contains(System.IO.Path.GetFileName(file) )) {
+                            System.IO.File.Delete(aimPath + System.IO.Path.GetFileName(file));
                             System.IO.File.Copy(file, aimPath + System.IO.Path.GetFileName(file), true);
                         }
 

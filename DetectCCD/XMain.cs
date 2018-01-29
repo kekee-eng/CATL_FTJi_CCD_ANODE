@@ -711,7 +711,7 @@ namespace DetectCCD
                         DateTime.Now.Minute,
                         DateTime.Now.Second
                         );
-                    FilmData.FilePathWidth = path;
+                  //  FilmData.FilePathWidth = path;
                     csvWidthWriter = new StreamWriter(path);
                     csvWidthWriter.WriteLine("膜卷号," + FilmData.FilmNum);
                     csvWidthWriter.WriteLine("品种," + "NA");
@@ -812,7 +812,7 @@ namespace DetectCCD
                         DateTime.Now.Minute,
                         DateTime.Now.Second
                         );
-                    FilmData.FilePathWidth = path;
+                  //  FilmData.FilePathWidth = path;
                     csvLabelWriter = new StreamWriter(path);
                     csvLabelWriter.WriteLine("时间,EA数,位置,贴标原因");
 
