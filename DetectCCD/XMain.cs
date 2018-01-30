@@ -781,7 +781,7 @@ namespace DetectCCD
                 }
                 fileReader.Close();
                 ls[4][1] = FilmData.StopTime.ToString("yyyy-MM-dd HH:mm:ss");
-                ls[11][1] = ((double)FilmData.EaOkNum /(double) (FilmData.EaNgNum+ FilmData.EaOkNum)).ToString("00%");
+                ls[11][1] = ((double)FilmData.EaOkNum /(double) (FilmData.EaNgNum+ FilmData.EaOkNum)).ToString("00.00%");
                 ls[12][1] = (FilmData.EaNgNum + FilmData.EaOkNum).ToString();
                 ls[13][1] = FilmData.InnerLableNum.ToString();
                 ls[14][1] = FilmData.OuterLableNum.ToString();
