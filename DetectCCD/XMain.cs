@@ -107,10 +107,11 @@ namespace DetectCCD
 
                     start = Static.App.FrameInnerToFront(isFront, isInner, start);
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
-
-                    var ret = (isFront ? process.InnerDetect : process.OuterDetect).AllocAndGetDefectCount(start, end, id);
-                    return ret;
-
+                    lock (process)
+                    {
+                        var ret = (isFront ? process.InnerDetect : process.OuterDetect).AllocAndGetDefectCount(start, end, id);
+                        return ret;
+                    }
                 };
                 RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, ea) =>
                 {
@@ -513,6 +514,36 @@ namespace DetectCCD
                     Log.Record(() => RemoteDefect.In4KCall8K_SetRoll(Static.Recipe.RecipeName, Static.App.RollName));
 
                 }
+                //else
+                //{
+                //    //8K
+                //    runAction("内侧缺陷保存", () =>
+                //    {
+                //        foreach (var item in process.InnerDetect.Defects)
+                //        {
+                //            lock(process)
+                //            {
+                //                saveDetectCSV(item,"内侧");
+                //            }
+                            
+                //        }
+                //        closeDetectCSV();
+                        
+                //    });
+                //    runAction("外侧缺陷保存", () =>
+                //    {
+                        
+                //        foreach (var item in process.OuterDetect.Defects)
+                //        {
+                //            lock (process)
+                //            {
+                //                saveDetectCSV(item, "外侧");
+                //            }
+
+                //        }
+                //        closeDetectCSV();
+                //    });
+                //}
 
                 //
                 ImageProcess.Init();
@@ -594,6 +625,37 @@ namespace DetectCCD
                 {
                     Log.Record(RemoteDefect.In4KCall8K_StopGrab);
                 }
+                else
+                {
+                    //8K
+                    runAction("内侧缺陷保存", () =>
+                    {
+                        foreach (var item in process.InnerDetect.Defects)
+                        {
+                            lock (process)
+                            {
+                                saveDetectCSV(item, "内侧");
+                            }
+
+                        }
+                        closeDetectCSV();
+
+                    });
+                    runAction("外侧缺陷保存", () =>
+                    {
+
+                        foreach (var item in process.OuterDetect.Defects)
+                        {
+                            lock (process)
+                            {
+                                saveDetectCSV(item, "外侧");
+                            }
+
+                        }
+                        closeDetectCSV();
+                    });
+                }
+
             });
         }
         public void DeviceUninit()
@@ -614,6 +676,7 @@ namespace DetectCCD
 
         StreamWriter csvWidthWriter = null;
         StreamWriter csvLabelWriter = null;
+        StreamWriter csvDetectWriter = null;
         void closeWidthCSV()
         {
             if (csvWidthWriter != null)
@@ -631,6 +694,52 @@ namespace DetectCCD
                 csvLabelWriter.Dispose();
                 csvLabelWriter = null;
             }
+        }
+        void closeDetectCSV()
+        {
+            if (csvDetectWriter != null)
+            {
+                csvDetectWriter.Flush();
+                csvDetectWriter.Dispose();
+                csvDetectWriter = null;
+            }
+        }
+        void saveDetectCSV(DataDefect dt,string name)
+        {
+            Log.Record(() =>
+            {
+                if (csvDetectWriter == null)
+                {
+                    var folder = Static.FolderRecord;
+                    if (!Directory.Exists(folder))
+                        Directory.CreateDirectory(folder);
+                    var path = string.Format("{0}\\{1}_缺陷-{2:D2}-{3:D2}_{4:D2}-{5:D2}-{6:D2}.csv",
+                        folder,                        
+                        name,                       
+                        DateTime.Now.Month,
+                        DateTime.Now.Day,
+                        DateTime.Now.Hour,
+                        DateTime.Now.Minute,
+                        DateTime.Now.Second
+                        );
+                    csvDetectWriter = new StreamWriter(path);
+                    csvDetectWriter.WriteLine("EA数序号,类型,X,Y,宽度,高度,面积,");
+
+                }
+
+                Action<double> appendItem = val => csvDetectWriter.Write(val.ToString("0.000") + ",");
+                          
+                appendItem(dt.EA);
+                csvDetectWriter.Write(dt.GetTypeCaption()+",");
+               // appendItem(dt.Type);
+                appendItem(dt.X);
+                appendItem(dt.Y);
+                appendItem(dt.Width);
+                appendItem(dt.Height);
+                appendItem(dt.Area);
+                csvDetectWriter.WriteLine();
+
+            });
         }
         void saveWidthCSV(DataTab inner, DataTab outer)
         {
@@ -915,6 +1024,7 @@ namespace DetectCCD
 
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
+                checkSaveMark.Enabled= Static.App.RecordSaveImageEnable;
 
                 if (device.isOpen)
                 {
@@ -1060,7 +1170,7 @@ namespace DetectCCD
                     //
                     try
                     {
-                        if(!isRepeatRoll && process.InnerDetect.Tabs.Count>0&&process.OuterDetect.Tabs.Count>0)
+                        if(Static.App.Is4K && !isRepeatRoll && process.InnerDetect.Tabs.Count>0&&process.OuterDetect.Tabs.Count>0)
                         {
                             FilmData.StopTime = DateTime.Now;
                             var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
