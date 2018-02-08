@@ -981,8 +981,8 @@ namespace DetectCCD
 
             Log.Record(() =>
             {
-
-                groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && isRollOk;
+                
+                groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;              
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
                 groupRoll.Enabled = Static.App.Is4K;
