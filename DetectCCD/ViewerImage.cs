@@ -601,6 +601,7 @@ namespace DetectCCD {
             for (int i = 0; i < Detect.Tabs.Count; i++) {
 
                 var tab = Detect.Tabs[i];
+               
                 if (tab.InRange(frameStart, frameEnd)) {
                     countTab++;
 
@@ -653,29 +654,29 @@ namespace DetectCCD {
                         g.WriteString(tab.ValWidth.ToString("0.000"));
 
                     }
-                    if (showContextMark && tab.IsNewEA) {
-                        countMark++;
+                    //if (showContextMark && tab.IsNewEA) {
+                    //    countMark++;
 
-                        //EA-Mark点
-                        g.SetDraw("margin");
-                        g.SetColor("blue");
-                        g.SetLineWidth(3);
-                        g.DispCross(getPixRow(tab.MarkY), getPixCol(tab.MarkX), crossSize, crossAngle);
-                        if (tab.HasTwoMark)
-                            g.DispCross(getPixRow(tab.MarkY_P), getPixCol(tab.MarkX_P), crossSize, crossAngle);
+                    //    //EA-Mark点
+                    //    g.SetDraw("margin");
+                    //    g.SetColor("blue");
+                    //    g.SetLineWidth(3);
+                    //    g.DispCross(getPixRow(tab.MarkY), getPixCol(tab.MarkX), crossSize, crossAngle);
+                    //    if (tab.HasTwoMark)
+                    //        g.DispCross(getPixRow(tab.MarkY_P), getPixCol(tab.MarkX_P), crossSize, crossAngle);
 
-                        //EA头部显示
-                        g.SetDraw("margin");
-                        g.SetColor("yellow");
-                        g.SetLineWidth(1);
-                        g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
-                        g.DispLine(getPixRow(tab.MarkY), getPixCol(0), getPixRow(tab.MarkY), getPixCol(1));
-                        g.SetLineStyle(new HTuple());
+                    //    //EA头部显示
+                    //    g.SetDraw("margin");
+                    //    g.SetColor("yellow");
+                    //    g.SetLineWidth(1);
+                    //    g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
+                    //    g.DispLine(getPixRow(tab.MarkY), getPixCol(0), getPixRow(tab.MarkY), getPixCol(1));
+                    //    g.SetLineStyle(new HTuple());
 
-                        g.SetTposition((int)getPixRow(tab.MarkY), (int)getPixCol(0));
-                        g.WriteString(string.Format("EA=#{0}", tab.EA));
+                    //    g.SetTposition((int)getPixRow(tab.MarkY), (int)getPixCol(0));
+                    //    g.WriteString(string.Format("EA=#{0}", tab.EA));
 
-                    }
+                    //}
 
                     if (showContextPosWidth) {
 
@@ -709,6 +710,36 @@ namespace DetectCCD {
 
                 }
             }
+            //Mark
+            for(int i=0; i<Detect.Marks.Count; i++)
+            {
+                var mark = Detect.Marks[i];
+                if (showContextMark && mark.HasMark)
+                {
+                    countMark++;
+
+                    //EA-Mark点
+                    g.SetDraw("margin");
+                    g.SetColor("blue");
+                    g.SetLineWidth(3);
+                    g.DispCross(getPixRow(mark.MarkY), getPixCol(mark.MarkX), crossSize, crossAngle);
+                    if (mark.HasTwoMark)
+                        g.DispCross(getPixRow(mark.MarkY_P), getPixCol(mark.MarkX_P), crossSize, crossAngle);
+
+                    //EA头部显示
+                    g.SetDraw("margin");
+                    g.SetColor("yellow");
+                    g.SetLineWidth(1);
+                    g.SetLineStyle(new HTuple(new int[] { 20, 7 }));
+                    g.DispLine(getPixRow(mark.MarkY), getPixCol(0), getPixRow(mark.MarkY), getPixCol(1));
+                    g.SetLineStyle(new HTuple());
+
+                    g.SetTposition((int)getPixRow(mark.MarkY), (int)getPixCol(0));
+                   // g.WriteString(string.Format("EA=#{0}", mark.EA));
+
+                }
+            }
+            
 
             //瑕疵
             if (showContextDefect) {

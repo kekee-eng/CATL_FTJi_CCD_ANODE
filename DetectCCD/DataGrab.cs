@@ -26,6 +26,11 @@ namespace DetectCCD {
         //图像
         public HImage Image;
 
+        //Mark相关数据
+        public HImage ImageMark;
+        public DataMark DM = new DataMark();
+
+
         //附像素数据
         public double ScaleX;
         public double ScaleY;
@@ -72,11 +77,30 @@ namespace DetectCCD {
 
             }
 
+            //检测MArk孔
+            double[] cx, cy;
+            double w = Width;
+            double h = Height;
+            if (ImageProcess.DetectMark(ImageMark, out cx, out cy))
+            {
+                DM.HasMark = true;
+                DM.MarkX = DM.MarkX_P = cx[0] / w;
+                DM.MarkY = DM.MarkY_P = DM.MarkImageStart + cy[0] / h;
+
+                if (cx.Length == 2 && cy.Length == 2)
+                {
+                    DM.HasTwoMark = true;
+                    DM.MarkX_P = cx[1] / w;
+                    DM.MarkY_P = DM.MarkImageStart + cy[1] / h;
+                }
+            }
+            ImageMark.Dispose();
+
+
             isDetectTab = true;
         }
 
-        //是否存在
-        public bool hasMark = false;
+      
 
         //生成时间戳
         public static string GenTimeStamp(DateTime time) {

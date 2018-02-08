@@ -94,6 +94,7 @@
     <Compile Include="CameraRealtime.cs" />
     <Compile Include="CfgTiebiao.cs" />
     <Compile Include="DataEA_SyncFrom4K.cs" />
+    <Compile Include="DataMark.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="RemoteDefect.cs" />
     <Compile Include="CameraZipFile.cs" />

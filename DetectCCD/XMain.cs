@@ -182,12 +182,28 @@ namespace DetectCCD
             //线程：采集图像
             device.EventInnerCameraGrab = obj => Log.Record(() =>
             {
+                //
                 process.InnerGrab[obj.Frame] = obj;
+
+                //
+                obj.DM.MarkImageStart = obj.Frame - 1.2;
+                obj.DM.MarkImageEnd = obj.Frame;
+                obj.ImageMark = process.InnerGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
+                //obj.ImageMark.WriteImage("png", 0, obj.Frame + ".png");
+                //
                 Log.RecordAsThread(obj.DetectTab);
             });
             device.EventOuterCameraGrab = obj => Log.Record(() =>
             {
+                //
                 process.OuterGrab[obj.Frame] = obj;
+
+                //
+                obj.DM.MarkImageStart = obj.Frame - 1.2;
+                obj.DM.MarkImageEnd = obj.Frame;
+                obj.ImageMark = process.OuterGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
+
+                //
                 Log.RecordAsThread(obj.DetectTab);
             });
 
@@ -214,6 +230,7 @@ namespace DetectCCD
             //线程：图像处理
             Log.RecordAsThread(() =>
             {
+                var mark = new DataMark();
                 var detect = process.InnerDetect;
                 while (!isQuit)
                 {
@@ -224,6 +241,17 @@ namespace DetectCCD
                     if (g == null || !g.isDetectTab)
                         continue;
 
+                    //
+                    if(g.DM.HasMark)
+                    {
+                        g.DM.CopyTo(mark);
+                        var markView = new DataMark();
+                        g.DM.CopyTo(markView);
+                        detect.Marks.Add(markView);
+                        detect.AddLableToPlc(g.TabData,mark);
+                    }
+
+                    //
                     Log.Record(() =>
                     {
                         if (Static.App.Is4K)
@@ -233,7 +261,7 @@ namespace DetectCCD
                                 detect.TryTransLabel(frame);
                                 lock (process)
                                 {
-                                    detect.TryAddTab(g.TabData);
+                                    detect.TryAddTab(g.TabData,mark);
                                 }
                             }
                         }
@@ -247,7 +275,7 @@ namespace DetectCCD
             });
             Log.RecordAsThread(() =>
             {
-
+                var mark = new DataMark();
                 var detect = process.OuterDetect;
                 while (!isQuit)
                 {
@@ -256,6 +284,15 @@ namespace DetectCCD
                     var g = process.OuterGrab.Cache[frame];
                     if (g == null || !g.isDetectTab)
                         continue;
+                    //
+                    if (g.DM.HasMark)
+                    {
+                        g.DM.CopyTo(mark);
+                        var markView = new DataMark();
+                        g.DM.CopyTo(markView);
+                        detect.Marks.Add(markView);
+                        detect.AddLableToPlc(g.TabData,mark);
+                    }
 
                     Log.Record(() =>
                     {
@@ -264,7 +301,7 @@ namespace DetectCCD
                             if (g.hasTab && g.TabData != null)
                             {
                                 detect.TryTransLabel(frame);
-                                if (detect.TryAddTab(g.TabData))
+                                if (detect.TryAddTab(g.TabData,mark))
                                 {
                                     lock (process)
                                     {

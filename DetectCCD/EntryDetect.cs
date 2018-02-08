@@ -27,6 +27,8 @@ namespace DetectCCD {
             Defects.Clear();
             Labels.Clear();
 
+            Marks.Clear();
+
             TabsCache.Clear();
             LabelsCache.Clear();
 
@@ -53,6 +55,7 @@ namespace DetectCCD {
         public List<DataTab> Tabs = new List<DataTab>();
         public List<DataDefect> Defects = new List<DataDefect>();
         public List<DataLabel> Labels = new List<DataLabel>();
+        public List<DataMark> Marks = new List<DataMark>();
 
         public List<DataTab> TabsCache = new List<DataTab>();
         public List<DataLabel> LabelsCache = new List<DataLabel>();
@@ -276,7 +279,7 @@ namespace DetectCCD {
                 OnSyncTab?.Invoke(myER, bindER);
 
         }
-        public bool TryAddTab(DataTab data) {
+        public bool TryAddTab(DataTab data,DataMark dm) {
 
             //是否新极耳
             int w = grab.Width;
@@ -369,79 +372,167 @@ namespace DetectCCD {
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
             data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
 
-            //EA头部Mark检测
-            double[] cx, cy;
-            double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
-            double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
+            ////EA头部Mark检测
+            //double[] cx, cy;
+            //double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
+            //double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
 
-            //
-            data.MarkImageStart = cfy1;
-            data.MarkImageEnd = cfy2;
+            ////
+            //data.MarkImageStart = cfy1;
+            //data.MarkImageEnd = cfy2;
 
-            var cimage = grab.GetImage(cfy1, cfy2);
-            if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+            //var cimage = grab.GetImage(cfy1, cfy2);
+            //if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
 
-                data.IsNewEA = true;
-                data.MarkX = data.MarkX_P = cx[0] / w;
-                data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+            //    data.IsNewEA = true;
+            //    data.MarkX = data.MarkX_P = cx[0] / w;
+            //    data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
 
-                if (cx.Length == 2 && cy.Length == 2) {
-                    data.HasTwoMark = true;
-                    data.MarkX_P = cx[1] / w;
-                    data.MarkY_P = cfy1 + cy[1] / h;
+            //    if (cx.Length == 2 && cy.Length == 2) {
+            //        data.HasTwoMark = true;
+            //        data.MarkX_P = cx[1] / w;
+            //        data.MarkY_P = cfy1 + cy[1] / h;
+            //    }
+
+            //    //Fix: 保存Mark孔图
+            //    if(Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageMark ) {
+
+            //        string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+            //        string pos = isinner ? "内侧" : "外侧";
+            //        var savefolder = Static.FolderRecord + "/Mark孔/";
+
+            //        if (!System.IO.Directory.Exists(savefolder))
+            //            System.IO.Directory.CreateDirectory(savefolder);
+
+            //        string filename = $"{savefolder}{timestamp}_{pos}_F{Convert.ToInt32(data.MarkY)}";
+
+            //        int w0 = 300;
+            //        int h0 = 100;
+            //        var saveimg = cimage.CropPart(cy[0] - h0 / 2, cx[0] - w0 / 2, w0, h0);
+
+            //        Log.RecordAsThread(() => {
+            //            saveimg?.WriteImage("png", 0, filename);
+            //            saveimg?.Dispose();
+            //        });
+            //    }
+
+            // }
+            // cimage?.Dispose();
+            //-------------------------------------------------
+            //判断有MARK孔
+            if (dm.HasMark)
+            {
+                double distMark = data.TabY1 - dm.MarkY;
+                bool IsNearMark = (distMark > 0 && distMark < 3);
+
+
+                if (IsNearMark)
+                {
+                    data.IsNewEA = true;
+                    data.HasTwoMark = dm.HasTwoMark;
+
+                    data.MarkX = dm.MarkX;
+                    data.MarkY = dm.MarkY;
+
+                    data.MarkX_P = dm.MarkX_P;
+                    data.MarkX_P = dm.MarkX_P;
+
+                    dm.HasMark = false;
                 }
-
-                //Fix: 保存Mark孔图
-                if(Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageMark ) {
-
-                    string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
-                    string pos = isinner ? "内侧" : "外侧";
-                    var savefolder = Static.FolderRecord + "/Mark孔/";
-
-                    if (!System.IO.Directory.Exists(savefolder))
-                        System.IO.Directory.CreateDirectory(savefolder);
-                    
-                    string filename = $"{savefolder}{timestamp}_{pos}_F{Convert.ToInt32(data.MarkY)}";
-
-                    int w0 = 300;
-                    int h0 = 100;
-                    var saveimg = cimage.CropPart(cy[0] - h0 / 2, cx[0] - w0 / 2, w0, h0);
-
-                    Log.RecordAsThread(() => {
-                        saveimg?.WriteImage("png", 0, filename);
-                        saveimg?.Dispose();
-                    });
-                }
-
             }
-            cimage?.Dispose();
-
             //
             TabsCache.Add(data);
 
             //
-            if (data.IsNewEA) {
+            //if (data.IsNewEA) {
 
+            //    int ea = 0;
+            //    if (Tabs.Count != 0) {
+            //        ea = Tabs.Last().EA;
+            //    }
+
+            //    var objEA = getEA(ea);
+
+            //    //FIX: 外侧相机前贴标机不打标
+            //    if (objEA != null && !objEA.IsFail && objEA.TabCount < 5) {
+            //        objEA = getEA(ea - 1);
+            //    }
+
+            //    if (objEA != null) {
+
+            //        //添加标签
+            //        if (Static.App.Is4K && Static.Tiebiao.EnableLabelEA) {
+            //            if (objEA.IsFail || Static.Tiebiao.EnableLabelEA_EveryOne) {
+            //                var objLab = new DataLabel() {
+            //                    EA = ea,
+            //                    Y = data.MarkY + Static.Tiebiao.LabelY_EA / Fy,
+            //                    Comment = (Static.Tiebiao.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
+            //                };
+            //                objLab.Encoder = grab.GetEncoder(objLab.Y);
+            //                addLabel(objLab);
+            //            }
+            //        }
+
+            //        //
+            //        posEAStart = data.MarkY;
+            //    }
+
+            //}
+
+            ////强制打标
+            //if (Static.App.Is4K
+            //    && Static.Tiebiao.EnableLabelEA
+            //    && Static.Tiebiao.EnableLabelEA_Force
+            //    && Static.Recipe.EALength > 100) {
+
+            //    if (posEAStart >= 0) {
+            //        var y0 = posEAStart + Static.Recipe.EALength / Fy;
+            //        if (data.TabY1 > y0) {
+            //            posEAStart = -1;
+
+            //            var objLab = new DataLabel() {
+            //                EA = data.EA,
+            //                Y = y0,
+            //                Comment = "EA末端强制贴标"
+            //            };
+
+            //            objLab.Encoder = grab.GetEncoder(objLab.Y);
+            //            addLabel(objLab);
+            //        }
+            //    }
+            //}
+
+            return true;
+        }
+        public void AddLableToPlc(DataTab data, DataMark dm)
+        {
+            
                 int ea = 0;
-                if (Tabs.Count != 0) {
+                if (Tabs.Count != 0)
+                {
                     ea = Tabs.Last().EA;
                 }
 
                 var objEA = getEA(ea);
 
                 //FIX: 外侧相机前贴标机不打标
-                if (objEA != null && !objEA.IsFail && objEA.TabCount < 5) {
+                if (objEA != null && !objEA.IsFail && objEA.TabCount < 5)
+                {
                     objEA = getEA(ea - 1);
                 }
 
-                if (objEA != null) {
+                if (objEA != null)
+                {
 
                     //添加标签
-                    if (Static.App.Is4K && Static.Tiebiao.EnableLabelEA) {
-                        if (objEA.IsFail || Static.Tiebiao.EnableLabelEA_EveryOne) {
-                            var objLab = new DataLabel() {
+                    if (Static.App.Is4K && Static.Tiebiao.EnableLabelEA)
+                    {
+                        if (objEA.IsFail || Static.Tiebiao.EnableLabelEA_EveryOne)
+                        {
+                            var objLab = new DataLabel()
+                            {
                                 EA = ea,
-                                Y = data.MarkY + Static.Tiebiao.LabelY_EA / Fy,
+                                Y = dm.MarkY + Static.Tiebiao.LabelY_EA / Fy,
                                 Comment = (Static.Tiebiao.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
                             };
                             objLab.Encoder = grab.GetEncoder(objLab.Y);
@@ -450,23 +541,27 @@ namespace DetectCCD {
                     }
 
                     //
-                    posEAStart = data.MarkY;
+                    posEAStart = dm.MarkY;
                 }
 
-            }
+            
 
             //强制打标
             if (Static.App.Is4K
                 && Static.Tiebiao.EnableLabelEA
                 && Static.Tiebiao.EnableLabelEA_Force
-                && Static.Recipe.EALength > 100) {
+                && Static.Recipe.EALength > 100)
+            {
 
-                if (posEAStart >= 0) {
+                if (posEAStart >= 0)
+                {
                     var y0 = posEAStart + Static.Recipe.EALength / Fy;
-                    if (data.TabY1 > y0) {
+                    if (data.TabY1 > y0)
+                    {
                         posEAStart = -1;
 
-                        var objLab = new DataLabel() {
+                        var objLab = new DataLabel()
+                        {
                             EA = data.EA,
                             Y = y0,
                             Comment = "EA末端强制贴标"
@@ -477,9 +572,8 @@ namespace DetectCCD {
                     }
                 }
             }
-
-            return true;
         }
+            
         public void TryAddDefect(bool hasDefect, int frame)
         {
 
