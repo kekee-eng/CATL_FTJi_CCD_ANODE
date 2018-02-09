@@ -465,7 +465,7 @@ namespace DetectCCD
             if (dm.HasMark)
             {
                 double distMark = data.TabY1 - dm.MarkY;
-                bool IsNearMark = (distMark > 0 && distMark < 3);
+                bool IsNearMark = (distMark > 0 && distMark < 2);
 
 
                 if (IsNearMark)

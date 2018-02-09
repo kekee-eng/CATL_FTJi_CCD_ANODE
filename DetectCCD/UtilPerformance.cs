@@ -126,6 +126,11 @@ namespace DetectCCD {
 
             return string.Format("{0}{1:00}:{2:00}:{3:00}", day == 0 ? "" : string.Format("{0} Day ", day), hour, minute, second);
         }
+        public static double GetAppRuntimeHour()
+        {
+            var t = DateTime.Now - _App_StartTime;
+            return t.TotalHours;
+        }
 
     }
 }

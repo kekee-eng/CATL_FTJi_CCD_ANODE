@@ -136,22 +136,32 @@ namespace DetectCCD
                     arr = arr.OrderBy(x => x.Y).ToArray();
                     return arr;
                 };
-                RemoteDefect._func_In4kAlign8k += (isFront2, isInner2, position) =>
+                RemoteDefect._func_In4kAlign8k += (isFront2, isInner2, pos4k) =>
                 {
-                    var pt = Static.App.FrameInnerToFront(isFront2, isInner2, position);
+                    double pos8kreal = 0;
+                    var pos8k = Static.App.FrameInnerToFront(isFront2, isInner2, pos4k);
                     var detect = process.InnerDetect;
                     for (int i = 0; i < detect.Marks.Count; i++)
                     {
-                        var dist = pt - detect.Marks[i].MarkY;
-                       // Log.AppLog.Info(dist.ToString());
+                        var dist = pos8k - detect.Marks[i].MarkY;
+                       
                         if (dist > -10 && dist < 10)
                         {
                             if (dist > 0.5) dist = 0.5;
                             if (dist < -0.5) dist = -0.5;
+
+                            pos8kreal = detect.Marks[i].MarkY;
                             Static.App.DiffFrameInnerFrontFix += -dist;
                             break;
                         }
                     }
+                    Log.AppLog.Info(string.Format("4k, 8k, 8kreal, FIX -> {0:0.0}, {1:0.0}, {2:0.0}, {3:0.0}",
+                        pos4k,
+                        pos8k,
+                        pos8kreal,
+                        Static.App.DiffFrameInnerFrontFix
+                        ));
+
                     return Static.App.DiffFrameInnerFrontFix;
                 };
                 RemoteDefect._func_in_8k_viewer += (isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront, diffInnerFrontFix) =>
@@ -176,7 +186,13 @@ namespace DetectCCD
                     }));
                 };
                 RemoteDefect._func_in_8k_startGrab += DeviceStartGrab;
-                RemoteDefect._func_in_8k_stopGrab += DeviceStopGrab;
+                RemoteDefect._func_in_8k_stopGrab += () =>
+                {
+                    DeviceStopGrab();
+
+                    if (UtilPerformance.GetAppRuntimeHour() > Static.App.AppRestartTimeout)
+                        UtilTool.Restart();
+                };
                 RemoteDefect._func_in_8k_uninit += DeviceUninit;
 
                 RemoteDefect._func_in_8k_setRoll += (recipe, roll) =>
@@ -566,7 +582,7 @@ namespace DetectCCD
 
             runAction("开启设备", () =>
             {
-
+                Static.App.DiffFrameInnerFrontFix = 0;
                 if (Static.App.Is4K)
                 {
 
@@ -720,6 +736,8 @@ namespace DetectCCD
                         closeDetectCSV();
                     });
                 }
+
+
 
             });
         }
@@ -1064,8 +1082,6 @@ namespace DetectCCD
                     {
                         RemotePLC.In4KCallPLC_OnGrabbing();
                     }
-                    btnDisconnect.Enabled = !isRollOk;
-
                 }
 
                 //
@@ -1076,17 +1092,22 @@ namespace DetectCCD
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
 
-                if (isRollOk)
+                if(isRollOk)
                 {
-                    btnStartGrab.Enabled = device.isOpen && !device.isGrabbing&&!isRepeatRoll;
+                    btnConnect.Enabled = !device.isGrabbing;
+                    btnDisconnect.Enabled = false;
+                    btnStartGrab.Enabled = device.isOpen && !device.isGrabbing && !isRepeatRoll;
+                    btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
                 }
                 else
                 {
+                    btnConnect.Enabled = !device.isGrabbing;
+                    btnDisconnect.Enabled = device.isOpen && !device.isGrabbing;
                     btnStartGrab.Enabled = false;
+                    btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
                 }
-               
-                btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
 
+                //
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveMark.Enabled= Static.App.RecordSaveImageEnable;
@@ -1199,7 +1220,10 @@ namespace DetectCCD
             {
 
                 if (device.isGrabbing)
-                    throw new Exception("请先停止采集图像！");
+                    throw new Exception("请先停止采像！");
+
+                //if (device.isOpen)
+                //    throw new Exception("请先关闭设备！");
 
                 closeLabelCSV();
                 closeWidthCSV();
@@ -1350,7 +1374,7 @@ namespace DetectCCD
         }
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-            Static.App.DiffFrameInnerFrontFix = 0;
+           
             UtilTool.XFWait.Open();
             await Task.Run(() =>
             {

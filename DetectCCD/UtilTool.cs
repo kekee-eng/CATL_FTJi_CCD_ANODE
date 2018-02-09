@@ -20,6 +20,16 @@ namespace DetectCCD {
 
     public class UtilTool {
 
+        public static void Restart()
+        {
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = Application.StartupPath + "\\restart.cmd";
+            p.StartInfo.UseShellExecute = true;    //是否使用操作系统shell启动
+            p.StartInfo.CreateNoWindow = true;//不显示程序窗口
+            p.Start();//启动程序
+
+        }
+
         public static void AddBuildTag(Control form) {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             var tbuild = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);

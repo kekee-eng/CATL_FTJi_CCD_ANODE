@@ -13,20 +13,12 @@ namespace DetectCCD {
         /// </summary>
         [STAThread]
         static void Main() {
-
-            //RemotePLC.InitClient();
-            //RemotePLC.In4KCallPLC_FilmLevelToMes(new FilmLevel());
-
-
-            //return;
-
-            //
-            AuthManage.CheckKey();
-
+            
             //
             UtilTool.XFSkin.Init();
             UtilTool.XFWait.OpenStart();
             Static.Init();
+            AuthManage.CheckKey();
 
             //
             Application.EnableVisualStyles();
