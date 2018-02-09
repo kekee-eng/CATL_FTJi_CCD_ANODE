@@ -191,7 +191,7 @@ namespace DetectCCD
             }
 
         }
-        public void TrySync(EntryDetect partner, EntryDetect partner2)
+        public void TrySync(EntryDetect partner)
         {
 
             // diff = this - partner
@@ -210,7 +210,7 @@ namespace DetectCCD
             {
 
                 //未找到：对方补测一个宽度
-                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame, partner);
+                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
             }
             else
             {
@@ -254,7 +254,7 @@ namespace DetectCCD
                     break;
 
                 //补测宽度
-                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame, partner2);
+                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
 
                 //同步EA头
                 if (missER.IsNewEA || myMissER.IsNewEA)
@@ -309,7 +309,7 @@ namespace DetectCCD
                 OnSyncTab?.Invoke(myER, bindER);
 
         }
-        public bool TryAddTab(DataTab data, DataMark dm)
+        public bool TryAddTab(DataTab data)
         {
 
             //是否新极耳
@@ -413,62 +413,13 @@ namespace DetectCCD
             //
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
             data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
-
-            ////EA头部Mark检测
-            //double[] cx, cy;
-            //double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
-            //double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
-
-            ////
-            //data.MarkImageStart = cfy1;
-            //data.MarkImageEnd = cfy2;
-
-            //var cimage = grab.GetImage(cfy1, cfy2);
-            //if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
-
-            //    data.IsNewEA = true;
-            //    data.MarkX = data.MarkX_P = cx[0] / w;
-            //    data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
-
-            //    if (cx.Length == 2 && cy.Length == 2) {
-            //        data.HasTwoMark = true;
-            //        data.MarkX_P = cx[1] / w;
-            //        data.MarkY_P = cfy1 + cy[1] / h;
-            //    }
-
-            //    //Fix: 保存Mark孔图
-            //    if(Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageMark ) {
-
-            //        string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
-            //        string pos = isinner ? "内侧" : "外侧";
-            //        var savefolder = Static.FolderRecord + "/Mark孔/";
-
-            //        if (!System.IO.Directory.Exists(savefolder))
-            //            System.IO.Directory.CreateDirectory(savefolder);
-
-            //        string filename = $"{savefolder}{timestamp}_{pos}_F{Convert.ToInt32(data.MarkY)}";
-
-            //        int w0 = 300;
-            //        int h0 = 100;
-            //        var saveimg = cimage.CropPart(cy[0] - h0 / 2, cx[0] - w0 / 2, w0, h0);
-
-            //        Log.RecordAsThread(() => {
-            //            saveimg?.WriteImage("png", 0, filename);
-            //            saveimg?.Dispose();
-            //        });
-            //    }
-
-            // }
-            // cimage?.Dispose();
-            //-------------------------------------------------
+            
             //判断有MARK孔
-            if (dm.HasMark)
+            double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
+            double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
+            foreach (var dm in Marks)
             {
-                double distMark = data.TabY1 - dm.MarkY;
-                bool IsNearMark = (distMark > 0 && distMark < 2);
-
-
-                if (IsNearMark)
+                if (dm.MarkY >= cfy1 && dm.MarkY <= cfy2)
                 {
                     data.IsNewEA = true;
                     data.HasTwoMark = dm.HasTwoMark;
@@ -479,71 +430,16 @@ namespace DetectCCD
                     data.MarkX_P = dm.MarkX_P;
                     data.MarkX_P = dm.MarkX_P;
 
-                    dm.HasMark = false;
+                    break;
                 }
             }
+            data.MarkImageStart = cfy1;
+            data.MarkImageEnd = cfy2;
+            
             //
             TabsCache.Add(data);
-
+            
             //
-            //if (data.IsNewEA) {
-
-            //    int ea = 0;
-            //    if (Tabs.Count != 0) {
-            //        ea = Tabs.Last().EA;
-            //    }
-
-            //    var objEA = getEA(ea);
-
-            //    //FIX: 外侧相机前贴标机不打标
-            //    if (objEA != null && !objEA.IsFail && objEA.TabCount < 5) {
-            //        objEA = getEA(ea - 1);
-            //    }
-
-            //    if (objEA != null) {
-
-            //        //添加标签
-            //        if (Static.App.Is4K && Static.Tiebiao.EnableLabelEA) {
-            //            if (objEA.IsFail || Static.Tiebiao.EnableLabelEA_EveryOne) {
-            //                var objLab = new DataLabel() {
-            //                    EA = ea,
-            //                    Y = data.MarkY + Static.Tiebiao.LabelY_EA / Fy,
-            //                    Comment = (Static.Tiebiao.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
-            //                };
-            //                objLab.Encoder = grab.GetEncoder(objLab.Y);
-            //                addLabel(objLab);
-            //            }
-            //        }
-
-            //        //
-            //        posEAStart = data.MarkY;
-            //    }
-
-            //}
-
-            ////强制打标
-            //if (Static.App.Is4K
-            //    && Static.Tiebiao.EnableLabelEA
-            //    && Static.Tiebiao.EnableLabelEA_Force
-            //    && Static.Recipe.EALength > 100) {
-
-            //    if (posEAStart >= 0) {
-            //        var y0 = posEAStart + Static.Recipe.EALength / Fy;
-            //        if (data.TabY1 > y0) {
-            //            posEAStart = -1;
-
-            //            var objLab = new DataLabel() {
-            //                EA = data.EA,
-            //                Y = y0,
-            //                Comment = "EA末端强制贴标"
-            //            };
-
-            //            objLab.Encoder = grab.GetEncoder(objLab.Y);
-            //            addLabel(objLab);
-            //        }
-            //    }
-            //}
-
             return true;
         }
         public void In4kAlign8k(double dm)
@@ -755,7 +651,7 @@ namespace DetectCCD
         {
             return TabsCache.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Recipe.TabMergeDistance);
         }
-        DataTab fixER(double x, double y1, double y2, EntryDetect partner)
+        DataTab fixER(double x, double y1, double y2)
         {
 
             int w = grab.Width;
@@ -768,35 +664,16 @@ namespace DetectCCD
             data.HasTwoMark = false;
 
             //宽度检测
-            double[] bx1, bx2;
-            double bfy1 = data.TabY1 + Static.Recipe.TabWidthStart / Fy;
-            double bfy2 = data.TabY1 + Static.Recipe.TabWidthEnd / Fy;
-
-            var bimage = grab.GetImage(bfy1, bfy2);
-            //    if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {    bimage?.Dispose();}
-            if (bimage != null)
+            DataTab dataCopy = new DataTab();
+            if (Tabs.Count > 0)
             {
-                DataTab dataCopy = new DataTab();
-                for (int a = partner.Tabs.Count; a > 0; a--)
-                {
-                    dataCopy = partner.Tabs[a - 1];
-                    if (!dataCopy.IsFix)
-                    {
-                        data.WidthY1 = dataCopy.WidthY1;
-                        data.WidthY2 = dataCopy.WidthY2;
-                        data.WidthX1 = dataCopy.WidthX1;
-                        data.WidthX2 = dataCopy.WidthX2;
-                        break;
-                    }
-                }
+                dataCopy = Tabs.Last();
 
+                data.WidthY1 = dataCopy.WidthY1;
+                data.WidthY2 = dataCopy.WidthY2;
+                data.WidthX1 = dataCopy.WidthX1;
+                data.WidthX2 = dataCopy.WidthX2;
             }
-            bimage?.Dispose();
-            //data.WidthY1 = bfy1;
-            //data.WidthY2 = bfy2;
-            //data.WidthX1 = bx1[0] / w;
-            //data.WidthX2 = bx2[0] / w;
-
 
             //
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;

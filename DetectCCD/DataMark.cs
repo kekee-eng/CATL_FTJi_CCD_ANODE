@@ -20,17 +20,17 @@ namespace DetectCCD
         public double MarkX_P;
         public double MarkY_P;
 
-        public void CopyTo(DataMark other)
+        public void CopyFrom(DataMark other)
         {
             //
-            other.MarkImageStart = MarkImageStart;
-            other.MarkImageEnd = MarkImageEnd;
-            other.MarkX = MarkX;
-            other.MarkY = MarkY;
-            other.MarkX_P = MarkX_P;
-            other.MarkY_P = MarkY_P;
-            other.HasMark = HasMark;
-            other.HasTwoMark = HasTwoMark;
+            MarkImageStart= other.MarkImageStart;
+            MarkImageEnd = other.MarkImageEnd;
+            MarkX = other.MarkX;
+            MarkY = other.MarkY;
+            MarkX_P = other.MarkX_P;
+            MarkY_P = other.MarkY_P;
+            HasMark = other.HasMark;
+            HasTwoMark = other.HasTwoMark;
         }
     }
 }

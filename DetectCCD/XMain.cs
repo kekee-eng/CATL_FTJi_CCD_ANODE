@@ -147,8 +147,8 @@ namespace DetectCCD
                        
                         if (dist > -10 && dist < 10)
                         {
-                            if (dist > 0.5) dist = 0.5;
-                            if (dist < -0.5) dist = -0.5;
+                            if (dist > Static.App.OnceAdjustValue) dist = Static.App.OnceAdjustValue;
+                            if (dist < -Static.App.OnceAdjustValue) dist = -Static.App.OnceAdjustValue;
 
                             pos8kreal = detect.Marks[i].MarkY;
                             Static.App.DiffFrameInnerFrontFix += -dist;
@@ -221,8 +221,8 @@ namespace DetectCCD
                 process.InnerGrab[obj.Frame] = obj;
 
                 //
-                obj.DM.MarkImageStart = obj.Frame - 1.2;
-                obj.DM.MarkImageEnd = obj.Frame;
+                obj.DM.MarkImageStart = obj.Frame - 0.2;
+                obj.DM.MarkImageEnd = obj.Frame+0.99;
                 obj.ImageMark = process.InnerGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
                
                 //
@@ -234,8 +234,8 @@ namespace DetectCCD
                 process.OuterGrab[obj.Frame] = obj;
 
                 //
-                obj.DM.MarkImageStart = obj.Frame - 1.2;
-                obj.DM.MarkImageEnd = obj.Frame;
+                obj.DM.MarkImageStart = obj.Frame - 0.2;
+                obj.DM.MarkImageEnd = obj.Frame +0.99;
                 obj.ImageMark = process.OuterGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
 
                 //
@@ -265,7 +265,6 @@ namespace DetectCCD
             //线程：图像处理
             Log.RecordAsThread(() =>
             {
-                var mark = new DataMark();
                 var detect = process.InnerDetect;
                 while (!isQuit)
                 {
@@ -279,14 +278,14 @@ namespace DetectCCD
                     //
                     if(g.DM.HasMark)
                     {
-                        g.DM.CopyTo(mark);
                         var markView = new DataMark();
-                        g.DM.CopyTo(markView);
+                        markView.CopyFrom(g.DM);
                         detect.Marks.Add(markView);
-                        if(Static.App.Is4K)
+
+                        if (Static.App.Is4K)
                         {
-                            detect.In4kAlign8k(mark.MarkY);
-                            detect.AddLableToPlc(g.TabData, mark.MarkY);
+                            detect.In4kAlign8k(g.DM.MarkY);
+                            detect.AddLableToPlc(g.TabData, g.DM.MarkY);
                         }
                         
                     }
@@ -301,7 +300,7 @@ namespace DetectCCD
                                 detect.TryTransLabel(frame);
                                 lock (process)
                                 {
-                                    detect.TryAddTab(g.TabData,mark);
+                                    detect.TryAddTab(g.TabData);
                                 }
                             }
                         }
@@ -313,9 +312,9 @@ namespace DetectCCD
                     });
                 };
             });
+
             Log.RecordAsThread(() =>
             {
-                var mark = new DataMark();
                 var detect = process.OuterDetect;
                 while (!isQuit)
                 {
@@ -324,16 +323,17 @@ namespace DetectCCD
                     var g = process.OuterGrab.Cache[frame];
                     if (g == null || !g.isDetectTab)
                         continue;
+
                     //
                     if (g.DM.HasMark)
                     {
-                        g.DM.CopyTo(mark);
                         var markView = new DataMark();
-                        g.DM.CopyTo(markView);
+                        markView.CopyFrom(g.DM);
                         detect.Marks.Add(markView);
+
                         if (Static.App.Is4K)
                         {
-                            detect.AddLableToPlc(g.TabData, mark.MarkY);
+                            detect.AddLableToPlc(g.TabData, g.DM.MarkY);
                         }
                            
                     }
@@ -345,11 +345,11 @@ namespace DetectCCD
                             if (g.hasTab && g.TabData != null)
                             {
                                 detect.TryTransLabel(frame);
-                                if (detect.TryAddTab(g.TabData,mark))
+                                if (detect.TryAddTab(g.TabData))
                                 {
                                     lock (process)
                                     {
-                                        detect.TrySync(process.InnerDetect,process.OuterDetect);
+                                        detect.TrySync(process.InnerDetect);
                                     }
                                 }
                             }
