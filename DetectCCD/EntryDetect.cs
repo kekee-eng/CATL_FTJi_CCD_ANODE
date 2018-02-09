@@ -7,18 +7,22 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace DetectCCD {
+namespace DetectCCD
+{
 
-    public class EntryDetect : IDisposable {
+    public class EntryDetect : IDisposable
+    {
 
-        public EntryDetect(EntryGrab grab, bool isInner) {
+        public EntryDetect(EntryGrab grab, bool isInner)
+        {
 
             //
             this.grab = grab;
             this.isinner = isInner;
 
         }
-        public void Dispose() {
+        public void Dispose()
+        {
 
             _IN_8K_FROM_4K.Clear();
 
@@ -60,28 +64,36 @@ namespace DetectCCD {
         public List<DataTab> TabsCache = new List<DataTab>();
         public List<DataLabel> LabelsCache = new List<DataLabel>();
 
-        void addLabel(DataLabel lab) {
-            Log.Record(() => {
+        void addLabel(DataLabel lab)
+        {
+            Log.Record(() =>
+            {
 
                 var repeat1 = LabelsCache.Find(x => Math.Abs(x.Y - lab.Y) < 0.5);
                 var repeat2 = Labels.Find(x => Math.Abs(x.Y - lab.Y) < 0.5);
-                if (repeat1 == null && repeat2 == null) {
+                if (repeat1 == null && repeat2 == null)
+                {
                     LabelsCache.Add(lab);
                 }
             });
         }
-        void checkLabel(int frame) {
-            Log.Record(() => {
+        void checkLabel(int frame)
+        {
+            Log.Record(() =>
+            {
                 if (LabelsCache.Count == 0)
                     return;
 
                 var minLab = LabelsCache.OrderBy(x => x.Y).First();
-                if (minLab != null) {
-                    if (minLab.Y < frame) {
+                if (minLab != null)
+                {
+                    if (minLab.Y < frame)
+                    {
                         LabelsCache.Remove(minLab);
                         minLab.Encoder = grab.GetEncoder(minLab.Y);
 
-                        if (null == Labels.Find(x => Math.Abs(x.Y - minLab.Y) < 0.5)) {
+                        if (null == Labels.Find(x => Math.Abs(x.Y - minLab.Y) < 0.5))
+                        {
                             Labels.Add(minLab);
                             OnNewLabel?.Invoke(minLab);
                         }
@@ -92,8 +104,10 @@ namespace DetectCCD {
         }
 
         public int ShowEACount = 0;
-        public int ShowEACountView {
-            get {
+        public int ShowEACountView
+        {
+            get
+            {
                 var count1 = Tabs.Count / Static.Recipe.CheckTabCount;
                 if (Math.Abs(count1 - ShowEACount) < 3)
                     return ShowEACount;
@@ -110,35 +124,46 @@ namespace DetectCCD {
         int defectFrameCount = 0;
 
         List<double> offsetList = new List<double>();
-        void addOffset(double offset) {
+        void addOffset(double offset)
+        {
 
             offsetList.Add(offset);
-            if (offsetList.Count > 10) {
+            if (offsetList.Count > 10)
+            {
                 offsetList.RemoveAt(0);
             }
         }
-        public double DiffFrame {
-            get {
+        public double DiffFrame
+        {
+            get
+            {
                 if (offsetList.Count < 10)
                     return Static.App.FixFrameOuterOrBackOffset;
-                else {
+                else
+                {
                     return offsetList.Average();
                 }
             }
         }
 
-        public void TryTransLabel(int frame) {
+        public void TryTransLabel(int frame)
+        {
 
             //
             checkLabel(frame);
 
             //转标签
-            if (Static.Tiebiao.EnableLabelDefect) {
+            if (Static.Tiebiao.EnableLabelDefect)
+            {
                 var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, -1);
-                if (remoteDefs != null) {
-                    foreach (var rl in remoteDefs) {
-                        if (rl.IsTransLabel()) {
-                            addLabel(new DataLabel() {
+                if (remoteDefs != null)
+                {
+                    foreach (var rl in remoteDefs)
+                    {
+                        if (rl.IsTransLabel())
+                        {
+                            addLabel(new DataLabel()
+                            {
                                 Y = rl.Y + Static.Tiebiao.LabelY_Defect / Fy,
                                 Comment = string.Format("转标[正面][{0}]", rl.GetTypeCaption())
                             });
@@ -146,12 +171,17 @@ namespace DetectCCD {
                     }
                 }
             }
-            if (Static.Tiebiao.EnableLabelDefect) {
+            if (Static.Tiebiao.EnableLabelDefect)
+            {
                 var remoteDefs = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, -1);
-                if (remoteDefs != null) {
-                    foreach (var rl in remoteDefs) {
-                        if (rl.IsTransLabel()) {
-                            addLabel(new DataLabel() {
+                if (remoteDefs != null)
+                {
+                    foreach (var rl in remoteDefs)
+                    {
+                        if (rl.IsTransLabel())
+                        {
+                            addLabel(new DataLabel()
+                            {
                                 Y = rl.Y + Static.Tiebiao.LabelY_Defect / Fy,
                                 Comment = string.Format("转标[背面][{0}]", rl.GetTypeCaption())
                             });
@@ -163,7 +193,7 @@ namespace DetectCCD {
         }
         public void TrySync(EntryDetect partner, EntryDetect partner2)
         {
-           
+
             // diff = this - partner
             // this = partner + diff
             // partner = this - diff
@@ -279,44 +309,54 @@ namespace DetectCCD {
                 OnSyncTab?.Invoke(myER, bindER);
 
         }
-        public bool TryAddTab(DataTab data,DataMark dm) {
+        public bool TryAddTab(DataTab data, DataMark dm)
+        {
 
             //是否新极耳
             int w = grab.Width;
             int h = grab.Height;
             bool isNewData = true;
-            if (Tabs.Count > 0 || TabsCache.Count > 0) {
+            if (Tabs.Count > 0 || TabsCache.Count > 0)
+            {
 
                 var nearTab = (TabsCache.Count > 0 ? TabsCache.Last() : Tabs.Last());
-                if (nearTab != null && Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Recipe.TabMergeDistance) {
+                if (nearTab != null && Math.Abs(data.TabY1 - nearTab.TabY2) * Fy < Static.Recipe.TabMergeDistance)
+                {
 
                     //更新极耳大小
                     double dist = 30 / Fx;
-                    if (data.HasTwoTab || nearTab.HasTwoTab || Math.Abs(data.TabX - nearTab.TabX) >= dist) {
+                    if (data.HasTwoTab || nearTab.HasTwoTab || Math.Abs(data.TabX - nearTab.TabX) >= dist)
+                    {
 
                         //
                         double leftx, rightx;
-                        if (data.HasTwoTab) {
+                        if (data.HasTwoTab)
+                        {
                             leftx = data.TabX;
                             rightx = data.TabX_P;
                         }
-                        else if (nearTab.HasTwoTab) {
+                        else if (nearTab.HasTwoTab)
+                        {
                             leftx = nearTab.TabX;
                             rightx = nearTab.TabX_P;
                         }
-                        else {
+                        else
+                        {
                             leftx = Math.Min(data.TabX, nearTab.TabX);
                             rightx = Math.Max(data.TabX, nearTab.TabX);
                         }
 
                         //
-                        Action<double, DataTab, List<double>> addPoint = (x, dt, list) => {
-                            if (Math.Abs(dt.TabX - x) < dist) {
+                        Action<double, DataTab, List<double>> addPoint = (x, dt, list) =>
+                        {
+                            if (Math.Abs(dt.TabX - x) < dist)
+                            {
                                 list.Add(dt.TabY1);
                                 list.Add(dt.TabY2);
                             }
 
-                            if (dt.HasTwoTab && Math.Abs(dt.TabX_P - x) < dist) {
+                            if (dt.HasTwoTab && Math.Abs(dt.TabX_P - x) < dist)
+                            {
                                 list.Add(dt.TabY1_P);
                                 list.Add(dt.TabY2_P);
                             }
@@ -341,7 +381,8 @@ namespace DetectCCD {
                         //
                         nearTab.HasTwoTab = true;
                     }
-                    else {
+                    else
+                    {
                         nearTab.TabY1 = Math.Min(nearTab.TabY1, data.TabY1);
                         nearTab.TabY2 = Math.Max(nearTab.TabY2, data.TabY2);
                     }
@@ -360,7 +401,8 @@ namespace DetectCCD {
             double bfy2 = data.TabY1 + Static.Recipe.TabWidthEnd / Fy;
 
             var bimage = grab.GetImage(bfy1, bfy2);
-            if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {
+            if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2))
+            {
                 data.WidthY1 = bfy1;
                 data.WidthY2 = bfy2;
                 data.WidthX1 = bx1[0] / w;
@@ -504,47 +546,53 @@ namespace DetectCCD {
 
             return true;
         }
-        public void AddLableToPlc(DataTab data, DataMark dm)
+        public void In4kAlign8k(double dm)
+        {
+            //
+            Static.App.DiffFrameInnerFrontFix = RemoteDefect.In4kAlign8k(true, true, dm);
+        }
+        public void AddLableToPlc(DataTab data, double dm)
         {
             
-                int ea = 0;
-                if (Tabs.Count != 0)
+            //
+            int ea = 0;
+            if (Tabs.Count != 0)
+            {
+                ea = Tabs.Last().EA;
+            }
+
+            var objEA = getEA(ea);
+
+            //FIX: 外侧相机前贴标机不打标
+            if (objEA != null && !objEA.IsFail && objEA.TabCount < 5)
+            {
+                objEA = getEA(ea - 1);
+            }
+
+            if (objEA != null)
+            {
+
+                //添加标签
+                if (Static.App.Is4K && Static.Tiebiao.EnableLabelEA)
                 {
-                    ea = Tabs.Last().EA;
-                }
-
-                var objEA = getEA(ea);
-
-                //FIX: 外侧相机前贴标机不打标
-                if (objEA != null && !objEA.IsFail && objEA.TabCount < 5)
-                {
-                    objEA = getEA(ea - 1);
-                }
-
-                if (objEA != null)
-                {
-
-                    //添加标签
-                    if (Static.App.Is4K && Static.Tiebiao.EnableLabelEA)
+                    if (objEA.IsFail || Static.Tiebiao.EnableLabelEA_EveryOne)
                     {
-                        if (objEA.IsFail || Static.Tiebiao.EnableLabelEA_EveryOne)
+                        var objLab = new DataLabel()
                         {
-                            var objLab = new DataLabel()
-                            {
-                                EA = ea,
-                                Y = dm.MarkY + Static.Tiebiao.LabelY_EA / Fy,
-                                Comment = (Static.Tiebiao.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
-                            };
-                            objLab.Encoder = grab.GetEncoder(objLab.Y);
-                            addLabel(objLab);
-                        }
+                            EA = ea,
+                            Y = dm + Static.Tiebiao.LabelY_EA / Fy,
+                            Comment = (Static.Tiebiao.EnableLabelEA_EveryOne ? "[测试]" : "") + "EA末端贴标: " + objEA.GetFailReason()
+                        };
+                        objLab.Encoder = grab.GetEncoder(objLab.Y);
+                        addLabel(objLab);
                     }
-
-                    //
-                    posEAStart = dm.MarkY;
                 }
 
-            
+                //
+                posEAStart = dm;
+            }
+
+
 
             //强制打标
             if (Static.App.Is4K
@@ -573,7 +621,7 @@ namespace DetectCCD {
                 }
             }
         }
-            
+
         public void TryAddDefect(bool hasDefect, int frame)
         {
 
@@ -687,7 +735,7 @@ namespace DetectCCD {
 
                             }
 
-                            if (myDefects.Count>0 && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
+                            if (myDefects.Count > 0 && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
                             {
                                 eimage.WriteImage("png", 0, saveBigFilename);
                                 myDefects[0].NGBigPath = saveBigFilename;
@@ -703,10 +751,12 @@ namespace DetectCCD {
             }
         }
 
-        DataTab findBind(double frame) {
+        DataTab findBind(double frame)
+        {
             return TabsCache.Find(x => Math.Abs(x.TabY1 - frame) * Fy < Static.Recipe.TabMergeDistance);
         }
-        DataTab fixER(double x, double y1, double y2, EntryDetect partner) {
+        DataTab fixER(double x, double y1, double y2, EntryDetect partner)
+        {
 
             int w = grab.Width;
             int h = grab.Height;
@@ -723,8 +773,8 @@ namespace DetectCCD {
             double bfy2 = data.TabY1 + Static.Recipe.TabWidthEnd / Fy;
 
             var bimage = grab.GetImage(bfy1, bfy2);
-        //    if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {    bimage?.Dispose();}
-          if(bimage != null)
+            //    if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2)) {    bimage?.Dispose();}
+            if (bimage != null)
             {
                 DataTab dataCopy = new DataTab();
                 for (int a = partner.Tabs.Count; a > 0; a--)
@@ -739,7 +789,7 @@ namespace DetectCCD {
                         break;
                     }
                 }
-              
+
             }
             bimage?.Dispose();
             //data.WidthY1 = bfy1;
@@ -762,14 +812,16 @@ namespace DetectCCD {
             data.MarkImageEnd = cfy2;
 
             var cimage = grab.GetImage(cfy1, cfy2);
-            if (ImageProcess.DetectMark(cimage, out cx, out cy)) {
+            if (ImageProcess.DetectMark(cimage, out cx, out cy))
+            {
 
                 //将最后一个极耳放到下个EA中
                 data.IsNewEA = true;
                 data.MarkX = data.MarkX_P = cx[0] / w;
                 data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
 
-                if (cx.Length == 2 && cy.Length == 2) {
+                if (cx.Length == 2 && cy.Length == 2)
+                {
                     data.HasTwoMark = true;
                     data.MarkX_P = cx[1] / w;
                     data.MarkY_P = cfy1 + cy[1] / h;
@@ -779,11 +831,12 @@ namespace DetectCCD {
 
             data.IsFix = true;
             data.IsSync = true;
-           
+
             TabsCache.Add(data);
             return data;
         }
-        DataEA _get_ea(int id) {
+        DataEA _get_ea(int id)
+        {
 
             var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
             if (curEaTab == null)
@@ -794,11 +847,13 @@ namespace DetectCCD {
             obj.TabCount = Tabs.Count(x => x.EA == id);
             obj.TabWidthFailCount = Tabs.Count(x => x.EA == id && x.IsWidthFail);
 
-            if (curEaTab.IsNewEA) {
+            if (curEaTab.IsNewEA)
+            {
                 obj.EAX = curEaTab.MarkX;
                 obj.EAY = curEaTab.MarkY;
             }
-            else {
+            else
+            {
                 obj.EAX = curEaTab.TabX;
                 obj.EAY = curEaTab.TabY1;
             }
@@ -806,34 +861,41 @@ namespace DetectCCD {
             double start = obj.EAY;
             double end = 0;
             var nextEaTab = Tabs.Find(x => x.EA == id + 1 && x.TAB == 1);
-            if (nextEaTab != null) {
+            if (nextEaTab != null)
+            {
                 end = nextEaTab.MarkY;
             }
-            else {
-                if (TabsCache.Count > 0) {
+            else
+            {
+                if (TabsCache.Count > 0)
+                {
                     end = TabsCache.Select(x => x.TabY1).Max();
                 }
-                else {
+                else
+                {
                     end = Tabs.FindAll(x => x.EA == id).Select(x => x.TabY1).Max();
                 }
             }
 
             AllocAndGetDefectCount(start, end, id);
 
-            if (Static.App.Is4K) {
+            if (Static.App.Is4K)
+            {
                 var setFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
                 var setBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
 
                 var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, id);
                 var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, id);
 
-                if (remoteDefsFront != null) {
+                if (remoteDefsFront != null)
+                {
                     obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
                     obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
                     obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 2);
                 }
 
-                if (remoteDefsBack != null) {
+                if (remoteDefsBack != null)
+                {
                     obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.Type == 0);
                     obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
                     obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 2);
@@ -843,12 +905,16 @@ namespace DetectCCD {
 
             return obj;
         }
-        DataEA getEA(int id) {
-            for (int i = 0; i < 10; i++) {
-                try {
+        DataEA getEA(int id)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                try
+                {
                     return _get_ea(id);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Log.AppLog.Debug("[已处理]", ex);
                     Thread.Sleep(10);
                 }
@@ -856,20 +922,24 @@ namespace DetectCCD {
             return null;
         }
         double posEAStart = -1;
-        void appendTab(DataTab data) {
+        void appendTab(DataTab data)
+        {
             int ea = 0;
             int tab = 0;
-            if (Tabs.Count != 0) {
+            if (Tabs.Count != 0)
+            {
                 var last = Tabs.Last();
                 ea = last.EA;
                 tab = last.TAB;
             }
 
-            if (data.IsNewEA) {
+            if (data.IsNewEA)
+            {
                 ea++;
                 tab = 1;
             }
-            else {
+            else
+            {
                 tab++;
             }
 
@@ -884,22 +954,27 @@ namespace DetectCCD {
             TabsCache.Remove(data);
             Tabs.Add(data);
 
-            if (data.IsNewEA) {
+            if (data.IsNewEA)
+            {
                 appendEA(data);
             }
 
         }
-        void appendEA(DataTab data) {
+        void appendEA(DataTab data)
+        {
 
             var objEA = getEA(data.EA - 1);
-            if (objEA != null) {
+            if (objEA != null)
+            {
 
                 //
                 ShowEACount++;
-                if (objEA.IsTabWidthFailCountFail) {
+                if (objEA.IsTabWidthFailCountFail)
+                {
                     ShowEAWidthNGCount++;
                 }
-                else if (objEA.IsDefectCountFail) {
+                else if (objEA.IsDefectCountFail)
+                {
                     ShowEADefectNGCount++;
                 }
 
@@ -909,21 +984,27 @@ namespace DetectCCD {
         }
 
         public List<DataEA_SyncFrom4K> _IN_8K_FROM_4K = new List<DataEA_SyncFrom4K>();
-        public int AllocAndGetDefectCount(double start, double end, int ea) {
+        public int AllocAndGetDefectCount(double start, double end, int ea)
+        {
             int count = 0;
-            for (int i = 0; i < Defects.Count; i++) {
-                if (Defects[i].InRange(start, end)) {
+            for (int i = 0; i < Defects.Count; i++)
+            {
+                if (Defects[i].InRange(start, end))
+                {
                     Defects[i].EA = ea;
                     count++;
 
                     //Fix:保存图片分EA
                     string ngPartPath = Defects[i].NGPartPath;
                     string ngBigPath = Defects[i].NGBigPath;
-                    Log.RecordAsThread(() => {
+                    Log.RecordAsThread(() =>
+                    {
 
                         //
-                        Action<string> moveFile = path => {
-                            Log.Record(() => {
+                        Action<string> moveFile = path =>
+                        {
+                            Log.Record(() =>
+                            {
                                 if (path == "")
                                     return;
 
@@ -944,15 +1025,18 @@ namespace DetectCCD {
             }
 
             var extEA = _IN_8K_FROM_4K.Find(x => x.EA == ea);
-            if (extEA == null) {
-                extEA = new DataEA_SyncFrom4K() {
+            if (extEA == null)
+            {
+                extEA = new DataEA_SyncFrom4K()
+                {
                     Start = start,
                     End = end,
                     EA = ea,
                 };
                 _IN_8K_FROM_4K.Add(extEA);
             }
-            else {
+            else
+            {
                 extEA.Start = Math.Min(extEA.Start, start);
                 extEA.End = Math.Max(extEA.End, end);
             }

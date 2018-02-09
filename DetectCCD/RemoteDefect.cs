@@ -35,7 +35,9 @@ namespace DetectCCD {
                 client._in_8k_viewer(true, true, 0,
                     Static.App.DiffFrameInnerOuter,
                     Static.App.DiffFrameFrontBack,
-                    Static.App.DiffFrameInnerFront);
+                    Static.App.DiffFrameInnerFront,
+                    Static.App.DiffFrameInnerFrontFix
+                    );
             }
             catch (Exception ex) {
                 Log.AppLog.Error("RemoteDefect:", ex);
@@ -58,6 +60,23 @@ namespace DetectCCD {
             }
             return -2;
         }
+
+        public static double In4kAlign8k(bool isFront, bool isInner, double position)
+        {
+            try
+            {
+                if (client == null) return 0;
+                return client._In4kAlign8k(isFront, isInner, position);
+            }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+                return 0;
+            }
+        }
+
+
         public static event Func<bool, bool, double, double, int, int> _func_in_8k_getDefectCount;
         public int _in_8k_return_4k_getDefectCount(bool isFront, bool isInner, double start, double end, int ea) {
 
@@ -103,16 +122,31 @@ namespace DetectCCD {
                 client._in_8k_viewer(isFront, isInner, y,
                     Static.App.DiffFrameInnerOuter,
                     Static.App.DiffFrameFrontBack,
-                    Static.App.DiffFrameInnerFront);
+                    Static.App.DiffFrameInnerFront,
+                    Static.App.DiffFrameInnerFrontFix
+                    );
             }
             catch (Exception ex) {
                 Log.AppLog.Error("RemoteDefect:", ex);
                 client = null;
             }
         }
-        public static event Action<bool, bool, double, double, double, double> _func_in_8k_viewer;
-        public void _in_8k_viewer(bool isFront, bool isInner, double y, double diffInnerOuter, double diffFrontBack, double diffInnerFront) {
-            try { _func_in_8k_viewer(isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront); }
+        public static event Func<bool, bool, double, double> _func_In4kAlign8k;
+        public  double _In4kAlign8k(bool isFront, bool isInner, double position)
+        {
+            if (_func_In4kAlign8k == null)
+                return Static.App.DiffFrameInnerFrontFix; //Master未关联
+            try { return _func_In4kAlign8k(isFront, isInner, position); }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                return Static.App.DiffFrameInnerFrontFix;
+            }
+        }
+
+        public static event Action<bool, bool, double, double, double, double,double> _func_in_8k_viewer;
+        public void _in_8k_viewer(bool isFront, bool isInner, double y, double diffInnerOuter, double diffFrontBack, double diffInnerFront,double diffInnerFrontFix) {
+            try { _func_in_8k_viewer(isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront, diffInnerFrontFix); }
             catch (Exception ex) {
                 Log.AppLog.Error("RemoteDefect:", ex);
             }

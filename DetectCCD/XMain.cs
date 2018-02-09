@@ -129,18 +129,37 @@ namespace DetectCCD
 
                         outdefs.Add(new DataDefect() { EA = defs[i].EA, Y = defs[i].Y, Type = defs[i].Type });
                     }
-
+                   
                     var arr = outdefs.ToArray();
                     for (int i = 0; i < arr.Length; i++)
                         arr[i].Y = Static.App.FrameFrontToInner(isFront, isInner, arr[i].Y);
                     arr = arr.OrderBy(x => x.Y).ToArray();
                     return arr;
                 };
-                RemoteDefect._func_in_8k_viewer += (isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront) =>
+                RemoteDefect._func_In4kAlign8k += (isFront2, isInner2, position) =>
+                {
+                    var pt = Static.App.FrameInnerToFront(isFront2, isInner2, position);
+                    var detect = process.InnerDetect;
+                    for (int i = 0; i < detect.Marks.Count; i++)
+                    {
+                        var dist = pt - detect.Marks[i].MarkY;
+                       // Log.AppLog.Info(dist.ToString());
+                        if (dist > -10 && dist < 10)
+                        {
+                            if (dist > 0.5) dist = 0.5;
+                            if (dist < -0.5) dist = -0.5;
+                            Static.App.DiffFrameInnerFrontFix += -dist;
+                            break;
+                        }
+                    }
+                    return Static.App.DiffFrameInnerFrontFix;
+                };
+                RemoteDefect._func_in_8k_viewer += (isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront, diffInnerFrontFix) =>
                 {
                     Static.App.DiffFrameInnerOuter = diffInnerOuter;
                     Static.App.DiffFrameFrontBack = diffFrontBack;
                     Static.App.DiffFrameInnerFront = diffInnerFront;
+                    Static.App.DiffFrameInnerFrontFix = diffInnerFrontFix;
                     (isFront ? process.InnerViewerImage : process.OuterViewerImage).MoveToFrame(
                         Static.App.FrameInnerToFront(isFront, isInner, y));
                 };
@@ -189,7 +208,7 @@ namespace DetectCCD
                 obj.DM.MarkImageStart = obj.Frame - 1.2;
                 obj.DM.MarkImageEnd = obj.Frame;
                 obj.ImageMark = process.InnerGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
-                //obj.ImageMark.WriteImage("png", 0, obj.Frame + ".png");
+               
                 //
                 Log.RecordAsThread(obj.DetectTab);
             });
@@ -248,7 +267,12 @@ namespace DetectCCD
                         var markView = new DataMark();
                         g.DM.CopyTo(markView);
                         detect.Marks.Add(markView);
-                        detect.AddLableToPlc(g.TabData,mark);
+                        if(Static.App.Is4K)
+                        {
+                            detect.In4kAlign8k(mark.MarkY);
+                            detect.AddLableToPlc(g.TabData, mark.MarkY);
+                        }
+                        
                     }
 
                     //
@@ -291,7 +315,11 @@ namespace DetectCCD
                         var markView = new DataMark();
                         g.DM.CopyTo(markView);
                         detect.Marks.Add(markView);
-                        detect.AddLableToPlc(g.TabData,mark);
+                        if (Static.App.Is4K)
+                        {
+                            detect.AddLableToPlc(g.TabData, mark.MarkY);
+                        }
+                           
                     }
 
                     Log.Record(() =>
@@ -1207,7 +1235,9 @@ namespace DetectCCD
                     //
                     try
                     {
-                        if(Static.App.Is4K && !isRepeatRoll && process.InnerDetect.Tabs.Count>0&&process.OuterDetect.Tabs.Count>0)
+                        Log.RecordAsThread(() =>
+                        {
+                        if (Static.App.Is4K && !isRepeatRoll && process.InnerDetect.Tabs.Count > 0 && process.OuterDetect.Tabs.Count > 0)
                         {
                             FilmData.StopTime = DateTime.Now;
                             var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
@@ -1218,7 +1248,7 @@ namespace DetectCCD
                             var FilmOuterWidthMean = FilmOuterWidthList.Average();
                             var FilmOuterWidthSigma = Math.Sqrt(FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Average());
 
-                            var FilmInOuterWidthSigma = Math.Sqrt((FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Sum()+ FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Sum())/ (FilmOuterWidthList.Count()+ FilmInnerWidthList.Count()));
+                            var FilmInOuterWidthSigma = Math.Sqrt((FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Sum() + FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Sum()) / (FilmOuterWidthList.Count() + FilmInnerWidthList.Count()));
 
 
 
@@ -1284,9 +1314,8 @@ namespace DetectCCD
                             FilmData.FilmWidthTarget = Static.Recipe.TabWidthTarget;
                             saveFinalCsv(FilmData.FilePathWidth, false);
                             RemotePLC.In4KCallPLC_FilmLevelToMes(FilmData);
-                        }
-                        
-
+                            }
+                        });                                              
                     }
                     catch (System.Exception ex)
                     {
@@ -1321,6 +1350,7 @@ namespace DetectCCD
         }
         private async void btnConnect_Click(object sender, EventArgs e)
         {
+            Static.App.DiffFrameInnerFrontFix = 0;
             UtilTool.XFWait.Open();
             await Task.Run(() =>
             {
@@ -1659,6 +1689,13 @@ namespace DetectCCD
                 }
 
             });
+        }
+
+        private void btnManualAlign_Click(object sender, EventArgs e)
+        {
+            var detect = process.InnerDetect;
+            detect.In4kAlign8k(detect.Marks[0].MarkY);
+            
         }
     }
 

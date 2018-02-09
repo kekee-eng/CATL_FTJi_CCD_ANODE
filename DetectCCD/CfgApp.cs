@@ -31,6 +31,8 @@ namespace DetectCCD {
         public double DiffFrameInnerOuter = 18.15;
         public double DiffFrameFrontBack = 2.225;
 
+        public double DiffFrameInnerFrontFix = 0;
+
         public double FixFrameInnerFrontScale = 1.12816987473266;
         public double FixFrameOuterOrBackOffset {
             get {
@@ -42,7 +44,7 @@ namespace DetectCCD {
 
             var eInner = i - (isInner ? 0 : DiffFrameInnerOuter);
             var eFrontScale = eInner * FixFrameInnerFrontScale;
-            var eFront = eFrontScale + DiffFrameInnerFront;
+            var eFront = eFrontScale + (DiffFrameInnerFront+ DiffFrameInnerFrontFix);
             var eOutput = eFront + (isFront ? 0 : DiffFrameFrontBack);
 
             return (eOutput);
@@ -50,7 +52,7 @@ namespace DetectCCD {
         public double FrameFrontToInner(bool isFront, bool isInner, double i) {
 
             var eInput = i - (isFront ? 0 : DiffFrameFrontBack);
-            var eInnerScale = eInput - DiffFrameInnerFront;
+            var eInnerScale = eInput - (DiffFrameInnerFront+ DiffFrameInnerFrontFix);
             var eInner = eInnerScale / FixFrameInnerFrontScale;
             var eOutput = eInner + (isInner ? 0 : DiffFrameInnerOuter);
 

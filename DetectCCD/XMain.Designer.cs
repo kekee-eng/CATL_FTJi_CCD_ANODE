@@ -198,6 +198,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btnManualAlign = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -1998,6 +1999,7 @@
             // 
             // groupCtrl
             // 
+            this.groupCtrl.Controls.Add(this.btnManualAlign);
             this.groupCtrl.Controls.Add(this.btnOpenViewerChart);
             this.groupCtrl.Controls.Add(this.btnOfflineControl);
             this.groupCtrl.Location = new System.Drawing.Point(25, 19);
@@ -2096,6 +2098,15 @@
             // 
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
+            // 
+            // btnManualAlign
+            // 
+            this.btnManualAlign.Location = new System.Drawing.Point(172, 94);
+            this.btnManualAlign.Name = "btnManualAlign";
+            this.btnManualAlign.Size = new System.Drawing.Size(101, 30);
+            this.btnManualAlign.TabIndex = 20;
+            this.btnManualAlign.Text = "手动对其";
+            this.btnManualAlign.Click += new System.EventHandler(this.btnManualAlign_Click);
             // 
             // XMain
             // 
@@ -2382,5 +2393,6 @@
         private DevExpress.XtraEditors.LabelControl labelControl34;
         private DevExpress.XtraEditors.TextEdit mainEmployeeNum;
         private DevExpress.XtraEditors.TextEdit mainMachineNum;
+        private DevExpress.XtraEditors.SimpleButton btnManualAlign;
     }
 }
