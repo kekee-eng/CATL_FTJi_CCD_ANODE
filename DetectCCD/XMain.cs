@@ -1691,12 +1691,7 @@ namespace DetectCCD
             });
         }
 
-        private void btnManualAlign_Click(object sender, EventArgs e)
-        {
-            var detect = process.InnerDetect;
-            detect.In4kAlign8k(detect.Marks[0].MarkY);
-            
-        }
+        
     }
 
 }
