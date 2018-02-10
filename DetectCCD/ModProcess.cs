@@ -26,7 +26,7 @@ namespace DetectCCD {
             InnerDetect = new EntryDetect(InnerGrab, true);
             InnerViewerImage = new ViewerImage(InnerGrab, InnerDetect);
             InnerViewerChart = new ViewerChart(InnerGrab, InnerDetect, InnerViewerImage);
-
+              
             //
             OuterGrab = new EntryGrab(Static.App.RecordCacheSize);
             OuterDetect = new EntryDetect(OuterGrab, false);
