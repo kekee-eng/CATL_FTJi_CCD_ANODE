@@ -689,16 +689,30 @@ namespace DetectCCD
             data.TabY1 = y1;
             data.TabY2 = y1;
             data.HasTwoMark = false;
-
+            
             //宽度检测
             if (Tabs.Count > 0)
             {
-                DataTab dataCopy = Tabs.Last();
-
+                //
+                var dataCopy = Tabs.Last();
                 data.WidthY1 = dataCopy.WidthY1;
                 data.WidthY2 = dataCopy.WidthY2;
                 data.WidthX1 = dataCopy.WidthX1;
                 data.WidthX2 = dataCopy.WidthX2;
+
+                //
+                for (int i = Tabs.Count() - 1; i >= 0; i--)
+                {
+                    if (!Tabs[i].IsFix)
+                    {
+                        dataCopy = Tabs[i];
+                        data.WidthY1 = dataCopy.WidthY1;
+                        data.WidthY2 = dataCopy.WidthY2;
+                        data.WidthX1 = dataCopy.WidthX1;
+                        data.WidthX2 = dataCopy.WidthX2;
+                        break;
+                    }
+                }
             }
 
             //
