@@ -75,6 +75,7 @@ namespace DetectCCD
                 var repeat2 = Labels.Find(x => Math.Abs(x.Y - lab.Y) < 0.5);
                 if (repeat1 == null && repeat2 == null)
                 {
+                    lab.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
                     LabelsCache.Add(lab);
                 }
             });
@@ -287,6 +288,9 @@ namespace DetectCCD
                     missER.ValWidth = myMissER.ValWidth;
                 }
 
+                myMissER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
+                missER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
+
                 //
                 appendTab(myMissER);
                 partner.appendTab(missER);
@@ -307,6 +311,8 @@ namespace DetectCCD
             appendTab(myER);
             partner.appendTab(bindER);
 
+            myER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
+            bindER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
             if (myER.ValWidth != 0 && bindER.ValWidth != 0)
                 OnSyncTab?.Invoke(myER, bindER);
 
@@ -619,6 +625,8 @@ namespace DetectCCD
                                 //判断膜漏金属和AT9漏金属的规格
                                 if (defect.Type == 2 && defect.Area <= Static.Recipe.FilmLeakMetalArea)
                                     continue;
+
+                                defect.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
                                 myDefects.Add(defect);
                             }
 

@@ -30,6 +30,14 @@ namespace DetectCCD {
 
         }
 
+        //生成时间戳
+        public static string GenTimeStamp(DateTime time)
+        {
+            return time.ToString("yyyy/MM/dd HH:mm:ss.fff");
+        }
+
+
+
         public static void AddBuildTag(Control form) {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             var tbuild = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);

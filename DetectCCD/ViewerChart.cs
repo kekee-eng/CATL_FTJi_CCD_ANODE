@@ -414,7 +414,8 @@ namespace DetectCCD {
                 dt.H,
                 dt.Width,
                 dt.Height,
-                dt.Area
+                dt.Area,
+                dt.Timestamp
                 );
             
         }
@@ -432,7 +433,8 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N3" } },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N3" } },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N1" } }
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N1" } },
+                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Time" }
                 );
             
             //
@@ -474,7 +476,8 @@ namespace DetectCCD {
                 dt.Y.ToString("0.000"),
                 dt.W.ToString("0.000"),
                 dt.H.ToString("0.000"),
-                dt.Comment
+                dt.Comment,
+                dt.Timestamp
                 );
 
         }
@@ -490,7 +493,8 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false },
-                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Comment" }
+                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Comment" },
+                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Time" }
                 );
 
             //
@@ -591,7 +595,8 @@ namespace DetectCCD {
                 dtOuter.TabY1.ToString("0.000"),
                 dtInner.ValWidth.ToString("0.000"),
                 dtOuter.ValWidth.ToString("0.000"),
-                (dtInner.ValWidth + dtOuter.ValWidth).ToString("0.000")
+                (dtInner.ValWidth + dtOuter.ValWidth).ToString("0.000"),
+                dtInner.Timestamp
                 );
             grid.Rows[0].Tag = new object[] { dtInner, dtOuter
     };
@@ -621,7 +626,8 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "外侧位置", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "内侧极宽" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "外侧极宽" },
-                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "总宽度" }
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "总宽度" },
+                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Time" }
                 );
             gridEvent(grid, viewInner.MoveToTAB);
             gridEvent(grid, viewOuter.MoveToTAB);

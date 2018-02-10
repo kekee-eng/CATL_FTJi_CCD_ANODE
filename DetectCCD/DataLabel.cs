@@ -9,6 +9,8 @@ namespace DetectCCD {
     [System.Serializable]
     public class DataLabel {
 
+        public string Timestamp;
+
         public int EA = -100;
         public int Encoder;
         public double X { get { return Static.Tiebiao.LabelShowX; } }

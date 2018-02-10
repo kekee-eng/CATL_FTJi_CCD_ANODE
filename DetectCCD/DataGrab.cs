@@ -99,13 +99,6 @@ namespace DetectCCD {
 
             isDetectTab = true;
         }
-
-      
-
-        //生成时间戳
-        public static string GenTimeStamp(DateTime time) {
-            return time.ToString("yyyy/MM/dd HH:mm:ss.fff");
-        }
         
         //缓存接口
         public class GrabCache : IDisposable {

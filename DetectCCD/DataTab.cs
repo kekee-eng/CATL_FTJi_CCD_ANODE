@@ -6,6 +6,8 @@ namespace DetectCCD {
     [System.Serializable]
     public class DataTab {
 
+        public string Timestamp;
+
         //极耳位置
         public double TabX;
         public double TabY1;

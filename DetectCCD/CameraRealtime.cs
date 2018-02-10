@@ -136,7 +136,7 @@ namespace DetectCCD {
                 Camera = Name,
                 Frame = m_frame,
                 Encoder = m_encoder,
-                Timestamp = DataGrab.GenTimeStamp(DateTime.Now),
+                Timestamp = UtilTool.GenTimeStamp(DateTime.Now),
             };
 
             //
