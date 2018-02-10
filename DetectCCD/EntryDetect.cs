@@ -64,6 +64,8 @@ namespace DetectCCD
         public List<DataTab> TabsCache = new List<DataTab>();
         public List<DataLabel> LabelsCache = new List<DataLabel>();
 
+        public DataTab prevTab = null;
+
         void addLabel(DataLabel lab)
         {
             Log.Record(() =>
@@ -398,7 +400,6 @@ namespace DetectCCD
             double[] bx1, bx2;
             double bfy1 = data.TabY1 + Static.Recipe.TabWidthStart / Fy;
             double bfy2 = data.TabY1 + Static.Recipe.TabWidthEnd / Fy;
-
             var bimage = grab.GetImage(bfy1, bfy2);
             if (bimage != null && ImageProcess.DetectWidth(bimage, out bx1, out bx2))
             {
@@ -408,6 +409,22 @@ namespace DetectCCD
                 data.WidthX2 = bx2[0] / w;
             }
             bimage?.Dispose();
+
+            //去除异常位置的测宽
+            if (prevTab != null)
+            {
+                double py1 = prevTab.TabY1;
+                double py2 = prevTab.TabY2;
+
+                if (py2 >= bfy1 && py1 <= bfy2)
+                {
+                    data.WidthX1 = prevTab.WidthX1;
+                    data.WidthX2 = prevTab.WidthX2;
+                    data.WidthY1 = prevTab.WidthY1;
+                    data.WidthY2 = prevTab.WidthY2;
+                }
+            }
+            prevTab = data;
 
             //
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
@@ -674,10 +691,9 @@ namespace DetectCCD
             data.HasTwoMark = false;
 
             //宽度检测
-            DataTab dataCopy = new DataTab();
             if (Tabs.Count > 0)
             {
-                dataCopy = Tabs.Last();
+                DataTab dataCopy = Tabs.Last();
 
                 data.WidthY1 = dataCopy.WidthY1;
                 data.WidthY2 = dataCopy.WidthY2;
