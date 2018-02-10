@@ -245,7 +245,7 @@ namespace DetectCCD
             //线程：手动拖动图像
             process.InnerViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() =>
             {
-                process.OuterViewerImage.MoveToView(y + Static.App.FixFrameOuterOrBackOffset, x, s);
+                process.OuterViewerImage.MoveToView(y + process.OuterDetect.DiffFrame, x, s);
                 if (Static.App.Is4K)
                 {
                     RemoteDefect.In4KCall8K_Viewer(true, true, y);
@@ -254,7 +254,7 @@ namespace DetectCCD
             });
             process.OuterViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() =>
             {
-                process.InnerViewerImage.MoveToView(y - Static.App.FixFrameOuterOrBackOffset, x, s);
+                process.InnerViewerImage.MoveToView(y - process.OuterDetect.DiffFrame, x, s);
                 if (Static.App.Is4K)
                 {
                     RemoteDefect.In4KCall8K_Viewer(true, false, y);

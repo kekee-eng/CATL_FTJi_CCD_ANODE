@@ -311,7 +311,6 @@ namespace DetectCCD
         }
         public bool TryAddTab(DataTab data)
         {
-
             //是否新极耳
             int w = grab.Width;
             int h = grab.Height;
@@ -413,13 +412,24 @@ namespace DetectCCD
             //
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
             data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
-            
+
             //判断有MARK孔
-            double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
-            double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
-            foreach (var dm in Marks)
+            if (Marks.Count > 0)
             {
-                if (dm.MarkY >= cfy1 && dm.MarkY <= cfy2)
+                //最近一个Mark孔位置
+                var dm = Marks.Last();
+                //附近极耳区域
+                var m1 = dm.MarkY;
+                var m2 = dm.MarkY + 2;
+
+                //待检测的极耳区域
+                var y1 = data.TabY1;
+                var y2 = data.TabY2;
+
+                //区域存在交集
+                var b = m2 >= y1 && m1 <= y2;
+
+                if(b)
                 {
                     data.IsNewEA = true;
                     data.HasTwoMark = dm.HasTwoMark;
@@ -430,12 +440,12 @@ namespace DetectCCD
                     data.MarkX_P = dm.MarkX_P;
                     data.MarkX_P = dm.MarkX_P;
 
-                    break;
+                    data.MarkImageStart = dm.MarkImageStart;
+                    data.MarkImageEnd = dm.MarkImageEnd;
+
                 }
             }
-            data.MarkImageStart = cfy1;
-            data.MarkImageEnd = cfy2;
-            
+
             //
             TabsCache.Add(data);
             
@@ -714,7 +724,6 @@ namespace DetectCCD
         }
         DataEA _get_ea(int id)
         {
-
             var curEaTab = Tabs.Find(x => x.EA == id && x.TAB == 1);
             if (curEaTab == null)
                 return null;
