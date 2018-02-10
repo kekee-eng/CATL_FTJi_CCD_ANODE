@@ -767,8 +767,12 @@ namespace DetectCCD
 
             if (Static.App.Is4K)
             {
-                var setFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
-                var setBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
+                //修复偶尔未从8K同步到标签的Bug
+                for (int i = 0; i < 3; i++)
+                {
+                    var setFront = RemoteDefect.In4KCall8K_GetDefectCount(true, isinner, start, end, id);
+                    var setBack = RemoteDefect.In4KCall8K_GetDefectCount(false, isinner, start, end, id);
+                }
 
                 var remoteDefsFront = RemoteDefect.In4KCall8K_GetDefectList(true, isinner, id);
                 var remoteDefsBack = RemoteDefect.In4KCall8K_GetDefectList(false, isinner, id);
@@ -786,7 +790,7 @@ namespace DetectCCD
                     obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
                     obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 2);
                 }
-
+                
             }
 
             return obj;
