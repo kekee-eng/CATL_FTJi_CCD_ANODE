@@ -307,12 +307,13 @@ namespace DetectCCD
                 bindER.ValWidth = myER.ValWidth;
             }
 
+            myER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
+            bindER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
             //添加到列表
             appendTab(myER);
             partner.appendTab(bindER);
 
-            myER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
-            bindER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
+          
             if (myER.ValWidth != 0 && bindER.ValWidth != 0)
                 OnSyncTab?.Invoke(myER, bindER);
 
@@ -452,7 +453,7 @@ namespace DetectCCD
                 //区域存在交集
                 var b = m2 >= y1 && m1 <= y2;
 
-                if(b)
+                if (b)
                 {
                     data.IsNewEA = true;
                     data.HasTwoMark = dm.HasTwoMark;
@@ -471,7 +472,7 @@ namespace DetectCCD
 
             //
             TabsCache.Add(data);
-            
+
             //
             return true;
         }
@@ -482,7 +483,7 @@ namespace DetectCCD
         }
         public void AddLableToPlc(DataTab data, double dm)
         {
-            
+
             //
             int ea = 0;
             if (Tabs.Count != 0)
@@ -697,7 +698,7 @@ namespace DetectCCD
             data.TabY1 = y1;
             data.TabY2 = y1;
             data.HasTwoMark = false;
-            
+
             //宽度检测
             if (Tabs.Count > 0)
             {
@@ -828,7 +829,7 @@ namespace DetectCCD
                     obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
                     obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 2);
                 }
-                
+
             }
 
             return obj;
