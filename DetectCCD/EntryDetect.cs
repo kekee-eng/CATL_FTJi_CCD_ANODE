@@ -802,6 +802,12 @@ namespace DetectCCD
                 }
             }
 
+            if (Marks.Count > 0)
+            {
+                var markvalue = Marks.Select(x => x.MarkY).OrderBy(x => Math.Abs(x - end)).First();
+                if (Math.Abs(markvalue - end) < 5)
+                    end = markvalue;
+            }
             AllocAndGetDefectCount(start, end, id);
 
             if (Static.App.Is4K)
