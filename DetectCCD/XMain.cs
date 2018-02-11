@@ -203,6 +203,10 @@ namespace DetectCCD
                     mainRollName.Text = roll;
                 };
 
+                RemoteDefect._func_in_8k_getFrame += () =>
+                {
+                    return new int[] { device.InnerCamera.m_frame, device.OuterCamera.m_frame };
+                };
             }
 
         }
@@ -1164,8 +1168,70 @@ namespace DetectCCD
                 process.InnerViewerChart.SyncDefectGrid(panelDefect1);
                 process.OuterViewerChart.SyncDefectGrid(panelDefect2);
 
+
+                if (Static.App.Is4K && device.isGrabbing)
+                {
+                    //
+                    int frameFront;
+                    int frameBack;
+                    int frameInner = device.InnerCamera.m_frame;
+                    int frameOuter = device.OuterCamera.m_frame;
+                    RemoteDefect.In4KGet8KFrame(out frameFront, out frameBack);
+
+                    //
+                    bool isPlayFront = frameFront != frameFrontPrev;
+                    bool isPlayBack = frameBack != frameBackPrev;
+                    bool isPlayInner = frameInner != frameInnerPrev;
+                    bool isPlayOuter = frameOuter != frameOuterPrev;
+
+                    //
+                    if (isPlayFront && isPlayBack && isPlayInner && isPlayOuter)
+                    {
+                        //运行
+                        frameIsError = false;
+                    }
+                    else if (!isPlayFront && !isPlayBack && !isPlayInner && !isPlayOuter)
+                    {
+                        //停止
+                        frameIsError = false;
+                    }
+                    else
+                    {
+                        //异常
+                        if (!frameIsError)
+                        {
+                            frameErrorTimeStart = DateTime.Now;
+                            frameIsError = true;
+                        }
+                    }
+
+                    if(frameIsError)
+                    {
+                        var time = DateTime.Now - frameErrorTimeStart;
+                        if (time.TotalSeconds > 20)
+                        {
+                            //
+                            DeviceStopGrab();
+                            XtraMessageBox.Show("相机采图错误，请重新开启设备！");
+                        }
+                    }
+
+                    //
+                    frameFrontPrev = frameFront;
+                    frameBackPrev = frameBack;
+                    frameInnerPrev = frameInner;
+                    frameOuterPrev = frameOuter;
+
+                }
             });
         }
+
+        int frameFrontPrev;
+        int frameBackPrev;
+        int frameInnerPrev;
+        int frameOuterPrev;
+        bool frameIsError = false;
+        DateTime frameErrorTimeStart = DateTime.Now;
 
         private void status_user_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {

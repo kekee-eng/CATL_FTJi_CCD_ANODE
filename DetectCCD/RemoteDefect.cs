@@ -253,10 +253,46 @@ namespace DetectCCD {
         public static event Action<string, string> _func_in_8k_setRoll;
         public void _in_8k_setRoll(string recipe, string roll) {
             try { _func_in_8k_setRoll(recipe, roll); }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Log.AppLog.Error("RemoteDefect:", ex);
             }
         }
 
+        public static void In4KGet8KFrame(out int front, out int back)
+        {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            front = 0;
+            back = 0;
+
+            try
+            {
+                if (client == null) return;
+                client._in_8k_getFrame(out front, out back);
+            }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+            }
+
+        }
+        public static event Func<int[]> _func_in_8k_getFrame;
+        public void _in_8k_getFrame(out int front, out int back)
+        {
+            try {
+                var values = _func_in_8k_getFrame();
+                front = values[0];
+                back = values[1];
+            }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                front = 0;
+                back = 0;
+            }
+        }
     }
 }
