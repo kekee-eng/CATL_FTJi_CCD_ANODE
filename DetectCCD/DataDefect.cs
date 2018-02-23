@@ -38,6 +38,25 @@ namespace DetectCCD {
         }
 
         //
+        public string IsInnerText()
+        {
+            //
+            var isinner = InInner(true);
+            var isouter = InInner(false);
+
+            if (isinner && isouter)
+                return "全部";
+
+            if (isinner)
+                return "内侧";
+
+            if (isouter)
+                return "外侧";
+
+            return "无";
+        }
+
+        //
         public bool InInner(bool isinner) {
             if(isinner)
                 return (X + W / 2 > 0.5);

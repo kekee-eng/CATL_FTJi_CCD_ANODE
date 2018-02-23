@@ -407,6 +407,7 @@ namespace DetectCCD {
             gridAdd(grid,
                 grid.Rows.Count + 1,
                 dt.EA,
+                dt.IsInnerText(),
                 dt.GetTypeCaption(),
                 dt.X,
                 dt.Y,
@@ -426,6 +427,7 @@ namespace DetectCCD {
             grid.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
                 new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "EA" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "位置" },
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "类型" },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X", Visible = false },
                 new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y", Visible = false },
