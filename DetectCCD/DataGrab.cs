@@ -93,6 +93,22 @@ namespace DetectCCD {
                     DM.MarkX_P = cx[1] / w;
                     DM.MarkY_P = DM.MarkImageStart + cy[1] / h;
                 }
+
+                //保存Mark孔图
+                if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageMark) {
+                    string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+                    var savefolder = Static.FolderRecord + "/Mark孔/";
+
+                    if (!System.IO.Directory.Exists(savefolder))
+                        System.IO.Directory.CreateDirectory(savefolder);
+
+                    string filename = $"{savefolder}{timestamp}_{Camera}_F{Convert.ToInt32(DM.MarkY)}";
+                    var img = ImageMark.CopyImage();
+                    Log.RecordAsThread(() => {
+                        img?.WriteImage("png", 0, filename);
+                        img?.Dispose();
+                    });
+                }
             }
             ImageMark.Dispose();
 
