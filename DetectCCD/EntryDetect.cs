@@ -43,8 +43,8 @@ namespace DetectCCD
             defectFrameCount = 0;
             posEAStart = -1;
 
-            offsetList.Clear();
-            
+            DiffFrame = Static.App.FixFrameOuterOrBackOffset;
+
             CountOfFrameMaybeDefect = 0;
             CountOfFrameRealDefect = 0;
 
@@ -135,29 +135,7 @@ namespace DetectCCD
         public event Action<DataTab, DataTab> OnSyncTab;
 
         int defectFrameCount = 0;
-
-        List<double> offsetList = new List<double>();
-        void addOffset(double offset)
-        {
-
-            offsetList.Add(offset);
-            if (offsetList.Count > 10)
-            {
-                offsetList.RemoveAt(0);
-            }
-        }
-        public double DiffFrame
-        {
-            get
-            {
-                if (offsetList.Count < 10)
-                    return Static.App.FixFrameOuterOrBackOffset;
-                else
-                {
-                    return offsetList.Average();
-                }
-            }
-        }
+        public double DiffFrame;
 
         public void TryTransLabel(int frame)
         {
@@ -204,13 +182,11 @@ namespace DetectCCD
             }
 
         }
-        public void TrySync(EntryDetect partner)
-        {
+        public void TrySync(EntryDetect partner) {
 
             // diff = this - partner
             // this = partner + diff
             // partner = this - diff
-            var diffFrame = DiffFrame;
 
             //需要同步的对象
             var myER = TabsCache.Last();
@@ -218,21 +194,42 @@ namespace DetectCCD
                 return;
 
             //尝试找到对应项
-            var bindER = partner.findBind(myER.TabY1 - diffFrame);
-            if (bindER == null)
-            {
+            var bindER = partner.findBind(myER.TabY1 - DiffFrame);
+            if (bindER == null) {
 
                 //未找到：对方补测一个宽度
-                bindER = partner.fixER(myER.TabX, myER.TabY1 - diffFrame, myER.TabY2 - diffFrame);
+                bindER = partner.fixER(myER.TabX, myER.TabY1 - DiffFrame, myER.TabY2 - DiffFrame);
             }
-            else
-            {
+            else {
+                if (bindER.IsNewEA) {
 
-                //纠偏
-                var offset = myER.TabY1 - bindER.TabY1;
-                if (Math.Abs(offset - diffFrame) < 1.2)
-                {
-                    addOffset(offset);
+                    //同步EA
+                    double posMe = myER.MarkY;
+                    double posPartner = posMe - DiffFrame;
+                    double posPartnerReal = 0;
+                    for (int i = 0; i < partner.Marks.Count; i++) {
+                        var dist = posPartner - partner.Marks[i].MarkY;
+
+                        if (dist > -10 && dist < 10) {
+
+                            if (dist > Static.App.OnceAdjustValue)
+                                dist = Static.App.OnceAdjustValue;
+                            if (dist < -Static.App.OnceAdjustValue)
+                                dist = -Static.App.OnceAdjustValue;
+
+                            posPartnerReal = partner.Marks[i].MarkY;
+                            DiffFrame += dist;
+                            break;
+                        }
+                    }
+
+                    Log.AppLog.Info(string.Format("ME, P, PReal, FIX -> {0:0.0}, {1:0.0}, {2:0.0}, {3:0.0}",
+                        posMe,
+                        posPartner,
+                        posPartnerReal,
+                        DiffFrame - Static.App.FixFrameOuterOrBackOffset
+                        ));
+
                 }
             }
 
@@ -241,60 +238,51 @@ namespace DetectCCD
             bindER.IsSync = true;
 
             //同步EA头
-            if (myER.IsNewEA || bindER.IsNewEA)
-            {
+            if (myER.IsNewEA || bindER.IsNewEA) {
                 myER.IsNewEA = true;
                 bindER.IsNewEA = true;
 
-                if (myER.MarkX == 0 && bindER.MarkX != 0)
-                {
+                if (myER.MarkX == 0 && bindER.MarkX != 0) {
                     myER.MarkX = bindER.MarkX;
-                    myER.MarkY = bindER.MarkY + diffFrame;
+                    myER.MarkY = bindER.MarkY + DiffFrame;
                 }
 
-                if (myER.MarkX != 0 && bindER.MarkX == 0)
-                {
+                if (myER.MarkX != 0 && bindER.MarkX == 0) {
                     bindER.MarkX = myER.MarkX;
-                    bindER.MarkY = myER.MarkY - diffFrame;
+                    bindER.MarkY = myER.MarkY - DiffFrame;
                 }
             }
 
             //查看我方是否有漏测
-            do
-            {
+            do {
                 var missER = partner.TabsCache.Find(x => x.TabY1 < bindER.TabY1);
                 if (missER == null)
                     break;
 
                 //补测宽度
-                var myMissER = fixER(missER.TabX, missER.TabY1 + diffFrame, missER.TabY2 + diffFrame);
+                var myMissER = fixER(missER.TabX, missER.TabY1 + DiffFrame, missER.TabY2 + DiffFrame);
 
                 //同步EA头
-                if (missER.IsNewEA || myMissER.IsNewEA)
-                {
+                if (missER.IsNewEA || myMissER.IsNewEA) {
                     missER.IsNewEA = true;
                     myMissER.IsNewEA = true;
 
-                    if (missER.MarkX == 0 && myMissER.MarkX != 0)
-                    {
+                    if (missER.MarkX == 0 && myMissER.MarkX != 0) {
                         missER.MarkX = myMissER.MarkX;
-                        missER.MarkY = myMissER.MarkY - diffFrame;
+                        missER.MarkY = myMissER.MarkY - DiffFrame;
                     }
 
-                    if (missER.MarkX != 0 && bindER.MarkX == 0)
-                    {
+                    if (missER.MarkX != 0 && bindER.MarkX == 0) {
                         myMissER.MarkX = missER.MarkX;
-                        myMissER.MarkY = missER.MarkY + diffFrame;
+                        myMissER.MarkY = missER.MarkY + DiffFrame;
                     }
                 }
 
                 //Fix: 宽度值为0
-                if (myMissER.ValWidth == 0 && missER.ValWidth != 0)
-                {
+                if (myMissER.ValWidth == 0 && missER.ValWidth != 0) {
                     myMissER.ValWidth = missER.ValWidth;
                 }
-                if (myMissER.ValWidth != 0 && missER.ValWidth == 0)
-                {
+                if (myMissER.ValWidth != 0 && missER.ValWidth == 0) {
                     missER.ValWidth = myMissER.ValWidth;
                 }
 
@@ -308,22 +296,21 @@ namespace DetectCCD
             } while (true);
 
             //Fix: 宽度值为0
-            if (myER.ValWidth == 0 && bindER.ValWidth != 0)
-            {
+            if (myER.ValWidth == 0 && bindER.ValWidth != 0) {
                 myER.ValWidth = bindER.ValWidth;
             }
-            if (myER.ValWidth != 0 && bindER.ValWidth == 0)
-            {
+            if (myER.ValWidth != 0 && bindER.ValWidth == 0) {
                 bindER.ValWidth = myER.ValWidth;
             }
 
             myER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
             bindER.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
+
             //添加到列表
             appendTab(myER);
             partner.appendTab(bindER);
 
-          
+            //
             if (myER.ValWidth != 0 && bindER.ValWidth != 0)
                 OnSyncTab?.Invoke(myER, bindER);
 
