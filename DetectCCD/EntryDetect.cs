@@ -651,6 +651,7 @@ namespace DetectCCD
                             }
 
                             //保存NG小图
+                            bool hasSmallDefect = false;
                             if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall) {
                                 for (int i = 0; i < myDefects.Count; i++) {
                                     var defect = myDefects[i];
@@ -676,12 +677,14 @@ namespace DetectCCD
                                             var saveimg = eimage.CropPart(ey[i] - h0 / 2, ex[i] - w0 / 2, w0, h0);
                                             UtilSaveImageQueue.Put(saveimg, filename);
                                         });
+
+                                        hasSmallDefect = true;
                                     }
                                 }
 
                             }
 
-                            if (myDefects.Count > 0 && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig) {
+                            if (hasSmallDefect && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig) {
                                 var saveimg = eimage.CopyImage();
                                 UtilSaveImageQueue.Put(saveimg, saveBigFilename);
                             }
