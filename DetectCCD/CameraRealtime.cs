@@ -104,11 +104,12 @@ namespace DetectCCD {
 
             if (Static.App.Is4K) {
                 //Fix：通过编码器来判断是否为超时触发
-                if (Math.Abs(encoder_check - callGetEncoderCheck()) < Buffers.Height - 200) {
+                var encoder = callGetEncoderCheck();
+                if (Math.Abs(encoder_check - encoder) < Buffers.Height / 4) {
                     m_trash++;
                     return;
                 }
-                encoder_check = callGetEncoderCheck();
+                encoder_check = encoder;
             }
             
             //
