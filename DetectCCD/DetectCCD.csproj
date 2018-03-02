@@ -110,6 +110,7 @@
     <Compile Include="TemplateCamera.cs" />
     <Compile Include="TemplateConfig.cs" />
     <Compile Include="UtilPerformance.cs" />
+    <Compile Include="UtilSaveImageQueue.cs" />
     <Compile Include="UtilSerialization.cs" />
     <Compile Include="UtilTool.cs" />
     <Compile Include="ViewerImage.cs" />

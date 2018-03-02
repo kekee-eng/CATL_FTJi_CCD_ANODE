@@ -104,10 +104,7 @@ namespace DetectCCD {
 
                     string filename = $"{savefolder}{timestamp}_{Camera}_F{Convert.ToInt32(DM.MarkY)}";
                     var img = ImageMark.CopyImage();
-                    Log.RecordAsThread(() => {
-                        img?.WriteImage("png", 0, filename);
-                        img?.Dispose();
-                    });
+                    UtilSaveImageQueue.Put(img, filename);
                 }
             }
             ImageMark?.Dispose();

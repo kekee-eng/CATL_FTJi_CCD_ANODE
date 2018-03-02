@@ -60,12 +60,15 @@ namespace DetectCCD {
 
             //
             App.SelectUserId = 0;
+
+            //
+            UtilSaveImageQueue.Start();
         }
         public static void Uninit() {
 
             App.Save();
             Recipe.Save();
-
+            UtilSaveImageQueue.Stop();
         }
 
         public static bool CompareFile(string p_1, string p_2) {

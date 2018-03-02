@@ -62,7 +62,10 @@ namespace DetectCCD {
             monitor["ImageProcess_DetectDefect"] = () => ImageProcess.TimeDetectDefect;
             monitor["ImageProcess_ImageDefectWidth"] = () => ImageProcess.ImageDefectWidth;
             monitor["ImageProcess_ImageDefectHeight"] = () => ImageProcess.ImageDefectHeight;
-            
+
+            monitor["SaveImage"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["SaveImageInfo"] = () => UtilSaveImageQueue.GetInformaticon();
+
             //
             return monitor;
 
@@ -81,6 +84,13 @@ namespace DetectCCD {
             monitor["Inner_Frame_Cache"] = () => getCountText(record.InnerGrab.Cache.Max);
             monitor["Inner_Frame_Detect"] = () => getCountText(record.InnerDetect.m_frame - 1);
 
+            monitor["Inner_Defect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Inner_Defect_FrameTotal"] = () => record.InnerDetect.m_frame;
+            monitor["Inner_Defect_FrameMaybe"] = () => record.InnerDetect.CountOfFrameMaybeDefect;
+            monitor["Inner_Defect_FrameReal"] = () => record.InnerDetect.CountOfFrameRealDefect;
+            monitor["Inner_Defect_DetectTotal"] = () => record.InnerDetect.CountOfDetectDefectTotal;
+            monitor["Inner_Defect_DetectReal"] = () => record.InnerDetect.CountOfDetectDefectReal;
+            
             monitor["Inner_Detect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             //monitor["Inner_DetectTime"] = () => record.InnerDetect.TimeDetect;
             //monitor["Inner_DetectTransLabel"] = () => record.InnerDetect.TimeTransLabel;
@@ -167,6 +177,13 @@ namespace DetectCCD {
             monitor["Outer_Frame_Grab"] = () => device.OuterCamera.m_frame;
             monitor["Outer_Frame_Cache"] = () => getCountText(record.OuterGrab.Cache.Max);
             monitor["Outer_Frame_Detect"] = () => getCountText(record.OuterDetect.m_frame - 1);
+
+            monitor["Outer_Defect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
+            monitor["Outer_Defect_FrameTotal"] = () => record.OuterDetect.m_frame;
+            monitor["Outer_Defect_FrameMaybe"] = () => record.OuterDetect.CountOfFrameMaybeDefect;
+            monitor["Outer_Defect_FrameReal"] = () => record.OuterDetect.CountOfFrameRealDefect;
+            monitor["Outer_Defect_DetectTotal"] = () => record.OuterDetect.CountOfDetectDefectTotal;
+            monitor["Outer_Defect_DetectReal"] = () => record.OuterDetect.CountOfDetectDefectReal;
 
             monitor["Outer_Detect"] = () => UtilTool.AutoInfo.C_SPACE_TEXT;
             //monitor["Outer_DetectTime"] = () => record.OuterDetect.TimeDetect;

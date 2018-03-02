@@ -21,8 +21,7 @@ namespace DetectCCD
             this.isinner = isInner;
 
         }
-        public void Dispose()
-        {
+        public void Dispose() {
 
             _IN_8K_FROM_4K.Clear();
 
@@ -45,6 +44,12 @@ namespace DetectCCD
             posEAStart = -1;
 
             offsetList.Clear();
+            
+            CountOfFrameMaybeDefect = 0;
+            CountOfFrameRealDefect = 0;
+
+            CountOfDetectDefectTotal = 0;
+            CountOfDetectDefectReal = 0;
         }
 
         EntryGrab grab;
@@ -54,6 +59,11 @@ namespace DetectCCD
         public double Fy { get { return grab.Fy; } }
 
         public int m_frame = 1;
+        public int CountOfFrameMaybeDefect = 0;
+        public int CountOfFrameRealDefect = 0;
+
+        public int CountOfDetectDefectTotal = 0;
+        public int CountOfDetectDefectReal = 0;
 
         public List<DataEA> EAs = new List<DataEA>();
         public List<DataTab> Tabs = new List<DataTab>();
@@ -556,6 +566,7 @@ namespace DetectCCD
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
             if (hasDefect) {
                 defectFrameCount++;
+                CountOfFrameMaybeDefect++;
             }
 
             if (defectFrameCount >= 3 || (!hasDefect && defectFrameCount > 0)) {
@@ -593,6 +604,11 @@ namespace DetectCCD
                 //多线程运算
                 Log.RecordAsThread(() => {
                     Log.Record(() => {
+
+                        //统计检测次数
+                        CountOfDetectDefectTotal++;
+
+                        //
                         var eimage = grab.GetImage(efx1, efx2);
                         int[] etype;
                         double[] ex, ey, ew, eh, earea;
@@ -620,6 +636,13 @@ namespace DetectCCD
 
                                 defect.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
                                 myDefects.Add(defect);
+                            }
+
+                            if (myDefects.Count > 0) {
+
+                                //统计发现缺陷次数
+                                CountOfDetectDefectReal++;
+                                CountOfFrameRealDefect += defectFrameCount;
                             }
 
                             //添加到列表中
@@ -651,8 +674,7 @@ namespace DetectCCD
 
                                         Log.Record(() => {
                                             var saveimg = eimage.CropPart(ey[i] - h0 / 2, ex[i] - w0 / 2, w0, h0);
-                                            saveimg?.WriteImage("png", 0, filename);
-                                            saveimg?.Dispose();
+                                            UtilSaveImageQueue.Put(saveimg, filename);
                                         });
                                     }
                                 }
@@ -660,10 +682,8 @@ namespace DetectCCD
                             }
 
                             if (myDefects.Count > 0 && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig) {
-                                Log.Record(() => {
-                                    eimage.WriteImage("png", 0, saveBigFilename);
-                                    myDefects[0].NGBigPath = saveBigFilename;
-                                });
+                                var saveimg = eimage.CopyImage();
+                                UtilSaveImageQueue.Put(saveimg, saveBigFilename);
                             }
                         }
 
