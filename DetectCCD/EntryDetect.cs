@@ -558,7 +558,7 @@ namespace DetectCCD
                 defectFrameCount++;
             }
 
-            if (defectFrameCount >= 10 || (!hasDefect && defectFrameCount > 0)) {
+            if (defectFrameCount >= 3 || (!hasDefect && defectFrameCount > 0)) {
                 //拼成大图进行瑕疵检测
                 int w = grab.Width;
                 int h = grab.Height;
