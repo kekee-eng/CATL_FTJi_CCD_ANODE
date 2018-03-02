@@ -193,6 +193,37 @@ namespace DetectCCD
             if (myER == null)
                 return;
 
+            //对齐Mark孔
+            if (myER.IsNewEA) {
+                
+                double posMe = myER.MarkY;
+                double posPartner = posMe - DiffFrame;
+                double posPartnerReal = 0;
+                for (int i = 0; i < partner.Marks.Count; i++) {
+                    var dist = posPartner - partner.Marks[i].MarkY;
+
+                    if (dist > -10 && dist < 10) {
+
+                        if (dist > Static.App.OnceAdjustValue)
+                            dist = Static.App.OnceAdjustValue;
+                        if (dist < -Static.App.OnceAdjustValue)
+                            dist = -Static.App.OnceAdjustValue;
+
+                        posPartnerReal = partner.Marks[i].MarkY;
+                        DiffFrame += dist;
+                        break;
+                    }
+                }
+
+                Log.AppLog.Info(string.Format("ME, P, PReal, FIX -> {0:0.0}, {1:0.0}, {2:0.0}, {3:0.0}",
+                    posMe,
+                    posPartner,
+                    posPartnerReal,
+                    DiffFrame - Static.App.FixFrameOuterOrBackOffset
+                    ));
+
+            }
+
             //尝试找到对应项
             var bindER = partner.findBind(myER.TabY1 - DiffFrame);
             if (bindER == null) {
@@ -200,39 +231,7 @@ namespace DetectCCD
                 //未找到：对方补测一个宽度
                 bindER = partner.fixER(myER.TabX, myER.TabY1 - DiffFrame, myER.TabY2 - DiffFrame);
             }
-            else {
-                if (bindER.IsNewEA) {
-
-                    //同步EA
-                    double posMe = myER.MarkY;
-                    double posPartner = posMe - DiffFrame;
-                    double posPartnerReal = 0;
-                    for (int i = 0; i < partner.Marks.Count; i++) {
-                        var dist = posPartner - partner.Marks[i].MarkY;
-
-                        if (dist > -10 && dist < 10) {
-
-                            if (dist > Static.App.OnceAdjustValue)
-                                dist = Static.App.OnceAdjustValue;
-                            if (dist < -Static.App.OnceAdjustValue)
-                                dist = -Static.App.OnceAdjustValue;
-
-                            posPartnerReal = partner.Marks[i].MarkY;
-                            DiffFrame += dist;
-                            break;
-                        }
-                    }
-
-                    Log.AppLog.Info(string.Format("ME, P, PReal, FIX -> {0:0.0}, {1:0.0}, {2:0.0}, {3:0.0}",
-                        posMe,
-                        posPartner,
-                        posPartnerReal,
-                        DiffFrame - Static.App.FixFrameOuterOrBackOffset
-                        ));
-
-                }
-            }
-
+            
             //找到：标记已同步
             myER.IsSync = true;
             bindER.IsSync = true;
