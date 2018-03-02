@@ -110,7 +110,7 @@ namespace DetectCCD {
                     });
                 }
             }
-            ImageMark.Dispose();
+            ImageMark?.Dispose();
 
 
             isDetectTab = true;

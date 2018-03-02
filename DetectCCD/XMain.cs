@@ -237,10 +237,13 @@ namespace DetectCCD
                 //
                 process.OuterGrab[obj.Frame] = obj;
 
-                //
-                obj.DM.MarkImageStart = obj.Frame - 0.2;
-                obj.DM.MarkImageEnd = obj.Frame +0.99;
-                obj.ImageMark = process.OuterGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
+                if (Static.App.Is4K) {
+
+                    //
+                    obj.DM.MarkImageStart = obj.Frame - 0.2;
+                    obj.DM.MarkImageEnd = obj.Frame + 0.99;
+                    obj.ImageMark = process.OuterGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
+                }
 
                 //
                 Log.RecordAsThread(obj.DetectTab);

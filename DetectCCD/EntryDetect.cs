@@ -552,22 +552,17 @@ namespace DetectCCD
             }
         }
 
-        public void TryAddDefect(bool hasDefect, int frame)
-        {
-
+        public void TryAddDefect(bool hasDefect, int frame) {
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
-            if (hasDefect)
-            {
+            if (hasDefect) {
                 defectFrameCount++;
             }
 
-            if (defectFrameCount >= 10 || (!hasDefect && defectFrameCount > 0))
-            {
-
+            if (defectFrameCount >= 10 || (!hasDefect && defectFrameCount > 0)) {
                 //拼成大图进行瑕疵检测
                 int w = grab.Width;
                 int h = grab.Height;
-                int efx1 = frame - 1 - defectFrameCount;
+                int efx1 = frame - defectFrameCount;
                 int efx2 = frame - 1;
                 defectFrameCount = 0;
 
@@ -596,22 +591,17 @@ namespace DetectCCD
                     System.IO.Directory.CreateDirectory(savefolderBig);
 
                 //多线程运算
-                Log.RecordAsThread(() =>
-                {
-                    Log.Record(() =>
-                    {
+                Log.RecordAsThread(() => {
+                    Log.Record(() => {
                         var eimage = grab.GetImage(efx1, efx2);
                         int[] etype;
                         double[] ex, ey, ew, eh, earea;
-                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea))
-                        {
+                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
 
                             int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
                             var myDefects = new List<DataDefect>();
-                            for (int i = 0; i < ecc; i++)
-                            {
-                                DataDefect defect = new DataDefect()
-                                {
+                            for (int i = 0; i < ecc; i++) {
+                                DataDefect defect = new DataDefect() {
                                     EA = -1,
                                     Type = etype[i],
                                     X = ex[i] / w,
@@ -623,6 +613,7 @@ namespace DetectCCD
                                 defect.Width = defect.W * Fx;
                                 defect.Height = defect.H * Fy;
                                 defect.Area = earea[i] * Fx * Fy / w / h;
+
                                 //判断膜漏金属和AT9漏金属的规格
                                 if (defect.Type == 2 && defect.Area <= Static.Recipe.FilmLeakMetalArea)
                                     continue;
@@ -632,25 +623,25 @@ namespace DetectCCD
                             }
 
                             //添加到列表中
-                            lock (Defects)
-                            {
+                            lock (Defects) {
                                 Defects.AddRange(myDefects);
                             }
 
                             //保存NG小图
-                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall)
-                            {
-                                for (int i = 0; i < myDefects.Count; i++)
-                                {
+                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall) {
+                                for (int i = 0; i < myDefects.Count; i++) {
                                     var defect = myDefects[i];
-                                    if (defect.Type < Static.App.RecordSaveImageNGSmallMaxType)
-                                    {
+                                    if (defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
 
                                         string folder = "";
-                                        if (defect.Type == 0) folder = savefolder1;
-                                        else if (defect.Type == 1) folder = savefolder2;
-                                        else if (defect.Type == 2) folder = savefolder3;
-                                        else folder = savefolder4;
+                                        if (defect.Type == 0)
+                                            folder = savefolder1;
+                                        else if (defect.Type == 1)
+                                            folder = savefolder2;
+                                        else if (defect.Type == 2)
+                                            folder = savefolder3;
+                                        else
+                                            folder = savefolder4;
 
                                         var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
                                         defect.NGPartPath = filename;
@@ -658,19 +649,21 @@ namespace DetectCCD
                                         double h0 = Math.Max(eh[i], 450) + 50;
                                         double w0 = Math.Max(ew[i], 450) + 50;
 
-                                        var saveimg = eimage.CropPart(ey[i] - h0 / 2, ex[i] - w0 / 2, w0, h0);
-                                        saveimg?.WriteImage("png", 0, filename);
-                                        saveimg?.Dispose();
-
+                                        Log.Record(() => {
+                                            var saveimg = eimage.CropPart(ey[i] - h0 / 2, ex[i] - w0 / 2, w0, h0);
+                                            saveimg?.WriteImage("png", 0, filename);
+                                            saveimg?.Dispose();
+                                        });
                                     }
                                 }
 
                             }
 
-                            if (myDefects.Count > 0 && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig)
-                            {
-                                eimage.WriteImage("png", 0, saveBigFilename);
-                                myDefects[0].NGBigPath = saveBigFilename;
+                            if (myDefects.Count > 0 && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig) {
+                                Log.Record(() => {
+                                    eimage.WriteImage("png", 0, saveBigFilename);
+                                    myDefects[0].NGBigPath = saveBigFilename;
+                                });
                             }
                         }
 
