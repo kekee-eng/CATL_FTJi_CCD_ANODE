@@ -43,6 +43,10 @@ namespace DetectCCD {
                 }
 
                 //
+                if (image == null || !image.IsInitialized())
+                    return null;
+
+                //
                 HDevProcedure procedure;
                 HDevProcedureCall call;
                 lock (m_engine)

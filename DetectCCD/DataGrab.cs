@@ -77,11 +77,11 @@ namespace DetectCCD {
 
             }
 
-            //检测MArk孔
+            //检测Mark孔
             double[] cx, cy;
             double w = Width;
             double h = Height;
-            if (ImageProcess.DetectMark(ImageMark, out cx, out cy))
+            if (ImageMark!=null && ImageProcess.DetectMark(ImageMark, out cx, out cy))
             {
                 DM.HasMark = true;
                 DM.MarkX = DM.MarkX_P = cx[0] / w;

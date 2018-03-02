@@ -103,6 +103,9 @@ namespace DetectCCD {
                 if (imgDst == null)
                     return;
 
+                if (imgSrc == null)
+                    return;
+
                 //
                 string type;
                 int w, h;

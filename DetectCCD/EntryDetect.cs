@@ -728,32 +728,32 @@ namespace DetectCCD
             data.ValWidth = (data.WidthX2 - data.WidthX1) * Fx;
             data.ValHeight = (data.TabY2 - data.TabY1) * Fy;
 
-            //EA头部Mark检测
-            double[] cx, cy;
-            double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
-            double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
+            ////EA头部Mark检测
+            //double[] cx, cy;
+            //double cfy1 = data.TabY1 + Static.Recipe.EAStart / Fy;
+            //double cfy2 = data.TabY1 + Static.Recipe.EAEnd / Fy;
 
-            //
-            data.MarkImageStart = cfy1;
-            data.MarkImageEnd = cfy2;
+            ////
+            //data.MarkImageStart = cfy1;
+            //data.MarkImageEnd = cfy2;
 
-            var cimage = grab.GetImage(cfy1, cfy2);
-            if (ImageProcess.DetectMark(cimage, out cx, out cy))
-            {
+            //var cimage = grab.GetImage(cfy1, cfy2);
+            //if (ImageProcess.DetectMark(cimage, out cx, out cy))
+            //{
 
-                //将最后一个极耳放到下个EA中
-                data.IsNewEA = true;
-                data.MarkX = data.MarkX_P = cx[0] / w;
-                data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
+            //    //将最后一个极耳放到下个EA中
+            //    data.IsNewEA = true;
+            //    data.MarkX = data.MarkX_P = cx[0] / w;
+            //    data.MarkY = data.MarkY_P = cfy1 + cy[0] / h;
 
-                if (cx.Length == 2 && cy.Length == 2)
-                {
-                    data.HasTwoMark = true;
-                    data.MarkX_P = cx[1] / w;
-                    data.MarkY_P = cfy1 + cy[1] / h;
-                }
-            }
-            cimage?.Dispose();
+            //    if (cx.Length == 2 && cy.Length == 2)
+            //    {
+            //        data.HasTwoMark = true;
+            //        data.MarkX_P = cx[1] / w;
+            //        data.MarkY_P = cfy1 + cy[1] / h;
+            //    }
+            //}
+            //cimage?.Dispose();
 
             data.IsFix = true;
             data.IsSync = true;
