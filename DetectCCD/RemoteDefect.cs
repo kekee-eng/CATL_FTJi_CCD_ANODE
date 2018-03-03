@@ -121,7 +121,7 @@ namespace DetectCCD {
             }
         }
 
-        public static void In4KCall8K_Viewer(bool isFront, bool isInner, double y) {
+        public static void In4KCall8K_Viewer(bool isFront, bool isInner, double y, double DiffFrame) {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
 
@@ -129,7 +129,7 @@ namespace DetectCCD {
                 if (client == null)
                     return;
                 client._in_8k_viewer(isFront, isInner, y,
-                    Static.App.DiffFrameInnerOuter,
+                    DiffFrame,
                     Static.App.DiffFrameFrontBack,
                     Static.App.DiffFrameInnerFront,
                     Static.App.DiffFrameInnerFrontFix

@@ -195,11 +195,12 @@ namespace DetectCCD
 
             //对齐Mark孔
             if (myER.IsNewEA) {
-                
+
                 double posMe = myER.MarkY;
                 double posPartner = posMe - DiffFrame;
                 double posPartnerReal = 0;
-                for (int i = 0; i < partner.Marks.Count; i++) {
+                for (int i = partner.Marks.Count - 1; i >= 0; i--) {
+
                     var dist = posPartner - partner.Marks[i].MarkY;
 
                     if (dist > -10 && dist < 10) {
@@ -231,7 +232,7 @@ namespace DetectCCD
                 //未找到：对方补测一个宽度
                 bindER = partner.fixER(myER.TabX, myER.TabY1 - DiffFrame, myER.TabY2 - DiffFrame);
             }
-            
+
             //找到：标记已同步
             myER.IsSync = true;
             bindER.IsSync = true;

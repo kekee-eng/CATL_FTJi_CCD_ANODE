@@ -141,7 +141,7 @@ namespace DetectCCD
                     double pos8kreal = 0;
                     var pos8k = Static.App.FrameInnerToFront(isFront2, isInner2, pos4k);
                     var detect = process.InnerDetect;
-                    for (int i = 0; i < detect.Marks.Count; i++)
+                    for (int i = detect.Marks.Count-1; i>=0; i--)
                     {
                         var dist = pos8k - detect.Marks[i].MarkY;
                        
@@ -286,8 +286,8 @@ namespace DetectCCD
                 process.OuterViewerImage.MoveToView(y + process.OuterDetect.DiffFrame, x, s);
                 if (Static.App.Is4K)
                 {
-                    RemoteDefect.In4KCall8K_Viewer(true, true, y);
-                    RemoteDefect.In4KCall8K_Viewer(false, true, y);
+                    RemoteDefect.In4KCall8K_Viewer(true, true, y, process.OuterDetect.DiffFrame);
+                    RemoteDefect.In4KCall8K_Viewer(false, true, y, process.OuterDetect.DiffFrame);
                 }
             });
             process.OuterViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() =>
@@ -295,8 +295,8 @@ namespace DetectCCD
                 process.InnerViewerImage.MoveToView(y - process.OuterDetect.DiffFrame, x, s);
                 if (Static.App.Is4K)
                 {
-                    RemoteDefect.In4KCall8K_Viewer(true, false, y);
-                    RemoteDefect.In4KCall8K_Viewer(false, false, y);
+                    RemoteDefect.In4KCall8K_Viewer(true, false, y, process.OuterDetect.DiffFrame);
+                    RemoteDefect.In4KCall8K_Viewer(false, false, y, process.OuterDetect.DiffFrame);
                 }
             });
 
