@@ -26,8 +26,8 @@ namespace DetectCCD {
             while (m_isRunning) {
                 Thread.Sleep(10);
 
-                if (UtilPerformance.GetCpuLoad() > 60)
-                    continue;
+                //if (UtilPerformance.GetCpuLoad() > 60)
+                //    continue;
 
                 ImageObj dt;
                 if (m_queue.TryDequeue(out dt)) {
