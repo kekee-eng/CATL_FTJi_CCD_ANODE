@@ -350,7 +350,6 @@ namespace DetectCCD
                     });
                 };
             });
-
             Log.RecordAsThread(() =>
             {
                 var detect = process.OuterDetect;
@@ -1784,7 +1783,6 @@ namespace DetectCCD
             });
 
         }
-
         private void btnBackupALL_Click(object sender, EventArgs e)
         {
             Log.Record(() =>
@@ -1802,7 +1800,6 @@ namespace DetectCCD
                 }
             });
         }
-
         private void btnReturnAll_Click(object sender, EventArgs e)
         {
             Log.Record(() =>
