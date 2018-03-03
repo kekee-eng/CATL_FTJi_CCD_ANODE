@@ -458,7 +458,7 @@ namespace DetectCCD {
 
             //Fix: 修正ID
             for (int i = 0; i < grid.Rows.Count; i++) {
-                int id = (int)grid.Rows[i].Cells[0].Value - 1;
+                int id = Convert.ToInt32(grid.Rows[i].Cells[0].Value) - 1;
                 if (id < Detect.Defects.Count)
                     grid.Rows[i].Cells[1].Value = Detect.Defects[id].EA;
             }
