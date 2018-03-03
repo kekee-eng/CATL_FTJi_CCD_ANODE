@@ -1686,6 +1686,9 @@ namespace DetectCCD
                 Static.Recipe.Load();
                 Static.Recipe.UpdateBind();
 
+                File.Delete(Static.PathCfgRecipeBackup);
+                File.Copy(Static.PathCfgRecipe, Static.PathCfgRecipeBackup);
+
                 updateRecipes();
             });
         }
