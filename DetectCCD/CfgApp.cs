@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DetectCCD {
-
+    [Serializable]
     public class CfgApp : TemplateConfig {
         public CfgApp(string path) : base(path) { }
 

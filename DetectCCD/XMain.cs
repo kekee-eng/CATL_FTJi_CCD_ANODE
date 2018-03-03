@@ -195,12 +195,43 @@ namespace DetectCCD
                 };
                 RemoteDefect._func_in_8k_uninit += DeviceUninit;
 
-                RemoteDefect._func_in_8k_setRoll += (recipe, roll) =>
-                {
-                    Static.Recipe.RecipeName = recipe;
-                    Static.App.RollName = roll;
+                RemoteDefect._func_in_8k_setRoll += (app, recipe, tiebiao) => {
 
-                    mainRollName.Text = roll;
+                    //
+                    if (!Directory.Exists(Static.FolderCfgBackup))
+                        Directory.CreateDirectory(Static.FolderCfgBackup);
+
+                    //
+                    Static.App.RollName = app.RollName;
+                    Static.App.MachineNum = app.MachineNum;
+                    Static.App.EmployeeNum = app.EmployeeNum;
+                    Static.App.AppRestartTimeout = app.AppRestartTimeout;
+                    Static.App.OnceAdjustValue = app.OnceAdjustValue;
+                    Static.App.UpdateBind();
+
+                    //
+                    recipe.SaveAs(Static.Recipe);
+                    Static.Recipe.Load();
+                    Static.Recipe.UpdateBind();
+                    if (File.Exists(Static.PathCfgRecipeBackup))
+                        File.Delete(Static.PathCfgRecipeBackup);
+                    File.Copy(Static.PathCfgRecipe, Static.PathCfgRecipeBackup);
+
+                    //
+                    tiebiao.SaveAs(Static.Tiebiao);
+                    Static.Tiebiao.Load();
+                    Static.Tiebiao.UpdateBind();
+                    if (File.Exists(Static.PathCfgTiebiaoBackup))
+                        File.Delete(Static.PathCfgTiebiaoBackup);
+                    File.Copy(Static.PathCfgTiebiao, Static.PathCfgTiebiaoBackup);
+
+                    //
+                    tmpRecipe.LoadAs(Static.Recipe);
+                    tmpRecipe.UpdateBind();
+
+                    tmpTiebiao.LoadAs(Static.Tiebiao);
+                    tmpTiebiao.UpdateBind();
+
                 };
 
                 RemoteDefect._func_in_8k_getFrame += () =>
@@ -599,7 +630,7 @@ namespace DetectCCD
                     Log.Record(RemoteDefect.InitClient);
                     Log.Record(RemotePLC.InitClient);
                     Log.Record(RemoteDefect.In4KCall8K_Init);
-                    Log.Record(() => RemoteDefect.In4KCall8K_SetRoll(Static.Recipe.RecipeName, Static.App.RollName));
+                    Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
                 }
                 //else
@@ -695,7 +726,7 @@ namespace DetectCCD
                 if (Static.App.Is4K)
                 {
                     Log.Record(RemoteDefect.In4KCall8K_StartGrab);
-                    Log.Record(() => RemoteDefect.In4KCall8K_SetRoll(Static.Recipe.RecipeName, Static.App.RollName));
+                    Log.Record(RemoteDefect.In4KCall8K_SetRoll);
                 }
             });
         }
@@ -1072,11 +1103,11 @@ namespace DetectCCD
             Log.Record(() =>
             {
                 
-                groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;              
+                groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
                 groupRoll.Enabled = Static.App.Is4K;
-
+                
                 if (Static.App.Is4K)
                 {
                     _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";
@@ -1317,7 +1348,8 @@ namespace DetectCCD
                     btnRollSet.Text = "结束膜卷";
 
                     //
-                    RemoteDefect.In4KCall8K_SetRoll(Static.Recipe.RecipeName, Static.App.RollName);
+                    Log.Record(RemoteDefect.InitClient);
+                    Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
                     //
                     isRollOk = true;
@@ -1619,6 +1651,8 @@ namespace DetectCCD
                 Log.Operate(changeCheck);
                 tmpTiebiao.Save();
                 Static.Tiebiao.Load();
+
+                Log.Record(RemoteDefect.In4KCall8K_SetRoll);
             }
         }
         private void btnAddRecipe_Click(object sender, EventArgs e)
@@ -1668,11 +1702,9 @@ namespace DetectCCD
                 updateRecipes();
             });
         }
-        private void btnSelectRecipe_Click(object sender, EventArgs e)
-        {
+        private void btnSelectRecipe_Click(object sender, EventArgs e) {
 
-            runAction((sender as SimpleButton).Text, () =>
-            {
+            runAction((sender as SimpleButton).Text, () => {
 
                 if (listBoxRecipe.SelectedIndex == -1)
                     throw new Exception("请先选择配方");
@@ -1686,10 +1718,15 @@ namespace DetectCCD
                 Static.Recipe.Load();
                 Static.Recipe.UpdateBind();
 
-                File.Delete(Static.PathCfgRecipeBackup);
+                if (!Directory.Exists(Static.FolderCfgBackup))
+                    Directory.CreateDirectory(Static.FolderCfgBackup);
+                if (File.Exists(Static.PathCfgRecipeBackup))
+                    File.Delete(Static.PathCfgRecipeBackup);
                 File.Copy(Static.PathCfgRecipe, Static.PathCfgRecipeBackup);
 
                 updateRecipes();
+
+                Log.Record(RemoteDefect.In4KCall8K_SetRoll);
             });
         }
         private void btnApplyRecipe_Click(object sender, EventArgs e)
