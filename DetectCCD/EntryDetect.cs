@@ -661,7 +661,18 @@ namespace DetectCCD
                                         double w0 = Math.Max(ew[i], 450) + 50;
 
                                         Log.Record(() => {
-                                            var saveimg = eimage.CropPart(ey[i] - h0 / 2, ex[i] - w0 / 2, w0, h0);
+                                            double y1 = ey[i] - h0 / 2;
+                                            double x1 = ex[i] - w0 / 2;
+                                            double y2 = ey[i] + h0 / 2 - 1;
+                                            double x2 = ex[i] + w0 / 2 - 1;
+
+                                            int twidth, theight;
+                                            eimage.GetImageSize(out twidth, out theight);
+                                            y1 = Math.Max(0, y1);
+                                            x1 = Math.Max(0, x1);
+                                            y2 = Math.Min(theight - 1, y2);
+                                            x2 = Math.Min(twidth - 1, x2);
+                                            var saveimg = eimage.CropRectangle1(y1, x1, y2, x2);
                                             UtilSaveImageQueue.Put(saveimg, filename);
                                         });
 
