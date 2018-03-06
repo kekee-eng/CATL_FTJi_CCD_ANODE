@@ -632,36 +632,6 @@ namespace DetectCCD
                     Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
                 }
-                //else
-                //{
-                //    //8K
-                //    runAction("内侧缺陷保存", () =>
-                //    {
-                //        foreach (var item in process.InnerDetect.Defects)
-                //        {
-                //            lock(process)
-                //            {
-                //                saveDetectCSV(item,"内侧");
-                //            }
-                            
-                //        }
-                //        closeDetectCSV();
-                        
-                //    });
-                //    runAction("外侧缺陷保存", () =>
-                //    {
-                        
-                //        foreach (var item in process.OuterDetect.Defects)
-                //        {
-                //            lock (process)
-                //            {
-                //                saveDetectCSV(item, "外侧");
-                //            }
-
-                //        }
-                //        closeDetectCSV();
-                //    });
-                //}
 
                 //
                 ImageProcess.Init();
@@ -1500,6 +1470,9 @@ namespace DetectCCD
         string checkBackupResult = "";
         public int checkBackup()
         {
+#if DEBUG
+            return 0;
+#endif
             string s1, s2, s3, s4, s5;
             int checkOK = 0;
             if (!Static.CompareFile(Static.PathCfgApp, Static.PathCfgAppBackup) && false)
@@ -1820,7 +1793,6 @@ namespace DetectCCD
 
             });
         }
-
         
     }
 
