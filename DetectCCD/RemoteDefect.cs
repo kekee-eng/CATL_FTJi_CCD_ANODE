@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace DetectCCD {
     public class RemoteDefect : MarshalByRefObject {
 
+        //初始化
         static RemoteDefect client;
         public static bool isConnect {
             get {
@@ -50,6 +51,33 @@ namespace DetectCCD {
             }
         }
 
+        //4k&8k间同步Mark孔
+        public static double In4kAlign8k(bool isFront, bool isInner, double position) {
+            try {
+                if (client == null)
+                    return 0;
+                return client._In4kAlign8k(isFront, isInner, position);
+            }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+                return 0;
+            }
+        }
+        public static event Func<bool, bool, double, double> _func_In4kAlign8k;
+        public double _In4kAlign8k(bool isFront, bool isInner, double position) {
+            if (_func_In4kAlign8k == null)
+                return Static.App.DiffFrameInnerFrontFix; //Master未关联
+            try {
+                return _func_In4kAlign8k(isFront, isInner, position);
+            }
+            catch (Exception ex) {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                return Static.App.DiffFrameInnerFrontFix;
+            }
+        }
+
+        //分EA，并取得瑕疵数目
         public static int In4KCall8K_GetDefectCount(bool isFront, bool isInner, double start, double end, int ea) {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -65,21 +93,6 @@ namespace DetectCCD {
             }
             return -2;
         }
-
-        public static double In4kAlign8k(bool isFront, bool isInner, double position) {
-            try {
-                if (client == null)
-                    return 0;
-                return client._In4kAlign8k(isFront, isInner, position);
-            }
-            catch (Exception ex) {
-                Log.AppLog.Error("RemoteDefect:", ex);
-                client = null;
-                return 0;
-            }
-        }
-
-
         public static event Func<bool, bool, double, double, int, int> _func_in_8k_getDefectCount;
         public int _in_8k_return_4k_getDefectCount(bool isFront, bool isInner, double start, double end, int ea) {
 
@@ -95,6 +108,7 @@ namespace DetectCCD {
             return -4; //Master函数有问题
         }
 
+        //取得瑕疵列表
         public static DataDefect[] In4KCall8K_GetDefectList(bool isFront, bool isInner, int ea) {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -121,6 +135,7 @@ namespace DetectCCD {
             }
         }
 
+        //图像同步拖动
         public static void In4KCall8K_Viewer(bool isFront, bool isInner, double y, double DiffFrame) {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -140,19 +155,6 @@ namespace DetectCCD {
                 client = null;
             }
         }
-        public static event Func<bool, bool, double, double> _func_In4kAlign8k;
-        public double _In4kAlign8k(bool isFront, bool isInner, double position) {
-            if (_func_In4kAlign8k == null)
-                return Static.App.DiffFrameInnerFrontFix; //Master未关联
-            try {
-                return _func_In4kAlign8k(isFront, isInner, position);
-            }
-            catch (Exception ex) {
-                Log.AppLog.Error("RemoteDefect:", ex);
-                return Static.App.DiffFrameInnerFrontFix;
-            }
-        }
-
         public static event Action<bool, bool, double, double, double, double, double> _func_in_8k_viewer;
         public void _in_8k_viewer(bool isFront, bool isInner, double y, double diffInnerOuter, double diffFrontBack, double diffInnerFront, double diffInnerFrontFix) {
             try {
@@ -163,6 +165,7 @@ namespace DetectCCD {
             }
         }
 
+        //连接
         public static void In4KCall8K_Init() {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -187,6 +190,7 @@ namespace DetectCCD {
             }
         }
 
+        //开始采图
         public static void In4KCall8K_StartGrab() {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -211,6 +215,7 @@ namespace DetectCCD {
             }
         }
 
+        //停止采图
         public static void In4KCall8K_StopGrab() {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -235,6 +240,7 @@ namespace DetectCCD {
             }
         }
 
+        //断开
         public static void In4KCall8K_Uninit() {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
@@ -259,6 +265,7 @@ namespace DetectCCD {
             }
         }
 
+        //同步参数
         public static void In4KCall8K_SetRoll() {
 
             if (Static.App.Is8K)
@@ -284,6 +291,7 @@ namespace DetectCCD {
             }
         }
 
+        //用于判断4个相机是否同时采图
         public static void In4KGet8KFrame(out int front, out int back) {
             if (Static.App.Is8K)
                 throw new Exception("In4KCall8K: don't in 8k use it.");
