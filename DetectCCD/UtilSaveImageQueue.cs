@@ -86,7 +86,6 @@ namespace DetectCCD {
 
         public static string GetInformaticon() {
             string info = string.Format(@"{1} [{0}]", m_countQueue, m_countOk);
-
             return info;
         }
 

@@ -637,55 +637,60 @@ namespace DetectCCD
                                 Defects.AddRange(myDefects);
                             }
 
-                            //保存NG小图
-                            bool hasSmallDefect = false;
-                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGSmall) {
+                            if (Static.App.RecordSaveImageEnable) {
+
+                                //保存NG小图
+                                bool hasSmallDefect = false;
                                 for (int i = 0; i < myDefects.Count; i++) {
                                     var defect = myDefects[i];
                                     if (defect.Type < Static.App.RecordSaveImageNGSmallMaxType) {
 
-                                        string folder = "";
-                                        if (defect.Type == 0)
-                                            folder = savefolder1;
-                                        else if (defect.Type == 1)
-                                            folder = savefolder2;
-                                        else if (defect.Type == 2)
-                                            folder = savefolder3;
-                                        else
-                                            folder = savefolder4;
-
-                                        var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
-                                        defect.NGPartPath = filename;
-
-                                        double h0 = Math.Max(eh[i], 450) + 50;
-                                        double w0 = Math.Max(ew[i], 450) + 50;
-
-                                        Log.Record(() => {
-                                            double y1 = ey[i] - h0 / 2;
-                                            double x1 = ex[i] - w0 / 2;
-                                            double y2 = ey[i] + h0 / 2 - 1;
-                                            double x2 = ex[i] + w0 / 2 - 1;
-
-                                            int twidth, theight;
-                                            eimage.GetImageSize(out twidth, out theight);
-                                            y1 = Math.Max(0, y1);
-                                            x1 = Math.Max(0, x1);
-                                            y2 = Math.Min(theight - 1, y2);
-                                            x2 = Math.Min(twidth - 1, x2);
-                                            var saveimg = eimage.CropRectangle1(y1, x1, y2, x2);
-                                            UtilSaveImageQueue.Put(saveimg, filename);
-                                        });
-
                                         hasSmallDefect = true;
+                                        if (Static.App.RecordSaveImageNGSmall) {
+
+                                            string folder = "";
+                                            if (defect.Type == 0)
+                                                folder = savefolder1;
+                                            else if (defect.Type == 1)
+                                                folder = savefolder2;
+                                            else if (defect.Type == 2)
+                                                folder = savefolder3;
+                                            else
+                                                folder = savefolder4;
+
+                                            var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
+                                            defect.NGPartPath = filename;
+
+                                            double h0 = Math.Max(eh[i], 450) + 50;
+                                            double w0 = Math.Max(ew[i], 450) + 50;
+
+                                            Log.Record(() => {
+                                                double y1 = ey[i] - h0 / 2;
+                                                double x1 = ex[i] - w0 / 2;
+                                                double y2 = ey[i] + h0 / 2 - 1;
+                                                double x2 = ex[i] + w0 / 2 - 1;
+
+                                                int twidth, theight;
+                                                eimage.GetImageSize(out twidth, out theight);
+                                                y1 = Math.Max(0, y1);
+                                                x1 = Math.Max(0, x1);
+                                                y2 = Math.Min(theight - 1, y2);
+                                                x2 = Math.Min(twidth - 1, x2);
+                                                var saveimg = eimage.CropRectangle1(y1, x1, y2, x2);
+                                                UtilSaveImageQueue.Put(saveimg, filename);
+                                            });
+                                        }
                                     }
                                 }
 
+                                //保存NG大图
+                                if (hasSmallDefect && Static.App.RecordSaveImageNGBig) {
+                                    var saveimg = eimage.CopyImage();
+                                    myDefects[0].NGBigPath = saveBigFilename;
+                                    UtilSaveImageQueue.Put(saveimg, saveBigFilename);
+                                }
                             }
 
-                            if (hasSmallDefect && Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageNGBig) {
-                                var saveimg = eimage.CopyImage();
-                                UtilSaveImageQueue.Put(saveimg, saveBigFilename);
-                            }
                         }
 
                         //
