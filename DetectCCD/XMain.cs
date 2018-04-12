@@ -1446,7 +1446,9 @@ namespace DetectCCD
         }
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-           
+            if (UtilTool.XFWait.isShow)
+                return;
+
             UtilTool.XFWait.Open();
             await Task.Run(() =>
             {
@@ -1526,8 +1528,10 @@ namespace DetectCCD
             return checkOK;
 
         }
-        private async void btnDisconnect_Click(object sender, EventArgs e)
-        {
+        private async void btnDisconnect_Click(object sender, EventArgs e) {
+            if (UtilTool.XFWait.isShow)
+                return;
+
             UtilTool.XFWait.Open();
             DeviceUninit();
             closeLabelCSV();
