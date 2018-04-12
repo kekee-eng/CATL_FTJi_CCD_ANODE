@@ -232,6 +232,8 @@ namespace DetectCCD
                     tmpTiebiao.LoadAs(Static.Tiebiao);
                     tmpTiebiao.UpdateBind();
 
+                    //
+                    updateRecipes();
                 };
 
                 RemoteDefect._func_in_8k_getFrame += () =>
@@ -1605,7 +1607,6 @@ namespace DetectCCD
 
             groupRecipeManage.Text = $"配方管理[当前：{Static.Recipe.RecipeName}]";
             mainRecipeName.Text = Static.Recipe.RecipeName;
-
         }
 
         private void btnApplyTiebiao_Click(object sender, EventArgs e)
