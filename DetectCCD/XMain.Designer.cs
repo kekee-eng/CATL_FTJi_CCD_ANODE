@@ -65,6 +65,9 @@
             this.btnQuit = new DevExpress.XtraEditors.SimpleButton();
             this.btnStartGrab = new DevExpress.XtraEditors.SimpleButton();
             this.groupRoll = new DevExpress.XtraEditors.GroupControl();
+            this.btnRecipeSet = new DevExpress.XtraEditors.SimpleButton();
+            this.mainRecipes = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.labelControl35 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl33 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl34 = new DevExpress.XtraEditors.LabelControl();
             this.mainEmployeeNum = new DevExpress.XtraEditors.TextEdit();
@@ -210,6 +213,7 @@
             this.groupDevice.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainRecipes.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainEmployeeNum.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainMachineNum.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainRollName.Properties)).BeginInit();
@@ -634,6 +638,9 @@
             // 
             // groupRoll
             // 
+            this.groupRoll.Controls.Add(this.btnRecipeSet);
+            this.groupRoll.Controls.Add(this.mainRecipes);
+            this.groupRoll.Controls.Add(this.labelControl35);
             this.groupRoll.Controls.Add(this.labelControl33);
             this.groupRoll.Controls.Add(this.labelControl34);
             this.groupRoll.Controls.Add(this.mainEmployeeNum);
@@ -645,9 +652,36 @@
             this.groupRoll.Controls.Add(this.mainRecipeName);
             this.groupRoll.Location = new System.Drawing.Point(351, 26);
             this.groupRoll.Name = "groupRoll";
-            this.groupRoll.Size = new System.Drawing.Size(284, 231);
+            this.groupRoll.Size = new System.Drawing.Size(284, 346);
             this.groupRoll.TabIndex = 6;
             this.groupRoll.Text = "膜卷记录";
+            // 
+            // btnRecipeSet
+            // 
+            this.btnRecipeSet.Location = new System.Drawing.Point(147, 292);
+            this.btnRecipeSet.Name = "btnRecipeSet";
+            this.btnRecipeSet.Size = new System.Drawing.Size(101, 30);
+            this.btnRecipeSet.TabIndex = 13;
+            this.btnRecipeSet.Text = "更改料号";
+            this.btnRecipeSet.Click += new System.EventHandler(this.btnRecipeSet_Click);
+            // 
+            // mainRecipes
+            // 
+            this.mainRecipes.Location = new System.Drawing.Point(87, 266);
+            this.mainRecipes.MenuManager = this.barManager1;
+            this.mainRecipes.Name = "mainRecipes";
+            this.mainRecipes.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.mainRecipes.Size = new System.Drawing.Size(161, 20);
+            this.mainRecipes.TabIndex = 12;
+            // 
+            // labelControl35
+            // 
+            this.labelControl35.Location = new System.Drawing.Point(32, 269);
+            this.labelControl35.Name = "labelControl35";
+            this.labelControl35.Size = new System.Drawing.Size(48, 14);
+            this.labelControl35.TabIndex = 11;
+            this.labelControl35.Text = "应用料号";
             // 
             // labelControl33
             // 
@@ -2125,6 +2159,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
             this.groupRoll.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainRecipes.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainEmployeeNum.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainMachineNum.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainRollName.Properties)).EndInit();
@@ -2382,5 +2417,8 @@
         private DevExpress.XtraEditors.LabelControl labelControl34;
         private DevExpress.XtraEditors.TextEdit mainEmployeeNum;
         private DevExpress.XtraEditors.TextEdit mainMachineNum;
+        private DevExpress.XtraEditors.SimpleButton btnRecipeSet;
+        private DevExpress.XtraEditors.ComboBoxEdit mainRecipes;
+        private DevExpress.XtraEditors.LabelControl labelControl35;
     }
 }

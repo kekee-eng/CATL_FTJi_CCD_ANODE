@@ -1606,11 +1606,17 @@ namespace DetectCCD
         }
         void updateRecipes()
         {
-            listBoxRecipe.Items.Clear();
-            listBoxRecipe.Items.AddRange(getAllRecipe().Select(x => x.RecipeName).ToArray());
+            if (Static.App.Is4K) {
+                listBoxRecipe.Items.Clear();
+                listBoxRecipe.Items.AddRange(getAllRecipe().Select(x => x.RecipeName).ToArray());
+
+                mainRecipes.Properties.Items.Clear();
+                mainRecipes.Properties.Items.AddRange(getAllRecipe().Select(x => x.RecipeName).ToArray());
+            }
 
             groupRecipeManage.Text = $"配方管理[当前：{Static.Recipe.RecipeName}]";
             mainRecipeName.Text = Static.Recipe.RecipeName;
+            mainRecipes.Text = Static.Recipe.RecipeName;
         }
 
         private void btnApplyTiebiao_Click(object sender, EventArgs e)
@@ -1798,7 +1804,14 @@ namespace DetectCCD
 
             });
         }
-        
+
+        private void btnRecipeSet_Click(object sender, EventArgs e) {
+            Log.Record(() => {
+                listBoxRecipe.SelectedIndex = mainRecipes.SelectedIndex;
+                listBoxRecipe_SelectedIndexChanged(listBoxRecipe, null);
+                btnSelectRecipe_Click(btnSelectRecipe, null);
+            });
+        }
     }
 
 }
