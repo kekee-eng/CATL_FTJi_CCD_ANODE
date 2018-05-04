@@ -78,10 +78,10 @@ namespace DetectCCD {
 
                 case 4: return "[U]待定";
 
-                case 10: return "[F]黑斑";
-                case 11: return "[G]白斑";
-                case 20: return "[E]脱碳";
-                case 30: return "[D]划痕";
+                case 10: return "[R]黑斑";
+                case 11: return "[S]白斑";
+                case 20: return "[T]脱碳";
+                case 30: return "[V]划痕";
             }
 
         }
