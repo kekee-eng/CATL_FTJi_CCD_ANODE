@@ -571,6 +571,7 @@ namespace DetectCCD
                 var savefolder2 = savefolder + "标签/";
                 var savefolder3 = savefolder + "漏金属/";
                 var savefolder4 = savefolder + "其它/";
+                var savefolder5 = savefolder + "边缘披风/";
 
                 if (!System.IO.Directory.Exists(savefolder1))
                     System.IO.Directory.CreateDirectory(savefolder1);
@@ -580,6 +581,8 @@ namespace DetectCCD
                     System.IO.Directory.CreateDirectory(savefolder3);
                 if (!System.IO.Directory.Exists(savefolder4))
                     System.IO.Directory.CreateDirectory(savefolder4);
+                if (!System.IO.Directory.Exists(savefolder5))
+                    System.IO.Directory.CreateDirectory(savefolder5);
 
                 //
                 var savefolderBig = Static.FolderRecord + "/瑕疵大图/";
@@ -655,6 +658,8 @@ namespace DetectCCD
                                                 folder = savefolder2;
                                             else if (defect.Type == 2)
                                                 folder = savefolder3;
+                                            else if (defect.Type == 3)
+                                                folder = savefolder5;
                                             else
                                                 folder = savefolder4;
 
@@ -846,6 +851,7 @@ namespace DetectCCD
                     obj.DefectCountFront_Join = remoteDefsFront.Count(x => x.Type == 0);
                     obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
                     obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 2);
+                    obj.DefectCountFront_Pifeng = remoteDefsFront.Count(x => x.Type == 3);
                 }
 
                 if (remoteDefsBack != null)
@@ -853,6 +859,7 @@ namespace DetectCCD
                     obj.DefectCountBack_Join = remoteDefsBack.Count(x => x.Type == 0);
                     obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
                     obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 2);
+                    obj.DefectCountBack_Pifeng = remoteDefsBack.Count(x => x.Type == 3);
                 }
 
             }

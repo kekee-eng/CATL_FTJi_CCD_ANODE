@@ -518,10 +518,12 @@ namespace DetectCCD
             tmpTiebiao.BindCheckBox(checkLabelContext_Join, "LabelContextJoin");
             tmpTiebiao.BindCheckBox(checkLabelContext_Tag, "LabelContextTag");
             tmpTiebiao.BindCheckBox(checkLabelContext_LeakMetal, "LabelContextLeakMetal");
+            tmpTiebiao.BindCheckBox(checkLabelContext_Pifeng, nameof(tmpTiebiao.LabelContextPifeng));
 
             tmpTiebiao.BindCheckBox(checkEAContext_Join, "EAContextJoin");
             tmpTiebiao.BindCheckBox(checkEAContext_Tag, "EAContextTag");
             tmpTiebiao.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
+            tmpTiebiao.BindCheckBox(checkEAContext_Pifeng, nameof(tmpTiebiao.EAContextPifeng));
             tmpTiebiao.BindCheckBox(checkEAContext_Width, "EAContextWidth");
 
             tmpTiebiao.BindTextBox(textLabelEAOffset, "LabelY_EA");
@@ -1316,6 +1318,9 @@ namespace DetectCCD
                     mainRollName.Enabled = false;
                     mainEmployeeNum.Enabled = false;
                     mainMachineNum.Enabled = false;
+                    mainRecipes.Enabled = false;
+                    btnRecipeSet.Enabled = false;
+
                     btnRollSet.Text = "结束膜卷";
 
                     //
@@ -1422,6 +1427,9 @@ namespace DetectCCD
                     mainRollName.Enabled = true;
                     mainEmployeeNum.Enabled = true;
                     mainMachineNum.Enabled = true;
+                    mainRecipes.Enabled = true;
+                    btnRecipeSet.Enabled = true;
+
                     btnRollSet.Text = "设置膜卷";
                     isRollOk = false;
                     isRepeatRoll = true;

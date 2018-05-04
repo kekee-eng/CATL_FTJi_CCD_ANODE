@@ -71,7 +71,10 @@ namespace DetectCCD {
 
                 case 0: return "[A]接头";
                 case 1: return "[B]标签";
-                case 2: return "[C]漏金属";
+                case 2:
+                    return "[C]漏金属";
+                case 3:
+                    return "[D]边缘披风";
 
                 case 4: return "[U]待定";
 
@@ -86,7 +89,10 @@ namespace DetectCCD {
         public bool IsTransLabel() {
             if (Static.Tiebiao.LabelContextJoin && Type == 0) return true;
             if (Static.Tiebiao.LabelContextTag && Type == 1) return true;
-            if (Static.Tiebiao.LabelContextLeakMetal && Type == 2) return true;
+            if (Static.Tiebiao.LabelContextLeakMetal && Type == 2)
+                return true;
+            if (Static.Tiebiao.LabelContextPifeng && Type == 3)
+                return true;
 
             return false;
         }
@@ -94,7 +100,10 @@ namespace DetectCCD {
         public bool IsCountEA() {
             if (Static.Tiebiao.EAContextJoin && Type == 0) return true;
             if (Static.Tiebiao.EAContextTag && Type == 1) return true;
-            if (Static.Tiebiao.EAContextLeakMetal && Type == 2) return true;
+            if (Static.Tiebiao.EAContextLeakMetal && Type == 2)
+                return true;
+            if (Static.Tiebiao.EAContextPifeng && Type == 3)
+                return true;
 
             return false;
         }

@@ -19,10 +19,12 @@ namespace DetectCCD {
         public bool LabelContextJoin = false;
         public bool LabelContextTag = false;
         public bool LabelContextLeakMetal = false;
+        public bool LabelContextPifeng = false;
 
         public bool EAContextJoin = false;
         public bool EAContextTag = false;
         public bool EAContextLeakMetal = false;
+        public bool EAContextPifeng = false;
         public bool EAContextWidth = false;
 
         //

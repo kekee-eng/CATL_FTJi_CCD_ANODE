@@ -201,6 +201,8 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkEAContext_Pifeng = new DevExpress.XtraEditors.CheckEdit();
+            this.checkLabelContext_Pifeng = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -294,6 +296,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Pifeng.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Pifeng.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -1862,6 +1866,7 @@
             // 
             // groupEAContext
             // 
+            this.groupEAContext.Controls.Add(this.checkEAContext_Pifeng);
             this.groupEAContext.Controls.Add(this.checkEAContext_Width);
             this.groupEAContext.Controls.Add(this.checkEAContext_LeakMetal);
             this.groupEAContext.Controls.Add(this.checkEAContext_Tag);
@@ -1874,7 +1879,7 @@
             // 
             // checkEAContext_Width
             // 
-            this.checkEAContext_Width.Location = new System.Drawing.Point(22, 131);
+            this.checkEAContext_Width.Location = new System.Drawing.Point(22, 154);
             this.checkEAContext_Width.MenuManager = this.barManager1;
             this.checkEAContext_Width.Name = "checkEAContext_Width";
             this.checkEAContext_Width.Properties.Caption = "宽度不良";
@@ -1910,6 +1915,7 @@
             // 
             // groupLabelContext
             // 
+            this.groupLabelContext.Controls.Add(this.checkLabelContext_Pifeng);
             this.groupLabelContext.Controls.Add(this.checkLabelContext_LeakMetal);
             this.groupLabelContext.Controls.Add(this.checkLabelContext_Tag);
             this.groupLabelContext.Controls.Add(this.checkLabelContext_Join);
@@ -2131,6 +2137,24 @@
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
+            // checkEAContext_Pifeng
+            // 
+            this.checkEAContext_Pifeng.Location = new System.Drawing.Point(22, 119);
+            this.checkEAContext_Pifeng.MenuManager = this.barManager1;
+            this.checkEAContext_Pifeng.Name = "checkEAContext_Pifeng";
+            this.checkEAContext_Pifeng.Properties.Caption = "边缘披风";
+            this.checkEAContext_Pifeng.Size = new System.Drawing.Size(83, 19);
+            this.checkEAContext_Pifeng.TabIndex = 32;
+            // 
+            // checkLabelContext_Pifeng
+            // 
+            this.checkLabelContext_Pifeng.Location = new System.Drawing.Point(22, 119);
+            this.checkLabelContext_Pifeng.MenuManager = this.barManager1;
+            this.checkLabelContext_Pifeng.Name = "checkLabelContext_Pifeng";
+            this.checkLabelContext_Pifeng.Properties.Caption = "边缘披风";
+            this.checkLabelContext_Pifeng.Size = new System.Drawing.Size(83, 19);
+            this.checkLabelContext_Pifeng.TabIndex = 31;
+            // 
             // XMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -2143,7 +2167,7 @@
             this.Controls.Add(this.barDockControlTop);
             this.Name = "XMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "CATL 分条机视觉检测系统";
+            this.Text = "CATL 分条机视觉检测系统[阳极]";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XFMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).EndInit();
@@ -2242,6 +2266,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Pifeng.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkLabelContext_Pifeng.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2420,5 +2446,7 @@
         private DevExpress.XtraEditors.SimpleButton btnRecipeSet;
         private DevExpress.XtraEditors.ComboBoxEdit mainRecipes;
         private DevExpress.XtraEditors.LabelControl labelControl35;
+        private DevExpress.XtraEditors.CheckEdit checkEAContext_Pifeng;
+        private DevExpress.XtraEditors.CheckEdit checkLabelContext_Pifeng;
     }
 }
