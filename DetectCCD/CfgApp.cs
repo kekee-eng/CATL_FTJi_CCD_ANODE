@@ -13,8 +13,8 @@ namespace DetectCCD {
         public bool ImageProcessReload = false;
         public double AppRestartTimeout = 12;
 
+        public double CheckAdjustRange = 15;
         public double OnceAdjustValue = 1;
-
         
         //记录参数
         public int RecordCacheSize = 200;

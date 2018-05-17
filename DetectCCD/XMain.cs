@@ -141,12 +141,13 @@ namespace DetectCCD
                     double pos8kreal = 0;
                     var pos8k = Static.App.FrameInnerToFront(isFront2, isInner2, pos4k);
                     var detect = process.InnerDetect;
-                    for (int i = detect.Marks.Count-1; i>=0; i--)
-                    {
+                    for (int i = detect.Marks.Count-1; i>=0; i--) {
+
                         var dist = pos8k - detect.Marks[i].MarkY;
-                       
-                        if (dist > -10 && dist < 10)
-                        {
+                        var range = Static.App.CheckAdjustRange;
+
+                        if (dist > -range && dist < range) {
+
                             if (dist > Static.App.OnceAdjustValue) dist = Static.App.OnceAdjustValue;
                             if (dist < -Static.App.OnceAdjustValue) dist = -Static.App.OnceAdjustValue;
 

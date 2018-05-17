@@ -202,8 +202,9 @@ namespace DetectCCD
                 for (int i = partner.Marks.Count - 1; i >= 0; i--) {
 
                     var dist = posPartner - partner.Marks[i].MarkY;
+                    var range = Static.App.CheckAdjustRange;
 
-                    if (dist > -10 && dist < 10) {
+                    if (dist > -range && dist < range) {
 
                         if (dist > Static.App.OnceAdjustValue)
                             dist = Static.App.OnceAdjustValue;
