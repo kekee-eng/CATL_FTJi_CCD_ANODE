@@ -208,6 +208,7 @@ namespace DetectCCD
                     Static.App.EmployeeNum = app.EmployeeNum;
                     Static.App.AppRestartTimeout = app.AppRestartTimeout;
                     Static.App.OnceAdjustValue = app.OnceAdjustValue;
+                    Static.App.CheckAdjustRange = app.CheckAdjustRange;
                     Static.App.UpdateBind();
 
                     //
