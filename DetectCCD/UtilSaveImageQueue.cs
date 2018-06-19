@@ -37,7 +37,7 @@ namespace DetectCCD {
                     if (!Directory.Exists(dir)) {
                         Directory.CreateDirectory(dir);
                     }
-
+                    
                     //
                     Log.Record(() => {
                         dt.image.WriteImage("bmp", 0, dt.path);
@@ -53,6 +53,12 @@ namespace DetectCCD {
         public static void Put(HImage image, string path) {
             if (image == null || !image.IsInitialized())
                 return;
+
+            if (Static.App.RecordSaveImageLimitEnable &&
+                UtilSaveImageQueue.m_countQueue >= Static.App.RecordSaveImageLimitNumber) {
+                image?.Dispose();
+                return;
+            }
 
             m_queue.Enqueue(new ImageObj(image, path));
         }
