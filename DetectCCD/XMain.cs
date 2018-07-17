@@ -329,7 +329,14 @@ namespace DetectCCD
                             detect.In4kAlign8k(g.DM.MarkY);
                             detect.AddLableToPlc(g.TabData, g.DM.MarkY);
                         }
-                        
+                        else
+                        {
+                            if (Static.App.EnableSkipDetectWhenLabed)
+                            {
+                                detect.isSkipDetect = false;
+                            }
+                        }
+
                     }
 
                     //
@@ -376,7 +383,14 @@ namespace DetectCCD
                         {
                             detect.AddLableToPlc(g.TabData, g.DM.MarkY);
                         }
-                           
+                        else
+                        {
+                            if (Static.App.EnableSkipDetectWhenLabed)
+                            {
+                                detect.isSkipDetect = false;
+                            }
+                        }
+
                     }
 
                     Log.Record(() =>

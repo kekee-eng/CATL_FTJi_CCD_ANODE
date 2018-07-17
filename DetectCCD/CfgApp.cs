@@ -15,7 +15,10 @@ namespace DetectCCD {
 
         public double CheckAdjustRange = 15;
         public double OnceAdjustValue = 1;
-        
+
+        public bool EnableSkipDetectWhenLabed = true;
+        public int SkipDetectMaxNumber = 30;
+
         //记录参数
         public int RecordCacheSize = 200;
         public bool RecordSaveImageEnable = false;

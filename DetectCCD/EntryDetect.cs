@@ -137,6 +137,9 @@ namespace DetectCCD
         int defectFrameCount = 0;
         public double DiffFrame;
 
+        int skipDetectStartFrame = 0;
+        public bool isSkipDetect = false;
+
         public void TryTransLabel(int frame)
         {
 
@@ -551,6 +554,24 @@ namespace DetectCCD
         }
 
         public void TryAddDefect(bool hasDefect, int frame) {
+
+            //检测到打标项，跳过本EA后续检测
+            if (Static.App.EnableSkipDetectWhenLabed)
+            {
+                if (isSkipDetect)
+                {
+                    if (frame - skipDetectStartFrame < Static.App.SkipDetectMaxNumber)
+                    {
+                        defectFrameCount = 0;
+                        return;
+                    }
+                    else
+                    {
+                        isSkipDetect = false;
+                    }
+                }
+            }
+
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
             if (hasDefect) {
                 defectFrameCount++;
@@ -639,6 +660,16 @@ namespace DetectCCD
                             //添加到列表中
                             lock (Defects) {
                                 Defects.AddRange(myDefects);
+                            }
+
+                            //检测到打标项，跳过本EA后续检测
+                            if (Static.App.EnableSkipDetectWhenLabed)
+                            {
+                                if(myDefects.Any(x=>x.Type < 3))
+                                {
+                                    skipDetectStartFrame = frame;
+                                    isSkipDetect = true;
+                                }
                             }
 
                             if (Static.App.RecordSaveImageEnable) {
