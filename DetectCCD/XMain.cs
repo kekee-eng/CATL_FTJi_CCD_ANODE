@@ -548,7 +548,7 @@ namespace DetectCCD
             tmpRecipe.BindTextBox(textRecipeName, "RecipeName");
             tmpRecipe.BindTextBox(textWidthMin, "TabWidthMin");
             tmpRecipe.BindTextBox(textWidthMax, "TabWidthMax");
-            tmpRecipe.BindTextBox(textWidthStep, "TabWidthStep");
+            //tmpRecipe.BindTextBox(textWidthStep, "TabWidthStep");
             tmpRecipe.BindTextBox(textTabCount, "CheckTabCount");
             tmpRecipe.BindTextBox(textEALength, "EALength");
 
@@ -708,6 +708,9 @@ namespace DetectCCD
 
                 device.InnerCamera.Grab();
                 device.OuterCamera.Grab();
+
+                process.InnerDetect.isSkipDetect = false;
+                process.OuterDetect.isSkipDetect = false;
 
                 process.InnerViewerImage.SetUserEnable(false);
                 process.OuterViewerImage.SetUserEnable(false);
@@ -1641,6 +1644,14 @@ namespace DetectCCD
             groupRecipeManage.Text = $"配方管理[当前：{Static.Recipe.RecipeName}]";
             mainRecipeName.Text = Static.Recipe.RecipeName;
             mainRecipes.Text = Static.Recipe.RecipeName;
+
+            lbRecipeParams.Text = $@"当前配方[{Static.Recipe.RecipeName}]参数：
+-> 上限= {Static.Recipe.TabWidthMax} mm
+-> 下限= {Static.Recipe.TabWidthMin} mm
+-> 极耳数= {Static.Recipe.CheckTabCount} 个
+-> EA长度= {Static.Recipe.EALength} mm
+";
+
         }
 
         private void btnApplyTiebiao_Click(object sender, EventArgs e)

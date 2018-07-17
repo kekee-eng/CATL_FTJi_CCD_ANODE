@@ -556,17 +556,14 @@ namespace DetectCCD
         public void TryAddDefect(bool hasDefect, int frame) {
 
             //检测到打标项，跳过本EA后续检测
-            if (Static.App.EnableSkipDetectWhenLabed)
-            {
-                if (isSkipDetect)
-                {
-                    if (frame - skipDetectStartFrame < Static.App.SkipDetectMaxNumber)
-                    {
+            if (Static.App.EnableSkipDetectWhenLabed) {
+                if (isSkipDetect) {
+                    int skipNum = frame - skipDetectStartFrame;
+                    if (skipNum > 0 && skipNum < Static.App.SkipDetectMaxNumber) {
                         defectFrameCount = 0;
                         return;
                     }
-                    else
-                    {
+                    else {
                         isSkipDetect = false;
                     }
                 }
