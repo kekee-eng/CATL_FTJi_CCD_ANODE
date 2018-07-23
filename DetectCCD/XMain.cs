@@ -360,14 +360,14 @@ namespace DetectCCD
 
                                 if (detect.isSkipDetect_inner) {
                                     int skipInner = frame - detect.skipDetectStartFrame_inner;
-                                    if (skipInner > 0 && skipInner < Static.App.SkipDetectMaxNumber) {
+                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_inner = false;
                                     }
                                 }
 
                                 if (detect.isSkipDetect_outer) {
                                     int skipOuter = frame - detect.skipDetectStartFrame_outer;
-                                    if (skipOuter > 0 && skipOuter < Static.App.SkipDetectMaxNumber) {
+                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_outer = false;
                                     }
                                 }
@@ -436,14 +436,14 @@ namespace DetectCCD
 
                                 if (detect.isSkipDetect_inner) {
                                     int skipInner = frame - detect.skipDetectStartFrame_inner;
-                                    if (skipInner > 0 && skipInner < Static.App.SkipDetectMaxNumber) {
+                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_inner = false;
                                     }
                                 }
 
                                 if (detect.isSkipDetect_outer) {
                                     int skipOuter = frame - detect.skipDetectStartFrame_outer;
-                                    if (skipOuter > 0 && skipOuter < Static.App.SkipDetectMaxNumber) {
+                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_outer = false;
                                     }
                                 }
