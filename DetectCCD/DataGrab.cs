@@ -51,6 +51,8 @@ namespace DetectCCD {
         public bool isDetectTab = false;
         public bool hasTab = false;
         public bool hasDefect = false;
+        public bool hasDefect1 = false;
+        public bool hasDefect2 = false;
         public DataTab TabData = null;
 
         public void DetectTab() {
@@ -59,7 +61,7 @@ namespace DetectCCD {
 
             //极耳检测、并判断是否可能有瑕疵
             double[] ax, ay1, ay2;
-            if (Image != null && ImageProcess.DetectTab(Image, out hasDefect, out hasTab, out ax, out ay1, out ay2)) {
+            if (Image != null && ImageProcess.DetectTab(Image, out hasDefect, out hasDefect1, out hasDefect2, out hasTab, out ax, out ay1, out ay2)) {
 
                 if (hasTab) {
                     //极耳数据整理

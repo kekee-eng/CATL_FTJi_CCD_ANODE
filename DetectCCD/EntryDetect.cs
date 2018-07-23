@@ -137,8 +137,10 @@ namespace DetectCCD
         int defectFrameCount = 0;
         public double DiffFrame;
 
-        int skipDetectStartFrame = 0;
-        public bool isSkipDetect = false;
+        public int skipDetectStartFrame_inner = 0;
+        public int skipDetectStartFrame_outer = 0;
+        public bool isSkipDetect_inner = false;
+        public bool isSkipDetect_outer = false;
 
         public void TryTransLabel(int frame)
         {
@@ -554,21 +556,7 @@ namespace DetectCCD
         }
 
         public void TryAddDefect(bool hasDefect, int frame) {
-
-            //检测到打标项，跳过本EA后续检测
-            if (Static.App.EnableSkipDetectWhenLabed) {
-                if (isSkipDetect) {
-                    int skipNum = frame - skipDetectStartFrame;
-                    if (skipNum > 0 && skipNum < Static.App.SkipDetectMaxNumber) {
-                        defectFrameCount = 0;
-                        return;
-                    }
-                    else {
-                        isSkipDetect = false;
-                    }
-                }
-            }
-
+            
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
             if (hasDefect) {
                 defectFrameCount++;
@@ -660,12 +648,15 @@ namespace DetectCCD
                             }
 
                             //检测到打标项，跳过本EA后续检测
-                            if (Static.App.EnableSkipDetectWhenLabed)
-                            {
-                                if(myDefects.Any(x=>x.Type < 3))
-                                {
-                                    skipDetectStartFrame = frame;
-                                    isSkipDetect = true;
+                            if (Static.App.EnableSkipDetectWhenLabed) {
+                                if (myDefects.Any(x => x.Type < 3 && x.InInner(true))) {
+                                    isSkipDetect_inner = true;
+                                    skipDetectStartFrame_inner = frame;
+                                }
+
+                                if (myDefects.Any(x => x.Type < 3 && x.InInner(false))) {
+                                    isSkipDetect_outer = true;
+                                    skipDetectStartFrame_outer = frame;
                                 }
                             }
 

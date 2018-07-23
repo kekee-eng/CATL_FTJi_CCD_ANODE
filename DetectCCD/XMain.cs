@@ -333,7 +333,8 @@ namespace DetectCCD
                         {
                             if (Static.App.EnableSkipDetectWhenLabed)
                             {
-                                detect.isSkipDetect = false;
+                                detect.isSkipDetect_inner = false;
+                                detect.isSkipDetect_outer = false;
                             }
                         }
 
@@ -355,6 +356,27 @@ namespace DetectCCD
                         }
                         else
                         {
+                            if (Static.App.EnableSkipDetectWhenLabed) {
+
+                                if (detect.isSkipDetect_inner) {
+                                    int skipInner = frame - detect.skipDetectStartFrame_inner;
+                                    if (skipInner > 0 && skipInner < Static.App.SkipDetectMaxNumber) {
+                                        detect.isSkipDetect_inner = false;
+                                    }
+                                }
+
+                                if (detect.isSkipDetect_outer) {
+                                    int skipOuter = frame - detect.skipDetectStartFrame_outer;
+                                    if (skipOuter > 0 && skipOuter < Static.App.SkipDetectMaxNumber) {
+                                        detect.isSkipDetect_outer = false;
+                                    }
+                                }
+
+                                bool isDetInner = !detect.isSkipDetect_inner && g.hasDefect2;
+                                bool isDetOuter = !detect.isSkipDetect_outer && g.hasDefect1;
+
+                                g.hasDefect = isDetInner || isDetOuter;
+                            }
                             detect.TryAddDefect(g.hasDefect, frame);
                         }
                         detect.m_frame++;
@@ -385,9 +407,9 @@ namespace DetectCCD
                         }
                         else
                         {
-                            if (Static.App.EnableSkipDetectWhenLabed)
-                            {
-                                detect.isSkipDetect = false;
+                            if (Static.App.EnableSkipDetectWhenLabed) {
+                                detect.isSkipDetect_inner = false;
+                                detect.isSkipDetect_outer = false;
                             }
                         }
 
@@ -409,8 +431,28 @@ namespace DetectCCD
                                 }
                             }
                         }
-                        else
-                        {
+                        else {
+                            if (Static.App.EnableSkipDetectWhenLabed) {
+
+                                if (detect.isSkipDetect_inner) {
+                                    int skipInner = frame - detect.skipDetectStartFrame_inner;
+                                    if (skipInner > 0 && skipInner < Static.App.SkipDetectMaxNumber) {
+                                        detect.isSkipDetect_inner = false;
+                                    }
+                                }
+
+                                if (detect.isSkipDetect_outer) {
+                                    int skipOuter = frame - detect.skipDetectStartFrame_outer;
+                                    if (skipOuter > 0 && skipOuter < Static.App.SkipDetectMaxNumber) {
+                                        detect.isSkipDetect_outer = false;
+                                    }
+                                }
+
+                                bool isDetInner = !detect.isSkipDetect_inner && g.hasDefect2;
+                                bool isDetOuter = !detect.isSkipDetect_outer && g.hasDefect1;
+
+                                g.hasDefect = isDetInner || isDetOuter;
+                            }
                             detect.TryAddDefect(g.hasDefect, frame);
                         }
 
@@ -709,8 +751,10 @@ namespace DetectCCD
                 device.InnerCamera.Grab();
                 device.OuterCamera.Grab();
 
-                process.InnerDetect.isSkipDetect = false;
-                process.OuterDetect.isSkipDetect = false;
+                process.InnerDetect.isSkipDetect_inner = false;
+                process.InnerDetect.isSkipDetect_outer = false;
+                process.OuterDetect.isSkipDetect_inner = false;
+                process.OuterDetect.isSkipDetect_outer = false;
 
                 process.InnerViewerImage.SetUserEnable(false);
                 process.OuterViewerImage.SetUserEnable(false);

@@ -91,10 +91,10 @@ namespace DetectCCD {
 
         }
 
-        public static bool DetectTab(HImage image, out bool hasDefect, out bool hasTab, out double[] x, out double[] y1, out double[] y2) {
+        public static bool DetectTab(HImage image, out bool hasDefect, out bool hasDefect1, out bool hasDefect2, out bool hasTab, out double[] x, out double[] y1, out double[] y2) {
 
             //
-            hasDefect = hasTab = false;
+            hasDefect = hasDefect1 = hasDefect2 = hasTab = false;
             x = y1 = y2 = null;
 
             //
@@ -104,6 +104,8 @@ namespace DetectCCD {
             if (!data.Keys.Contains("OutHasDefect")) return false;
             if (!data.Keys.Contains("OutHasTab")) return false;
 
+            hasDefect1 = data["OutHasDefect1"];
+            hasDefect2 = data["OutHasDefect2"];
             hasDefect = data["OutHasDefect"];
             hasTab = data["OutHasTab"];
 
