@@ -129,7 +129,7 @@ namespace DetectCCD
 
                         outdefs.Add(new DataDefect() { EA = defs[i].EA, Y = defs[i].Y, Type = defs[i].Type });
                     }
-                   
+
                     var arr = outdefs.ToArray();
                     for (int i = 0; i < arr.Length; i++)
                         arr[i].Y = Static.App.FrameFrontToInner(isFront, isInner, arr[i].Y);
@@ -141,12 +141,14 @@ namespace DetectCCD
                     double pos8kreal = 0;
                     var pos8k = Static.App.FrameInnerToFront(isFront2, isInner2, pos4k);
                     var detect = process.InnerDetect;
-                    for (int i = detect.Marks.Count-1; i>=0; i--) {
+                    for (int i = detect.Marks.Count - 1; i >= 0; i--)
+                    {
 
                         var dist = pos8k - detect.Marks[i].MarkY;
                         var range = Static.App.CheckAdjustRange;
 
-                        if (dist > -range && dist < range) {
+                        if (dist > -range && dist < range)
+                        {
 
                             if (dist > Static.App.OnceAdjustValue) dist = Static.App.OnceAdjustValue;
                             if (dist < -Static.App.OnceAdjustValue) dist = -Static.App.OnceAdjustValue;
@@ -196,7 +198,8 @@ namespace DetectCCD
                 };
                 RemoteDefect._func_in_8k_uninit += DeviceUninit;
 
-                RemoteDefect._func_in_8k_setRoll += (app, recipe, tiebiao) => {
+                RemoteDefect._func_in_8k_setRoll += (app, recipe, tiebiao) =>
+                {
 
                     //
                     if (!Directory.Exists(Static.FolderCfgBackup))
@@ -261,9 +264,9 @@ namespace DetectCCD
 
                 //
                 obj.DM.MarkImageStart = obj.Frame - 0.2;
-                obj.DM.MarkImageEnd = obj.Frame+0.99;
+                obj.DM.MarkImageEnd = obj.Frame + 0.99;
                 obj.ImageMark = process.InnerGrab.GetImage(obj.DM.MarkImageStart, obj.DM.MarkImageEnd);
-               
+
                 //
                 Log.RecordAsThread(obj.DetectTab);
             });
@@ -272,7 +275,8 @@ namespace DetectCCD
                 //
                 process.OuterGrab[obj.Frame] = obj;
 
-                if (Static.App.Is4K) {
+                if (Static.App.Is4K)
+                {
 
                     //
                     obj.DM.MarkImageStart = obj.Frame - 0.2;
@@ -318,7 +322,7 @@ namespace DetectCCD
                         continue;
 
                     //
-                    if(g.DM.HasMark)
+                    if (g.DM.HasMark)
                     {
                         var markView = new DataMark();
                         markView.CopyFrom(g.DM);
@@ -356,18 +360,23 @@ namespace DetectCCD
                         }
                         else
                         {
-                            if (Static.App.EnableSkipDetectWhenLabed) {
+                            if (Static.App.EnableSkipDetectWhenLabed)
+                            {
 
-                                if (detect.isSkipDetect_inner) {
+                                if (detect.isSkipDetect_inner)
+                                {
                                     int skipInner = frame - detect.skipDetectStartFrame_inner;
-                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber) {
+                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber)
+                                    {
                                         detect.isSkipDetect_inner = false;
                                     }
                                 }
 
-                                if (detect.isSkipDetect_outer) {
+                                if (detect.isSkipDetect_outer)
+                                {
                                     int skipOuter = frame - detect.skipDetectStartFrame_outer;
-                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber) {
+                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber)
+                                    {
                                         detect.isSkipDetect_outer = false;
                                     }
                                 }
@@ -407,7 +416,8 @@ namespace DetectCCD
                         }
                         else
                         {
-                            if (Static.App.EnableSkipDetectWhenLabed) {
+                            if (Static.App.EnableSkipDetectWhenLabed)
+                            {
                                 detect.isSkipDetect_inner = false;
                                 detect.isSkipDetect_outer = false;
                             }
@@ -431,19 +441,25 @@ namespace DetectCCD
                                 }
                             }
                         }
-                        else {
-                            if (Static.App.EnableSkipDetectWhenLabed) {
+                        else
+                        {
+                            if (Static.App.EnableSkipDetectWhenLabed)
+                            {
 
-                                if (detect.isSkipDetect_inner) {
+                                if (detect.isSkipDetect_inner)
+                                {
                                     int skipInner = frame - detect.skipDetectStartFrame_inner;
-                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber) {
+                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber)
+                                    {
                                         detect.isSkipDetect_inner = false;
                                     }
                                 }
 
-                                if (detect.isSkipDetect_outer) {
+                                if (detect.isSkipDetect_outer)
+                                {
                                     int skipOuter = frame - detect.skipDetectStartFrame_outer;
-                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber) {
+                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber)
+                                    {
                                         detect.isSkipDetect_outer = false;
                                     }
                                 }
@@ -505,17 +521,17 @@ namespace DetectCCD
                     tabInner.ValWidth,
                     tabOuter.ValWidth
                     );
-              
+
                 if (tabOuter.IsNewEA)
                 {
                     //
-                    var eaInner = process.InnerDetect.EAs[tabInner.EA-1];
-                    var eaOuter = process.OuterDetect.EAs[tabOuter.EA-1];
-                    if(eaInner.IsFail)
+                    var eaInner = process.InnerDetect.EAs[tabInner.EA - 1];
+                    var eaOuter = process.OuterDetect.EAs[tabOuter.EA - 1];
+                    if (eaInner.IsFail)
                     {
                         FilmData.InnerLableNum += 1;
                     }
-                    if(eaOuter.IsFail)
+                    if (eaOuter.IsFail)
                     {
                         FilmData.OuterLableNum += 1;
                     }
@@ -627,6 +643,7 @@ namespace DetectCCD
             xtraTabPage7.PageVisible = Static.App.Is8K;
             xtraTabPage6.PageVisible = Static.App.Is4K;
             xtraTabPage5.PageVisible = Static.App.Is4K;
+            checkEnableUseDetectedParam.Visible = Static.App.Is8K;
         }
         void changeUser()
         {
@@ -861,7 +878,7 @@ namespace DetectCCD
                 csvDetectWriter = null;
             }
         }
-        void saveDetectCSV(DataDefect dt,string name)
+        void saveDetectCSV(DataDefect dt, string name)
         {
             Log.Record(() =>
             {
@@ -871,8 +888,8 @@ namespace DetectCCD
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
                     var path = string.Format("{0}\\{1}_缺陷-{2:D2}-{3:D2}_{4:D2}-{5:D2}-{6:D2}.csv",
-                        folder,                        
-                        name,                       
+                        folder,
+                        name,
                         DateTime.Now.Month,
                         DateTime.Now.Day,
                         DateTime.Now.Hour,
@@ -885,10 +902,10 @@ namespace DetectCCD
                 }
 
                 Action<double> appendItem = val => csvDetectWriter.Write(val.ToString("0.000") + ",");
-                          
+
                 appendItem(dt.EA);
-                csvDetectWriter.Write(dt.GetTypeCaption()+",");
-               // appendItem(dt.Type);
+                csvDetectWriter.Write(dt.GetTypeCaption() + ",");
+                // appendItem(dt.Type);
                 appendItem(dt.X);
                 appendItem(dt.Y);
                 appendItem(dt.Width);
@@ -977,7 +994,7 @@ namespace DetectCCD
                         DateTime.Now.Minute,
                         DateTime.Now.Second
                         );
-                  //  FilmData.FilePathWidth = path;
+                    //  FilmData.FilePathWidth = path;
                     csvWidthWriter = new StreamWriter(path);
                     csvWidthWriter.WriteLine("膜卷号," + FilmData.FilmNum);
                     csvWidthWriter.WriteLine("品种," + "NA");
@@ -1047,7 +1064,7 @@ namespace DetectCCD
                 }
                 fileReader.Close();
                 ls[4][1] = FilmData.StopTime.ToString("yyyy-MM-dd HH:mm:ss");
-                ls[11][1] = ((double)FilmData.EaOkNum /(double) (FilmData.EaNgNum+ FilmData.EaOkNum)).ToString("00.00%");
+                ls[11][1] = ((double)FilmData.EaOkNum / (double)(FilmData.EaNgNum + FilmData.EaOkNum)).ToString("00.00%");
                 ls[12][1] = (FilmData.EaNgNum + FilmData.EaOkNum).ToString();
                 ls[13][1] = FilmData.InnerLableNum.ToString();
                 ls[14][1] = FilmData.OuterLableNum.ToString();
@@ -1078,7 +1095,7 @@ namespace DetectCCD
                         DateTime.Now.Minute,
                         DateTime.Now.Second
                         );
-                  //  FilmData.FilePathWidth = path;
+                    //  FilmData.FilePathWidth = path;
                     csvLabelWriter = new StreamWriter(path);
                     csvLabelWriter.WriteLine("时间,EA数,位置,贴标原因");
 
@@ -1138,12 +1155,12 @@ namespace DetectCCD
 
             Log.Record(() =>
             {
-                
+
                 groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
                 groupRoll.Enabled = Static.App.Is4K;
-                
+
                 if (Static.App.Is4K)
                 {
                     _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";
@@ -1166,7 +1183,7 @@ namespace DetectCCD
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
 
-                if(isRollOk)
+                if (isRollOk)
                 {
                     btnConnect.Enabled = !device.isGrabbing;
                     btnDisconnect.Enabled = false;
@@ -1184,7 +1201,7 @@ namespace DetectCCD
                 //
                 checkSaveNG.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
-                checkSaveMark.Enabled= Static.App.RecordSaveImageEnable;
+                checkSaveMark.Enabled = Static.App.RecordSaveImageEnable;
 
                 if (device.isOpen)
                 {
@@ -1221,7 +1238,7 @@ namespace DetectCCD
                 status_device.ImageIndex = device.isOpen ? 5 : 4;
                 status_memory.Caption = string.Format("内存已使用={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
-                if (tmpTiebiao!=null&& tmpTiebiao.EnableLabelEA)
+                if (tmpTiebiao != null && tmpTiebiao.EnableLabelEA)
                 {
                     status_OpenTiebiao.Caption = tiebiao();
                 }
@@ -1275,7 +1292,7 @@ namespace DetectCCD
                         }
                     }
 
-                    if(frameIsError)
+                    if (frameIsError)
                     {
                         var time = DateTime.Now - frameErrorTimeStart;
                         if (time.TotalSeconds > 20)
@@ -1349,12 +1366,11 @@ namespace DetectCCD
             }
         }
         FilmLevel FilmData;
-        bool isRepeatRoll = false;     
+        bool isRepeatRoll = false;
         private void btnRollSet_Click(object sender, EventArgs e)
         {
             runAction((sender as SimpleButton).Text, () =>
             {
-
                 if (device.isGrabbing)
                     throw new Exception("请先停止采像！");
 
@@ -1401,91 +1417,91 @@ namespace DetectCCD
                     {
                         Log.RecordAsThread(() =>
                         {
-                        if (Static.App.Is4K && !isRepeatRoll && process.InnerDetect.Tabs.Count > 0 && process.OuterDetect.Tabs.Count > 0)
-                        {
-                            FilmData.StopTime = DateTime.Now;
-                            var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
-                            var FilmInnerWidthMean = FilmInnerWidthList.Average();
-                            var FilmInnerWidthSigma = Math.Sqrt(FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Average());
+                            if (Static.App.Is4K && !isRepeatRoll && process.InnerDetect.Tabs.Count > 0 && process.OuterDetect.Tabs.Count > 0)
+                            {
+                                FilmData.StopTime = DateTime.Now;
+                                var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
+                                var FilmInnerWidthMean = FilmInnerWidthList.Average();
+                                var FilmInnerWidthSigma = Math.Sqrt(FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Average());
 
-                            var FilmOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
-                            var FilmOuterWidthMean = FilmOuterWidthList.Average();
-                            var FilmOuterWidthSigma = Math.Sqrt(FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Average());
+                                var FilmOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
+                                var FilmOuterWidthMean = FilmOuterWidthList.Average();
+                                var FilmOuterWidthSigma = Math.Sqrt(FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Average());
 
-                            var FilmInOuterWidthSigma = Math.Sqrt((FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Sum() + FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Sum()) / (FilmOuterWidthList.Count() + FilmInnerWidthList.Count()));
-
-
-
-                            var CoatedInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
-                            var CoatedInnerWidthMean = CoatedInnerWidthList.Average();
-                            var CoatedInnerWidthSigma = Math.Sqrt(CoatedInnerWidthList.Select(x => (x - CoatedInnerWidthMean) * (x - CoatedInnerWidthMean)).Average());
-
-                            var CoatedOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
-                            var CoatedOuterWidthMean = CoatedOuterWidthList.Average();
-                            var CoatedOuterWidthSigma = Math.Sqrt(CoatedOuterWidthList.Select(x => (x - CoatedOuterWidthMean) * (x - CoatedOuterWidthMean)).Average());
-
-                            var CoatedInOuterWidthSigma = Math.Sqrt((CoatedOuterWidthList.Select(x => (x - CoatedOuterWidthMean) * (x - CoatedOuterWidthMean)).Sum() + CoatedInnerWidthList.Select(x => (x - CoatedInnerWidthMean) * (x - CoatedInnerWidthMean)).Sum()) / (CoatedOuterWidthList.Count() + CoatedInnerWidthList.Count()));
-
-                            var totalWidth =
-                                from x in process.InnerDetect.Tabs
-                                from y in process.OuterDetect.Tabs
-                                where x.EA == y.EA && x.TAB == y.TAB
-                                select x.ValWidth + y.ValWidth;
-
-                            //  Enumerable.Range(0, 100).Select(x => process.InnerDetect.Tabs[x].ValWidth);
+                                var FilmInOuterWidthSigma = Math.Sqrt((FilmOuterWidthList.Select(x => (x - FilmOuterWidthMean) * (x - FilmOuterWidthMean)).Sum() + FilmInnerWidthList.Select(x => (x - FilmInnerWidthMean) * (x - FilmInnerWidthMean)).Sum()) / (FilmOuterWidthList.Count() + FilmInnerWidthList.Count()));
 
 
-                            var FilmWidthList = totalWidth.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 2);
-                            var FilmWidthMean = FilmWidthList.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 2).Average();
-                            var FilmWidthSigma = Math.Sqrt(FilmWidthList.Select(x => (x - FilmWidthMean) * (x - FilmWidthMean)).Average());
 
-                            var InnerEaOk = process.InnerDetect.EAs.Count(x => !x.IsFail);
-                            var InnerEaNg = process.InnerDetect.EAs.Count(x => x.IsFail);
-                            var InnerEAContextTagNum = process.InnerDetect.EAs.Count(x => x.DefectCountBack_Tag > 0 || x.DefectCountFront_Tag > 0);
-                            var InnerEAContextJoinNum = process.InnerDetect.EAs.Count(x => x.DefectCountBack_Join > 0 || x.DefectCountFront_Join > 0);
-                            var InnerEAContextLeakMetalNum = process.InnerDetect.EAs.Count(x => x.DefectCountBack_LeakMetal > 0 || x.DefectCountFront_LeakMetal > 0);
-                            var InnerEAContextWidthNum = process.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail);
+                                var CoatedInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
+                                var CoatedInnerWidthMean = CoatedInnerWidthList.Average();
+                                var CoatedInnerWidthSigma = Math.Sqrt(CoatedInnerWidthList.Select(x => (x - CoatedInnerWidthMean) * (x - CoatedInnerWidthMean)).Average());
 
-                            var OuterEaOk = process.OuterDetect.EAs.Count(x => !x.IsFail);
-                            var OuterEaNg = process.OuterDetect.EAs.Count(x => x.IsFail);
-                            var OuterEAContextTagNum = process.OuterDetect.EAs.Count(x => x.DefectCountBack_Tag > 0 || x.DefectCountFront_Tag > 0);
-                            var OuterEAContextJoinNum = process.OuterDetect.EAs.Count(x => x.DefectCountBack_Join > 0 || x.DefectCountFront_Join > 0);
-                            var OuterEAContextLeakMetalNum = process.OuterDetect.EAs.Count(x => x.DefectCountBack_LeakMetal > 0 || x.DefectCountFront_LeakMetal > 0);
-                            var OuterEAContextWidthNum = process.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail);
+                                var CoatedOuterWidthList = process.OuterDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
+                                var CoatedOuterWidthMean = CoatedOuterWidthList.Average();
+                                var CoatedOuterWidthSigma = Math.Sqrt(CoatedOuterWidthList.Select(x => (x - CoatedOuterWidthMean) * (x - CoatedOuterWidthMean)).Average());
 
-                            FilmData.FILM_WIDTH_LEFT_M = FilmInnerWidthMean;
-                            FilmData.FILM_WIDTH_LEFT_S = FilmInnerWidthSigma;
-                            FilmData.FILM_WIDTH_RIGHT_M = FilmOuterWidthMean;
-                            FilmData.FILM_WIDTH_RIGHT_S = FilmOuterWidthSigma;
-                            FilmData.FILM_WIDTH_LRIGHT_S = FilmInOuterWidthSigma;
-                            FilmData.COATED_WIDTH_LEFT_M = CoatedInnerWidthMean;
-                            FilmData.COATED_WIDTH_LEFT_S = CoatedInnerWidthSigma;
-                            FilmData.COATED_WIDTH_RIGHT_M = CoatedOuterWidthMean;
-                            FilmData.COATED_WIDTH_RIGHT_S = CoatedOuterWidthSigma;
-                            FilmData.COATED_WIDTH_LRIGHT_S = CoatedInOuterWidthSigma;
-                            FilmData.FILM_SUMWIDTH_M = FilmWidthMean;
-                            FilmData.FILM_SUMWIDTH_S = FilmWidthSigma;
-                            FilmData.COATED_SUMWIDTH_M = FilmWidthMean;
-                            FilmData.COATED_SUMWIDTH_S = FilmWidthSigma;
-                            FilmData.EaOkNum = InnerEaOk + OuterEaOk;
-                            FilmData.EaNgNum = InnerEaNg + OuterEaNg;
-                            FilmData.EAContextJoin = InnerEAContextJoinNum + OuterEAContextJoinNum;
-                            FilmData.EAContextTag = OuterEAContextTagNum + InnerEAContextTagNum;
-                            FilmData.EAContextLeakMetal = InnerEAContextLeakMetalNum + OuterEAContextLeakMetalNum;
-                            FilmData.EAContextWidth = InnerEAContextWidthNum + OuterEAContextWidthNum;
-                            FilmData.FilmWidthMax = Static.Recipe.TabWidthMax;
-                            FilmData.FilmWidthMin = Static.Recipe.TabWidthMin;
-                            FilmData.FilmWidthTarget = Static.Recipe.TabWidthTarget;
-                            saveFinalCsv(FilmData.FilePathWidth, false);
-                            RemotePLC.In4KCallPLC_FilmLevelToMes(FilmData);
+                                var CoatedInOuterWidthSigma = Math.Sqrt((CoatedOuterWidthList.Select(x => (x - CoatedOuterWidthMean) * (x - CoatedOuterWidthMean)).Sum() + CoatedInnerWidthList.Select(x => (x - CoatedInnerWidthMean) * (x - CoatedInnerWidthMean)).Sum()) / (CoatedOuterWidthList.Count() + CoatedInnerWidthList.Count()));
+
+                                var totalWidth =
+                                    from x in process.InnerDetect.Tabs
+                                    from y in process.OuterDetect.Tabs
+                                    where x.EA == y.EA && x.TAB == y.TAB
+                                    select x.ValWidth + y.ValWidth;
+
+                                //  Enumerable.Range(0, 100).Select(x => process.InnerDetect.Tabs[x].ValWidth);
+
+
+                                var FilmWidthList = totalWidth.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 2);
+                                var FilmWidthMean = FilmWidthList.Where(x => Math.Abs(x - 2 * Static.Recipe.TabWidthTarget) < 2).Average();
+                                var FilmWidthSigma = Math.Sqrt(FilmWidthList.Select(x => (x - FilmWidthMean) * (x - FilmWidthMean)).Average());
+
+                                var InnerEaOk = process.InnerDetect.EAs.Count(x => !x.IsFail);
+                                var InnerEaNg = process.InnerDetect.EAs.Count(x => x.IsFail);
+                                var InnerEAContextTagNum = process.InnerDetect.EAs.Count(x => x.DefectCountBack_Tag > 0 || x.DefectCountFront_Tag > 0);
+                                var InnerEAContextJoinNum = process.InnerDetect.EAs.Count(x => x.DefectCountBack_Join > 0 || x.DefectCountFront_Join > 0);
+                                var InnerEAContextLeakMetalNum = process.InnerDetect.EAs.Count(x => x.DefectCountBack_LeakMetal > 0 || x.DefectCountFront_LeakMetal > 0);
+                                var InnerEAContextWidthNum = process.InnerDetect.EAs.Count(x => x.IsTabWidthFailCountFail);
+
+                                var OuterEaOk = process.OuterDetect.EAs.Count(x => !x.IsFail);
+                                var OuterEaNg = process.OuterDetect.EAs.Count(x => x.IsFail);
+                                var OuterEAContextTagNum = process.OuterDetect.EAs.Count(x => x.DefectCountBack_Tag > 0 || x.DefectCountFront_Tag > 0);
+                                var OuterEAContextJoinNum = process.OuterDetect.EAs.Count(x => x.DefectCountBack_Join > 0 || x.DefectCountFront_Join > 0);
+                                var OuterEAContextLeakMetalNum = process.OuterDetect.EAs.Count(x => x.DefectCountBack_LeakMetal > 0 || x.DefectCountFront_LeakMetal > 0);
+                                var OuterEAContextWidthNum = process.OuterDetect.EAs.Count(x => x.IsTabWidthFailCountFail);
+
+                                FilmData.FILM_WIDTH_LEFT_M = FilmInnerWidthMean;
+                                FilmData.FILM_WIDTH_LEFT_S = FilmInnerWidthSigma;
+                                FilmData.FILM_WIDTH_RIGHT_M = FilmOuterWidthMean;
+                                FilmData.FILM_WIDTH_RIGHT_S = FilmOuterWidthSigma;
+                                FilmData.FILM_WIDTH_LRIGHT_S = FilmInOuterWidthSigma;
+                                FilmData.COATED_WIDTH_LEFT_M = CoatedInnerWidthMean;
+                                FilmData.COATED_WIDTH_LEFT_S = CoatedInnerWidthSigma;
+                                FilmData.COATED_WIDTH_RIGHT_M = CoatedOuterWidthMean;
+                                FilmData.COATED_WIDTH_RIGHT_S = CoatedOuterWidthSigma;
+                                FilmData.COATED_WIDTH_LRIGHT_S = CoatedInOuterWidthSigma;
+                                FilmData.FILM_SUMWIDTH_M = FilmWidthMean;
+                                FilmData.FILM_SUMWIDTH_S = FilmWidthSigma;
+                                FilmData.COATED_SUMWIDTH_M = FilmWidthMean;
+                                FilmData.COATED_SUMWIDTH_S = FilmWidthSigma;
+                                FilmData.EaOkNum = InnerEaOk + OuterEaOk;
+                                FilmData.EaNgNum = InnerEaNg + OuterEaNg;
+                                FilmData.EAContextJoin = InnerEAContextJoinNum + OuterEAContextJoinNum;
+                                FilmData.EAContextTag = OuterEAContextTagNum + InnerEAContextTagNum;
+                                FilmData.EAContextLeakMetal = InnerEAContextLeakMetalNum + OuterEAContextLeakMetalNum;
+                                FilmData.EAContextWidth = InnerEAContextWidthNum + OuterEAContextWidthNum;
+                                FilmData.FilmWidthMax = Static.Recipe.TabWidthMax;
+                                FilmData.FilmWidthMin = Static.Recipe.TabWidthMin;
+                                FilmData.FilmWidthTarget = Static.Recipe.TabWidthTarget;
+                                saveFinalCsv(FilmData.FilePathWidth, false);
+                                RemotePLC.In4KCallPLC_FilmLevelToMes(FilmData);
                             }
-                        });                                              
+                        });
                     }
                     catch (System.Exception ex)
                     {
                         Log.AppLog.Error(string.Format("->"), ex);
                     }
-                   
+
 
                     mainRollName.Enabled = true;
                     mainEmployeeNum.Enabled = true;
@@ -1496,6 +1512,9 @@ namespace DetectCCD
                     btnRollSet.Text = "设置膜卷";
                     isRollOk = false;
                     isRepeatRoll = true;
+                    //设定膜卷关闭检测参数设定
+                    checkEnableUseDetectedParam.Checked = false;
+
                 }
             });
         }
@@ -1599,7 +1618,8 @@ namespace DetectCCD
             return checkOK;
 
         }
-        private async void btnDisconnect_Click(object sender, EventArgs e) {
+        private async void btnDisconnect_Click(object sender, EventArgs e)
+        {
             if (UtilTool.XFWait.isShow)
                 return;
 
@@ -1677,7 +1697,8 @@ namespace DetectCCD
         }
         void updateRecipes()
         {
-            if (Static.App.Is4K) {
+            if (Static.App.Is4K)
+            {
                 listBoxRecipe.Items.Clear();
                 listBoxRecipe.Items.AddRange(getAllRecipe().Select(x => x.RecipeName).ToArray());
 
@@ -1764,9 +1785,11 @@ namespace DetectCCD
                 updateRecipes();
             });
         }
-        private void btnSelectRecipe_Click(object sender, EventArgs e) {
+        private void btnSelectRecipe_Click(object sender, EventArgs e)
+        {
 
-            runAction((sender as SimpleButton).Text, () => {
+            runAction((sender as SimpleButton).Text, () =>
+            {
 
                 if (listBoxRecipe.SelectedIndex == -1)
                     throw new Exception("请先选择配方");
@@ -1884,12 +1907,23 @@ namespace DetectCCD
             });
         }
 
-        private void btnRecipeSet_Click(object sender, EventArgs e) {
-            Log.Record(() => {
+        private void btnRecipeSet_Click(object sender, EventArgs e)
+        {
+            Log.Record(() =>
+            {
                 listBoxRecipe.SelectedIndex = mainRecipes.SelectedIndex;
                 listBoxRecipe_SelectedIndexChanged(listBoxRecipe, null);
                 btnSelectRecipe_Click(btnSelectRecipe, null);
             });
+        }
+
+        private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e)
+        {
+            runAction("开启“来料异常”", () =>
+            {
+                Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
+            });
+
         }
     }
 

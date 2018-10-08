@@ -6,23 +6,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DetectCCD {
+namespace DetectCCD
+{
 
-    class ImageProcess {
+    class ImageProcess
+    {
 
         static HDevEngine m_engine = new HDevEngine();
         static HDevProgram m_program = null;
         public static string ErrorMessage;
-        
-        public static void Init() {
-            
+
+        public static void Init()
+        {
+
             //
             m_program?.Dispose();
             m_program = new HDevProgram(Static.PathImageProcess);
-            
+
         }
 
-        public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image, out int time) {
+        public static Dictionary<string, HTuple> TemplateProcess(string process, HImage image, out int time)
+        {
 
             Dictionary<string, HTuple> call = null;
             time = UtilTool.TimeCounting(() => call = TemplateProcess(process, image));
@@ -54,6 +58,19 @@ namespace DetectCCD {
                     procedure = new HDevProcedure(m_program, process);
                     call = procedure.CreateCall();
                     call.SetInputIconicParamObject("Image", image);
+                    if (process == "DetectDefect")
+                    {
+                        HTuple param = new HTuple();
+                        if (Static.Status.isEnableUseDetectParam)
+                        {
+                            param.TupleAdd(Static.App.ImageProcessParam_DetectDefect_Gray);
+                        }
+                        else
+                        {
+                            param.TupleAdd(1.5);
+                        }
+                        call.SetInputCtrlParamTuple("InParam", param);
+                    }
                 }
 
                 //
@@ -91,7 +108,8 @@ namespace DetectCCD {
 
         }
 
-        public static bool DetectTab(HImage image, out bool hasDefect, out bool hasDefect1, out bool hasDefect2, out bool hasTab, out double[] x, out double[] y1, out double[] y2) {
+        public static bool DetectTab(HImage image, out bool hasDefect, out bool hasDefect1, out bool hasDefect2, out bool hasTab, out double[] x, out double[] y1, out double[] y2)
+        {
 
             //
             hasDefect = hasDefect1 = hasDefect2 = hasTab = false;
@@ -100,7 +118,7 @@ namespace DetectCCD {
             //
             var data = TemplateProcess("DetectTab", image, out TimeDetectTab);
             if (data == null) return false;
-            
+
             if (!data.Keys.Contains("OutHasDefect")) return false;
             if (!data.Keys.Contains("OutHasTab")) return false;
 
@@ -109,7 +127,8 @@ namespace DetectCCD {
             hasDefect = data["OutHasDefect"];
             hasTab = data["OutHasTab"];
 
-            if (hasTab) {
+            if (hasTab)
+            {
                 x = data["OutX"].ToDArr();
                 y1 = data["OutY1"].ToDArr();
                 y2 = data["OutY2"].ToDArr();
@@ -120,7 +139,8 @@ namespace DetectCCD {
             return true;
 
         }
-        public static bool DetectWidth(HImage image, out double[] x1, out double[] x2) {
+        public static bool DetectWidth(HImage image, out double[] x1, out double[] x2)
+        {
 
             //
             x1 = x2 = null;
@@ -128,7 +148,7 @@ namespace DetectCCD {
             //
             var data = TemplateProcess("DetectWidth", image, out TimeDetectWidth);
             if (data == null) return false;
-            
+
             //  
             x1 = data["OutX1"];
             x2 = data["OutX2"];
@@ -140,7 +160,8 @@ namespace DetectCCD {
             return true;
 
         }
-        public static bool DetectMark(HImage image, out double[] x, out double[] y) {
+        public static bool DetectMark(HImage image, out double[] x, out double[] y)
+        {
 
             //
             x = y = null;
@@ -160,14 +181,15 @@ namespace DetectCCD {
             //
             if (x.Length == 0) return false;
             if (y.Length == 0) return false;
-            
+
             return true;
         }
-        public static bool DetectDefect(HImage image, out int[] type, out double[] x, out double[] y, out double[] w, out double[] h, out double [] area) {
+        public static bool DetectDefect(HImage image, out int[] type, out double[] x, out double[] y, out double[] w, out double[] h, out double[] area)
+        {
 
             //
             type = null;
-            x = y = w = h =area = null;
+            x = y = w = h = area = null;
 
             //
             image.GetImageSize(out ImageDefectWidth, out ImageDefectHeight);
@@ -175,7 +197,7 @@ namespace DetectCCD {
             //
             var data = TemplateProcess("DetectDefect", image, out TimeDetectDefect);
             if (data == null) return false;
-            
+
             //
             type = data["OutType"].ToIArr();
             x = data["OutX"].ToDArr();

@@ -45,6 +45,11 @@ namespace DetectCCD {
         public static CfgApp App;
         public static CfgRecipe Recipe;
         public static CfgTiebiao Tiebiao;
+        public static class Status
+        {
+            //是否启用检测参数
+            public static bool isEnableUseDetectParam = false;
+        }
 
         public static void Init() {
 
