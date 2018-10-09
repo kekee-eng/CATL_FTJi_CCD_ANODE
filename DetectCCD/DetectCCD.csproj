@@ -158,6 +158,7 @@
     </Compile>
     <Compile Include="_ENC7480.cs" />
     <Compile Include="_ModbusTCP.cs" />
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="XFCameraControl.resx">
       <DependentUpon>XFCameraControl.cs</DependentUpon>
     </EmbeddedResource>

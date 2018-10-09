@@ -239,6 +239,10 @@ namespace DetectCCD
 
                     //
                     updateRecipes();
+
+                    //8k取消使用检测参数，使用默认参数
+                    checkEnableUseDetectedParam.Checked = false;
+
                 };
 
                 RemoteDefect._func_in_8k_getFrame += () =>
@@ -1919,10 +1923,20 @@ namespace DetectCCD
 
         private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e)
         {
-            runAction("开启“来料异常”", () =>
+            if(!checkEnableUseDetectedParam.Checked)
             {
-                Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
-            });
+                runAction("开启“来料异常”", () =>
+                {
+                    Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
+                });
+            }
+           else
+            {
+                runAction("关闭“来料异常”", () =>
+                {
+                    Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
+                });
+            }
 
         }
     }
