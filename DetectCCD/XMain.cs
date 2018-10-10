@@ -1925,14 +1925,14 @@ namespace DetectCCD
         {
             if(!checkEnableUseDetectedParam.Checked)
             {
-                runAction("开启“来料异常”", () =>
+                runAction("开启“来料压痕”", () =>
                 {
                     Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
                 });
             }
            else
             {
-                runAction("关闭“来料异常”", () =>
+                runAction("关闭“来料压痕”", () =>
                 {
                     Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
                 });

@@ -52,7 +52,6 @@
             this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.groupRemoteClient = new DevExpress.XtraEditors.GroupControl();
-            this.checkEnableUseDetectedParam = new DevExpress.XtraEditors.CheckEdit();
             this.btnConnectRemotePLC = new DevExpress.XtraEditors.SimpleButton();
             this.btnConnectRemote8K = new DevExpress.XtraEditors.SimpleButton();
             this._lc_remote_plc = new DevExpress.XtraEditors.LabelControl();
@@ -60,6 +59,7 @@
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.groupDevice = new DevExpress.XtraEditors.GroupControl();
+            this.checkEnableUseDetectedParam = new DevExpress.XtraEditors.CheckEdit();
             this.btnDisconnect = new DevExpress.XtraEditors.SimpleButton();
             this.btnStopGrab = new DevExpress.XtraEditors.SimpleButton();
             this.btnConnect = new DevExpress.XtraEditors.SimpleButton();
@@ -210,9 +210,9 @@
             this.xtraTabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).BeginInit();
             this.groupRemoteClient.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupDevice)).BeginInit();
             this.groupDevice.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainRecipes.Properties)).BeginInit();
@@ -531,16 +531,6 @@
             this.groupRemoteClient.TabIndex = 1;
             this.groupRemoteClient.Text = "联机设备状态";
             // 
-            // checkEnableUseDetectedParam
-            // 
-            this.checkEnableUseDetectedParam.Location = new System.Drawing.Point(30, 185);
-            this.checkEnableUseDetectedParam.MenuManager = this.barManager1;
-            this.checkEnableUseDetectedParam.Name = "checkEnableUseDetectedParam";
-            this.checkEnableUseDetectedParam.Properties.Caption = "启用“来料异常检测”";
-            this.checkEnableUseDetectedParam.Size = new System.Drawing.Size(131, 19);
-            this.checkEnableUseDetectedParam.TabIndex = 94;
-            this.checkEnableUseDetectedParam.CheckedChanged += new System.EventHandler(this.checkEnableUseDetectedParam_CheckedChanged);
-            // 
             // btnConnectRemotePLC
             // 
             this.btnConnectRemotePLC.Location = new System.Drawing.Point(168, 73);
@@ -604,6 +594,16 @@
             this.groupDevice.Size = new System.Drawing.Size(279, 231);
             this.groupDevice.TabIndex = 0;
             this.groupDevice.Text = "初始化设置";
+            // 
+            // checkEnableUseDetectedParam
+            // 
+            this.checkEnableUseDetectedParam.Location = new System.Drawing.Point(30, 185);
+            this.checkEnableUseDetectedParam.MenuManager = this.barManager1;
+            this.checkEnableUseDetectedParam.Name = "checkEnableUseDetectedParam";
+            this.checkEnableUseDetectedParam.Properties.Caption = "启用“来料压痕检测”";
+            this.checkEnableUseDetectedParam.Size = new System.Drawing.Size(131, 19);
+            this.checkEnableUseDetectedParam.TabIndex = 94;
+            this.checkEnableUseDetectedParam.CheckedChanged += new System.EventHandler(this.checkEnableUseDetectedParam_CheckedChanged);
             // 
             // btnDisconnect
             // 
@@ -2170,9 +2170,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).EndInit();
             this.groupRemoteClient.ResumeLayout(false);
             this.groupRemoteClient.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupDevice)).EndInit();
             this.groupDevice.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
             this.groupRoll.PerformLayout();
