@@ -51,6 +51,7 @@
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.checkEnableUseDetectedParam = new DevExpress.XtraEditors.CheckEdit();
             this.groupRemoteClient = new DevExpress.XtraEditors.GroupControl();
             this.btnConnectRemotePLC = new DevExpress.XtraEditors.SimpleButton();
             this.btnConnectRemote8K = new DevExpress.XtraEditors.SimpleButton();
@@ -59,7 +60,6 @@
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
             this.groupDevice = new DevExpress.XtraEditors.GroupControl();
-            this.checkEnableUseDetectedParam = new DevExpress.XtraEditors.CheckEdit();
             this.btnDisconnect = new DevExpress.XtraEditors.SimpleButton();
             this.btnStopGrab = new DevExpress.XtraEditors.SimpleButton();
             this.btnConnect = new DevExpress.XtraEditors.SimpleButton();
@@ -208,11 +208,11 @@
             this.xtraTabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).BeginInit();
             this.xtraTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).BeginInit();
             this.groupRemoteClient.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupDevice)).BeginInit();
             this.groupDevice.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).BeginInit();
             this.groupRoll.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainRecipes.Properties)).BeginInit();
@@ -508,6 +508,7 @@
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.checkEnableUseDetectedParam);
             this.xtraTabPage1.Controls.Add(this.groupRemoteClient);
             this.xtraTabPage1.Controls.Add(this.groupDevice);
             this.xtraTabPage1.Controls.Add(this.groupRoll);
@@ -516,6 +517,16 @@
             this.xtraTabPage1.Name = "xtraTabPage1";
             this.xtraTabPage1.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage1.Text = "设备控制";
+            // 
+            // checkEnableUseDetectedParam
+            // 
+            this.checkEnableUseDetectedParam.Location = new System.Drawing.Point(39, 263);
+            this.checkEnableUseDetectedParam.MenuManager = this.barManager1;
+            this.checkEnableUseDetectedParam.Name = "checkEnableUseDetectedParam";
+            this.checkEnableUseDetectedParam.Properties.Caption = "启用“来料压痕检测”";
+            this.checkEnableUseDetectedParam.Size = new System.Drawing.Size(131, 19);
+            this.checkEnableUseDetectedParam.TabIndex = 94;
+            this.checkEnableUseDetectedParam.CheckedChanged += new System.EventHandler(this.checkEnableUseDetectedParam_CheckedChanged);
             // 
             // groupRemoteClient
             // 
@@ -583,7 +594,6 @@
             // 
             // groupDevice
             // 
-            this.groupDevice.Controls.Add(this.checkEnableUseDetectedParam);
             this.groupDevice.Controls.Add(this.btnDisconnect);
             this.groupDevice.Controls.Add(this.btnStopGrab);
             this.groupDevice.Controls.Add(this.btnConnect);
@@ -594,16 +604,6 @@
             this.groupDevice.Size = new System.Drawing.Size(279, 231);
             this.groupDevice.TabIndex = 0;
             this.groupDevice.Text = "初始化设置";
-            // 
-            // checkEnableUseDetectedParam
-            // 
-            this.checkEnableUseDetectedParam.Location = new System.Drawing.Point(30, 185);
-            this.checkEnableUseDetectedParam.MenuManager = this.barManager1;
-            this.checkEnableUseDetectedParam.Name = "checkEnableUseDetectedParam";
-            this.checkEnableUseDetectedParam.Properties.Caption = "启用“来料压痕检测”";
-            this.checkEnableUseDetectedParam.Size = new System.Drawing.Size(131, 19);
-            this.checkEnableUseDetectedParam.TabIndex = 94;
-            this.checkEnableUseDetectedParam.CheckedChanged += new System.EventHandler(this.checkEnableUseDetectedParam_CheckedChanged);
             // 
             // btnDisconnect
             // 
@@ -2167,12 +2167,12 @@
             this.xtraTabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).EndInit();
             this.xtraTabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).EndInit();
             this.groupRemoteClient.ResumeLayout(false);
             this.groupRemoteClient.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupDevice)).EndInit();
             this.groupDevice.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRoll)).EndInit();
             this.groupRoll.ResumeLayout(false);
             this.groupRoll.PerformLayout();
