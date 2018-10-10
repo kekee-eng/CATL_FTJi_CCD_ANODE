@@ -1923,7 +1923,7 @@ namespace DetectCCD
 
         private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e)
         {
-            if(!checkEnableUseDetectedParam.Checked)
+            if(checkEnableUseDetectedParam.Checked)
             {
                 runAction("开启“来料压痕”", () =>
                 {
