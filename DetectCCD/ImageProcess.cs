@@ -63,11 +63,15 @@ namespace DetectCCD
                         HTuple param = new HTuple();
                         if (Static.Status.isEnableUseDetectParam)
                         {
-                            param.TupleAdd(Static.App.ImageProcessParam_DetectDefect_Gray);
+                            param[0]=Static.App.ImageProcessParam_DetectDefect_MaxGray;
+                            param[0] = Static.App.ImageProcessParam_DetectDefect_MinGray;
+                            param[0] = Static.App.ImageProcessParam_DetectDefect_Deviation;
                         }
                         else
                         {
-                            param.TupleAdd(1.5);
+                            param[0]=1.5;
+                            param[0] = 0.5;
+                            param[0] = 10;
                         }
                         call.SetInputCtrlParamTuple("InParam", param);
                     }
