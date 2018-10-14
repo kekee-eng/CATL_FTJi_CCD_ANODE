@@ -64,14 +64,14 @@ namespace DetectCCD
                         if (Static.Status.isEnableUseDetectParam)
                         {
                             param[0]=Static.App.ImageProcessParam_DetectDefect_MaxGray;
-                            param[0] = Static.App.ImageProcessParam_DetectDefect_MinGray;
-                            param[0] = Static.App.ImageProcessParam_DetectDefect_Deviation;
+                            param[1] = Static.App.ImageProcessParam_DetectDefect_MinGray;
+                            param[2] = Static.App.ImageProcessParam_DetectDefect_Deviation;
                         }
                         else
                         {
                             param[0]=1.5;
-                            param[0] = 0.5;
-                            param[0] = 10;
+                            param[1] = 0.5;
+                            param[2] = 10;
                         }
                         call.SetInputCtrlParamTuple("InParam", param);
                     }
