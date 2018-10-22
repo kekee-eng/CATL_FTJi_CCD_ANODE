@@ -1927,14 +1927,15 @@ namespace DetectCCD
             {
                 runAction("开启“来料压痕”", () =>
                 {
-                    Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
+                    this.Invoke(new Action(()=> { Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked; }));
+                    
                 });
             }
            else
             {
                 runAction("关闭“来料压痕”", () =>
                 {
-                    Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked;
+                    this.Invoke(new Action(()=> { Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked; })); 
                 });
             }
 
