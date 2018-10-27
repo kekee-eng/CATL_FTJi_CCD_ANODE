@@ -323,5 +323,40 @@ namespace DetectCCD {
                 back = 0;
             }
         }
+
+        //取得8K硬盘剩余空间
+        public static void In4KGet8KDiskSpace(out double size)
+        {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            size = 0;
+
+            try
+            {
+                if (client == null)
+                    return;
+                client._in_8k_getDiskSpace(out size);
+            }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+            }
+        }
+        public static event Func<double> _func_in_8k_getDiskSpace;
+        public void _in_8k_getDiskSpace(out double size)
+        {
+            try
+            {
+                size = _func_in_8k_getDiskSpace();
+            }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                size = 0;
+            }
+        }
+
     }
 }

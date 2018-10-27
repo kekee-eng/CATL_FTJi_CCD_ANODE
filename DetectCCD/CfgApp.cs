@@ -11,6 +11,7 @@ namespace DetectCCD {
 
         //
         public bool ImageProcessReload = false;
+
         //检测露金属参数
         public double ImageProcessParam_DetectDefect_MaxGray = 2.5;
         public double ImageProcessParam_DetectDefect_MinGray = 0.5;
@@ -22,6 +23,9 @@ namespace DetectCCD {
 
         public bool EnableSkipDetectWhenLabed = true;
         public int SkipDetectMaxNumber = 30;
+
+        //检查硬盘剩余空间(G)
+        public double CheckHardDiskLess = 100;
 
         //记录参数
         public int RecordCacheSize = 200;
