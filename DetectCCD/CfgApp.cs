@@ -16,6 +16,7 @@ namespace DetectCCD {
         public double ImageProcessParam_DetectDefect_MaxGray = 2.5;
         public double ImageProcessParam_DetectDefect_MinGray = 0.5;
         public double ImageProcessParam_DetectDefect_Deviation = 20;
+        public double ImageProcessParam_DetectDefect_Area = 3500;
         public double AppRestartTimeout = 12;
 
         public double CheckAdjustRange = 15;
