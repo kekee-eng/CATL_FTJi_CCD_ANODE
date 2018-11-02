@@ -40,7 +40,7 @@ namespace DetectCCD {
                     
                     //
                     Log.Record(() => {
-                        dt.image.WriteImage("bmp", 0, dt.path);
+                        dt.image.WriteImage("png", 0, dt.path);
                     });
                     m_countOk++;
 
