@@ -38,8 +38,7 @@ namespace DetectCCD {
         }
 
         //
-        public string IsInnerText()
-        {
+        public string IsInnerText() {
             //
             var isinner = InInner(true);
             var isouter = InInner(false);
@@ -58,7 +57,7 @@ namespace DetectCCD {
 
         //
         public bool InInner(bool isinner) {
-            if(isinner)
+            if (isinner)
                 return (X + W / 2 > 0.5);
             else
                 return (X - W / 2 < 0.5);
@@ -95,7 +94,6 @@ namespace DetectCCD {
                 return true;
             if (Static.Tiebiao.LabelContextPifeng && Type == 3)
                 return true;
-
             return false;
         }
 
@@ -106,7 +104,8 @@ namespace DetectCCD {
                 return true;
             if (Static.Tiebiao.EAContextPifeng && Type == 3)
                 return true;
-
+            if (Static.Tiebiao.EAContextLineLeakMetal && Type == 40)
+                return true;
             return false;
         }
 
