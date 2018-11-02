@@ -1255,6 +1255,13 @@ namespace DetectCCD {
                     btnRollSet.Text = "结束膜卷";
 
                     //
+                    Static.App.ImageProcessParamEnable = false;
+                    //Static.App.LineLeakMetalEnable = true;
+                    //Static.App.LineLeakMetalIsAlarmStop = true;
+                    //Static.App.LineLeakMetalIsLabel = true;
+                    Static.App.UpdateBind();
+                    
+                    //
                     Log.Record(RemoteDefect.InitClient);
                     Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
