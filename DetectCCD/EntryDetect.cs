@@ -574,7 +574,7 @@ namespace DetectCCD
                         DataDefect def = new DataDefect() {
                             EA = -1,
                             Type = 40,
-                            X = dx,
+                            X = dx / grab.Width,
                             Y = frame + 0.5,
                             W = dw / grab.Width,
                             H = 1
