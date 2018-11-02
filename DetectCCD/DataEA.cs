@@ -22,6 +22,10 @@ namespace DetectCCD {
         public int DefectCountBack_LeakMetal;
         public int DefectCountBack_Pifeng;
 
+        public int DefectCountFront_LineLeakMetal;
+        public int DefectCountBack_LineLeakMetal;
+
+
         public bool IsTabCountFail { get { return TabCount != Static.Recipe.CheckTabCount; } }
         public bool IsTabWidthFailCountFail {
             get {
@@ -54,6 +58,11 @@ namespace DetectCCD {
                         return true;
                     if (DefectCountBack_Pifeng > 0)
                         return true;
+                }
+                if (Static.App.LineLeakMetalIsLabel)
+                {
+                    if (DefectCountBack_LineLeakMetal > 0) return true;
+                    if (DefectCountFront_LineLeakMetal > 0) return true;
                 }
                 return false;
             }
@@ -89,12 +98,21 @@ namespace DetectCCD {
                     if (DefectCountBack_LeakMetal > 0)
                         text += string.Format("背面漏金属[{0}], ", DefectCountBack_LeakMetal);
                 }
-                if (Static.Tiebiao.EAContextPifeng) {
+                if (Static.Tiebiao.EAContextPifeng)
+                {
                     if (DefectCountFront_Pifeng > 0)
                         text += string.Format("正面披风[{0}], ", DefectCountFront_Pifeng);
 
                     if (DefectCountBack_Pifeng > 0)
                         text += string.Format("背面披风[{0}], ", DefectCountBack_Pifeng);
+                }
+                if (Static.App.LineLeakMetalIsLabel)
+                {
+                    if (DefectCountFront_LineLeakMetal > 0)
+                        text += string.Format("正面线性漏金属[{0}], ", DefectCountFront_LineLeakMetal);
+
+                    if (DefectCountBack_LineLeakMetal > 0)
+                        text += string.Format("背面线性漏金属[{0}], ", DefectCountBack_LineLeakMetal);
                 }
             }
             return text;

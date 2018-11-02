@@ -970,6 +970,7 @@ namespace DetectCCD
                     obj.DefectCountFront_Tag = remoteDefsFront.Count(x => x.Type == 1);
                     obj.DefectCountFront_LeakMetal = remoteDefsFront.Count(x => x.Type == 2);
                     obj.DefectCountFront_Pifeng = remoteDefsFront.Count(x => x.Type == 3);
+                    obj.DefectCountFront_LineLeakMetal = remoteDefsFront.Count(x => x.Type == 40);
                 }
 
                 if (remoteDefsBack != null)
@@ -978,6 +979,7 @@ namespace DetectCCD
                     obj.DefectCountBack_Tag = remoteDefsBack.Count(x => x.Type == 1);
                     obj.DefectCountBack_LeakMetal = remoteDefsBack.Count(x => x.Type == 2);
                     obj.DefectCountBack_Pifeng = remoteDefsBack.Count(x => x.Type == 3);
+                    obj.DefectCountBack_LineLeakMetal = remoteDefsBack.Count(x => x.Type == 40);
                 }
 
             }
