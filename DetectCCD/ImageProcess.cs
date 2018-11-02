@@ -219,7 +219,7 @@ namespace DetectCCD {
                 //取得模区边界
                 int xstart, xend;
                 {
-                    var region = image.Threshold(30.0, 255);
+                    var region = image.Threshold(Static.App.LineLeakMetalParam_bgGray, 255.0);
                     region = region.Connection();
                     region = region.SelectShapeStd("max_area", 5000);
 
@@ -228,7 +228,7 @@ namespace DetectCCD {
 
                     int x1 = x1list.TupleMedian();
                     int x2 = x2list.TupleMedian();
-                    int offset = 50;
+                    int offset = Static.App.LineLeakMetalParam_offset;
 
                     xstart = x1 + offset;
                     xend = x2 - offset;
@@ -253,7 +253,7 @@ namespace DetectCCD {
                     double max = checkVP.Max();
                     double min = checkVP.Min();
 
-                    if (mean - min > 10) {
+                    if (mean - min > Static.App.LineLeakMetalParam_downThreshold) {
                         //暗痕线性漏金属
                         int minid = VP.FindIndex(x => x == min);
 
@@ -263,7 +263,7 @@ namespace DetectCCD {
                         return true;
                     }
 
-                    if (max - mean > 15) {
+                    if (max - mean > Static.App.LineLeakMetalParam_upThreshold) {
                         //亮痕线性漏金属
                         int maxid = VP.FindIndex(x => x == max);
                         px = maxid;

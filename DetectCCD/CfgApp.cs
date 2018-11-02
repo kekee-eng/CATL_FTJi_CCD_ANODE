@@ -17,6 +17,10 @@ namespace DetectCCD {
         public bool LineLeakMetalEnable = true;
         public bool LineLeakMetalIsAlarmStop = true;
         public bool LineLeakMetalIsLabel = true;
+        public int LineLeakMetalParam_bgGray = 50;
+        public int LineLeakMetalParam_offset = 50;
+        public int LineLeakMetalParam_upThreshold = 15;
+        public int LineLeakMetalParam_downThreshold = 10;
 
         //检测露金属参数
         public bool ImageProcessParamEnable = false;
