@@ -565,39 +565,53 @@ namespace DetectCCD
         public void TryAddDefect(bool hasDefect, int frame) {
 
             //检测暗痕漏金属
-            if (Static.App.LineLeakMetalEnable) {
+            if (Static.App.LineLeakMetalEnable)
+            {
 
                 //多线程运算
-                Log.RecordAsThread(() => {
+                Log.RecordAsThread(() =>
+                {
 
                     //
                     var image = grab.GetImage(frame);
 
                     //检测
                     double dx, dw;
-                    if (image != null && ImageProcess.DetectDarkLineLeakMetal(image, out dx, out dw)) {
+                    if (image != null && ImageProcess.DetectDarkLineLeakMetal(image, out dx, out dw))
+                    {
 
                         //
                         LineLeakMetalCount++;
-                        if (Static.App.LineLeakMetalIsAlarmStop) {
-                            if (LineLeakMetalCount > Static.App.LineLeakMetal_AlarmStop_MaxCount) {
+                        if (Static.App.LineLeakMetalIsAlarmStop)
+                        {
+                            if (LineLeakMetalCount > Static.App.LineLeakMetal_AlarmStop_MaxCount)
+                            {
 
                                 int markCount = Marks.Count;
-                                if(markCount != PrevMarkCount) {
+                                if (markCount != PrevMarkCount)
+                                {
                                     AlreadyAlarmStopOnLineLeakMetal = false;
                                 }
 
-                                if (!AlreadyAlarmStopOnLineLeakMetal) {
+                                if (!AlreadyAlarmStopOnLineLeakMetal)
+                                {
                                     AlreadyAlarmStopOnLineLeakMetal = true;
-                                    //RemotePLC.In4KCallPLC_AlarmStop(false, true, $"连接检测到 {LineLeakMetalCount} 个暗痕线性漏金属");
-                                }
+                                    if (Static.App.Is4K)
+                                    {
+                                        RemoteDefect.In8KSetDataPlcAlarmStop(false, true, $"连接检测到 {LineLeakMetalCount} 个暗痕线性漏金属");
+                                    }
+                                    else
+                                    {
+                                        RemotePLC.In4KCallPLC_AlarmStop(false, true, $"连接检测到 {LineLeakMetalCount} 个暗痕线性漏金属");
+                                    }
 
-                                PrevMarkCount = markCount;
+                                    PrevMarkCount = markCount;
+                                }
                             }
                         }
-
                         //
-                        DataDefect def = new DataDefect() {
+                        DataDefect def = new DataDefect()
+                        {
                             EA = -1,
                             Type = 40,
                             X = dx / grab.Width,
@@ -607,24 +621,33 @@ namespace DetectCCD
                         };
 
                         //添加到列表中
-                        lock (Defects) {
+                        lock (Defects)
+                        {
                             Defects.Add(def);
                         }
 
                         //存图
-                        Log.Record(() => {
-                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageLineLeakMetal) {
-                                string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
-                                var savefolder = Static.FolderRecord + "/线性漏金属/";
+                        if (LineLeakMetalCount <= Static.App.LineLeakMetal_SaveImage_MaxCount)
+                        {
+                            Log.Record(() =>
+                            {
+                                if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageLineLeakMetal)
+                                {
+                                    string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+                                    var savefolder = Static.FolderRecord + "/线性漏金属/";
 
-                                if (!System.IO.Directory.Exists(savefolder))
-                                    System.IO.Directory.CreateDirectory(savefolder);
+                                    if (!System.IO.Directory.Exists(savefolder))
+                                        System.IO.Directory.CreateDirectory(savefolder);
 
-                                string filename = $"{savefolder}{timestamp}_{grab.Cache[frame].Camera}_F{frame}";
-                                UtilSaveImageQueue.Put(image, filename);
-                            }
-                        });
-                    }else {
+                                    string filename = $"{savefolder}{timestamp}_{grab.Cache[frame].Camera}_F{frame}";
+                                    UtilSaveImageQueue.Put(image, filename);
+                                }
+
+                            });
+                        }
+                    }
+                    else
+                    {
                         LineLeakMetalCount = 0;
                     }
                 });

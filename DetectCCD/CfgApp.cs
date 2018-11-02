@@ -14,6 +14,7 @@ namespace DetectCCD {
 
         //
         public int LineLeakMetal_AlarmStop_MaxCount = 3;
+        public int LineLeakMetal_SaveImage_MaxCount = 3;
         public bool LineLeakMetalEnable = true;
         public bool LineLeakMetalIsAlarmStop = true;
         public bool LineLeakMetalIsLabel = true;

@@ -25,7 +25,7 @@ namespace DetectCCD {
                 typeof(RemoteDefect),
                 "RemoteObject",
                 WellKnownObjectMode.SingleCall);
-
+            
         }
         public static void InitClient() {
 
@@ -357,6 +357,59 @@ namespace DetectCCD {
                 size = 0;
             }
         }
+
+        //取得8K硬盘剩余空间
+        public static void In4KGet8KGetAlarmStop(out DataPlcAlarmStop data)
+        {
+            if (Static.App.Is8K)
+                throw new Exception("In4KCall8K: don't in 8k use it.");
+
+            data = null;
+
+            try
+            {
+                if (client == null)
+                    return;
+                client._in_8k_getAlarmStop(out data);
+            }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+                client = null;
+            }
+        }
+        public void _in_8k_getAlarmStop(out DataPlcAlarmStop data)
+        {
+            data = new DataPlcAlarmStop();
+            try
+            {
+                if (PlcAlarmStopData.Enable)
+                {
+                    data.Enable = true;
+                    data.IsAlarm = PlcAlarmStopData.IsAlarm;
+                    data.IsStop = PlcAlarmStopData.IsStop;
+                    data.Message = PlcAlarmStopData.Message;
+
+                    PlcAlarmStopData.Enable = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.AppLog.Error("RemoteDefect:", ex);
+            }
+        }
+        public static DataPlcAlarmStop PlcAlarmStopData = new DataPlcAlarmStop();
+        public static void In8KSetDataPlcAlarmStop(bool isAlarm, bool isStop, string msg)
+        {
+            if (!PlcAlarmStopData.Enable)
+            {
+                PlcAlarmStopData.IsAlarm = isAlarm;
+                PlcAlarmStopData.IsStop = isStop;
+                PlcAlarmStopData.Message = msg;
+                PlcAlarmStopData.Enable = true;
+            }
+        }
+        
 
     }
 }

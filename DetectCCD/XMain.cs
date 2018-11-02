@@ -1048,6 +1048,13 @@ namespace DetectCCD {
                     if (device.isGrabbing && RemoteDefect.isConnect) {
                         RemotePLC.In4KCallPLC_OnGrabbing();
                     }
+
+                    DataPlcAlarmStop data;
+                    RemoteDefect.In4KGet8KGetAlarmStop(out data);
+                    if (data.Enable)
+                    {
+                        RemotePLC.In4KCallPLC_AlarmStop(data.IsAlarm, data.IsStop, data.Message);
+                    }
                 }
 
                 //
