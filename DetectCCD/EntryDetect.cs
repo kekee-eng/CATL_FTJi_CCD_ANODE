@@ -589,7 +589,7 @@ namespace DetectCCD
 
                                 if (!AlreadyAlarmStopOnLineLeakMetal) {
                                     AlreadyAlarmStopOnLineLeakMetal = true;
-                                    RemotePLC.In4KCallPLC_AlarmStop(false, true, $"连接检测到 {LineLeakMetalCount} 个暗痕线性漏金属");
+                                    //RemotePLC.In4KCallPLC_AlarmStop(false, true, $"连接检测到 {LineLeakMetalCount} 个暗痕线性漏金属");
                                 }
 
                                 PrevMarkCount = markCount;

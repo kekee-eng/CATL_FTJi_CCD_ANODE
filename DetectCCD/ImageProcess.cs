@@ -218,14 +218,14 @@ namespace DetectCCD {
 
                 //取得模区边界
                 int xstart, xend;
-                {
+                try {
                     var region = image.Threshold(Static.App.LineLeakMetalParam_bgGray, 255.0);
                     region = region.Connection();
                     region = region.SelectShapeStd("max_area", 5000);
 
                     HTuple row, x1list, x2list;
                     region.GetRegionRuns(out row, out x1list, out x2list);
-
+                    
                     int x1 = x1list.TupleMedian();
                     int x2 = x2list.TupleMedian();
                     int offset = Static.App.LineLeakMetalParam_offset;
@@ -233,6 +233,9 @@ namespace DetectCCD {
                     xstart = x1 + offset;
                     xend = x2 - offset;
 
+                }catch
+                {
+                    throw new Exception("取得模区边界错误，请修改参数！");
                 }
 
                 //取得投影
