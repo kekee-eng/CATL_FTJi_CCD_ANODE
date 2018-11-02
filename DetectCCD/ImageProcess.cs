@@ -211,19 +211,64 @@ namespace DetectCCD {
         public static int TimeDetectDefect = 0;
         public static int ImageDefectWidth = 0;
         public static int ImageDefectHeight = 0;
-
-
-        public static bool DetectDarkLineLeakMetal(HImage image, out double x, out double w) {
-            w = x = 0;
+        
+        public static bool DetectDarkLineLeakMetal(HImage image, out double px, out double pw) {
+            pw = px = 0;
             try {
 
+                //取得模区边界
+                int xstart, xend;
+                {
+                    var region = image.Threshold(30.0, 255);
+                    region = region.Connection();
+                    region = region.SelectShapeStd("max_area", 5000);
 
-                return true;
-            }
-            catch {
+                    HTuple row, x1list, x2list;
+                    region.GetRegionRuns(out row, out x1list, out x2list);
 
-                return false;
+                    int x1 = x1list.TupleMedian();
+                    int x2 = x2list.TupleMedian();
+                    int offset = 50;
+
+                    xstart = x1 + offset;
+                    xend = x2 - offset;
+
+                }
+
+                //取得投影
+                double[] VP;
+                {
+                    HTuple vertProjection;
+                    image.GrayProjections(image, "simple", out vertProjection);
+
+                    VP = vertProjection.DArr;
+                }
+
+                //判定
+                {
+                    //
+                    var checkVP = VP.Skip(xstart).Take(xend - xstart);
+
+                    double mean = checkVP.Average();
+                    double max = checkVP.Max();
+                    double min = checkVP.Min();
+
+                    if (mean - min > 10) {
+                        //暗痕线性漏金属
+                        int minid = VP.FindIndex(x => x == min);
+
+                        //
+                        px = minid;
+                        pw = 40;
+                        return true;
+                    }
+                }
+
             }
+            catch (Exception ex) {
+                Log.AppLog.Error("暗痕线性漏金属检测异常：", ex);
+            }
+            return false;
         }
     }
 }
