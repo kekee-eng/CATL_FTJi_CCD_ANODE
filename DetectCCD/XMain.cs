@@ -13,12 +13,9 @@ using DetectCCD;
 using System.IO;
 using System.Diagnostics;
 
-namespace DetectCCD
-{
-    partial class XMain : DevExpress.XtraEditors.XtraForm
-    {
-        public XMain()
-        {
+namespace DetectCCD {
+    partial class XMain : DevExpress.XtraEditors.XtraForm {
+        public XMain() {
             InitializeComponent();
 
             //
@@ -32,11 +29,9 @@ namespace DetectCCD
             this.Text += ((Static.App.Is4K) ? "~[4K]" : "~[8K]");
             UtilTool.XFWait.Close();
         }
-        private void XFMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
+        private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
 
-            if (!isQuit && XtraMessageBox.Show("当前操作将退出视觉检测系统，请确认是否退出？", "退出确认", MessageBoxButtons.OKCancel) != DialogResult.OK)
-            {
+            if (!isQuit && XtraMessageBox.Show("当前操作将退出视觉检测系统，请确认是否退出？", "退出确认", MessageBoxButtons.OKCancel) != DialogResult.OK) {
                 e.Cancel = true;
                 return;
             }
@@ -53,25 +48,20 @@ namespace DetectCCD
             closeWidthCSV();
         }
 
-        void runAction(string actName, Action act)
-        {
-            try
-            {
+        void runAction(string actName, Action act) {
+            try {
                 appendLog(String.Format("正在{0}...", actName));
                 act();
                 appendLog(String.Format("{0}成功", actName));
                 Log.Operate(actName);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 appendLog(String.Format("{0}失败: \r\n{1}", actName, ex.Message), -1, ex);
             }
         }
-        void appendLog(string msg, int msgStatus = 0, Exception ex = null)
-        {
+        void appendLog(string msg, int msgStatus = 0, Exception ex = null) {
 
-            if (InvokeRequired)
-            {
+            if (InvokeRequired) {
                 this.Invoke(new Action(() => appendLog(msg, msgStatus, ex)));
                 return;
             }
@@ -95,31 +85,25 @@ namespace DetectCCD
         public ModProcess process = new ModProcess();
         public ModDevice device = new ModDevice();
 
-        void init_server()
-        {
+        void init_server() {
 
-            if (Static.App.Is8K)
-            {
+            if (Static.App.Is8K) {
 
                 RemoteDefect.InitServer();
-                RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) =>
-                {
+                RemoteDefect._func_in_8k_getDefectCount += (isFront, isInner, start, end, id) => {
 
                     start = Static.App.FrameInnerToFront(isFront, isInner, start);
                     end = Static.App.FrameInnerToFront(isFront, isInner, end);
-                    lock (process)
-                    {
+                    lock (process) {
                         var ret = (isFront ? process.InnerDetect : process.OuterDetect).AllocAndGetDefectCount(start, end, id);
                         return ret;
                     }
                 };
-                RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, ea) =>
-                {
+                RemoteDefect._func_in_8k_getDefectList += (isFront, isInner, ea) => {
 
                     var defs = (isFront ? process.InnerDetect : process.OuterDetect).Defects;
                     var outdefs = new List<DataDefect>();
-                    for (int i = 0; i < defs.Count; i++)
-                    {
+                    for (int i = 0; i < defs.Count; i++) {
 
                         if (ea != -1 && defs[i].EA != ea)
                             continue;
@@ -136,19 +120,16 @@ namespace DetectCCD
                     arr = arr.OrderBy(x => x.Y).ToArray();
                     return arr;
                 };
-                RemoteDefect._func_In4kAlign8k += (isFront2, isInner2, pos4k) =>
-                {
+                RemoteDefect._func_In4kAlign8k += (isFront2, isInner2, pos4k) => {
                     double pos8kreal = 0;
                     var pos8k = Static.App.FrameInnerToFront(isFront2, isInner2, pos4k);
                     var detect = process.InnerDetect;
-                    for (int i = detect.Marks.Count - 1; i >= 0; i--)
-                    {
+                    for (int i = detect.Marks.Count - 1; i >= 0; i--) {
 
                         var dist = pos8k - detect.Marks[i].MarkY;
                         var range = Static.App.CheckAdjustRange;
 
-                        if (dist > -range && dist < range)
-                        {
+                        if (dist > -range && dist < range) {
 
                             if (dist > Static.App.OnceAdjustValue) dist = Static.App.OnceAdjustValue;
                             if (dist < -Static.App.OnceAdjustValue) dist = -Static.App.OnceAdjustValue;
@@ -167,8 +148,7 @@ namespace DetectCCD
 
                     return Static.App.DiffFrameInnerFrontFix;
                 };
-                RemoteDefect._func_in_8k_viewer += (isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront, diffInnerFrontFix) =>
-                {
+                RemoteDefect._func_in_8k_viewer += (isFront, isInner, y, diffInnerOuter, diffFrontBack, diffInnerFront, diffInnerFrontFix) => {
                     Static.App.DiffFrameInnerOuter = diffInnerOuter;
                     Static.App.DiffFrameFrontBack = diffFrontBack;
                     Static.App.DiffFrameInnerFront = diffInnerFront;
@@ -176,21 +156,18 @@ namespace DetectCCD
                     (isFront ? process.InnerViewerImage : process.OuterViewerImage).MoveToFrame(
                         Static.App.FrameInnerToFront(isFront, isInner, y));
                 };
-                RemoteDefect._func_in_8k_init += () =>
-                {
+                RemoteDefect._func_in_8k_init += () => {
 
                     DeviceInit();
                     DeviceStartGrab();
 
-                    this.Invoke(new Action(() =>
-                    {
+                    this.Invoke(new Action(() => {
                         groupDevice.Enabled = false;
                         xtraTabControl1.SelectedTabPageIndex = 1;
                     }));
                 };
                 RemoteDefect._func_in_8k_startGrab += DeviceStartGrab;
-                RemoteDefect._func_in_8k_stopGrab += () =>
-                {
+                RemoteDefect._func_in_8k_stopGrab += () => {
                     DeviceStopGrab();
 
                     if (UtilPerformance.GetAppRuntimeHour() > Static.App.AppRestartTimeout)
@@ -198,8 +175,7 @@ namespace DetectCCD
                 };
                 RemoteDefect._func_in_8k_uninit += DeviceUninit;
 
-                RemoteDefect._func_in_8k_setRoll += (app, recipe, tiebiao) =>
-                {
+                RemoteDefect._func_in_8k_setRoll += (app, recipe, tiebiao) => {
 
                     //
                     if (!Directory.Exists(Static.FolderCfgBackup))
@@ -212,6 +188,9 @@ namespace DetectCCD
                     Static.App.AppRestartTimeout = app.AppRestartTimeout;
                     Static.App.OnceAdjustValue = app.OnceAdjustValue;
                     Static.App.CheckAdjustRange = app.CheckAdjustRange;
+                    Static.App.ImageProcessParamEnable = app.ImageProcessParamEnable;
+                    Static.App.LineLeakMetalEnable = app.LineLeakMetalEnable;
+                    Static.App.LineLeakMetalIsAlarmStop = app.LineLeakMetalIsAlarmStop;
                     Static.App.UpdateBind();
 
                     //
@@ -240,25 +219,24 @@ namespace DetectCCD
                     //
                     updateRecipes();
 
-                    //8k取消使用检测参数，使用默认参数
+                    //
                     checkEnableUseDetectedParam.Checked = false;
-                    checkEnableDetectDarkLineLeakMetal.Checked = false;
+                    checkEnableDetectDarkLineLeakMetal.Checked = true;
+                    checkEnableDetectDarkLineLeakMetal_isStop.Checked = true;
+                    checkEnableDetectDarkLineLeakMetal_isLabel.Checked = true;
                 };
 
-                RemoteDefect._func_in_8k_getFrame += () =>
-                {
+                RemoteDefect._func_in_8k_getFrame += () => {
                     return new int[] { device.InnerCamera.m_frame, device.OuterCamera.m_frame };
                 };
 
-                RemoteDefect._func_in_8k_getDiskSpace += () =>
-                {
+                RemoteDefect._func_in_8k_getDiskSpace += () => {
                     return UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString());
                 };
             }
 
         }
-        void init_device()
-        {
+        void init_device() {
 
             //初始化
             process.Init();
@@ -266,8 +244,7 @@ namespace DetectCCD
             process.OuterViewerImage.Init(hwinOuter);
 
             //线程：采集图像
-            device.EventInnerCameraGrab = obj => Log.Record(() =>
-            {
+            device.EventInnerCameraGrab = obj => Log.Record(() => {
                 //
                 process.InnerGrab[obj.Frame] = obj;
 
@@ -279,13 +256,11 @@ namespace DetectCCD
                 //
                 Log.RecordAsThread(obj.DetectTab);
             });
-            device.EventOuterCameraGrab = obj => Log.Record(() =>
-            {
+            device.EventOuterCameraGrab = obj => Log.Record(() => {
                 //
                 process.OuterGrab[obj.Frame] = obj;
 
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
 
                     //
                     obj.DM.MarkImageStart = obj.Frame - 0.2;
@@ -298,31 +273,25 @@ namespace DetectCCD
             });
 
             //线程：手动拖动图像
-            process.InnerViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() =>
-            {
+            process.InnerViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
                 process.OuterViewerImage.MoveToView(y + process.OuterDetect.DiffFrame, x, s);
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
                     RemoteDefect.In4KCall8K_Viewer(true, true, y, process.OuterDetect.DiffFrame);
                     RemoteDefect.In4KCall8K_Viewer(false, true, y, process.OuterDetect.DiffFrame);
                 }
             });
-            process.OuterViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() =>
-            {
+            process.OuterViewerImage.OnViewUpdate += (y, x, s) => Log.Record(() => {
                 process.InnerViewerImage.MoveToView(y - process.OuterDetect.DiffFrame, x, s);
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
                     RemoteDefect.In4KCall8K_Viewer(true, false, y, process.OuterDetect.DiffFrame);
                     RemoteDefect.In4KCall8K_Viewer(false, false, y, process.OuterDetect.DiffFrame);
                 }
             });
 
             //线程：图像处理
-            Log.RecordAsThread(() =>
-            {
+            Log.RecordAsThread(() => {
                 var detect = process.InnerDetect;
-                while (!isQuit)
-                {
+                while (!isQuit) {
                     Thread.Sleep(1);
 
                     var frame = detect.m_frame;
@@ -331,21 +300,17 @@ namespace DetectCCD
                         continue;
 
                     //
-                    if (g.DM.HasMark)
-                    {
+                    if (g.DM.HasMark) {
                         var markView = new DataMark();
                         markView.CopyFrom(g.DM);
                         detect.Marks.Add(markView);
 
-                        if (Static.App.Is4K)
-                        {
+                        if (Static.App.Is4K) {
                             detect.In4kAlign8k(g.DM.MarkY);
                             detect.AddLableToPlc(g.TabData, g.DM.MarkY);
                         }
-                        else
-                        {
-                            if (Static.App.EnableSkipDetectWhenLabed)
-                            {
+                        else {
+                            if (Static.App.EnableSkipDetectWhenLabed) {
                                 detect.isSkipDetect_inner = false;
                                 detect.isSkipDetect_outer = false;
                             }
@@ -354,38 +319,28 @@ namespace DetectCCD
                     }
 
                     //
-                    Log.Record(() =>
-                    {
-                        if (Static.App.Is4K)
-                        {
-                            if (g.hasTab && g.TabData != null)
-                            {
+                    Log.Record(() => {
+                        if (Static.App.Is4K) {
+                            if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
-                                lock (process)
-                                {
+                                lock (process) {
                                     detect.TryAddTab(g.TabData);
                                 }
                             }
                         }
-                        else
-                        {
-                            if (Static.App.EnableSkipDetectWhenLabed)
-                            {
+                        else {
+                            if (Static.App.EnableSkipDetectWhenLabed) {
 
-                                if (detect.isSkipDetect_inner)
-                                {
+                                if (detect.isSkipDetect_inner) {
                                     int skipInner = frame - detect.skipDetectStartFrame_inner;
-                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber)
-                                    {
+                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_inner = false;
                                     }
                                 }
 
-                                if (detect.isSkipDetect_outer)
-                                {
+                                if (detect.isSkipDetect_outer) {
                                     int skipOuter = frame - detect.skipDetectStartFrame_outer;
-                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber)
-                                    {
+                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_outer = false;
                                     }
                                 }
@@ -401,11 +356,9 @@ namespace DetectCCD
                     });
                 };
             });
-            Log.RecordAsThread(() =>
-            {
+            Log.RecordAsThread(() => {
                 var detect = process.OuterDetect;
-                while (!isQuit)
-                {
+                while (!isQuit) {
                     Thread.Sleep(1);
                     var frame = detect.m_frame;
                     var g = process.OuterGrab.Cache[frame];
@@ -413,20 +366,16 @@ namespace DetectCCD
                         continue;
 
                     //
-                    if (g.DM.HasMark)
-                    {
+                    if (g.DM.HasMark) {
                         var markView = new DataMark();
                         markView.CopyFrom(g.DM);
                         detect.Marks.Add(markView);
 
-                        if (Static.App.Is4K)
-                        {
+                        if (Static.App.Is4K) {
                             detect.AddLableToPlc(g.TabData, g.DM.MarkY);
                         }
-                        else
-                        {
-                            if (Static.App.EnableSkipDetectWhenLabed)
-                            {
+                        else {
+                            if (Static.App.EnableSkipDetectWhenLabed) {
                                 detect.isSkipDetect_inner = false;
                                 detect.isSkipDetect_outer = false;
                             }
@@ -434,41 +383,30 @@ namespace DetectCCD
 
                     }
 
-                    Log.Record(() =>
-                    {
-                        if (Static.App.Is4K)
-                        {
-                            if (g.hasTab && g.TabData != null)
-                            {
+                    Log.Record(() => {
+                        if (Static.App.Is4K) {
+                            if (g.hasTab && g.TabData != null) {
                                 detect.TryTransLabel(frame);
-                                if (detect.TryAddTab(g.TabData))
-                                {
-                                    lock (process)
-                                    {
+                                if (detect.TryAddTab(g.TabData)) {
+                                    lock (process) {
                                         detect.TrySync(process.InnerDetect);
                                     }
                                 }
                             }
                         }
-                        else
-                        {
-                            if (Static.App.EnableSkipDetectWhenLabed)
-                            {
+                        else {
+                            if (Static.App.EnableSkipDetectWhenLabed) {
 
-                                if (detect.isSkipDetect_inner)
-                                {
+                                if (detect.isSkipDetect_inner) {
                                     int skipInner = frame - detect.skipDetectStartFrame_inner;
-                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber)
-                                    {
+                                    if (skipInner < 0 || skipInner > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_inner = false;
                                     }
                                 }
 
-                                if (detect.isSkipDetect_outer)
-                                {
+                                if (detect.isSkipDetect_outer) {
                                     int skipOuter = frame - detect.skipDetectStartFrame_outer;
-                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber)
-                                    {
+                                    if (skipOuter < 0 || skipOuter > Static.App.SkipDetectMaxNumber) {
                                         detect.isSkipDetect_outer = false;
                                     }
                                 }
@@ -489,40 +427,33 @@ namespace DetectCCD
             });
 
             //线程：更新显示
-            Log.RecordAsThread(() =>
-            {
-                while (!isQuit)
-                {
+            Log.RecordAsThread(() => {
+                while (!isQuit) {
                     Thread.Sleep(10);
                     process.InnerViewerImage.MoveTargetSync();
                 };
             });
-            Log.RecordAsThread(() =>
-            {
-                while (!isQuit)
-                {
+            Log.RecordAsThread(() => {
+                while (!isQuit) {
                     Thread.Sleep(10);
                     process.OuterViewerImage.MoveTargetSync();
                 };
             });
 
             //PLC交互操作
-            process.InnerDetect.OnNewLabel += obj => Log.RecordAsThread(() =>
-            {
+            process.InnerDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
                 if (obj.Encoder != 0)
                     RemotePLC.In4KCallPLC_SendLabel(true, obj.Encoder);
 
                 saveLabelCSV(true, obj);
             });
-            process.OuterDetect.OnNewLabel += obj => Log.RecordAsThread(() =>
-            {
+            process.OuterDetect.OnNewLabel += obj => Log.RecordAsThread(() => {
                 if (obj.Encoder != 0)
                     RemotePLC.In4KCallPLC_SendLabel(false, obj.Encoder);
 
                 saveLabelCSV(false, obj);
             });
-            process.OuterDetect.OnSyncTab += (tabOuter, tabInner) => Log.RecordAsThread(() =>
-            {
+            process.OuterDetect.OnSyncTab += (tabOuter, tabInner) => Log.RecordAsThread(() => {
                 RemotePLC.In4KCallPLC_ForWidth(
                     tabOuter.EA,
                     tabOuter.TAB,
@@ -531,17 +462,14 @@ namespace DetectCCD
                     tabOuter.ValWidth
                     );
 
-                if (tabOuter.IsNewEA)
-                {
+                if (tabOuter.IsNewEA) {
                     //
                     var eaInner = process.InnerDetect.EAs[tabInner.EA - 1];
                     var eaOuter = process.OuterDetect.EAs[tabOuter.EA - 1];
-                    if (eaInner.IsFail)
-                    {
+                    if (eaInner.IsFail) {
                         FilmData.InnerLableNum += 1;
                     }
-                    if (eaOuter.IsFail)
-                    {
+                    if (eaOuter.IsFail) {
                         FilmData.OuterLableNum += 1;
                     }
                     saveLablCountCsv(eaInner, eaOuter);
@@ -550,26 +478,22 @@ namespace DetectCCD
             });
 
             //线程：离线循环测试
-            Log.RecordAsThread(new Action(() =>
-            {
+            Log.RecordAsThread(new Action(() => {
                 bool b1 = false;
                 bool b2 = false;
 
                 device.EventInnerCameraComplete += () => b1 = true;
                 device.EventOuterCameraComplete += () => b2 = true;
-                while (!isQuit)
-                {
+                while (!isQuit) {
                     b1 = false;
                     b2 = false;
 
-                    while (!(b1 && b2))
-                    {
+                    while (!(b1 && b2)) {
                         if (isQuit) return;
                         Thread.Sleep(1000);
                     }
 
-                    if (Static.App.TestZipFileCircle)
-                    {
+                    if (Static.App.TestZipFileCircle) {
                         Thread.Sleep(3000);
                         DeviceInit();
 
@@ -579,8 +503,7 @@ namespace DetectCCD
                 }
             }));
         }
-        void init_recipe()
-        {
+        void init_recipe() {
 
             //公用变量
             Static.App.BindTextBox(mainRollName, "RollName");
@@ -589,6 +512,10 @@ namespace DetectCCD
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
             Static.App.BindCheckBox(checkSaveMark, "RecordSaveImageMark");
+            Static.App.BindCheckBox(checkEnableUseDetectedParam, nameof(Static.App.ImageProcessParamEnable));
+            Static.App.BindCheckBox(checkEnableDetectDarkLineLeakMetal, nameof(Static.App.LineLeakMetalEnable));
+            Static.App.BindCheckBox(checkEnableDetectDarkLineLeakMetal_isStop, nameof(Static.App.LineLeakMetalIsAlarmStop));
+            Static.App.BindCheckBox(checkEnableDetectDarkLineLeakMetal_isLabel, nameof(Static.App.LineLeakMetalIsLabel));
 
             //设置参数
             tmpRecipe = new CfgRecipe(Static.PathCfgRecipe);
@@ -608,7 +535,6 @@ namespace DetectCCD
             tmpTiebiao.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
             tmpTiebiao.BindCheckBox(checkEAContext_Pifeng, nameof(tmpTiebiao.EAContextPifeng));
             tmpTiebiao.BindCheckBox(checkEAContext_Width, "EAContextWidth");
-            tmpTiebiao.BindCheckBox(checkEAContext_LineLeakMetal, nameof(tmpTiebiao.EAContextLineLeakMetal));
 
             tmpTiebiao.BindTextBox(textLabelEAOffset, "LabelY_EA");
             tmpTiebiao.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
@@ -625,8 +551,7 @@ namespace DetectCCD
             //初始化
             updateRecipes();
         }
-        void init_status()
-        {
+        void init_status() {
 
             //选定用户
             changeUser();
@@ -653,11 +578,10 @@ namespace DetectCCD
             xtraTabPage7.PageVisible = Static.App.Is8K;
             xtraTabPage6.PageVisible = Static.App.Is4K;
             xtraTabPage5.PageVisible = Static.App.Is4K;
-            checkEnableUseDetectedParam.Visible = Static.App.Is8K;
-            checkEnableDetectDarkLineLeakMetal.Visible = Static.App.Is8K;
+            groupDetectParam.Visible = Static.App.Is4K;
+
         }
-        void changeUser()
-        {
+        void changeUser() {
             //隐藏按钮
             selectSkin.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             selectFullScreen.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
@@ -667,16 +591,14 @@ namespace DetectCCD
             xtraTabControl1.TabPages.Remove(xtraTabPage4);
 
             int userselect = Static.App.SelectUserId;
-            if (userselect == 0)
-            {
+            if (userselect == 0) {
                 //左下角图标
                 status_user.ImageIndex = 0;
 
                 //主题样式
                 UtilTool.XFSkin.SetSkinStyle(Static.App.OperatorViewstyle);
             }
-            else if (userselect == 1)
-            {
+            else if (userselect == 1) {
                 //左下角图标
                 status_user.ImageIndex = 1;
 
@@ -686,8 +608,7 @@ namespace DetectCCD
                 //附加页面
                 xtraTabControl1.TabPages.Add(xtraTabPage3);
             }
-            else
-            {
+            else {
                 //左下角图标
                 status_user.ImageIndex = 2;
 
@@ -704,14 +625,11 @@ namespace DetectCCD
             }
         }
 
-        public void DeviceInit()
-        {
+        public void DeviceInit() {
 
-            runAction("开启设备", () =>
-            {
+            runAction("开启设备", () => {
                 Static.App.DiffFrameInnerFrontFix = 0;
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
 
                     closeLabelCSV();
                     closeWidthCSV();
@@ -762,16 +680,12 @@ namespace DetectCCD
             });
 
         }
-        public void DeviceStartGrab()
-        {
+        public void DeviceStartGrab() {
 
-            runAction("开启采图", () =>
-            {
+            runAction("开启采图", () => {
 
-                if (Static.App.Is4K)
-                {
-                    if (!isRollOk)
-                    {
+                if (Static.App.Is4K) {
+                    if (!isRollOk) {
                         throw new Exception("请先设置膜卷！");
                     }
                 }
@@ -787,36 +701,28 @@ namespace DetectCCD
                 process.InnerViewerImage.SetUserEnable(false);
                 process.OuterViewerImage.SetUserEnable(false);
 
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
                     Log.Record(RemoteDefect.In4KCall8K_StartGrab);
                     Log.Record(RemoteDefect.In4KCall8K_SetRoll);
                 }
             });
         }
-        public void DeviceStopGrab()
-        {
-            runAction("停止采图", () =>
-            {
+        public void DeviceStopGrab() {
+            runAction("停止采图", () => {
                 device.InnerCamera.Freeze();
                 device.OuterCamera.Freeze();
 
                 process.InnerViewerImage.SetUserEnable(true);
                 process.OuterViewerImage.SetUserEnable(true);
 
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
                     Log.Record(RemoteDefect.In4KCall8K_StopGrab);
                 }
-                else
-                {
+                else {
                     //8K
-                    runAction("内侧缺陷保存", () =>
-                    {
-                        foreach (var item in process.InnerDetect.Defects)
-                        {
-                            lock (process)
-                            {
+                    runAction("内侧缺陷保存", () => {
+                        foreach (var item in process.InnerDetect.Defects) {
+                            lock (process) {
                                 saveDetectCSV(item, "内侧");
                             }
 
@@ -824,13 +730,10 @@ namespace DetectCCD
                         closeDetectCSV();
 
                     });
-                    runAction("外侧缺陷保存", () =>
-                    {
+                    runAction("外侧缺陷保存", () => {
 
-                        foreach (var item in process.OuterDetect.Defects)
-                        {
-                            lock (process)
-                            {
+                        foreach (var item in process.OuterDetect.Defects) {
+                            lock (process) {
                                 saveDetectCSV(item, "外侧");
                             }
 
@@ -843,16 +746,13 @@ namespace DetectCCD
 
             });
         }
-        public void DeviceUninit()
-        {
-            runAction("关闭设备", () =>
-            {
+        public void DeviceUninit() {
+            runAction("关闭设备", () => {
 
                 device?.Dispose();
                 process?.Dispose();
 
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
                     Log.Record(RemoteDefect.In4KCall8K_Uninit);
                     Log.Record(RemotePLC.In4KCallPLC_ClearEncoder);
                 }
@@ -862,39 +762,30 @@ namespace DetectCCD
         StreamWriter csvWidthWriter = null;
         StreamWriter csvLabelWriter = null;
         StreamWriter csvDetectWriter = null;
-        void closeWidthCSV()
-        {
-            if (csvWidthWriter != null)
-            {
+        void closeWidthCSV() {
+            if (csvWidthWriter != null) {
                 csvWidthWriter.Flush();
                 csvWidthWriter.Dispose();
                 csvWidthWriter = null;
             }
         }
-        void closeLabelCSV()
-        {
-            if (csvLabelWriter != null)
-            {
+        void closeLabelCSV() {
+            if (csvLabelWriter != null) {
                 csvLabelWriter.Flush();
                 csvLabelWriter.Dispose();
                 csvLabelWriter = null;
             }
         }
-        void closeDetectCSV()
-        {
-            if (csvDetectWriter != null)
-            {
+        void closeDetectCSV() {
+            if (csvDetectWriter != null) {
                 csvDetectWriter.Flush();
                 csvDetectWriter.Dispose();
                 csvDetectWriter = null;
             }
         }
-        void saveDetectCSV(DataDefect dt, string name)
-        {
-            Log.Record(() =>
-            {
-                if (csvDetectWriter == null)
-                {
+        void saveDetectCSV(DataDefect dt, string name) {
+            Log.Record(() => {
+                if (csvDetectWriter == null) {
                     var folder = Static.FolderRecord;
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
@@ -926,12 +817,9 @@ namespace DetectCCD
 
             });
         }
-        void saveWidthCSV(DataTab inner, DataTab outer)
-        {
-            Log.Record(() =>
-            {
-                if (csvWidthWriter == null)
-                {
+        void saveWidthCSV(DataTab inner, DataTab outer) {
+            Log.Record(() => {
+                if (csvWidthWriter == null) {
                     var folder = Static.FolderRecord;
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
@@ -986,12 +874,9 @@ namespace DetectCCD
 
             });
         }
-        void saveLablCountCsv(DataEA inner, DataEA outer)
-        {
-            Log.Record(() =>
-            {
-                if (csvWidthWriter == null)
-                {
+        void saveLablCountCsv(DataEA inner, DataEA outer) {
+            Log.Record(() => {
+                if (csvWidthWriter == null) {
                     var folder = Static.FolderRecord;
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
@@ -1057,18 +942,14 @@ namespace DetectCCD
 
             });
         }
-        void saveFinalCsv(string filePathName, bool append)
-        {
-            Log.Record(() =>
-            {
+        void saveFinalCsv(string filePathName, bool append) {
+            Log.Record(() => {
                 List<String[]> ls = new List<String[]>();
                 StreamReader fileReader = new StreamReader(filePathName);
                 string strLine = "";
-                while (strLine != null)
-                {
+                while (strLine != null) {
                     strLine = fileReader.ReadLine();
-                    if (strLine != null && strLine.Length > 0)
-                    {
+                    if (strLine != null && strLine.Length > 0) {
                         ls.Add(strLine.Split(','));
 
                     }
@@ -1080,20 +961,16 @@ namespace DetectCCD
                 ls[13][1] = FilmData.InnerLableNum.ToString();
                 ls[14][1] = FilmData.OuterLableNum.ToString();
                 StreamWriter fileWriter = new StreamWriter(filePathName, append, Encoding.Default);
-                foreach (String[] strArr in ls)
-                {
+                foreach (String[] strArr in ls) {
                     fileWriter.WriteLine(String.Join(",", strArr));
                 }
                 fileWriter.Flush();
                 fileWriter.Close();
             });
         }
-        void saveLabelCSV(bool isInner, DataLabel label)
-        {
-            Log.Record(() =>
-            {
-                if (csvLabelWriter == null)
-                {
+        void saveLabelCSV(bool isInner, DataLabel label) {
+            Log.Record(() => {
+                if (csvLabelWriter == null) {
                     var folder = Static.FolderRecord;
                     if (!Directory.Exists(folder))
                         Directory.CreateDirectory(folder);
@@ -1123,65 +1000,52 @@ namespace DetectCCD
         /// 界面显示打标项
         /// </summary>
         /// <returns></returns>
-        public string tiebiao()
-        {
+        public string tiebiao() {
             string tt = "";
             string t1, t2, t3, t4;
-            if (tmpTiebiao.EAContextJoin == true)
-            {
+            if (tmpTiebiao.EAContextJoin == true) {
                 t1 = "接头，";
             }
-            else
-            {
+            else {
                 t1 = "";
             }
-            if (tmpTiebiao.EAContextTag == true)
-            {
+            if (tmpTiebiao.EAContextTag == true) {
                 t2 = "标签，";
             }
-            else
-            {
+            else {
                 t2 = "";
             }
-            if (tmpTiebiao.EAContextLeakMetal == true)
-            {
+            if (tmpTiebiao.EAContextLeakMetal == true) {
                 t3 = "漏金属，";
             }
-            else
-            {
+            else {
                 t3 = "";
             }
-            if (tmpTiebiao.EAContextWidth == true)
-            {
+            if (tmpTiebiao.EAContextWidth == true) {
                 t4 = "宽度不良，";
             }
-            else
-            {
+            else {
                 t4 = "";
             }
             return tt = string.Format("末尾贴标项启用:{0}{1}{2}{3}", t1, t2, t3, t4);
         }
-        private void timer1_Tick(object sender, EventArgs e)
-        {
+        private void timer1_Tick(object sender, EventArgs e) {
 
-            Log.Record(() =>
-            {
+            Log.Record(() => {
 
                 groupRecipeManage.Enabled = Static.App.Is4K && !device.isGrabbing && !isRollOk;
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
                 groupRoll.Enabled = Static.App.Is4K;
 
-                if (Static.App.Is4K)
-                {
+                if (Static.App.Is4K) {
                     _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";
                     _lc_remote_8k.ForeColor = RemoteDefect.isConnect ? Color.Green : Color.Red;
 
                     _lc_remote_plc.Text = RemotePLC.isConnect ? "On" : "Off";
                     _lc_remote_plc.ForeColor = RemotePLC.isConnect ? Color.Green : Color.Red;
 
-                    if (device.isGrabbing && RemoteDefect.isConnect)
-                    {
+                    if (device.isGrabbing && RemoteDefect.isConnect) {
                         RemotePLC.In4KCallPLC_OnGrabbing();
                     }
                 }
@@ -1194,15 +1058,13 @@ namespace DetectCCD
                 groupLabelContext.Enabled = checkEnableLabelDefect.Checked;
                 groupEAContext.Enabled = checkEnableLabelEA.Checked;
 
-                if (isRollOk)
-                {
+                if (isRollOk) {
                     btnConnect.Enabled = !device.isGrabbing;
                     btnDisconnect.Enabled = false;
                     btnStartGrab.Enabled = device.isOpen && !device.isGrabbing && !isRepeatRoll;
                     btnStopGrab.Enabled = device.isOpen && device.isGrabbing;
                 }
-                else
-                {
+                else {
                     btnConnect.Enabled = !device.isGrabbing;
                     btnDisconnect.Enabled = device.isOpen && !device.isGrabbing;
                     btnStartGrab.Enabled = false;
@@ -1214,8 +1076,7 @@ namespace DetectCCD
                 checkSaveNGSmall.Enabled = Static.App.RecordSaveImageEnable;
                 checkSaveMark.Enabled = Static.App.RecordSaveImageEnable;
 
-                if (device.isOpen)
-                {
+                if (device.isOpen) {
                     //
                     _lc_inner_camera.Text = device.InnerCamera.Name;
                     //_lc_inner_fps.Text = device.InnerCamera.m_fpsRealtime.ToString("0.000");
@@ -1249,12 +1110,10 @@ namespace DetectCCD
                 status_device.ImageIndex = device.isOpen ? 5 : 4;
                 status_memory.Caption = string.Format("内存已使用={0:0.0}M", UtilPerformance.GetMemoryLoad());
                 status_diskspace.Caption = string.Format("硬盘剩余空间={0:0.0}G", UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString()));
-                if (tmpTiebiao != null && tmpTiebiao.EnableLabelEA)
-                {
+                if (tmpTiebiao != null && tmpTiebiao.EnableLabelEA) {
                     status_OpenTiebiao.Caption = tiebiao();
                 }
-                else
-                {
+                else {
                     status_OpenTiebiao.Caption = "末尾贴标未启用";
                 }
 
@@ -1267,8 +1126,7 @@ namespace DetectCCD
                 process.OuterViewerChart.SyncDefectGrid(panelDefect2);
 
 
-                if (Static.App.Is4K && device.isGrabbing)
-                {
+                if (Static.App.Is4K && device.isGrabbing) {
                     //
                     int frameFront;
                     int frameBack;
@@ -1283,31 +1141,25 @@ namespace DetectCCD
                     bool isPlayOuter = frameOuter != frameOuterPrev;
 
                     //
-                    if (isPlayFront && isPlayBack && isPlayInner && isPlayOuter)
-                    {
+                    if (isPlayFront && isPlayBack && isPlayInner && isPlayOuter) {
                         //运行
                         frameIsError = false;
                     }
-                    else if (!isPlayFront && !isPlayBack && !isPlayInner && !isPlayOuter)
-                    {
+                    else if (!isPlayFront && !isPlayBack && !isPlayInner && !isPlayOuter) {
                         //停止
                         frameIsError = false;
                     }
-                    else
-                    {
+                    else {
                         //异常
-                        if (!frameIsError)
-                        {
+                        if (!frameIsError) {
                             frameErrorTimeStart = DateTime.Now;
                             frameIsError = true;
                         }
                     }
 
-                    if (frameIsError)
-                    {
+                    if (frameIsError) {
                         var time = DateTime.Now - frameErrorTimeStart;
-                        if (time.TotalSeconds > 20)
-                        {
+                        if (time.TotalSeconds > 20) {
                             //
                             DeviceStopGrab();
                             XtraMessageBox.Show("相机采图错误，请重新开启设备！");
@@ -1331,32 +1183,25 @@ namespace DetectCCD
         bool frameIsError = false;
         DateTime frameErrorTimeStart = DateTime.Now;
 
-        private void status_user_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            runAction("切换用户", () =>
-            {
+        private void status_user_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
+            runAction("切换用户", () => {
                 UserSelect.GShow(this);
                 changeUser();
             });
         }
-        private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+        private void status_plc_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
 
-            if (!device.isGrabbing)
-            {
-                if (!device.isOpen)
-                {
+            if (!device.isGrabbing) {
+                if (!device.isOpen) {
                     //DeviceOpen();
                 }
             }
         }
-        private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
+        private void selectFullScreen_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e) {
             if (selectFullScreen.Tag == null)
                 selectFullScreen.Tag = false;
 
-            if ((bool)selectFullScreen.Tag)
-            {
+            if ((bool)selectFullScreen.Tag) {
                 //取消全屏
                 UtilTool.FullScreen.Set(this, false);
                 selectFullScreen.Tag = false;
@@ -1366,8 +1211,7 @@ namespace DetectCCD
                 //更改图标
                 selectFullScreen.ImageIndex = 7;
             }
-            else
-            {
+            else {
                 //全屏
                 UtilTool.FullScreen.Set(this, true);
                 selectFullScreen.Tag = true;
@@ -1378,10 +1222,8 @@ namespace DetectCCD
         }
         FilmLevel FilmData;
         bool isRepeatRoll = false;
-        private void btnRollSet_Click(object sender, EventArgs e)
-        {
-            runAction((sender as SimpleButton).Text, () =>
-            {
+        private void btnRollSet_Click(object sender, EventArgs e) {
+            runAction((sender as SimpleButton).Text, () => {
                 if (device.isGrabbing)
                     throw new Exception("请先停止采像！");
 
@@ -1392,8 +1234,7 @@ namespace DetectCCD
                 closeWidthCSV();
                 RemotePLC.In4KCallPLC_ClearEncoder();
 
-                if (!isRollOk)
-                {
+                if (!isRollOk) {
                     FilmData = new FilmLevel();
                     if (mainRecipeName.Text == "")
                         throw new Exception("料号未设定!");
@@ -1420,16 +1261,12 @@ namespace DetectCCD
                     //
                     isRollOk = true;
                 }
-                else
-                {
+                else {
 
                     //
-                    try
-                    {
-                        Log.RecordAsThread(() =>
-                        {
-                            if (Static.App.Is4K && !isRepeatRoll && process.InnerDetect.Tabs.Count > 0 && process.OuterDetect.Tabs.Count > 0)
-                            {
+                    try {
+                        Log.RecordAsThread(() => {
+                            if (Static.App.Is4K && !isRepeatRoll && process.InnerDetect.Tabs.Count > 0 && process.OuterDetect.Tabs.Count > 0) {
                                 FilmData.StopTime = DateTime.Now;
                                 var FilmInnerWidthList = process.InnerDetect.Tabs.Select(x => x.ValWidth).Where(x => Math.Abs(x - Static.Recipe.TabWidthTarget) < 2);
                                 var FilmInnerWidthMean = FilmInnerWidthList.Average();
@@ -1508,8 +1345,7 @@ namespace DetectCCD
                             }
                         });
                     }
-                    catch (System.Exception ex)
-                    {
+                    catch (System.Exception ex) {
                         Log.AppLog.Error(string.Format("->"), ex);
                     }
 
@@ -1523,52 +1359,40 @@ namespace DetectCCD
                     btnRollSet.Text = "设置膜卷";
                     isRollOk = false;
                     isRepeatRoll = true;
-                    //设定膜卷关闭检测参数设定
-                    checkEnableUseDetectedParam.Checked = false;
-                    checkEnableDetectDarkLineLeakMetal.Checked = true;
+
                 }
             });
         }
-        private void btnOpenViewerChart_Click(object sender, EventArgs e)
-        {
+        private void btnOpenViewerChart_Click(object sender, EventArgs e) {
             new XFViewerChart(device, process).Show();
         }
-        private void btnOfflineControl_Click(object sender, EventArgs e)
-        {
+        private void btnOfflineControl_Click(object sender, EventArgs e) {
             new XFCameraControl(this).Show();
         }
-        private void btnStartGrab_Click(object sender, EventArgs e)
-        {
+        private void btnStartGrab_Click(object sender, EventArgs e) {
             DeviceStartGrab();
         }
-        private void btnStopGrab_Click(object sender, EventArgs e)
-        {
+        private void btnStopGrab_Click(object sender, EventArgs e) {
             DeviceStopGrab();
         }
-        private async void btnConnect_Click(object sender, EventArgs e)
-        {
+        private async void btnConnect_Click(object sender, EventArgs e) {
             if (UtilTool.XFWait.isShow)
                 return;
 
             UtilTool.XFWait.Open();
-            await Task.Run(() =>
-            {
-                if (checkBackup() == 2)
-                {
+            await Task.Run(() => {
+                if (checkBackup() == 2) {
                     XtraMessageBox.Show(string.Format("参数{0}与备份不一致，请进入专家模式“备份所有参数”", checkBackupResult), "参数确认", MessageBoxButtons.OK);
                     UtilTool.XFWait.Close();
                 }
-                else if (checkBackup() == 1)
-                {
+                else if (checkBackup() == 1) {
                     XtraMessageBox.Show(string.Format("参数{0}与备份不一致，请进入工程师模式“备份参数”", checkBackupResult), "参数确认", MessageBoxButtons.OK);
                     UtilTool.XFWait.Close();
                 }
-                else
-                {
+                else {
                     //连接8K电脑
                     RemoteDefect.InitClient();
-                    if (!RemoteDefect.isConnect)
-                    {
+                    if (!RemoteDefect.isConnect) {
                         XtraMessageBox.Show($"8K连接失败！", "错误", MessageBoxButtons.OK);
                         UtilTool.XFWait.Close();
                         return;
@@ -1581,16 +1405,14 @@ namespace DetectCCD
                     Log.AppLog.Info($"开始膜卷时，记录硬盘剩余空间： 4K= {diskLess4k:0.0}G  8K= {diskLess8K:0.0}G");
 
                     //
-                    if(diskLess4k < Static.App.CheckHardDiskLess)
-                    {
+                    if (diskLess4k < Static.App.CheckHardDiskLess) {
                         XtraMessageBox.Show($"4K剩余空间不足: {diskLess4k:0.0}G < {Static.App.CheckHardDiskLess:0.0}G", "剩余空间不足报警", MessageBoxButtons.OK);
                         UtilTool.XFWait.Close();
                         return;
                     }
 
                     //
-                    if (diskLess8K < Static.App.CheckHardDiskLess)
-                    {
+                    if (diskLess8K < Static.App.CheckHardDiskLess) {
                         XtraMessageBox.Show($"8K剩余空间不足: {diskLess8K:0.0}G < {Static.App.CheckHardDiskLess:0.0}G", "剩余空间不足报警", MessageBoxButtons.OK);
                         UtilTool.XFWait.Close();
                         return;
@@ -1605,64 +1427,52 @@ namespace DetectCCD
             });
         }
         string checkBackupResult = "";
-        public int checkBackup()
-        {
+        public int checkBackup() {
 #if DEBUG
             return 0;
 #endif
             string s1, s2, s3, s4, s5;
             int checkOK = 0;
-            if (!Static.CompareFile(Static.PathCfgApp, Static.PathCfgAppBackup) && false)
-            {
+            if (!Static.CompareFile(Static.PathCfgApp, Static.PathCfgAppBackup) && false) {
                 s1 = "cfg_app,";
                 checkOK = 1;
             }
-            else
-            {
+            else {
                 s1 = "";
             }
-            if (!Static.CompareFile(Static.PathCfgTiebiao, Static.PathCfgTiebiaoBackup))
-            {
+            if (!Static.CompareFile(Static.PathCfgTiebiao, Static.PathCfgTiebiaoBackup)) {
                 s2 = "cfg_tiebiao,";
                 checkOK = 1;
             }
-            else
-            {
+            else {
                 s2 = "";
             }
-            if (!Static.CompareFile(Static.PathCfgRecipe, Static.PathCfgRecipeBackup))
-            {
+            if (!Static.CompareFile(Static.PathCfgRecipe, Static.PathCfgRecipeBackup)) {
                 s3 = "cfg_param,";
                 checkOK = 1;
             }
-            else
-            {
+            else {
                 s3 = "";
             }
-            if (!Static.CompareFile(Static.PathImageProcess, Static.PathImageProcessBackup))
-            {
+            if (!Static.CompareFile(Static.PathImageProcess, Static.PathImageProcessBackup)) {
                 s4 = "image_process,";
                 checkOK = 2;
             }
-            else
-            {
+            else {
                 s4 = "";
             }
-            if (!Static.CompareFile(Static.PathCamera, Static.PathCameraBackup))
-            {
+            if (!Static.CompareFile(Static.PathCamera, Static.PathCameraBackup)) {
                 s5 = "card,";
                 checkOK = 2;
             }
-            else
-            {
+            else {
                 s5 = "";
             }
             checkBackupResult = string.Format("{0}{1}{2}{3}{4}", s1, s2, s3, s4, s5);
             return checkOK;
 
         }
-        private async void btnDisconnect_Click(object sender, EventArgs e)
-        {
+        private async void btnDisconnect_Click(object sender, EventArgs e) {
             if (UtilTool.XFWait.isShow)
                 return;
 
@@ -1671,54 +1481,41 @@ namespace DetectCCD
             closeLabelCSV();
             closeWidthCSV();
 
-            await Task.Run(() =>
-            {
-                if (Static.App.Is4K)
-                {
+            await Task.Run(() => {
+                if (Static.App.Is4K) {
                     Log.Record(RemoteDefect.In4KCall8K_Uninit);
                 }
 
                 UtilTool.XFWait.Close();
             });
         }
-        private void btnQuit_Click(object sender, EventArgs e)
-        {
+        private void btnQuit_Click(object sender, EventArgs e) {
             this.Close();
         }
 
-        private void groupStatuInner_DoubleClick(object sender, EventArgs e)
-        {
+        private void groupStatuInner_DoubleClick(object sender, EventArgs e) {
             splitContainerInner.Panel1Collapsed ^= true;
         }
-        private void groupStatuOuter_DoubleClick(object sender, EventArgs e)
-        {
+        private void groupStatuOuter_DoubleClick(object sender, EventArgs e) {
             splitContainerOuter.Panel1Collapsed ^= true;
         }
 
-        private async void btnConnectRemote8K_Click(object sender, EventArgs e)
-        {
-            if (!RemoteDefect.isConnect)
-            {
+        private async void btnConnectRemote8K_Click(object sender, EventArgs e) {
+            if (!RemoteDefect.isConnect) {
                 UtilTool.XFWait.Open();
-                await Task.Run(() =>
-                {
-                    runAction((sender as SimpleButton).Text, () =>
-                    {
+                await Task.Run(() => {
+                    runAction((sender as SimpleButton).Text, () => {
                         RemoteDefect.InitClient();
                     });
                     UtilTool.XFWait.Close();
                 });
             }
         }
-        private async void btnConnectRemotePLC_Click(object sender, EventArgs e)
-        {
-            if (!RemotePLC.isConnect)
-            {
+        private async void btnConnectRemotePLC_Click(object sender, EventArgs e) {
+            if (!RemotePLC.isConnect) {
                 UtilTool.XFWait.Open();
-                await Task.Run(() =>
-                {
-                    runAction((sender as SimpleButton).Text, () =>
-                    {
+                await Task.Run(() => {
+                    runAction((sender as SimpleButton).Text, () => {
                         RemotePLC.InitClient();
                     });
                     UtilTool.XFWait.Close();
@@ -1728,20 +1525,16 @@ namespace DetectCCD
 
         CfgRecipe tmpRecipe;
         CfgTiebiao tmpTiebiao;
-        List<CfgRecipe> getAllRecipe()
-        {
+        List<CfgRecipe> getAllRecipe() {
             List<CfgRecipe> cfgs = new List<CfgRecipe>();
             var files = new System.IO.DirectoryInfo(Static.FolderCfg).GetFiles("recipe_*");
-            foreach (var fi in files)
-            {
+            foreach (var fi in files) {
                 cfgs.Add(new CfgRecipe(fi.FullName));
             }
             return cfgs;
         }
-        void updateRecipes()
-        {
-            if (Static.App.Is4K)
-            {
+        void updateRecipes() {
+            if (Static.App.Is4K) {
                 listBoxRecipe.Items.Clear();
                 listBoxRecipe.Items.AddRange(getAllRecipe().Select(x => x.RecipeName).ToArray());
 
@@ -1762,8 +1555,7 @@ namespace DetectCCD
 
         }
 
-        private void btnApplyTiebiao_Click(object sender, EventArgs e)
-        {
+        private void btnApplyTiebiao_Click(object sender, EventArgs e) {
 
             //
             string msg = Static.Tiebiao.GetDiff(tmpTiebiao);
@@ -1772,8 +1564,7 @@ namespace DetectCCD
 
             //
             string changeCheck = "修改贴标参数\r\n" + msg;
-            if (DialogResult.Yes == XtraMessageBox.Show(changeCheck, "修改确认", MessageBoxButtons.YesNo))
-            {
+            if (DialogResult.Yes == XtraMessageBox.Show(changeCheck, "修改确认", MessageBoxButtons.YesNo)) {
                 Log.Operate(changeCheck);
                 tmpTiebiao.Save();
                 Static.Tiebiao.Load();
@@ -1781,10 +1572,8 @@ namespace DetectCCD
                 Log.Record(RemoteDefect.In4KCall8K_SetRoll);
             }
         }
-        private void btnAddRecipe_Click(object sender, EventArgs e)
-        {
-            runAction((sender as SimpleButton).Text, () =>
-            {
+        private void btnAddRecipe_Click(object sender, EventArgs e) {
+            runAction((sender as SimpleButton).Text, () => {
 
                 if (tmpRecipe.RecipeName == "")
                     throw new Exception("请输入配方名称");
@@ -1795,8 +1584,7 @@ namespace DetectCCD
 
                 string newFilePath = "";
                 int id = recipes.Count + 1;
-                while (true)
-                {
+                while (true) {
                     newFilePath = Static.FolderCfg + "recipe_" + id;
                     if (!System.IO.File.Exists(newFilePath))
                         break;
@@ -1807,11 +1595,9 @@ namespace DetectCCD
                 updateRecipes();
             });
         }
-        private void btnRemoveRecipe_Click(object sender, EventArgs e)
-        {
+        private void btnRemoveRecipe_Click(object sender, EventArgs e) {
 
-            runAction((sender as SimpleButton).Text, () =>
-            {
+            runAction((sender as SimpleButton).Text, () => {
 
                 if (tmpRecipe.RecipeName == "")
                     throw new Exception("请输入配方名称");
@@ -1828,11 +1614,9 @@ namespace DetectCCD
                 updateRecipes();
             });
         }
-        private void btnSelectRecipe_Click(object sender, EventArgs e)
-        {
+        private void btnSelectRecipe_Click(object sender, EventArgs e) {
 
-            runAction((sender as SimpleButton).Text, () =>
-            {
+            runAction((sender as SimpleButton).Text, () => {
 
                 if (listBoxRecipe.SelectedIndex == -1)
                     throw new Exception("请先选择配方");
@@ -1857,11 +1641,9 @@ namespace DetectCCD
                 Log.Record(RemoteDefect.In4KCall8K_SetRoll);
             });
         }
-        private void btnApplyRecipe_Click(object sender, EventArgs e)
-        {
+        private void btnApplyRecipe_Click(object sender, EventArgs e) {
 
-            runAction((sender as SimpleButton).Text, () =>
-            {
+            runAction((sender as SimpleButton).Text, () => {
 
                 var recipes = getAllRecipe();
                 var select = recipes.Find(x => x.RecipeName == tmpRecipe.RecipeName);
@@ -1873,11 +1655,9 @@ namespace DetectCCD
 
             });
         }
-        private void listBoxRecipe_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        private void listBoxRecipe_SelectedIndexChanged(object sender, EventArgs e) {
 
-            Log.Record(() =>
-            {
+            Log.Record(() => {
 
                 if (listBoxRecipe.SelectedIndex < 0)
                     return;
@@ -1894,55 +1674,40 @@ namespace DetectCCD
             });
         }
 
-        private void btnBackup_Click(object sender, EventArgs e)
-        {
-            Log.Record(() =>
-            {
-                if (XtraMessageBox.Show("备份参数，请确认是否备份？", "备份确认", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                {
-                    if (Static.CopyDir(Static.FolderCfg, Static.FolderCfgBackup))
-                    {
+        private void btnBackup_Click(object sender, EventArgs e) {
+            Log.Record(() => {
+                if (XtraMessageBox.Show("备份参数，请确认是否备份？", "备份确认", MessageBoxButtons.OKCancel) == DialogResult.OK) {
+                    if (Static.CopyDir(Static.FolderCfg, Static.FolderCfgBackup)) {
                         XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
                     }
-                    else
-                    {
+                    else {
                         XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
                     }
                 }
             });
 
         }
-        private void btnBackupALL_Click(object sender, EventArgs e)
-        {
-            Log.Record(() =>
-            {
-                if (XtraMessageBox.Show("备份所有参数，请确认是否备份？", "备份确认", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                {
-                    if (Static.CopyDirAll(Static.FolderCfg, Static.FolderCfgBackup))
-                    {
+        private void btnBackupALL_Click(object sender, EventArgs e) {
+            Log.Record(() => {
+                if (XtraMessageBox.Show("备份所有参数，请确认是否备份？", "备份确认", MessageBoxButtons.OKCancel) == DialogResult.OK) {
+                    if (Static.CopyDirAll(Static.FolderCfg, Static.FolderCfgBackup)) {
                         XtraMessageBox.Show("参数备份成功", "备份确认", MessageBoxButtons.OK);
                     }
-                    else
-                    {
+                    else {
                         XtraMessageBox.Show("参数备份失败", "备份确认", MessageBoxButtons.OK);
                     }
                 }
             });
         }
-        private void btnReturnAll_Click(object sender, EventArgs e)
-        {
-            Log.Record(() =>
-            {
-                if (XtraMessageBox.Show("还原所有参数，请确认是否还原？", "还原确认", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                {
+        private void btnReturnAll_Click(object sender, EventArgs e) {
+            Log.Record(() => {
+                if (XtraMessageBox.Show("还原所有参数，请确认是否还原？", "还原确认", MessageBoxButtons.OKCancel) == DialogResult.OK) {
 
-                    if (Static.CopyDirAll(Static.FolderCfgBackup, Static.FolderCfg))
-                    {
+                    if (Static.CopyDirAll(Static.FolderCfgBackup, Static.FolderCfg)) {
                         Static.Init();
                         XtraMessageBox.Show("还原参数成功", "还原确认", MessageBoxButtons.OK);
                     }
-                    else
-                    {
+                    else {
                         XtraMessageBox.Show("还原参数失败", "还原确认", MessageBoxButtons.OK);
                     }
                 }
@@ -1950,31 +1715,23 @@ namespace DetectCCD
             });
         }
 
-        private void btnRecipeSet_Click(object sender, EventArgs e)
-        {
-            Log.Record(() =>
-            {
+        private void btnRecipeSet_Click(object sender, EventArgs e) {
+            Log.Record(() => {
                 listBoxRecipe.SelectedIndex = mainRecipes.SelectedIndex;
                 listBoxRecipe_SelectedIndexChanged(listBoxRecipe, null);
                 btnSelectRecipe_Click(btnSelectRecipe, null);
             });
         }
 
-        private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e)
-        {
-            if(checkEnableUseDetectedParam.Checked)
-            {
-                runAction("开启“来料压痕”", () =>
-                {
-                    this.Invoke(new Action(()=> { Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked; }));
-                    
+        private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e) {
+            if (checkEnableUseDetectedParam.Checked) {
+                runAction("开启“来料压痕”", () => {
+
                 });
             }
-           else
-            {
-                runAction("关闭“来料压痕”", () =>
-                {
-                    this.Invoke(new Action(()=> { Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked; })); 
+            else {
+                runAction("关闭“来料压痕”", () => {
+
                 });
             }
 
@@ -1982,15 +1739,30 @@ namespace DetectCCD
         private void checkEnableDetectDarkLineLeakMetal_CheckedChanged(object sender, EventArgs e) {
 
             if (checkEnableDetectDarkLineLeakMetal.Checked) {
-                runAction("开启“暗痕线性漏金属”", () => {
-                    this.Invoke(new Action(() => { Static.Status.isEnableDetectDarkLineLeakMetal = checkEnableDetectDarkLineLeakMetal.Checked; }));
-
-                });
+                runAction("开启“暗痕线性漏金属”", () => { });
             }
             else {
-                runAction("关闭“暗痕线性漏金属”", () => {
-                    this.Invoke(new Action(() => { Static.Status.isEnableDetectDarkLineLeakMetal = checkEnableDetectDarkLineLeakMetal.Checked; }));
-                });
+                runAction("关闭“暗痕线性漏金属”", () => { });
+            }
+
+        }
+
+        private void checkEnableDetectDarkLineLeakMetal_isStop_CheckedChanged(object sender, EventArgs e) {
+
+            if (checkEnableDetectDarkLineLeakMetal_isStop.Checked) {
+                runAction("开启“暗痕线性漏金属”停机确认选项", () => { });
+            }
+            else {
+                runAction("关闭“暗痕线性漏金属”停机确认选项", () => { });
+            }
+        }
+        private void checkEnableDetectDarkLineLeakMetal_isLabel_CheckedChanged(object sender, EventArgs e) {
+
+            if (checkEnableDetectDarkLineLeakMetal_isLabel.Checked) {
+                runAction("开启“暗痕线性漏金属”停机确认选项", () => { });
+            }
+            else {
+                runAction("关闭“暗痕线性漏金属”停机确认选项", () => { });
             }
 
         }

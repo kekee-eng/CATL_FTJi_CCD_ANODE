@@ -104,7 +104,7 @@ namespace DetectCCD {
                 return true;
             if (Static.Tiebiao.EAContextPifeng && Type == 3)
                 return true;
-            if (Static.Tiebiao.EAContextLineLeakMetal && Type == 40)
+            if (Static.App.LineLeakMetalIsLabel && Type == 40)
                 return true;
             return false;
         }

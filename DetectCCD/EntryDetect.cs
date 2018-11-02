@@ -50,6 +50,9 @@ namespace DetectCCD
 
             CountOfDetectDefectTotal = 0;
             CountOfDetectDefectReal = 0;
+
+            AlreadyAlarmStopOnLineLeakMetal = false;
+            LineLeakMetalCount = 0;
         }
 
         EntryGrab grab;
@@ -130,6 +133,10 @@ namespace DetectCCD
         }
         public int ShowEAWidthNGCount = 0;
         public int ShowEADefectNGCount = 0;
+
+        public int PrevMarkCount = 0;
+        public int LineLeakMetalCount = 0;
+        public bool AlreadyAlarmStopOnLineLeakMetal = false;
 
         public event Action<DataLabel> OnNewLabel;
         public event Action<DataTab, DataTab> OnSyncTab;
@@ -558,7 +565,7 @@ namespace DetectCCD
         public void TryAddDefect(bool hasDefect, int frame) {
 
             //检测暗痕漏金属
-            if (Static.Status.isEnableDetectDarkLineLeakMetal) {
+            if (Static.App.LineLeakMetalEnable) {
 
                 //多线程运算
                 Log.RecordAsThread(() => {
@@ -569,6 +576,25 @@ namespace DetectCCD
                     //检测
                     double dx, dw;
                     if (image != null && ImageProcess.DetectDarkLineLeakMetal(image, out dx, out dw)) {
+
+                        //
+                        LineLeakMetalCount++;
+                        if (Static.App.LineLeakMetalIsAlarmStop) {
+                            if (LineLeakMetalCount > Static.App.LineLeakMetal_AlarmStop_MaxCount) {
+
+                                int markCount = Marks.Count;
+                                if(markCount != PrevMarkCount) {
+                                    AlreadyAlarmStopOnLineLeakMetal = false;
+                                }
+
+                                if (!AlreadyAlarmStopOnLineLeakMetal) {
+                                    AlreadyAlarmStopOnLineLeakMetal = true;
+                                    RemotePLC.In4KCallPLC_AlarmStop(false, true, $"连接检测到 {LineLeakMetalCount} 个暗痕线性漏金属");
+                                }
+
+                                PrevMarkCount = markCount;
+                            }
+                        }
 
                         //
                         DataDefect def = new DataDefect() {
@@ -598,6 +624,8 @@ namespace DetectCCD
                                 UtilSaveImageQueue.Put(image, filename);
                             }
                         });
+                    }else {
+                        LineLeakMetalCount = 0;
                     }
                 });
             }

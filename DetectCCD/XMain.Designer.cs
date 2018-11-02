@@ -51,6 +51,8 @@
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.checkEnableDetectDarkLineLeakMetal_isLabel = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEnableDetectDarkLineLeakMetal_isStop = new DevExpress.XtraEditors.CheckEdit();
             this.checkEnableDetectDarkLineLeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkEnableUseDetectedParam = new DevExpress.XtraEditors.CheckEdit();
             this.groupRemoteClient = new DevExpress.XtraEditors.GroupControl();
@@ -171,7 +173,6 @@
             this.btnBackup = new DevExpress.XtraEditors.SimpleButton();
             this.btnApplyTiebiao = new DevExpress.XtraEditors.SimpleButton();
             this.groupEAContext = new DevExpress.XtraEditors.GroupControl();
-            this.checkEAContext_LineLeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Pifeng = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Width = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
@@ -204,12 +205,15 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.groupDetectParam = new DevExpress.XtraEditors.GroupControl();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).BeginInit();
             this.xtraTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal_isLabel.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal_isStop.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).BeginInit();
@@ -276,7 +280,6 @@
             this.groupLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).BeginInit();
             this.groupEAContext.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LineLeakMetal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Pifeng.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Width.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).BeginInit();
@@ -301,6 +304,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupDetectParam)).BeginInit();
+            this.groupDetectParam.SuspendLayout();
             this.SuspendLayout();
             // 
             // barManager1
@@ -512,8 +517,7 @@
             // 
             // xtraTabPage1
             // 
-            this.xtraTabPage1.Controls.Add(this.checkEnableDetectDarkLineLeakMetal);
-            this.xtraTabPage1.Controls.Add(this.checkEnableUseDetectedParam);
+            this.xtraTabPage1.Controls.Add(this.groupDetectParam);
             this.xtraTabPage1.Controls.Add(this.groupRemoteClient);
             this.xtraTabPage1.Controls.Add(this.groupDevice);
             this.xtraTabPage1.Controls.Add(this.groupRoll);
@@ -523,10 +527,32 @@
             this.xtraTabPage1.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage1.Text = "设备控制";
             // 
+            // checkEnableDetectDarkLineLeakMetal_isLabel
+            // 
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.EditValue = true;
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.Location = new System.Drawing.Point(51, 113);
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.MenuManager = this.barManager1;
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.Name = "checkEnableDetectDarkLineLeakMetal_isLabel";
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.Properties.Caption = "是否打标";
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.Size = new System.Drawing.Size(165, 19);
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.TabIndex = 97;
+            this.checkEnableDetectDarkLineLeakMetal_isLabel.CheckedChanged += new System.EventHandler(this.checkEnableDetectDarkLineLeakMetal_isLabel_CheckedChanged);
+            // 
+            // checkEnableDetectDarkLineLeakMetal_isStop
+            // 
+            this.checkEnableDetectDarkLineLeakMetal_isStop.EditValue = true;
+            this.checkEnableDetectDarkLineLeakMetal_isStop.Location = new System.Drawing.Point(51, 88);
+            this.checkEnableDetectDarkLineLeakMetal_isStop.MenuManager = this.barManager1;
+            this.checkEnableDetectDarkLineLeakMetal_isStop.Name = "checkEnableDetectDarkLineLeakMetal_isStop";
+            this.checkEnableDetectDarkLineLeakMetal_isStop.Properties.Caption = "是否停机确认";
+            this.checkEnableDetectDarkLineLeakMetal_isStop.Size = new System.Drawing.Size(165, 19);
+            this.checkEnableDetectDarkLineLeakMetal_isStop.TabIndex = 96;
+            this.checkEnableDetectDarkLineLeakMetal_isStop.CheckedChanged += new System.EventHandler(this.checkEnableDetectDarkLineLeakMetal_isStop_CheckedChanged);
+            // 
             // checkEnableDetectDarkLineLeakMetal
             // 
             this.checkEnableDetectDarkLineLeakMetal.EditValue = true;
-            this.checkEnableDetectDarkLineLeakMetal.Location = new System.Drawing.Point(39, 288);
+            this.checkEnableDetectDarkLineLeakMetal.Location = new System.Drawing.Point(21, 63);
             this.checkEnableDetectDarkLineLeakMetal.MenuManager = this.barManager1;
             this.checkEnableDetectDarkLineLeakMetal.Name = "checkEnableDetectDarkLineLeakMetal";
             this.checkEnableDetectDarkLineLeakMetal.Properties.Caption = "启用“暗痕漏金属检测”";
@@ -536,7 +562,7 @@
             // 
             // checkEnableUseDetectedParam
             // 
-            this.checkEnableUseDetectedParam.Location = new System.Drawing.Point(39, 263);
+            this.checkEnableUseDetectedParam.Location = new System.Drawing.Point(21, 38);
             this.checkEnableUseDetectedParam.MenuManager = this.barManager1;
             this.checkEnableUseDetectedParam.Name = "checkEnableUseDetectedParam";
             this.checkEnableUseDetectedParam.Properties.Caption = "启用“来料压痕检测”";
@@ -1874,7 +1900,6 @@
             // 
             // groupEAContext
             // 
-            this.groupEAContext.Controls.Add(this.checkEAContext_LineLeakMetal);
             this.groupEAContext.Controls.Add(this.checkEAContext_Pifeng);
             this.groupEAContext.Controls.Add(this.checkEAContext_Width);
             this.groupEAContext.Controls.Add(this.checkEAContext_LeakMetal);
@@ -1885,15 +1910,6 @@
             this.groupEAContext.Size = new System.Drawing.Size(147, 216);
             this.groupEAContext.TabIndex = 90;
             this.groupEAContext.Text = "末端贴标项";
-            // 
-            // checkEAContext_LineLeakMetal
-            // 
-            this.checkEAContext_LineLeakMetal.Location = new System.Drawing.Point(22, 179);
-            this.checkEAContext_LineLeakMetal.MenuManager = this.barManager1;
-            this.checkEAContext_LineLeakMetal.Name = "checkEAContext_LineLeakMetal";
-            this.checkEAContext_LineLeakMetal.Properties.Caption = "暗痕线性漏金属";
-            this.checkEAContext_LineLeakMetal.Size = new System.Drawing.Size(109, 19);
-            this.checkEAContext_LineLeakMetal.TabIndex = 33;
             // 
             // checkEAContext_Pifeng
             // 
@@ -2173,6 +2189,18 @@
             this.openFileDialog1.Filter = "膜卷记录|*.db";
             this.openFileDialog1.InitialDirectory = "config_package";
             // 
+            // groupDetectParam
+            // 
+            this.groupDetectParam.Controls.Add(this.checkEnableUseDetectedParam);
+            this.groupDetectParam.Controls.Add(this.checkEnableDetectDarkLineLeakMetal_isLabel);
+            this.groupDetectParam.Controls.Add(this.checkEnableDetectDarkLineLeakMetal);
+            this.groupDetectParam.Controls.Add(this.checkEnableDetectDarkLineLeakMetal_isStop);
+            this.groupDetectParam.Location = new System.Drawing.Point(39, 280);
+            this.groupDetectParam.Name = "groupDetectParam";
+            this.groupDetectParam.Size = new System.Drawing.Size(279, 170);
+            this.groupDetectParam.TabIndex = 98;
+            this.groupDetectParam.Text = "检测选项";
+            // 
             // XMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -2193,6 +2221,8 @@
             this.xtraTabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).EndInit();
             this.xtraTabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal_isLabel.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal_isStop.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).EndInit();
@@ -2263,7 +2293,6 @@
             this.groupLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).EndInit();
             this.groupEAContext.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LineLeakMetal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Pifeng.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Width.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).EndInit();
@@ -2288,6 +2317,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveMark.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNGSmall.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkSaveNG.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupDetectParam)).EndInit();
+            this.groupDetectParam.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2467,7 +2498,9 @@
         private DevExpress.XtraEditors.CheckEdit checkLabelContext_Pifeng;
         private DevExpress.XtraEditors.LabelControl lbRecipeParams;
         private DevExpress.XtraEditors.CheckEdit checkEnableUseDetectedParam;
-        private DevExpress.XtraEditors.CheckEdit checkEAContext_LineLeakMetal;
         private DevExpress.XtraEditors.CheckEdit checkEnableDetectDarkLineLeakMetal;
+        private DevExpress.XtraEditors.CheckEdit checkEnableDetectDarkLineLeakMetal_isLabel;
+        private DevExpress.XtraEditors.CheckEdit checkEnableDetectDarkLineLeakMetal_isStop;
+        private DevExpress.XtraEditors.GroupControl groupDetectParam;
     }
 }

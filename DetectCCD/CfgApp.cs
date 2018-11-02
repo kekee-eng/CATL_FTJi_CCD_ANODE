@@ -11,8 +11,15 @@ namespace DetectCCD {
 
         //
         public bool ImageProcessReload = false;
-        
+
+        //
+        public int LineLeakMetal_AlarmStop_MaxCount = 3;
+        public bool LineLeakMetalEnable = true;
+        public bool LineLeakMetalIsAlarmStop = true;
+        public bool LineLeakMetalIsLabel = true;
+
         //检测露金属参数
+        public bool ImageProcessParamEnable = false;
         public double ImageProcessParam_DetectDefect_MaxGray = 2.5;
         public double ImageProcessParam_DetectDefect_MinGray = 0.5;
         public double ImageProcessParam_DetectDefect_Deviation = 20;

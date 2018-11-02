@@ -52,7 +52,7 @@ namespace DetectCCD {
                     call.SetInputIconicParamObject("Image", image);
                     if (process == "DetectDefect") {
                         HTuple param = new HTuple();
-                        if (Static.Status.isEnableUseDetectParam) {
+                        if (Static.App.ImageProcessParamEnable) {
                             param[0] = Static.App.ImageProcessParam_DetectDefect_MaxGray;
                             param[1] = Static.App.ImageProcessParam_DetectDefect_MinGray;
                             param[2] = Static.App.ImageProcessParam_DetectDefect_Deviation;
