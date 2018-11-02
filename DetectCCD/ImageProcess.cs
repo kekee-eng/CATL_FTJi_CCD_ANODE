@@ -233,6 +233,8 @@ namespace DetectCCD {
                     xstart = x1 + offset;
                     xend = x2 - offset;
 
+                    if (xend <= xstart)
+                        throw new Exception();
                 }catch
                 {
                     throw new Exception("取得模区边界错误，请修改参数！");
@@ -251,6 +253,8 @@ namespace DetectCCD {
                 {
                     //
                     var checkVP = VP.Skip(xstart).Take(xend - xstart);
+                    if (checkVP == null)
+                        throw new Exception($"异常参数，{VP.Length} {xstart} {xend}");
 
                     double mean = checkVP.Average();
                     double max = checkVP.Max();
