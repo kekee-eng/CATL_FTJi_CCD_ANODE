@@ -1737,53 +1737,77 @@ namespace DetectCCD {
             });
         }
 
-        private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e) {
-            if (checkEnableUseDetectedParam.Checked) {
-                runAction("开启“忽略来料压痕”", () => {
+        private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Static.App.Is4K)
+            {
+                if (checkEnableUseDetectedParam.Checked)
+                {
+                    runAction("开启“忽略来料压痕”", () =>
+                    {
 
-                });
+                    });
+                }
+                else
+                {
+                    runAction("关闭“忽略来料压痕”", () =>
+                    {
+
+                    });
+                }
+                Log.Record(RemoteDefect.In4KCall8K_SetRoll);
+
             }
-            else {
-                runAction("关闭“忽略来料压痕”", () => {
-
-                });
-            }
-            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
-
         }
-        private void checkEnableDetectDarkLineLeakMetal_CheckedChanged(object sender, EventArgs e) {
+        private void checkEnableDetectDarkLineLeakMetal_CheckedChanged(object sender, EventArgs e)
+        {
 
-            if (checkEnableDetectDarkLineLeakMetal.Checked) {
-                runAction("开启“暗痕线性漏金属”", () => { });
-            }
-            else {
-                runAction("关闭“暗痕线性漏金属”", () => { });
-            }
-            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
+            if (Static.App.Is4K)
+            {
+                if (checkEnableDetectDarkLineLeakMetal.Checked)
+                {
+                    runAction("开启“暗痕线性漏金属”", () => { });
+                }
+                else
+                {
+                    runAction("关闭“暗痕线性漏金属”", () => { });
+                }
+                Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
+            }
         }
 
-        private void checkEnableDetectDarkLineLeakMetal_isStop_CheckedChanged(object sender, EventArgs e) {
+        private void checkEnableDetectDarkLineLeakMetal_isStop_CheckedChanged(object sender, EventArgs e)
+        {
 
-            if (checkEnableDetectDarkLineLeakMetal_isStop.Checked) {
-                runAction("开启“暗痕线性漏金属”停机确认选项", () => { });
-            }
-            else {
-                runAction("关闭“暗痕线性漏金属”停机确认选项", () => { });
-            }
-            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
+            if (Static.App.Is4K)
+            {
+                if (checkEnableDetectDarkLineLeakMetal_isStop.Checked)
+                {
+                    runAction("开启“暗痕线性漏金属”停机确认选项", () => { });
+                }
+                else
+                {
+                    runAction("关闭“暗痕线性漏金属”停机确认选项", () => { });
+                }
+                Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
+            }
         }
         private void checkEnableDetectDarkLineLeakMetal_isLabel_CheckedChanged(object sender, EventArgs e) {
 
-            if (checkEnableDetectDarkLineLeakMetal_isLabel.Checked) {
-                runAction("开启“暗痕线性漏金属”打标选项", () => { });
+            if (Static.App.Is4K)
+            {
+                if (checkEnableDetectDarkLineLeakMetal_isLabel.Checked)
+                {
+                    runAction("开启“暗痕线性漏金属”打标选项", () => { });
+                }
+                else
+                {
+                    runAction("关闭“暗痕线性漏金属”打标选项", () => { });
+                }
+                Log.Record(RemoteDefect.In4KCall8K_SetRoll);
             }
-            else {
-                runAction("关闭“暗痕线性漏金属”打标选项", () => { });
-            }
-            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
-
         }
     }
 
