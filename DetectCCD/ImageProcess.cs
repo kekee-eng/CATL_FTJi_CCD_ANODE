@@ -211,7 +211,7 @@ namespace DetectCCD {
         public static int TimeDetectDefect = 0;
         public static int ImageDefectWidth = 0;
         public static int ImageDefectHeight = 0;
-        
+
         public static bool DetectDarkLineLeakMetal(HImage image, out double px, out double pw) {
             pw = px = 0;
             try {
@@ -259,6 +259,14 @@ namespace DetectCCD {
 
                         //
                         px = minid;
+                        pw = 40;
+                        return true;
+                    }
+
+                    if (max - mean > 15) {
+                        //亮痕线性漏金属
+                        int maxid = VP.FindIndex(x => x == max);
+                        px = maxid;
                         pw = 40;
                         return true;
                     }
