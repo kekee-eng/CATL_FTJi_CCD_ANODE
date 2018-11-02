@@ -242,7 +242,7 @@ namespace DetectCCD
 
                     //8k取消使用检测参数，使用默认参数
                     checkEnableUseDetectedParam.Checked = false;
-
+                    checkEnableDetectDarkLineLeakMetal.Checked = false;
                 };
 
                 RemoteDefect._func_in_8k_getFrame += () =>
@@ -654,6 +654,7 @@ namespace DetectCCD
             xtraTabPage6.PageVisible = Static.App.Is4K;
             xtraTabPage5.PageVisible = Static.App.Is4K;
             checkEnableUseDetectedParam.Visible = Static.App.Is8K;
+            checkEnableDetectDarkLineLeakMetal.Visible = Static.App.Is8K;
         }
         void changeUser()
         {
@@ -1524,7 +1525,7 @@ namespace DetectCCD
                     isRepeatRoll = true;
                     //设定膜卷关闭检测参数设定
                     checkEnableUseDetectedParam.Checked = false;
-
+                    checkEnableDetectDarkLineLeakMetal.Checked = true;
                 }
             });
         }
