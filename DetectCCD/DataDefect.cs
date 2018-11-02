@@ -82,6 +82,8 @@ namespace DetectCCD {
                 case 11: return "[S]白斑";
                 case 20: return "[T]脱碳";
                 case 30: return "[V]划痕";
+
+                case 40: return "[L]线性漏金属";
             }
 
         }

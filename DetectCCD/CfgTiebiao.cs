@@ -27,6 +27,8 @@ namespace DetectCCD {
         public bool EAContextPifeng = false;
         public bool EAContextWidth = false;
 
+        public bool EAContextLineLeakMetal = false;
+
         //
         public double LabelY_Defect = 0;
         public double LabelY_EA = 0;

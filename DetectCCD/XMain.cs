@@ -608,6 +608,7 @@ namespace DetectCCD
             tmpTiebiao.BindCheckBox(checkEAContext_LeakMetal, "EAContextLeakMetal");
             tmpTiebiao.BindCheckBox(checkEAContext_Pifeng, nameof(tmpTiebiao.EAContextPifeng));
             tmpTiebiao.BindCheckBox(checkEAContext_Width, "EAContextWidth");
+            tmpTiebiao.BindCheckBox(checkEAContext_LineLeakMetal, nameof(tmpTiebiao.EAContextLineLeakMetal));
 
             tmpTiebiao.BindTextBox(textLabelEAOffset, "LabelY_EA");
             tmpTiebiao.BindTextBox(textLabelDefectOffset, "LabelY_Defect");
@@ -1973,6 +1974,21 @@ namespace DetectCCD
                 runAction("关闭“来料压痕”", () =>
                 {
                     this.Invoke(new Action(()=> { Static.Status.isEnableUseDetectParam = checkEnableUseDetectedParam.Checked; })); 
+                });
+            }
+
+        }
+        private void checkEnableDetectDarkLineLeakMetal_CheckedChanged(object sender, EventArgs e) {
+
+            if (checkEnableDetectDarkLineLeakMetal.Checked) {
+                runAction("开启“暗痕线性漏金属”", () => {
+                    this.Invoke(new Action(() => { Static.Status.isEnableDetectDarkLineLeakMetal = checkEnableDetectDarkLineLeakMetal.Checked; }));
+
+                });
+            }
+            else {
+                runAction("关闭“暗痕线性漏金属”", () => {
+                    this.Invoke(new Action(() => { Static.Status.isEnableDetectDarkLineLeakMetal = checkEnableDetectDarkLineLeakMetal.Checked; }));
                 });
             }
 

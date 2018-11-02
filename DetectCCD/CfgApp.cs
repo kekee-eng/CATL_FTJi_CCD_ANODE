@@ -11,7 +11,7 @@ namespace DetectCCD {
 
         //
         public bool ImageProcessReload = false;
-
+        
         //检测露金属参数
         public double ImageProcessParam_DetectDefect_MaxGray = 2.5;
         public double ImageProcessParam_DetectDefect_MinGray = 0.5;
@@ -35,6 +35,7 @@ namespace DetectCCD {
         public bool RecordSaveImageNGSmall = false;
         public int RecordSaveImageNGSmallMaxType = 5;
         public bool RecordSaveImageMark = false;
+        public bool RecordSaveImageLineLeakMetal = false;
 
         public bool RecordSaveImageLimitEnable = true;
         public int RecordSaveImageLimitNumber = 20;

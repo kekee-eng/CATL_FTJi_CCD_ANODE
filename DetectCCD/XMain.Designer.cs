@@ -51,6 +51,7 @@
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.imageCollectionTab = new DevExpress.Utils.ImageCollection(this.components);
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.checkEnableDetectDarkLineLeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkEnableUseDetectedParam = new DevExpress.XtraEditors.CheckEdit();
             this.groupRemoteClient = new DevExpress.XtraEditors.GroupControl();
             this.btnConnectRemotePLC = new DevExpress.XtraEditors.SimpleButton();
@@ -170,6 +171,7 @@
             this.btnBackup = new DevExpress.XtraEditors.SimpleButton();
             this.btnApplyTiebiao = new DevExpress.XtraEditors.SimpleButton();
             this.groupEAContext = new DevExpress.XtraEditors.GroupControl();
+            this.checkEAContext_LineLeakMetal = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Pifeng = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_Width = new DevExpress.XtraEditors.CheckEdit();
             this.checkEAContext_LeakMetal = new DevExpress.XtraEditors.CheckEdit();
@@ -208,6 +210,7 @@
             this.xtraTabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).BeginInit();
             this.xtraTabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).BeginInit();
             this.groupRemoteClient.SuspendLayout();
@@ -273,6 +276,7 @@
             this.groupLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).BeginInit();
             this.groupEAContext.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LineLeakMetal.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Pifeng.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Width.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).BeginInit();
@@ -508,6 +512,7 @@
             // 
             // xtraTabPage1
             // 
+            this.xtraTabPage1.Controls.Add(this.checkEnableDetectDarkLineLeakMetal);
             this.xtraTabPage1.Controls.Add(this.checkEnableUseDetectedParam);
             this.xtraTabPage1.Controls.Add(this.groupRemoteClient);
             this.xtraTabPage1.Controls.Add(this.groupDevice);
@@ -517,6 +522,17 @@
             this.xtraTabPage1.Name = "xtraTabPage1";
             this.xtraTabPage1.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage1.Text = "设备控制";
+            // 
+            // checkEnableDetectDarkLineLeakMetal
+            // 
+            this.checkEnableDetectDarkLineLeakMetal.EditValue = true;
+            this.checkEnableDetectDarkLineLeakMetal.Location = new System.Drawing.Point(39, 288);
+            this.checkEnableDetectDarkLineLeakMetal.MenuManager = this.barManager1;
+            this.checkEnableDetectDarkLineLeakMetal.Name = "checkEnableDetectDarkLineLeakMetal";
+            this.checkEnableDetectDarkLineLeakMetal.Properties.Caption = "启用“暗痕漏金属检测”";
+            this.checkEnableDetectDarkLineLeakMetal.Size = new System.Drawing.Size(165, 19);
+            this.checkEnableDetectDarkLineLeakMetal.TabIndex = 95;
+            this.checkEnableDetectDarkLineLeakMetal.CheckedChanged += new System.EventHandler(this.checkEnableDetectDarkLineLeakMetal_CheckedChanged);
             // 
             // checkEnableUseDetectedParam
             // 
@@ -823,7 +839,7 @@
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(545, 616);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(544, 616);
             this.tableLayoutPanel8.TabIndex = 29;
             // 
             // groupStatuOuter
@@ -832,7 +848,7 @@
             this.groupStatuOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupStatuOuter.Location = new System.Drawing.Point(275, 3);
             this.groupStatuOuter.Name = "groupStatuOuter";
-            this.groupStatuOuter.Size = new System.Drawing.Size(267, 610);
+            this.groupStatuOuter.Size = new System.Drawing.Size(266, 610);
             this.groupStatuOuter.TabIndex = 1;
             this.groupStatuOuter.Text = "Camera2";
             this.groupStatuOuter.DoubleClick += new System.EventHandler(this.groupStatuOuter_DoubleClick);
@@ -853,7 +869,7 @@
             // splitContainerOuter.Panel2
             // 
             this.splitContainerOuter.Panel2.Controls.Add(this.hwinOuter);
-            this.splitContainerOuter.Size = new System.Drawing.Size(263, 587);
+            this.splitContainerOuter.Size = new System.Drawing.Size(262, 587);
             this.splitContainerOuter.SplitterDistance = 120;
             this.splitContainerOuter.TabIndex = 0;
             // 
@@ -869,7 +885,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(263, 120);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(262, 120);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -1015,7 +1031,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(126, 114);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(125, 114);
             this.tableLayoutPanel4.TabIndex = 27;
             // 
             // _lc_outer_defectCount
@@ -1026,7 +1042,7 @@
             this._lc_outer_defectCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_defectCount.Location = new System.Drawing.Point(66, 88);
             this._lc_outer_defectCount.Name = "_lc_outer_defectCount";
-            this._lc_outer_defectCount.Size = new System.Drawing.Size(56, 22);
+            this._lc_outer_defectCount.Size = new System.Drawing.Size(55, 22);
             this._lc_outer_defectCount.TabIndex = 34;
             this._lc_outer_defectCount.Text = "-";
             // 
@@ -1050,7 +1066,7 @@
             this._lc_outer_widthCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_widthCount.Location = new System.Drawing.Point(66, 60);
             this._lc_outer_widthCount.Name = "_lc_outer_widthCount";
-            this._lc_outer_widthCount.Size = new System.Drawing.Size(56, 21);
+            this._lc_outer_widthCount.Size = new System.Drawing.Size(55, 21);
             this._lc_outer_widthCount.TabIndex = 32;
             this._lc_outer_widthCount.Text = "-";
             // 
@@ -1074,7 +1090,7 @@
             this._lc_outer_eaCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_eaCount.Location = new System.Drawing.Point(66, 32);
             this._lc_outer_eaCount.Name = "_lc_outer_eaCount";
-            this._lc_outer_eaCount.Size = new System.Drawing.Size(56, 21);
+            this._lc_outer_eaCount.Size = new System.Drawing.Size(55, 21);
             this._lc_outer_eaCount.TabIndex = 30;
             this._lc_outer_eaCount.Text = "-";
             // 
@@ -1110,7 +1126,7 @@
             this._lc_outer_caption.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_caption.Location = new System.Drawing.Point(66, 4);
             this._lc_outer_caption.Name = "_lc_outer_caption";
-            this._lc_outer_caption.Size = new System.Drawing.Size(56, 21);
+            this._lc_outer_caption.Size = new System.Drawing.Size(55, 21);
             this._lc_outer_caption.TabIndex = 29;
             this._lc_outer_caption.Text = "-";
             // 
@@ -1122,9 +1138,9 @@
             this.hwinOuter.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwinOuter.Location = new System.Drawing.Point(0, 0);
             this.hwinOuter.Name = "hwinOuter";
-            this.hwinOuter.Size = new System.Drawing.Size(263, 463);
+            this.hwinOuter.Size = new System.Drawing.Size(262, 463);
             this.hwinOuter.TabIndex = 30;
-            this.hwinOuter.WindowSize = new System.Drawing.Size(263, 463);
+            this.hwinOuter.WindowSize = new System.Drawing.Size(262, 463);
             // 
             // groupStatuInner
             // 
@@ -1476,7 +1492,7 @@
             this.panelTabMergeGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTabMergeGrid.Location = new System.Drawing.Point(0, 0);
             this.panelTabMergeGrid.Name = "panelTabMergeGrid";
-            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 154);
+            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 153);
             this.panelTabMergeGrid.TabIndex = 1;
             // 
             // xtraTabPage6
@@ -1614,7 +1630,7 @@
             this.splitContainerControl4.Panel2.Controls.Add(this.btnSelectRecipe);
             this.splitContainerControl4.Panel2.Controls.Add(this.btnAddRecipe);
             this.splitContainerControl4.Panel2.Text = "Panel2";
-            this.splitContainerControl4.Size = new System.Drawing.Size(474, 438);
+            this.splitContainerControl4.Size = new System.Drawing.Size(473, 438);
             this.splitContainerControl4.SplitterPosition = 84;
             this.splitContainerControl4.TabIndex = 0;
             this.splitContainerControl4.Text = "splitContainerControl4";
@@ -1625,7 +1641,7 @@
             this.xtraTabControl3.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl3.Name = "xtraTabControl3";
             this.xtraTabControl3.SelectedTabPage = this.xtraTabPage8;
-            this.xtraTabControl3.Size = new System.Drawing.Size(470, 345);
+            this.xtraTabControl3.Size = new System.Drawing.Size(469, 344);
             this.xtraTabControl3.TabIndex = 0;
             this.xtraTabControl3.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage8,
@@ -1648,7 +1664,7 @@
             this.xtraTabPage8.Controls.Add(this.textWidthMin);
             this.xtraTabPage8.Controls.Add(this.labelControl27);
             this.xtraTabPage8.Name = "xtraTabPage8";
-            this.xtraTabPage8.Size = new System.Drawing.Size(464, 316);
+            this.xtraTabPage8.Size = new System.Drawing.Size(463, 315);
             this.xtraTabPage8.Text = "常用参数";
             // 
             // textRecipeName
@@ -1767,7 +1783,7 @@
             // 
             this.xtraTabPage9.Controls.Add(this.dataRecipe);
             this.xtraTabPage9.Name = "xtraTabPage9";
-            this.xtraTabPage9.Size = new System.Drawing.Size(464, 316);
+            this.xtraTabPage9.Size = new System.Drawing.Size(463, 315);
             this.xtraTabPage9.Text = "高级参数";
             // 
             // dataRecipe
@@ -1778,7 +1794,7 @@
             this.dataRecipe.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataRecipe.Location = new System.Drawing.Point(0, 0);
             this.dataRecipe.Name = "dataRecipe";
-            this.dataRecipe.Size = new System.Drawing.Size(464, 316);
+            this.dataRecipe.Size = new System.Drawing.Size(463, 315);
             this.dataRecipe.TabIndex = 0;
             // 
             // btnApplyRecipe
@@ -1858,6 +1874,7 @@
             // 
             // groupEAContext
             // 
+            this.groupEAContext.Controls.Add(this.checkEAContext_LineLeakMetal);
             this.groupEAContext.Controls.Add(this.checkEAContext_Pifeng);
             this.groupEAContext.Controls.Add(this.checkEAContext_Width);
             this.groupEAContext.Controls.Add(this.checkEAContext_LeakMetal);
@@ -1865,9 +1882,18 @@
             this.groupEAContext.Controls.Add(this.checkEAContext_Join);
             this.groupEAContext.Location = new System.Drawing.Point(177, 178);
             this.groupEAContext.Name = "groupEAContext";
-            this.groupEAContext.Size = new System.Drawing.Size(131, 184);
+            this.groupEAContext.Size = new System.Drawing.Size(147, 216);
             this.groupEAContext.TabIndex = 90;
             this.groupEAContext.Text = "末端贴标项";
+            // 
+            // checkEAContext_LineLeakMetal
+            // 
+            this.checkEAContext_LineLeakMetal.Location = new System.Drawing.Point(22, 179);
+            this.checkEAContext_LineLeakMetal.MenuManager = this.barManager1;
+            this.checkEAContext_LineLeakMetal.Name = "checkEAContext_LineLeakMetal";
+            this.checkEAContext_LineLeakMetal.Properties.Caption = "暗痕线性漏金属";
+            this.checkEAContext_LineLeakMetal.Size = new System.Drawing.Size(109, 19);
+            this.checkEAContext_LineLeakMetal.TabIndex = 33;
             // 
             // checkEAContext_Pifeng
             // 
@@ -2167,6 +2193,7 @@
             this.xtraTabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageCollectionTab)).EndInit();
             this.xtraTabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkEnableDetectDarkLineLeakMetal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableUseDetectedParam.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupRemoteClient)).EndInit();
             this.groupRemoteClient.ResumeLayout(false);
@@ -2236,6 +2263,7 @@
             this.groupLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupEAContext)).EndInit();
             this.groupEAContext.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LineLeakMetal.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Pifeng.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_Width.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEAContext_LeakMetal.Properties)).EndInit();
@@ -2439,5 +2467,7 @@
         private DevExpress.XtraEditors.CheckEdit checkLabelContext_Pifeng;
         private DevExpress.XtraEditors.LabelControl lbRecipeParams;
         private DevExpress.XtraEditors.CheckEdit checkEnableUseDetectedParam;
+        private DevExpress.XtraEditors.CheckEdit checkEAContext_LineLeakMetal;
+        private DevExpress.XtraEditors.CheckEdit checkEnableDetectDarkLineLeakMetal;
     }
 }

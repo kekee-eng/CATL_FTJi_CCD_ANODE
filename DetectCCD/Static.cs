@@ -49,6 +49,10 @@ namespace DetectCCD {
         {
             //是否启用检测参数
             public static bool isEnableUseDetectParam = false;
+
+            //是否检测暗痕线性漏金属
+            public static bool isEnableDetectDarkLineLeakMetal = true;
+
         }
 
         public static void Init() {

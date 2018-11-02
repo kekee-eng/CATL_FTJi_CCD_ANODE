@@ -556,7 +556,52 @@ namespace DetectCCD
         }
 
         public void TryAddDefect(bool hasDefect, int frame) {
-            
+
+            //检测暗痕漏金属
+            if (Static.Status.isEnableDetectDarkLineLeakMetal) {
+
+                //多线程运算
+                Log.RecordAsThread(() => {
+
+                    //
+                    var image = grab.GetImage(frame);
+
+                    //检测
+                    double dx, dw;
+                    if (image != null && ImageProcess.DetectDarkLineLeakMetal(image, out dx, out dw)) {
+
+                        //
+                        DataDefect def = new DataDefect() {
+                            EA = -1,
+                            Type = 40,
+                            X = dx,
+                            Y = frame + 0.5,
+                            W = dw / grab.Width,
+                            H = 1
+                        };
+
+                        //添加到列表中
+                        lock (Defects) {
+                            Defects.Add(def);
+                        }
+
+                        //存图
+                        Log.Record(() => {
+                            if (Static.App.RecordSaveImageEnable && Static.App.RecordSaveImageLineLeakMetal) {
+                                string timestamp = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff");
+                                var savefolder = Static.FolderRecord + "/线性漏金属/";
+
+                                if (!System.IO.Directory.Exists(savefolder))
+                                    System.IO.Directory.CreateDirectory(savefolder);
+
+                                string filename = $"{savefolder}{timestamp}_{grab.Cache[frame].Camera}_F{frame}";
+                                UtilSaveImageQueue.Put(image, filename);
+                            }
+                        });
+                    }
+                });
+            }
+
             //若有瑕疵，先缓存图片，直到瑕疵结束或图像过大
             if (hasDefect) {
                 defectFrameCount++;
@@ -600,67 +645,68 @@ namespace DetectCCD
 
                 //多线程运算
                 Log.RecordAsThread(() => {
-                    Log.Record(() => {
 
-                        //统计检测次数
-                        CountOfDetectDefectTotal++;
+                    //统计检测次数
+                    CountOfDetectDefectTotal++;
 
-                        //
-                        var eimage = grab.GetImage(efx1, efx2);
-                        int[] etype;
-                        double[] ex, ey, ew, eh, earea;
-                        if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
+                    //
+                    var eimage = grab.GetImage(efx1, efx2);
+                    int[] etype;
+                    double[] ex, ey, ew, eh, earea;
+                    if (eimage != null && ImageProcess.DetectDefect(eimage, out etype, out ex, out ey, out ew, out eh, out earea)) {
 
-                            int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
-                            var myDefects = new List<DataDefect>();
-                            for (int i = 0; i < ecc; i++) {
-                                DataDefect defect = new DataDefect() {
-                                    EA = -1,
-                                    Type = etype[i],
-                                    X = ex[i] / w,
-                                    Y = efx1 + ey[i] / h,
-                                    W = ew[i] / w,
-                                    H = eh[i] / h
-                                };
+                        int ecc = new int[] { etype.Length, ex.Length, ey.Length, ew.Length, eh.Length }.Min();
+                        var myDefects = new List<DataDefect>();
+                        for (int i = 0; i < ecc; i++) {
+                            DataDefect defect = new DataDefect() {
+                                EA = -1,
+                                Type = etype[i],
+                                X = ex[i] / w,
+                                Y = efx1 + ey[i] / h,
+                                W = ew[i] / w,
+                                H = eh[i] / h
+                            };
 
-                                defect.Width = defect.W * Fx;
-                                defect.Height = defect.H * Fy;
-                                defect.Area = earea[i] * Fx * Fy / w / h;
+                            defect.Width = defect.W * Fx;
+                            defect.Height = defect.H * Fy;
+                            defect.Area = earea[i] * Fx * Fy / w / h;
 
-                                //判断膜漏金属和AT9漏金属的规格
-                                if (defect.Type == 2 && defect.Area <= Static.Recipe.FilmLeakMetalArea)
-                                    continue;
+                            //判断膜漏金属和AT9漏金属的规格
+                            if (defect.Type == 2 && defect.Area <= Static.Recipe.FilmLeakMetalArea)
+                                continue;
 
-                                defect.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
-                                myDefects.Add(defect);
+                            defect.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
+                            myDefects.Add(defect);
+                        }
+
+                        if (myDefects.Count > 0) {
+
+                            //统计发现缺陷次数
+                            CountOfDetectDefectReal++;
+                            CountOfFrameRealDefect += defectFrameCount;
+                        }
+
+                        //添加到列表中
+                        lock (Defects) {
+                            Defects.AddRange(myDefects);
+                        }
+
+                        //检测到打标项，跳过本EA后续检测
+                        if (Static.App.EnableSkipDetectWhenLabed) {
+                            if (myDefects.Any(x => x.Type < 3 && x.InInner(true))) {
+                                isSkipDetect_inner = true;
+                                skipDetectStartFrame_inner = frame;
                             }
 
-                            if (myDefects.Count > 0) {
-
-                                //统计发现缺陷次数
-                                CountOfDetectDefectReal++;
-                                CountOfFrameRealDefect += defectFrameCount;
+                            if (myDefects.Any(x => x.Type < 3 && x.InInner(false))) {
+                                isSkipDetect_outer = true;
+                                skipDetectStartFrame_outer = frame;
                             }
+                        }
 
-                            //添加到列表中
-                            lock (Defects) {
-                                Defects.AddRange(myDefects);
-                            }
+                        if (Static.App.RecordSaveImageEnable) {
 
-                            //检测到打标项，跳过本EA后续检测
-                            if (Static.App.EnableSkipDetectWhenLabed) {
-                                if (myDefects.Any(x => x.Type < 3 && x.InInner(true))) {
-                                    isSkipDetect_inner = true;
-                                    skipDetectStartFrame_inner = frame;
-                                }
-
-                                if (myDefects.Any(x => x.Type < 3 && x.InInner(false))) {
-                                    isSkipDetect_outer = true;
-                                    skipDetectStartFrame_outer = frame;
-                                }
-                            }
-
-                            if (Static.App.RecordSaveImageEnable) {
+                            Log.Record(() => {
 
                                 //保存NG小图
                                 bool hasSmallDefect = false;
@@ -714,15 +760,16 @@ namespace DetectCCD
                                     myDefects[0].NGBigPath = saveBigFilename;
                                     UtilSaveImageQueue.Put(saveimg, saveBigFilename);
                                 }
-                            }
-
+                            });
                         }
 
-                        //
-                        eimage?.Dispose();
+                    }
 
-                    });
+                    //
+                    eimage?.Dispose();
+
                 });
+
 
             }
         }
