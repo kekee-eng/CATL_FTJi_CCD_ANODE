@@ -578,7 +578,6 @@ namespace DetectCCD {
             xtraTabPage7.PageVisible = Static.App.Is8K;
             xtraTabPage6.PageVisible = Static.App.Is4K;
             xtraTabPage5.PageVisible = Static.App.Is4K;
-            groupDetectParam.Visible = Static.App.Is4K;
 
         }
         void changeUser() {
@@ -1037,6 +1036,7 @@ namespace DetectCCD {
                 groupLabel.Enabled = Static.App.Is4K;
                 groupRemoteClient.Enabled = Static.App.Is4K;
                 groupRoll.Enabled = Static.App.Is4K;
+                groupDetectParam.Enabled = Static.App.Is4K;
 
                 if (Static.App.Is4K) {
                     _lc_remote_8k.Text = RemoteDefect.isConnect ? "On" : "Off";
@@ -1732,15 +1732,16 @@ namespace DetectCCD {
 
         private void checkEnableUseDetectedParam_CheckedChanged(object sender, EventArgs e) {
             if (checkEnableUseDetectedParam.Checked) {
-                runAction("开启“来料压痕”", () => {
+                runAction("开启“忽略来料压痕”", () => {
 
                 });
             }
             else {
-                runAction("关闭“来料压痕”", () => {
+                runAction("关闭“忽略来料压痕”", () => {
 
                 });
             }
+            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
         }
         private void checkEnableDetectDarkLineLeakMetal_CheckedChanged(object sender, EventArgs e) {
@@ -1751,6 +1752,7 @@ namespace DetectCCD {
             else {
                 runAction("关闭“暗痕线性漏金属”", () => { });
             }
+            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
         }
 
@@ -1762,15 +1764,18 @@ namespace DetectCCD {
             else {
                 runAction("关闭“暗痕线性漏金属”停机确认选项", () => { });
             }
+            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
+
         }
         private void checkEnableDetectDarkLineLeakMetal_isLabel_CheckedChanged(object sender, EventArgs e) {
 
             if (checkEnableDetectDarkLineLeakMetal_isLabel.Checked) {
-                runAction("开启“暗痕线性漏金属”停机确认选项", () => { });
+                runAction("开启“暗痕线性漏金属”打标选项", () => { });
             }
             else {
-                runAction("关闭“暗痕线性漏金属”停机确认选项", () => { });
+                runAction("关闭“暗痕线性漏金属”打标选项", () => { });
             }
+            Log.Record(RemoteDefect.In4KCall8K_SetRoll);
 
         }
     }
