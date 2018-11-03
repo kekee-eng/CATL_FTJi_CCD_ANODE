@@ -1055,12 +1055,13 @@ namespace DetectCCD {
                         RemotePLC.In4KCallPLC_OnGrabbing();
                     }
 
-                    DataPlcAlarmStop data;
-                    RemoteDefect.In4KGet8KGetAlarmStop(out data);
-                    if (data.Enable)
-                    {
-                        Log.AppLog.Info("4K recive plc stop.");
-                        RemotePLC.In4KCallPLC_AlarmStop(data.IsAlarm, data.IsStop, data.Message);
+                    if (RemotePLC.isConnect) {
+                        DataPlcAlarmStop data;
+                        RemoteDefect.In4KGet8KGetAlarmStop(out data);
+                        if (data.Enable) {
+                            Log.AppLog.Info("4K recive plc stop.");
+                            RemotePLC.In4KCallPLC_AlarmStop(data.IsAlarm, data.IsStop, data.Message);
+                        }
                     }
                 }
 
