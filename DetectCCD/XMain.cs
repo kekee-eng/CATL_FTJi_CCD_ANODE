@@ -27,6 +27,7 @@ namespace DetectCCD {
             //
             UtilTool.AddBuildTag(this);
             this.Text += ((Static.App.Is4K) ? "~[4K]" : "~[8K]");
+            checkTestAlarmStop_text.Text += ((Static.App.Is4K) ? "~[4K]" : "~[8K]");
             UtilTool.XFWait.Close();
         }
         private void XFMain_FormClosing(object sender, FormClosingEventArgs e) {
