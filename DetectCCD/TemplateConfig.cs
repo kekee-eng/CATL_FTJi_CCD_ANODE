@@ -279,13 +279,15 @@ namespace DetectCCD {
             if (m_tbs != null) {
                 foreach (var tb in m_tbs) {
                     if (tb != null && tb.IsHandleCreated) {
-                        foreach (var field in fields) {
-                            if ((string)tb.Tag == field.Name) {
-                                tb.Text = getValueFromField(field);
-                                tb.BackColor = Color.White;
-                                break;
+                        Log.Invoke(tb, () => {
+                            foreach (var field in fields) {
+                                if ((string)tb.Tag == field.Name) {
+                                    tb.Text = getValueFromField(field);
+                                    tb.BackColor = Color.White;
+                                    break;
+                                }
                             }
-                        }
+                        });
                     }
                 }
             }
@@ -293,17 +295,19 @@ namespace DetectCCD {
             if (m_cbs != null) {
                 foreach (var cb in m_cbs) {
                     if (cb != null && cb.IsHandleCreated) {
-                        foreach (var field in fields) {
-                            if ((string)cb.Tag == field.Name) {
-                                cb.Checked = Convert.ToBoolean(getValueFromField(field));
-                                cb.BackColor = Color.White;
-                                break;
+                        Log.Invoke(cb, () => {
+                            foreach (var field in fields) {
+                                if ((string)cb.Tag == field.Name) {
+                                    cb.Checked = Convert.ToBoolean(getValueFromField(field));
+                                    cb.BackColor = Color.White;
+                                    break;
+                                }
                             }
-                        }
+                        });
                     }
                 }
             }
-            
+
         }
 
         //界面操作反馈事件

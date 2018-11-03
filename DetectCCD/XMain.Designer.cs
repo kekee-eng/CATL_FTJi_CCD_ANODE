@@ -194,6 +194,11 @@
             this.checkEnableLabelEA = new DevExpress.XtraEditors.CheckEdit();
             this.checkEnableLabelDefect = new DevExpress.XtraEditors.CheckEdit();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
+            this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
+            this.checkTestAlarmStop_trigger = new DevExpress.XtraEditors.SimpleButton();
+            this.checkTestAlarmStop_text = new DevExpress.XtraEditors.TextEdit();
+            this.checkTestAlarmStop_isStop = new DevExpress.XtraEditors.CheckEdit();
+            this.checkTestAlarmStop_isAlarm = new DevExpress.XtraEditors.CheckEdit();
             this.groupCtrl = new DevExpress.XtraEditors.GroupControl();
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
@@ -299,6 +304,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEA.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).BeginInit();
             this.xtraTabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
+            this.groupControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkTestAlarmStop_text.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkTestAlarmStop_isStop.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkTestAlarmStop_isAlarm.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).BeginInit();
             this.groupCtrl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).BeginInit();
@@ -877,7 +887,7 @@
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(545, 616);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(544, 616);
             this.tableLayoutPanel8.TabIndex = 29;
             // 
             // groupStatuOuter
@@ -886,7 +896,7 @@
             this.groupStatuOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupStatuOuter.Location = new System.Drawing.Point(275, 3);
             this.groupStatuOuter.Name = "groupStatuOuter";
-            this.groupStatuOuter.Size = new System.Drawing.Size(267, 610);
+            this.groupStatuOuter.Size = new System.Drawing.Size(266, 610);
             this.groupStatuOuter.TabIndex = 1;
             this.groupStatuOuter.Text = "Camera2";
             this.groupStatuOuter.DoubleClick += new System.EventHandler(this.groupStatuOuter_DoubleClick);
@@ -907,7 +917,7 @@
             // splitContainerOuter.Panel2
             // 
             this.splitContainerOuter.Panel2.Controls.Add(this.hwinOuter);
-            this.splitContainerOuter.Size = new System.Drawing.Size(263, 587);
+            this.splitContainerOuter.Size = new System.Drawing.Size(262, 587);
             this.splitContainerOuter.SplitterDistance = 120;
             this.splitContainerOuter.TabIndex = 0;
             // 
@@ -923,7 +933,7 @@
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(263, 120);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(262, 120);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -1069,7 +1079,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(126, 114);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(125, 114);
             this.tableLayoutPanel4.TabIndex = 27;
             // 
             // _lc_outer_defectCount
@@ -1080,7 +1090,7 @@
             this._lc_outer_defectCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_defectCount.Location = new System.Drawing.Point(66, 88);
             this._lc_outer_defectCount.Name = "_lc_outer_defectCount";
-            this._lc_outer_defectCount.Size = new System.Drawing.Size(56, 22);
+            this._lc_outer_defectCount.Size = new System.Drawing.Size(55, 22);
             this._lc_outer_defectCount.TabIndex = 34;
             this._lc_outer_defectCount.Text = "-";
             // 
@@ -1104,7 +1114,7 @@
             this._lc_outer_widthCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_widthCount.Location = new System.Drawing.Point(66, 60);
             this._lc_outer_widthCount.Name = "_lc_outer_widthCount";
-            this._lc_outer_widthCount.Size = new System.Drawing.Size(56, 21);
+            this._lc_outer_widthCount.Size = new System.Drawing.Size(55, 21);
             this._lc_outer_widthCount.TabIndex = 32;
             this._lc_outer_widthCount.Text = "-";
             // 
@@ -1128,7 +1138,7 @@
             this._lc_outer_eaCount.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_eaCount.Location = new System.Drawing.Point(66, 32);
             this._lc_outer_eaCount.Name = "_lc_outer_eaCount";
-            this._lc_outer_eaCount.Size = new System.Drawing.Size(56, 21);
+            this._lc_outer_eaCount.Size = new System.Drawing.Size(55, 21);
             this._lc_outer_eaCount.TabIndex = 30;
             this._lc_outer_eaCount.Text = "-";
             // 
@@ -1164,7 +1174,7 @@
             this._lc_outer_caption.LineLocation = DevExpress.XtraEditors.LineLocation.Center;
             this._lc_outer_caption.Location = new System.Drawing.Point(66, 4);
             this._lc_outer_caption.Name = "_lc_outer_caption";
-            this._lc_outer_caption.Size = new System.Drawing.Size(56, 21);
+            this._lc_outer_caption.Size = new System.Drawing.Size(55, 21);
             this._lc_outer_caption.TabIndex = 29;
             this._lc_outer_caption.Text = "-";
             // 
@@ -1176,9 +1186,9 @@
             this.hwinOuter.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
             this.hwinOuter.Location = new System.Drawing.Point(0, 0);
             this.hwinOuter.Name = "hwinOuter";
-            this.hwinOuter.Size = new System.Drawing.Size(263, 463);
+            this.hwinOuter.Size = new System.Drawing.Size(262, 463);
             this.hwinOuter.TabIndex = 30;
-            this.hwinOuter.WindowSize = new System.Drawing.Size(263, 463);
+            this.hwinOuter.WindowSize = new System.Drawing.Size(262, 463);
             // 
             // groupStatuInner
             // 
@@ -1530,7 +1540,7 @@
             this.panelTabMergeGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelTabMergeGrid.Location = new System.Drawing.Point(0, 0);
             this.panelTabMergeGrid.Name = "panelTabMergeGrid";
-            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 154);
+            this.panelTabMergeGrid.Size = new System.Drawing.Size(574, 153);
             this.panelTabMergeGrid.TabIndex = 1;
             // 
             // xtraTabPage6
@@ -1668,7 +1678,7 @@
             this.splitContainerControl4.Panel2.Controls.Add(this.btnSelectRecipe);
             this.splitContainerControl4.Panel2.Controls.Add(this.btnAddRecipe);
             this.splitContainerControl4.Panel2.Text = "Panel2";
-            this.splitContainerControl4.Size = new System.Drawing.Size(474, 438);
+            this.splitContainerControl4.Size = new System.Drawing.Size(473, 438);
             this.splitContainerControl4.SplitterPosition = 84;
             this.splitContainerControl4.TabIndex = 0;
             this.splitContainerControl4.Text = "splitContainerControl4";
@@ -1679,7 +1689,7 @@
             this.xtraTabControl3.Location = new System.Drawing.Point(0, 0);
             this.xtraTabControl3.Name = "xtraTabControl3";
             this.xtraTabControl3.SelectedTabPage = this.xtraTabPage8;
-            this.xtraTabControl3.Size = new System.Drawing.Size(470, 345);
+            this.xtraTabControl3.Size = new System.Drawing.Size(469, 344);
             this.xtraTabControl3.TabIndex = 0;
             this.xtraTabControl3.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage8,
@@ -1702,7 +1712,7 @@
             this.xtraTabPage8.Controls.Add(this.textWidthMin);
             this.xtraTabPage8.Controls.Add(this.labelControl27);
             this.xtraTabPage8.Name = "xtraTabPage8";
-            this.xtraTabPage8.Size = new System.Drawing.Size(464, 316);
+            this.xtraTabPage8.Size = new System.Drawing.Size(463, 315);
             this.xtraTabPage8.Text = "常用参数";
             // 
             // textRecipeName
@@ -1821,7 +1831,7 @@
             // 
             this.xtraTabPage9.Controls.Add(this.dataRecipe);
             this.xtraTabPage9.Name = "xtraTabPage9";
-            this.xtraTabPage9.Size = new System.Drawing.Size(464, 316);
+            this.xtraTabPage9.Size = new System.Drawing.Size(463, 315);
             this.xtraTabPage9.Text = "高级参数";
             // 
             // dataRecipe
@@ -1832,7 +1842,7 @@
             this.dataRecipe.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataRecipe.Location = new System.Drawing.Point(0, 0);
             this.dataRecipe.Name = "dataRecipe";
-            this.dataRecipe.Size = new System.Drawing.Size(464, 316);
+            this.dataRecipe.Size = new System.Drawing.Size(463, 315);
             this.dataRecipe.TabIndex = 0;
             // 
             // btnApplyRecipe
@@ -2093,12 +2103,61 @@
             // 
             // xtraTabPage4
             // 
+            this.xtraTabPage4.Controls.Add(this.groupControl1);
             this.xtraTabPage4.Controls.Add(this.groupCtrl);
             this.xtraTabPage4.Controls.Add(this.groupTest);
             this.xtraTabPage4.ImageIndex = 3;
             this.xtraTabPage4.Name = "xtraTabPage4";
             this.xtraTabPage4.Size = new System.Drawing.Size(1142, 620);
             this.xtraTabPage4.Text = "测试工具";
+            // 
+            // groupControl1
+            // 
+            this.groupControl1.Controls.Add(this.checkTestAlarmStop_trigger);
+            this.groupControl1.Controls.Add(this.checkTestAlarmStop_text);
+            this.groupControl1.Controls.Add(this.checkTestAlarmStop_isStop);
+            this.groupControl1.Controls.Add(this.checkTestAlarmStop_isAlarm);
+            this.groupControl1.Location = new System.Drawing.Point(25, 218);
+            this.groupControl1.Name = "groupControl1";
+            this.groupControl1.Size = new System.Drawing.Size(298, 187);
+            this.groupControl1.TabIndex = 51;
+            this.groupControl1.Text = "发送停机报警测试";
+            // 
+            // checkTestAlarmStop_trigger
+            // 
+            this.checkTestAlarmStop_trigger.Location = new System.Drawing.Point(22, 142);
+            this.checkTestAlarmStop_trigger.Name = "checkTestAlarmStop_trigger";
+            this.checkTestAlarmStop_trigger.Size = new System.Drawing.Size(101, 30);
+            this.checkTestAlarmStop_trigger.TabIndex = 95;
+            this.checkTestAlarmStop_trigger.Text = "发送";
+            this.checkTestAlarmStop_trigger.Click += new System.EventHandler(this.checkTestAlarmStop_trigger_Click);
+            // 
+            // checkTestAlarmStop_text
+            // 
+            this.checkTestAlarmStop_text.EditValue = "测试报警停机文本";
+            this.checkTestAlarmStop_text.Location = new System.Drawing.Point(22, 96);
+            this.checkTestAlarmStop_text.MenuManager = this.barManager1;
+            this.checkTestAlarmStop_text.Name = "checkTestAlarmStop_text";
+            this.checkTestAlarmStop_text.Size = new System.Drawing.Size(228, 20);
+            this.checkTestAlarmStop_text.TabIndex = 2;
+            // 
+            // checkTestAlarmStop_isStop
+            // 
+            this.checkTestAlarmStop_isStop.Location = new System.Drawing.Point(20, 71);
+            this.checkTestAlarmStop_isStop.MenuManager = this.barManager1;
+            this.checkTestAlarmStop_isStop.Name = "checkTestAlarmStop_isStop";
+            this.checkTestAlarmStop_isStop.Properties.Caption = "是否停机";
+            this.checkTestAlarmStop_isStop.Size = new System.Drawing.Size(75, 19);
+            this.checkTestAlarmStop_isStop.TabIndex = 1;
+            // 
+            // checkTestAlarmStop_isAlarm
+            // 
+            this.checkTestAlarmStop_isAlarm.Location = new System.Drawing.Point(20, 46);
+            this.checkTestAlarmStop_isAlarm.MenuManager = this.barManager1;
+            this.checkTestAlarmStop_isAlarm.Name = "checkTestAlarmStop_isAlarm";
+            this.checkTestAlarmStop_isAlarm.Properties.Caption = "是否报警";
+            this.checkTestAlarmStop_isAlarm.Size = new System.Drawing.Size(75, 19);
+            this.checkTestAlarmStop_isAlarm.TabIndex = 0;
             // 
             // groupCtrl
             // 
@@ -2312,6 +2371,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelEA.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEnableLabelDefect.Properties)).EndInit();
             this.xtraTabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
+            this.groupControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.checkTestAlarmStop_text.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkTestAlarmStop_isStop.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkTestAlarmStop_isAlarm.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupCtrl)).EndInit();
             this.groupCtrl.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupTest)).EndInit();
@@ -2502,5 +2566,10 @@
         private DevExpress.XtraEditors.CheckEdit checkEnableDetectDarkLineLeakMetal_isLabel;
         private DevExpress.XtraEditors.CheckEdit checkEnableDetectDarkLineLeakMetal_isStop;
         private DevExpress.XtraEditors.GroupControl groupDetectParam;
+        private DevExpress.XtraEditors.GroupControl groupControl1;
+        private DevExpress.XtraEditors.SimpleButton checkTestAlarmStop_trigger;
+        private DevExpress.XtraEditors.TextEdit checkTestAlarmStop_text;
+        private DevExpress.XtraEditors.CheckEdit checkTestAlarmStop_isStop;
+        private DevExpress.XtraEditors.CheckEdit checkTestAlarmStop_isAlarm;
     }
 }

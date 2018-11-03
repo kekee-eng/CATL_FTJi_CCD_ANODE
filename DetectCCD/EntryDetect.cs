@@ -585,7 +585,6 @@ namespace DetectCCD
                         {
                             if (LineLeakMetalCount > Static.App.LineLeakMetal_AlarmStop_MaxCount)
                             {
-                                Log.AppLog.Info($"send a {LineLeakMetalCount} {PrevMarkCount}");
                                 int markCount = Marks.Count;
                                 if (markCount != PrevMarkCount)
                                 {
@@ -594,9 +593,8 @@ namespace DetectCCD
 
                                 if (!AlreadyAlarmStopOnLineLeakMetal)
                                 {
-                                    Log.AppLog.Info($"send b");
                                     AlreadyAlarmStopOnLineLeakMetal = true;
-                                    if (Static.App.Is4K)
+                                    if (Static.App.Is8K)
                                     {
                                         RemoteDefect.In8KSetDataPlcAlarmStop(false, true, $"连接检测到 {LineLeakMetalCount} 个暗痕线性漏金属");
                                     }

@@ -191,7 +191,15 @@ namespace DetectCCD {
                     Static.App.ImageProcessParamEnable = app.ImageProcessParamEnable;
                     Static.App.LineLeakMetalEnable = app.LineLeakMetalEnable;
                     Static.App.LineLeakMetalIsAlarmStop = app.LineLeakMetalIsAlarmStop;
+                    Static.App.LineLeakMetalIsLabel = app.LineLeakMetalIsLabel;
                     Static.App.UpdateBind();
+
+                    Log.Invoke(this, () => {
+                        checkEnableUseDetectedParam.Checked = Static.App.ImageProcessParamEnable;
+                        checkEnableDetectDarkLineLeakMetal.Checked = Static.App.LineLeakMetalEnable;
+                        checkEnableDetectDarkLineLeakMetal_isStop.Checked = Static.App.LineLeakMetalIsAlarmStop;
+                        checkEnableDetectDarkLineLeakMetal_isLabel.Checked = Static.App.LineLeakMetalIsLabel;
+                    });
 
                     //
                     recipe.SaveAs(Static.Recipe);
@@ -512,10 +520,13 @@ namespace DetectCCD {
             Static.App.BindCheckBox(checkSaveNG, "RecordSaveImageNGBig");
             Static.App.BindCheckBox(checkSaveNGSmall, "RecordSaveImageNGSmall");
             Static.App.BindCheckBox(checkSaveMark, "RecordSaveImageMark");
-            Static.App.BindCheckBox(checkEnableUseDetectedParam, nameof(Static.App.ImageProcessParamEnable));
-            Static.App.BindCheckBox(checkEnableDetectDarkLineLeakMetal, nameof(Static.App.LineLeakMetalEnable));
-            Static.App.BindCheckBox(checkEnableDetectDarkLineLeakMetal_isStop, nameof(Static.App.LineLeakMetalIsAlarmStop));
-            Static.App.BindCheckBox(checkEnableDetectDarkLineLeakMetal_isLabel, nameof(Static.App.LineLeakMetalIsLabel));
+
+            {
+                checkEnableUseDetectedParam.Checked = Static.App.ImageProcessParamEnable;
+                checkEnableDetectDarkLineLeakMetal.Checked = Static.App.LineLeakMetalEnable;
+                checkEnableDetectDarkLineLeakMetal_isStop.Checked = Static.App.LineLeakMetalIsAlarmStop;
+                checkEnableDetectDarkLineLeakMetal_isLabel.Checked = Static.App.LineLeakMetalIsLabel;
+            }
 
             //设置参数
             tmpRecipe = new CfgRecipe(Static.PathCfgRecipe);
@@ -1756,15 +1767,13 @@ namespace DetectCCD {
 
                     });
                 }
+                Static.App.ImageProcessParamEnable = checkEnableUseDetectedParam.Checked;
                 Log.Record(RemoteDefect.In4KCall8K_SetRoll);
-
             }
         }
         private void checkEnableDetectDarkLineLeakMetal_CheckedChanged(object sender, EventArgs e)
         {
-
-            if (Static.App.Is4K)
-            {
+            if (Static.App.Is4K) {
                 if (checkEnableDetectDarkLineLeakMetal.Checked)
                 {
                     runAction("开启“暗痕线性漏金属”", () => { });
@@ -1773,16 +1782,15 @@ namespace DetectCCD {
                 {
                     runAction("关闭“暗痕线性漏金属”", () => { });
                 }
+                Static.App.LineLeakMetalEnable = checkEnableDetectDarkLineLeakMetal.Checked;
                 Log.Record(RemoteDefect.In4KCall8K_SetRoll);
-
             }
         }
 
         private void checkEnableDetectDarkLineLeakMetal_isStop_CheckedChanged(object sender, EventArgs e)
         {
 
-            if (Static.App.Is4K)
-            {
+            if (Static.App.Is4K) {
                 if (checkEnableDetectDarkLineLeakMetal_isStop.Checked)
                 {
                     runAction("开启“暗痕线性漏金属”停机确认选项", () => { });
@@ -1791,14 +1799,13 @@ namespace DetectCCD {
                 {
                     runAction("关闭“暗痕线性漏金属”停机确认选项", () => { });
                 }
+                Static.App.LineLeakMetalIsAlarmStop = checkEnableDetectDarkLineLeakMetal_isStop.Checked;
                 Log.Record(RemoteDefect.In4KCall8K_SetRoll);
-
             }
         }
         private void checkEnableDetectDarkLineLeakMetal_isLabel_CheckedChanged(object sender, EventArgs e) {
 
-            if (Static.App.Is4K)
-            {
+            if (Static.App.Is4K) {
                 if (checkEnableDetectDarkLineLeakMetal_isLabel.Checked)
                 {
                     runAction("开启“暗痕线性漏金属”打标选项", () => { });
@@ -1807,7 +1814,23 @@ namespace DetectCCD {
                 {
                     runAction("关闭“暗痕线性漏金属”打标选项", () => { });
                 }
+                Static.App.LineLeakMetalIsLabel = checkEnableDetectDarkLineLeakMetal_isLabel.Checked;
                 Log.Record(RemoteDefect.In4KCall8K_SetRoll);
+            }
+        }
+
+        //测试报警停机功能
+        private void checkTestAlarmStop_trigger_Click(object sender, EventArgs e) {
+
+            bool isAlarm = checkTestAlarmStop_isAlarm.Checked;
+            bool isStop = checkTestAlarmStop_isStop.Checked;
+            string text = checkTestAlarmStop_text.Text;
+            
+            if (Static.App.Is8K) {
+                RemoteDefect.In8KSetDataPlcAlarmStop(isAlarm, isStop, text);
+            }
+            else {
+                RemotePLC.In4KCallPLC_AlarmStop(isAlarm, isStop, text);
             }
         }
     }
