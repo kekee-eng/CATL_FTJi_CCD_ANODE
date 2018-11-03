@@ -227,11 +227,6 @@ namespace DetectCCD {
                     //
                     updateRecipes();
 
-                    //
-                    checkEnableUseDetectedParam.Checked = false;
-                    checkEnableDetectDarkLineLeakMetal.Checked = true;
-                    checkEnableDetectDarkLineLeakMetal_isStop.Checked = true;
-                    checkEnableDetectDarkLineLeakMetal_isLabel.Checked = true;
                 };
 
                 RemoteDefect._func_in_8k_getFrame += () => {
@@ -1253,6 +1248,13 @@ namespace DetectCCD {
                 closeWidthCSV();
                 RemotePLC.In4KCallPLC_ClearEncoder();
 
+                //恢复默认参数
+                checkEnableUseDetectedParam.Checked = false;
+                //checkEnableDetectDarkLineLeakMetal.Checked = true;
+                //checkEnableDetectDarkLineLeakMetal_isStop.Checked = true;
+                //checkEnableDetectDarkLineLeakMetal_isLabel.Checked = true;
+
+
                 if (!isRollOk) {
                     FilmData = new FilmLevel();
                     if (mainRecipeName.Text == "")
@@ -1274,12 +1276,8 @@ namespace DetectCCD {
                     btnRollSet.Text = "结束膜卷";
 
                     //
-                    Static.App.ImageProcessParamEnable = false;
-                    //Static.App.LineLeakMetalEnable = true;
-                    //Static.App.LineLeakMetalIsAlarmStop = true;
-                    //Static.App.LineLeakMetalIsLabel = true;
-                    Static.App.UpdateBind();
-                    
+
+
                     //
                     Log.Record(RemoteDefect.InitClient);
                     Log.Record(RemoteDefect.In4KCall8K_SetRoll);
@@ -1416,32 +1414,36 @@ namespace DetectCCD {
                     UtilTool.XFWait.Close();
                 }
                 else {
-                    //连接8K电脑
-                    RemoteDefect.InitClient();
-                    if (!RemoteDefect.isConnect) {
-                        XtraMessageBox.Show($"8K连接失败！", "错误", MessageBoxButtons.OK);
-                        UtilTool.XFWait.Close();
-                        return;
-                    }
 
-                    //
-                    double diskLess4k = UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString());
-                    double diskLess8K = 0;
-                    RemoteDefect.In4KGet8KDiskSpace(out diskLess8K);
-                    Log.AppLog.Info($"开始膜卷时，记录硬盘剩余空间： 4K= {diskLess4k:0.0}G  8K= {diskLess8K:0.0}G");
+                    if (Static.App.Is4K) {
 
-                    //
-                    if (diskLess4k < Static.App.CheckHardDiskLess) {
-                        XtraMessageBox.Show($"4K剩余空间不足: {diskLess4k:0.0}G < {Static.App.CheckHardDiskLess:0.0}G", "剩余空间不足报警", MessageBoxButtons.OK);
-                        UtilTool.XFWait.Close();
-                        return;
-                    }
+                        //连接8K电脑
+                        RemoteDefect.InitClient();
+                        if (!RemoteDefect.isConnect) {
+                            XtraMessageBox.Show($"8K连接失败！", "错误", MessageBoxButtons.OK);
+                            UtilTool.XFWait.Close();
+                            return;
+                        }
 
-                    //
-                    if (diskLess8K < Static.App.CheckHardDiskLess) {
-                        XtraMessageBox.Show($"8K剩余空间不足: {diskLess8K:0.0}G < {Static.App.CheckHardDiskLess:0.0}G", "剩余空间不足报警", MessageBoxButtons.OK);
-                        UtilTool.XFWait.Close();
-                        return;
+                        //
+                        double diskLess4k = UtilPerformance.GetDiskFree(Application.StartupPath[0].ToString());
+                        double diskLess8K = 0;
+                        RemoteDefect.In4KGet8KDiskSpace(out diskLess8K);
+                        Log.AppLog.Info($"开始膜卷时，记录硬盘剩余空间： 4K= {diskLess4k:0.0}G  8K= {diskLess8K:0.0}G");
+
+                        //
+                        if (diskLess4k < Static.App.CheckHardDiskLess) {
+                            XtraMessageBox.Show($"4K剩余空间不足: {diskLess4k:0.0}G < {Static.App.CheckHardDiskLess:0.0}G", "剩余空间不足报警", MessageBoxButtons.OK);
+                            UtilTool.XFWait.Close();
+                            return;
+                        }
+
+                        //
+                        if (diskLess8K < Static.App.CheckHardDiskLess) {
+                            XtraMessageBox.Show($"8K剩余空间不足: {diskLess8K:0.0}G < {Static.App.CheckHardDiskLess:0.0}G", "剩余空间不足报警", MessageBoxButtons.OK);
+                            UtilTool.XFWait.Close();
+                            return;
+                        }
                     }
 
                     //
