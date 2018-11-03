@@ -46,6 +46,7 @@
     <Reference Include="DevExpress.Data.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
+    <Reference Include="DevExpress.Printing.v15.2.Core, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Utils.v15.2, Version=15.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
@@ -114,6 +115,12 @@
     <Compile Include="UtilSaveImageQueue.cs" />
     <Compile Include="UtilSerialization.cs" />
     <Compile Include="UtilTool.cs" />
+    <Compile Include="ViaImageDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViaImageDisplay.Designer.cs">
+      <DependentUpon>ViaImageDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewerImage.cs" />
     <Compile Include="ModProcess.cs" />
     <Compile Include="ModDevice.cs" />
@@ -122,6 +129,12 @@
     </Compile>
     <Compile Include="XFCameraControl.Designer.cs">
       <DependentUpon>XFCameraControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XFImageProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XFImageProcess.Designer.cs">
+      <DependentUpon>XFImageProcess.cs</DependentUpon>
     </Compile>
     <Compile Include="XFUserLogin.cs">
       <SubType>Form</SubType>
@@ -160,8 +173,14 @@
     <Compile Include="_ENC7480.cs" />
     <Compile Include="_ModbusTCP.cs" />
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="ViaImageDisplay.resx">
+      <DependentUpon>ViaImageDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="XFCameraControl.resx">
       <DependentUpon>XFCameraControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XFImageProcess.resx">
+      <DependentUpon>XFImageProcess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="XFUserLogin.resx">
       <DependentUpon>XFUserLogin.cs</DependentUpon>

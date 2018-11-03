@@ -1836,6 +1836,10 @@ namespace DetectCCD {
                 RemotePLC.In4KCallPLC_AlarmStop(isAlarm, isStop, text);
             }
         }
+        
+        private void btnTestImageProcess_Click(object sender, EventArgs e) {
+            new XFImageProcess().Show();
+        }
     }
 
 }

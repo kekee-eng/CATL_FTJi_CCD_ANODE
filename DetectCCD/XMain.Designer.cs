@@ -200,6 +200,7 @@
             this.checkTestAlarmStop_isStop = new DevExpress.XtraEditors.CheckEdit();
             this.checkTestAlarmStop_isAlarm = new DevExpress.XtraEditors.CheckEdit();
             this.groupCtrl = new DevExpress.XtraEditors.GroupControl();
+            this.btnTestImageProcess = new DevExpress.XtraEditors.SimpleButton();
             this.btnOpenViewerChart = new DevExpress.XtraEditors.SimpleButton();
             this.btnOfflineControl = new DevExpress.XtraEditors.SimpleButton();
             this.groupTest = new DevExpress.XtraEditors.GroupControl();
@@ -2161,6 +2162,7 @@
             // 
             // groupCtrl
             // 
+            this.groupCtrl.Controls.Add(this.btnTestImageProcess);
             this.groupCtrl.Controls.Add(this.btnOpenViewerChart);
             this.groupCtrl.Controls.Add(this.btnOfflineControl);
             this.groupCtrl.Location = new System.Drawing.Point(25, 19);
@@ -2168,6 +2170,15 @@
             this.groupCtrl.Size = new System.Drawing.Size(298, 183);
             this.groupCtrl.TabIndex = 50;
             this.groupCtrl.Text = "控制台";
+            // 
+            // btnTestImageProcess
+            // 
+            this.btnTestImageProcess.Location = new System.Drawing.Point(22, 135);
+            this.btnTestImageProcess.Name = "btnTestImageProcess";
+            this.btnTestImageProcess.Size = new System.Drawing.Size(101, 30);
+            this.btnTestImageProcess.TabIndex = 20;
+            this.btnTestImageProcess.Text = "图像处理测试";
+            this.btnTestImageProcess.Click += new System.EventHandler(this.btnTestImageProcess_Click);
             // 
             // btnOpenViewerChart
             // 
@@ -2571,5 +2582,6 @@
         private DevExpress.XtraEditors.TextEdit checkTestAlarmStop_text;
         private DevExpress.XtraEditors.CheckEdit checkTestAlarmStop_isStop;
         private DevExpress.XtraEditors.CheckEdit checkTestAlarmStop_isAlarm;
+        private DevExpress.XtraEditors.SimpleButton btnTestImageProcess;
     }
 }
