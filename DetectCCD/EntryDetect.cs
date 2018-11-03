@@ -577,7 +577,7 @@ namespace DetectCCD
 
                     //检测
                     double dx, dw;
-                    if (image != null && ImageProcess.DetectDarkLineLeakMetal(image, out dx, out dw))
+                    if (image != null && ImageProcess.DetectLineLeakMetal(image, out dx, out dw))
                     {
                         //
                         LineLeakMetalCount++;
