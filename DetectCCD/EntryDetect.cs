@@ -579,14 +579,13 @@ namespace DetectCCD
                     double dx, dw;
                     if (image != null && ImageProcess.DetectDarkLineLeakMetal(image, out dx, out dw))
                     {
-
                         //
                         LineLeakMetalCount++;
                         if (Static.App.LineLeakMetalIsAlarmStop)
                         {
                             if (LineLeakMetalCount > Static.App.LineLeakMetal_AlarmStop_MaxCount)
                             {
-
+                                Log.AppLog.Info($"send a {LineLeakMetalCount} {PrevMarkCount}");
                                 int markCount = Marks.Count;
                                 if (markCount != PrevMarkCount)
                                 {
@@ -595,6 +594,7 @@ namespace DetectCCD
 
                                 if (!AlreadyAlarmStopOnLineLeakMetal)
                                 {
+                                    Log.AppLog.Info($"send b");
                                     AlreadyAlarmStopOnLineLeakMetal = true;
                                     if (Static.App.Is4K)
                                     {
@@ -1072,36 +1072,40 @@ namespace DetectCCD
             {
                 if (Defects[i].InRange(start, end))
                 {
-                    Defects[i].EA = ea;
                     count++;
-
-                    //Fix:保存图片分EA
-                    string ngPartPath = Defects[i].NGPartPath;
-                    string ngBigPath = Defects[i].NGBigPath;
-                    Log.RecordAsThread(() =>
+                    if (Defects[i].EA != ea)
                     {
+                        Defects[i].EA = ea;
 
-                        //
-                        Action<string> moveFile = path =>
+                        //Fix:保存图片分EA
+                        string ngPartPath = Defects[i].NGPartPath;
+                        string ngBigPath = Defects[i].NGBigPath;
+                        Log.RecordAsThread(() =>
                         {
-                            Log.Record(() =>
+
+                            //
+                            Action<string> moveFile = path =>
                             {
-                                if (path == "")
-                                    return;
+                                try
+                                {
+                                    if (path == "")
+                                        return;
 
-                                string oldFile = path + ".png";
-                                string newFile = path + $"_EA{ea}.png";
+                                    string oldFile = path + ".png";
+                                    string newFile = path + $"_EA{ea}.png";
 
-                                if (System.IO.File.Exists(oldFile))
-                                    System.IO.File.Move(oldFile, newFile);
-                            });
-                        };
+                                    if (System.IO.File.Exists(oldFile))
+                                        System.IO.File.Move(oldFile, newFile);
+                                }
+                                catch { }
+                            };
 
-                        //
-                        moveFile(ngPartPath);
-                        moveFile(ngBigPath);
+                            //
+                            moveFile(ngPartPath);
+                            moveFile(ngBigPath);
 
-                    });
+                        });
+                    }
                 }
             }
 

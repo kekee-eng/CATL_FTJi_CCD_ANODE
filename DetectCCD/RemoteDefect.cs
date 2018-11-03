@@ -358,7 +358,7 @@ namespace DetectCCD {
             }
         }
 
-        //取得8K硬盘剩余空间
+        //取得8KPLC停机信号
         public static void In4KGet8KGetAlarmStop(out DataPlcAlarmStop data)
         {
             if (Static.App.Is8K)
@@ -385,6 +385,8 @@ namespace DetectCCD {
             {
                 if (PlcAlarmStopData.Enable)
                 {
+                    Log.AppLog.Info($"recive b");
+
                     data.Enable = true;
                     data.IsAlarm = PlcAlarmStopData.IsAlarm;
                     data.IsStop = PlcAlarmStopData.IsStop;
@@ -401,8 +403,9 @@ namespace DetectCCD {
         public static DataPlcAlarmStop PlcAlarmStopData = new DataPlcAlarmStop();
         public static void In8KSetDataPlcAlarmStop(bool isAlarm, bool isStop, string msg)
         {
-            if (!PlcAlarmStopData.Enable)
+            //if (!PlcAlarmStopData.Enable)
             {
+                Log.AppLog.Info("send plc stop.");
                 PlcAlarmStopData.IsAlarm = isAlarm;
                 PlcAlarmStopData.IsStop = isStop;
                 PlcAlarmStopData.Message = msg;
