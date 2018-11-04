@@ -574,6 +574,8 @@ namespace DetectCCD {
             process.OuterViewerChart.InitLabelGrid(panelLabel2);
             process.InnerViewerChart.InitDefectGrid(panelDefect1);
             process.OuterViewerChart.InitDefectGrid(panelDefect2);
+            process.InnerViewerChart.InitDefectAnalyGrid(panelDefAnaly1);
+            process.OuterViewerChart.InitDefectAnalyGrid(panelDefAnaly2);
 
             //定时器
             timer1.Tag = true;
@@ -583,6 +585,7 @@ namespace DetectCCD {
 
             //
             xtraTabPage7.PageVisible = Static.App.Is8K;
+            xtraTabPage10.PageVisible = Static.App.Is8K;
             xtraTabPage6.PageVisible = Static.App.Is4K;
             xtraTabPage5.PageVisible = Static.App.Is4K;
 
@@ -1140,8 +1143,9 @@ namespace DetectCCD {
                 process.OuterViewerChart.SyncLabelGrid(panelLabel2);
                 process.InnerViewerChart.SyncDefectGrid(panelDefect1);
                 process.OuterViewerChart.SyncDefectGrid(panelDefect2);
-
-
+                process.InnerViewerChart.SyncDefectAnalyGrid(panelDefAnaly1);
+                process.OuterViewerChart.SyncDefectAnalyGrid(panelDefAnaly2);
+                
                 if (Static.App.Is4K && device.isGrabbing) {
                     //
                     int frameFront;
@@ -1841,6 +1845,7 @@ namespace DetectCCD {
         private void btnTestImageProcess_Click(object sender, EventArgs e) {
             new XFImageProcess().Show();
         }
+        
     }
 
 }

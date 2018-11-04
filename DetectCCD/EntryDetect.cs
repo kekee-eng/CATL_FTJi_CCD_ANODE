@@ -35,6 +35,8 @@ namespace DetectCCD
             TabsCache.Clear();
             LabelsCache.Clear();
 
+            DefectsSimulate.Clear();
+
             ShowEACount = 0;
             ShowEADefectNGCount = 0;
             ShowEAWidthNGCount = 0;
@@ -76,6 +78,8 @@ namespace DetectCCD
 
         public List<DataTab> TabsCache = new List<DataTab>();
         public List<DataLabel> LabelsCache = new List<DataLabel>();
+        
+        public List<DataDefect> DefectsSimulate = new List<DataDefect>();
 
         public DataTab prevTab = null;
 
@@ -685,6 +689,27 @@ namespace DetectCCD
                 if (!System.IO.Directory.Exists(savefolder5))
                     System.IO.Directory.CreateDirectory(savefolder5);
 
+                Func<int, DataDefect, string> getDefectFilename = (i,defect) => {
+
+                    string folder = "";
+                    if (defect.Type == 0)
+                        folder = savefolder1;
+                    else if (defect.Type == 1)
+                        folder = savefolder2;
+                    else if (defect.Type == 2)
+                        folder = savefolder3;
+                    else if (defect.Type == 3)
+                        folder = savefolder5;
+                    else
+                        folder = savefolder4;
+
+                    var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
+                    if (defect.Proc != DataDefect.DefectProcess.None)
+                        filename += "[Force]";
+
+                    return filename;
+                };
+
                 //
                 var savefolderBig = Static.FolderRecord + "/瑕疵大图/";
                 var saveBigFilename = string.Format("{0}{1}_{2}_F{3}", savefolderBig, timestamp, isinner ? "正面" : "背面", frame);
@@ -719,13 +744,17 @@ namespace DetectCCD
                             defect.Width = defect.W * Fx;
                             defect.Height = defect.H * Fy;
                             defect.Area = earea[i] * Fx * Fy / w / h;
+                            defect.NGPartPath = getDefectFilename(i, defect);
 
                             //判断膜漏金属和AT9漏金属的规格
                             if (defect.Type == 2 && defect.Area <= Static.Recipe.FilmLeakMetalArea)
                                 continue;
-
+                            
                             defect.Timestamp = UtilTool.GenTimeStamp(DateTime.Now);
                             myDefects.Add(defect);
+
+                            //添加到相似列表，并进行预处理
+                            TryAddDefectSimulate(defect);
                         }
 
                         if (myDefects.Count > 0) {
@@ -734,7 +763,7 @@ namespace DetectCCD
                             CountOfDetectDefectReal++;
                             CountOfFrameRealDefect += defectFrameCount;
                         }
-
+                        
                         //添加到列表中
                         lock (Defects) {
                             Defects.AddRange(myDefects);
@@ -765,22 +794,7 @@ namespace DetectCCD
 
                                         hasSmallDefect = true;
                                         if (Static.App.RecordSaveImageNGSmall) {
-
-                                            string folder = "";
-                                            if (defect.Type == 0)
-                                                folder = savefolder1;
-                                            else if (defect.Type == 1)
-                                                folder = savefolder2;
-                                            else if (defect.Type == 2)
-                                                folder = savefolder3;
-                                            else if (defect.Type == 3)
-                                                folder = savefolder5;
-                                            else
-                                                folder = savefolder4;
-
-                                            var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
-                                            defect.NGPartPath = filename;
-
+                                            
                                             double h0 = Math.Max(eh[i], 450) + 50;
                                             double w0 = Math.Max(ew[i], 450) + 50;
 
@@ -797,7 +811,7 @@ namespace DetectCCD
                                                 y2 = Math.Min(theight - 1, y2);
                                                 x2 = Math.Min(twidth - 1, x2);
                                                 var saveimg = eimage.CropRectangle1(y1, x1, y2, x2);
-                                                UtilSaveImageQueue.Put(saveimg, filename);
+                                                UtilSaveImageQueue.Put(saveimg, defect.NGPartPath);
                                             });
                                         }
                                     }
@@ -822,6 +836,39 @@ namespace DetectCCD
 
             }
         }
+        public void TryAddDefectSimulate(DataDefect defect) {
+
+            //非标签、接带、批锋
+            if (!new int[] { 0, 1, 3 }.Contains(defect.Type)) {
+
+                //分析缺陷处理
+                try {
+                    var defSimulate = DefectsSimulate.First(x => defect.IsSimulate(x));
+
+                    defSimulate.Edit(defect);
+                    defSimulate.SimulateCount++;
+                    if (defSimulate.Proc == DataDefect.DefectProcess.ForceLeakMetal) {
+                        defect.Type = 2;
+                    }
+                    if (defSimulate.Proc == DataDefect.DefectProcess.ForceOther) {
+                        defect.Type = 4;
+                    }
+                    defSimulate.NGPartPath = defect.NGPartPath;
+
+                }
+                catch {
+
+                    var count = Defects.Where(x => defect.Y - x.Y < 2000).Where(x => defect.IsSimulate(x)).Count();
+                    if (count > 5) {
+                        var myDef = new DataDefect();
+                        myDef.Edit(defect);
+                        myDef.SimulateCount = count;
+                        DefectsSimulate.Add(myDef);
+                    }
+                }
+            }
+        }
+
 
         DataTab findBind(double frame)
         {

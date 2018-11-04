@@ -20,9 +20,57 @@ namespace DetectCCD {
         public double Width;
         public double Height;
         public double Area;
-
+        
         public string NGPartPath = "";
         public string NGBigPath = "";
+
+        //判断缺陷相似
+        public bool IsSimulate(DataDefect other) {
+
+            //
+            if (Math.Abs(X - other.X) * 8192 > Static.App.CheckDefectSimulate_XMax)
+                return false;
+
+            double fw = Width == 0 ? 0 : other.Width / Width;
+            double fh = Height == 0 ? 0 : other.Height / Height;
+            double fa = Area == 0 ? 0 : other.Area / Area;
+
+            if (fw < Static.App.CheckDefectSimulate_WHMin || fw > Static.App.CheckDefectSimulate_WHMax)
+                return false;
+
+            if (fh < Static.App.CheckDefectSimulate_WHMin || fh > Static.App.CheckDefectSimulate_WHMax)
+                return false;
+
+            if (fa < Static.App.CheckDefectSimulate_AreaMin || fa > Static.App.CheckDefectSimulate_AreaMax)
+                return false;
+
+            return true;
+        }
+        public int SimulateCount = 0;
+
+        //处理缺陷
+        public enum DefectProcess {
+            ForceLeakMetal, ForceOther, None
+        }
+        public DefectProcess Proc = DefectProcess.None;
+        public string GetProcCaption() {
+            if (Proc == DefectProcess.ForceLeakMetal) return "判成漏金属";
+            if (Proc == DefectProcess.ForceOther) return "判成其它";
+            return "未处理";
+        }
+
+        //
+        public void Edit(DataDefect other) {
+            Type = other.Type;
+            EA = other.EA;
+            X = other.X;
+            Y = other.Y;
+            W = other.W;
+            H = other.H;
+            Width = other.Width;
+            Height = other.Height;
+            Area = other.Area;
+        }
 
         public string Timestamp;
         //
@@ -96,19 +144,7 @@ namespace DetectCCD {
                 return true;
             return false;
         }
-
-        public bool IsCountEA() {
-            if (Static.Tiebiao.EAContextJoin && Type == 0) return true;
-            if (Static.Tiebiao.EAContextTag && Type == 1) return true;
-            if (Static.Tiebiao.EAContextLeakMetal && Type == 2)
-                return true;
-            if (Static.Tiebiao.EAContextPifeng && Type == 3)
-                return true;
-            if (Static.App.LineLeakMetalIsLabel && Type == 40)
-                return true;
-            return false;
-        }
-
+        
     }
 
 

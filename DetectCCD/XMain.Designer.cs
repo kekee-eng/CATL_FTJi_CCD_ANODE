@@ -143,6 +143,10 @@
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.panelDefect2 = new System.Windows.Forms.Panel();
             this.panelDefect1 = new System.Windows.Forms.Panel();
+            this.xtraTabPage10 = new DevExpress.XtraTab.XtraTabPage();
+            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.panelDefAnaly2 = new System.Windows.Forms.Panel();
+            this.panelDefAnaly1 = new System.Windows.Forms.Panel();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
             this.groupRecipeManage = new DevExpress.XtraEditors.GroupControl();
             this.splitContainerControl3 = new DevExpress.XtraEditors.SplitContainerControl();
@@ -266,6 +270,8 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.xtraTabPage7.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
+            this.xtraTabPage10.SuspendLayout();
+            this.tableLayoutPanel10.SuspendLayout();
             this.xtraTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupRecipeManage)).BeginInit();
             this.groupRecipeManage.SuspendLayout();
@@ -1502,7 +1508,8 @@
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage5,
             this.xtraTabPage6,
-            this.xtraTabPage7});
+            this.xtraTabPage7,
+            this.xtraTabPage10});
             // 
             // xtraTabPage5
             // 
@@ -1619,6 +1626,44 @@
             this.panelDefect1.Name = "panelDefect1";
             this.panelDefect1.Size = new System.Drawing.Size(572, 287);
             this.panelDefect1.TabIndex = 1;
+            // 
+            // xtraTabPage10
+            // 
+            this.xtraTabPage10.Controls.Add(this.tableLayoutPanel10);
+            this.xtraTabPage10.Name = "xtraTabPage10";
+            this.xtraTabPage10.Size = new System.Drawing.Size(578, 587);
+            this.xtraTabPage10.Text = "瑕疵分类处理";
+            // 
+            // tableLayoutPanel10
+            // 
+            this.tableLayoutPanel10.ColumnCount = 1;
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel10.Controls.Add(this.panelDefAnaly2, 0, 1);
+            this.tableLayoutPanel10.Controls.Add(this.panelDefAnaly1, 0, 0);
+            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+            this.tableLayoutPanel10.RowCount = 2;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(578, 587);
+            this.tableLayoutPanel10.TabIndex = 2;
+            // 
+            // panelDefAnaly2
+            // 
+            this.panelDefAnaly2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelDefAnaly2.Location = new System.Drawing.Point(3, 296);
+            this.panelDefAnaly2.Name = "panelDefAnaly2";
+            this.panelDefAnaly2.Size = new System.Drawing.Size(572, 288);
+            this.panelDefAnaly2.TabIndex = 1;
+            // 
+            // panelDefAnaly1
+            // 
+            this.panelDefAnaly1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelDefAnaly1.Location = new System.Drawing.Point(3, 3);
+            this.panelDefAnaly1.Name = "panelDefAnaly1";
+            this.panelDefAnaly1.Size = new System.Drawing.Size(572, 287);
+            this.panelDefAnaly1.TabIndex = 1;
             // 
             // xtraTabPage3
             // 
@@ -2341,6 +2386,8 @@
             this.tableLayoutPanel3.ResumeLayout(false);
             this.xtraTabPage7.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
+            this.xtraTabPage10.ResumeLayout(false);
+            this.tableLayoutPanel10.ResumeLayout(false);
             this.xtraTabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.groupRecipeManage)).EndInit();
             this.groupRecipeManage.ResumeLayout(false);
@@ -2583,5 +2630,9 @@
         private DevExpress.XtraEditors.CheckEdit checkTestAlarmStop_isStop;
         private DevExpress.XtraEditors.CheckEdit checkTestAlarmStop_isAlarm;
         private DevExpress.XtraEditors.SimpleButton btnTestImageProcess;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPage10;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.Panel panelDefAnaly2;
+        private System.Windows.Forms.Panel panelDefAnaly1;
     }
 }

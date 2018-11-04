@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -418,7 +419,7 @@ namespace DetectCCD {
                 dt.Area,
                 dt.Timestamp
                 );
-            
+
         }
         public void InitDefectGrid(Control parent) {
 
@@ -438,7 +439,7 @@ namespace DetectCCD {
                 new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N1" } },
                 new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Time" }
                 );
-            
+
             //
             gridEvent(grid, ImageViewer.MoveToDefect);
 
@@ -738,8 +739,8 @@ namespace DetectCCD {
             chart.Tag = false;
             //上下限
             var diff = (Static.Recipe.TabWidthMax - Static.Recipe.TabWidthMin);
-            g.YAxis.Scale.Min = Static.Recipe.TabWidthMin - Math.Ceiling(diff * 0.1 * 2)/2;
-            g.YAxis.Scale.Max = Static.Recipe.TabWidthMax + Math.Ceiling(diff * 0.1 * 2)/2;
+            g.YAxis.Scale.Min = Static.Recipe.TabWidthMin - Math.Ceiling(diff * 0.1 * 2) / 2;
+            g.YAxis.Scale.Max = Static.Recipe.TabWidthMax + Math.Ceiling(diff * 0.1 * 2) / 2;
             g.YAxis.Scale.MajorStep = Static.Recipe.TabWidthStep;
 
             //
@@ -747,7 +748,7 @@ namespace DetectCCD {
             chart.GraphPane.CurveList[2].Points[1].Y = Static.Recipe.TabWidthMin;
             chart.GraphPane.CurveList[3].Points[0].Y = Static.Recipe.TabWidthMax;
             chart.GraphPane.CurveList[3].Points[1].Y = Static.Recipe.TabWidthMax;
- 
+
             //
             chart.GraphPane.AxisChange();
             chart.Refresh();
@@ -780,6 +781,130 @@ namespace DetectCCD {
             ViewerChart.parentGetGrid(parent).Rows[0].Cells[0].Value = ImageProcess.ErrorMessage;
 
         }
+
+        //缺陷分析表格
+        static void addDefectAnalyGrid(DataGridView grid, DataDefect dt) {
+
+            //
+            gridAdd(grid,
+                grid.Rows.Count + 1,
+                dt.GetProcCaption(),
+                dt.IsInnerText(),
+                dt.GetTypeCaption(),
+                dt.SimulateCount,
+                dt.X * 8192,
+                dt.Y,
+                dt.W,
+                dt.H,
+                dt.Width,
+                dt.Height,
+                dt.Area,
+                dt.Timestamp
+                );
+
+        }
+        public void InitDefectAnalyGrid(Control parent) {
+
+            //
+            var grid = parentInitGrid(parent);
+            grid.Columns.AddRange(
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "ID" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "处理结果" },
+                new DataGridViewTextBoxColumn() { Width = 50, HeaderText = "位置" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "类型" },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "重复次数" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "X", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N0" } },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "Y" },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "W", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 80, HeaderText = "H", Visible = false },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "宽度(mm)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N3" } },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "高度(mm)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N3" } },
+                new DataGridViewTextBoxColumn() { Width = 100, HeaderText = "面积(mm2)", DefaultCellStyle = new DataGridViewCellStyle() { Format = "N1" } },
+                new DataGridViewTextBoxColumn() { Width = 200, HeaderText = "Time" }
+                );
+
+            //
+            ContextMenuStrip menu = new ContextMenuStrip();
+            var btnSetNone = menu.Items.Add("不设置");
+            var btnSetLeakMetal = menu.Items.Add("设置为漏金属");
+            var btnSetOther = menu.Items.Add("设置为其它");
+            menu.Items.Add(new ToolStripSeparator());
+            var btnViewImage = menu.Items.Add("查看图像");
+
+            //
+            grid.ContextMenuStrip = menu;
+
+            //
+            Action<Action<int>> getCurrDefect = fun => {
+                if (grid.Rows.Count > 0 && grid.CurrentCell != null && grid.CurrentCell.ColumnIndex != 0 && grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value != null) {
+                    int val;
+                    if (int.TryParse(grid.Rows[grid.CurrentCell.RowIndex].Cells[0].Value.ToString(), out val)) {
+
+                        int id = val - 1;
+                        if (id >= 0 && id <= Detect.DefectsSimulate.Count - 1) {
+                            var obj = Detect.DefectsSimulate[id];
+                            fun(id);
+                        }
+                    }
+                }
+            };
+
+            btnSetNone.Click += (o, e) => getCurrDefect((id) => {
+                Detect.DefectsSimulate[id].Proc = DataDefect.DefectProcess.None;
+            });
+            btnSetLeakMetal.Click += (o, e) => getCurrDefect((id) => {
+                Detect.DefectsSimulate[id].Proc = DataDefect.DefectProcess.ForceLeakMetal;
+            });
+            btnSetOther.Click += (o, e) => getCurrDefect((id) => {
+                Detect.DefectsSimulate[id].Proc = DataDefect.DefectProcess.ForceOther;
+            });
+            btnViewImage.Click += (o, e) => getCurrDefect((id) => {
+                Log.Record(() => {
+                    var path = Detect.DefectsSimulate[id].NGPartPath;
+                    System.IO.FileInfo fi = new System.IO.FileInfo(path);
+                    var fis = fi.Directory.GetFiles().Where(x => x.FullName.Contains(path)).ToList();
+                    if (fis.Count > 0) {
+                        Process.Start(fis[0].FullName);
+                    }
+                });
+            });
+
+        }
+        public void SyncDefectAnalyGrid(Control parent) {
+            if (!parent.Visible) return;
+
+            var grid = parentGetGrid(parent);
+            grid.Tag = false;
+            if (Detect.DefectsSimulate.Count > grid.Rows.Count) {
+                for (int i = grid.Rows.Count; i < Detect.DefectsSimulate.Count; i++)
+                    addDefectAnalyGrid(grid, Detect.DefectsSimulate[i]);
+            }
+            if (Detect.DefectsSimulate.Count < grid.Rows.Count) {
+                grid.Rows.Clear();
+            }
+
+            //Fix: 修正ID
+            for (int i = 0; i < grid.Rows.Count; i++) {
+                int id = Convert.ToInt32(grid.Rows[i].Cells[0].Value) - 1;
+                if (id < Detect.DefectsSimulate.Count) {
+                    grid.Rows[i].Cells[1].Value = Detect.DefectsSimulate[id].GetProcCaption();
+                    grid.Rows[i].Cells[3].Value = Detect.DefectsSimulate[id].GetTypeCaption();
+                    grid.Rows[i].Cells[4].Value = Detect.DefectsSimulate[id].SimulateCount;
+                    grid.Rows[i].Cells[5].Value = Detect.DefectsSimulate[id].X * 8192;
+                    grid.Rows[i].Cells[6].Value = Detect.DefectsSimulate[id].Y;
+                    grid.Rows[i].Cells[7].Value = Detect.DefectsSimulate[id].X;
+                    grid.Rows[i].Cells[8].Value = Detect.DefectsSimulate[id].Y;
+                    grid.Rows[i].Cells[9].Value = Detect.DefectsSimulate[id].Width;
+                    grid.Rows[i].Cells[10].Value = Detect.DefectsSimulate[id].Height;
+                    grid.Rows[i].Cells[11].Value = Detect.DefectsSimulate[id].Area;
+                    grid.Rows[i].Cells[12].Value = Detect.DefectsSimulate[id].Timestamp;
+
+                }
+            }
+
+            grid.Tag = true;
+        }
+
     }
 }
 
