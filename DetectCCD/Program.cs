@@ -13,14 +13,7 @@ namespace DetectCCD {
         /// </summary>
         [STAThread]
         static void Main() {
-
-            var path = @"D:\Users\fra\Desktop\LNG2\2018_11_03_18_14_";
-            System.IO.FileInfo fi = new System.IO.FileInfo(path);
-            var fis = fi.Directory.GetFiles().Where(x=>x.FullName.StartsWith(path)).ToList();
-            if(fis.Count > 0) {
-                System.Diagnostics.Process.Start(fis[0].FullName);
-            }
-
+            
             //
             UtilTool.XFSkin.Init();
             UtilTool.XFWait.OpenStart();
