@@ -858,8 +858,10 @@ namespace DetectCCD
                 }
                 catch {
 
-                    var count = Defects.Where(x => defect.Y - x.Y < 2000).Where(x => defect.IsSimulate(x)).Count();
-                    if (count > 5) {
+                    var count = Defects.
+                        Where(x => defect.Y - x.Y < Static.App.CheckDefectSimulate_CheckYRange).
+                        Where(x => defect.IsSimulate(x)).Count();
+                    if (count >= Static.App.CheckDefectSimulate_CheckCount) {
                         var myDef = new DataDefect();
                         myDef.Edit(defect);
                         myDef.SimulateCount = count;

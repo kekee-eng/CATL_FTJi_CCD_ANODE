@@ -18,6 +18,8 @@ namespace DetectCCD {
         public double CheckDefectSimulate_WHMin = 0.8;
         public double CheckDefectSimulate_AreaMax = 1.2;
         public double CheckDefectSimulate_AreaMin = 0.8;
+        public double CheckDefectSimulate_CheckYRange = 5000;
+        public int CheckDefectSimulate_CheckCount = 3;
 
         //
         public int LineLeakMetal_AlarmStop_MaxCount = 3;
