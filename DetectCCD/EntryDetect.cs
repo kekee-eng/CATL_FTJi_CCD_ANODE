@@ -703,7 +703,7 @@ namespace DetectCCD
                     else
                         folder = savefolder4;
 
-                    var filename = string.Format("{0}{1}_{2}_{3}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i);
+                    var filename = string.Format("{0}{1}_{2}_{3}_{6}_F{4}_C{5}", folder, timestamp, defect.GetTypeCaption(), isinner ? "正面" : "背面", frame, i, defect.IsInnerText());
                     if (defect.Proc != DataDefect.DefectProcess.None)
                         filename += "[Force]";
 
@@ -858,15 +858,19 @@ namespace DetectCCD
                 }
                 catch {
 
-                    var count = Defects.
-                        Where(x => defect.Y - x.Y < Static.App.CheckDefectSimulate_CheckYRange).
-                        Where(x => defect.IsSimulate(x)).Count();
-                    if (count >= Static.App.CheckDefectSimulate_CheckCount) {
-                        var myDef = new DataDefect();
-                        myDef.Edit(defect);
-                        myDef.SimulateCount = count;
-                        DefectsSimulate.Add(myDef);
-                    }
+                    Log.Record(() => {
+
+                        var count = Defects.
+                            Where(x => defect.Y - x.Y < Static.App.CheckDefectSimulate_CheckYRange).
+                            Where(x => defect.IsSimulate(x)).Count();
+                        if (count >= Static.App.CheckDefectSimulate_CheckCount) {
+                            var myDef = new DataDefect();
+                            myDef.Edit(defect);
+                            myDef.SimulateCount = count;
+                            DefectsSimulate.Add(myDef);
+                        }
+
+                    });
                 }
             }
         }
